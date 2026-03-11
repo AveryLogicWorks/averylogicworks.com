@@ -1,0 +1,12 @@
+LAUNCH CHECKLIST
+
+[ ] Add your real Stripe links to assets/site-config.js
+[ ] Add your real support and billing emails to assets/site-config.js
+[ ] Add your founder photo as assets/founder-photo.jpg
+[ ] Decide whether signup/login/account pages stay public now or later
+[ ] Point your domain to your hosting provider
+[ ] Test every nav link on desktop and mobile
+[ ] Test donation buttons after Stripe links are pasted
+[ ] Update sitemap.xml with your real domain
+[ ] Update robots.txt with your real domain
+[ ] Replace placeholder policy language with your final wording if desired

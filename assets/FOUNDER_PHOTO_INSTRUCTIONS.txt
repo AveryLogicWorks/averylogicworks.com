@@ -1,0 +1,2 @@
+Save the founder image as assets/founder-photo.jpg to activate the real photo on the home and founder pages.
+The HTML and JavaScript are already pointed at that filename.

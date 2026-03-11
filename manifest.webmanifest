@@ -1,0 +1,15 @@
+{
+  "name": "Avery Logic Works",
+  "short_name": "ALW",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#06111d",
+  "theme_color": "#8c1f42",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

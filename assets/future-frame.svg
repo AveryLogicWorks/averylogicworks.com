@@ -1,0 +1,28 @@
+<svg width="880" height="720" viewBox="0 0 880 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="880" height="720" rx="42" fill="#0A1222"/>
+  <rect x="30" y="30" width="820" height="660" rx="30" fill="url(#bg)" stroke="rgba(255,255,255,0.09)"/>
+  <rect x="104" y="112" width="672" height="496" rx="28" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.11)"/>
+  <rect x="146" y="154" width="146" height="86" rx="18" fill="rgba(123,125,255,0.16)" stroke="rgba(123,125,255,0.32)"/>
+  <rect x="588" y="154" width="146" height="86" rx="18" fill="rgba(94,234,212,0.14)" stroke="rgba(94,234,212,0.28)"/>
+  <rect x="146" y="480" width="146" height="86" rx="18" fill="rgba(245,158,11,0.14)" stroke="rgba(245,158,11,0.28)"/>
+  <rect x="588" y="480" width="146" height="86" rx="18" fill="rgba(192,132,252,0.14)" stroke="rgba(192,132,252,0.28)"/>
+  <circle cx="440" cy="360" r="126" stroke="rgba(255,255,255,0.14)" stroke-width="2"/>
+  <circle cx="440" cy="360" r="90" stroke="rgba(123,125,255,0.32)" stroke-width="2" stroke-dasharray="10 12"/>
+  <circle cx="440" cy="360" r="56" fill="url(#core)"/>
+  <path d="M292 198L390 294" stroke="rgba(255,255,255,0.3)" stroke-width="3"/>
+  <path d="M588 198L490 294" stroke="rgba(255,255,255,0.3)" stroke-width="3"/>
+  <path d="M292 522L390 426" stroke="rgba(255,255,255,0.3)" stroke-width="3"/>
+  <path d="M588 522L490 426" stroke="rgba(255,255,255,0.3)" stroke-width="3"/>
+  <defs>
+    <linearGradient id="bg" x1="84" y1="88" x2="784" y2="632" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0D182B"/>
+      <stop offset="1" stop-color="#111A30"/>
+    </linearGradient>
+    <radialGradient id="core" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(440 360) rotate(90) scale(56)">
+      <stop stop-color="#FDFEFF"/>
+      <stop offset="0.18" stop-color="#D6E7FF"/>
+      <stop offset="0.5" stop-color="#5EEAD4"/>
+      <stop offset="1" stop-color="#111A31"/>
+    </radialGradient>
+  </defs>
+</svg>

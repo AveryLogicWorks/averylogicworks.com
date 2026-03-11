@@ -1,0 +1,9 @@
+FOUNDER PHOTO NOTE
+
+The site is already configured to use this file path:
+assets/founder-photo.jpg
+
+If you upload or save your real founder photo into the assets folder with that exact name,
+landing and founder pages will switch over automatically.
+
+Until then, the site falls back to the built-in placeholder artwork.

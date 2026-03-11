@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/site.css">
+  <meta name="description" content="Create an updates account or join the Avery Logic Works newsletter with simple preference controls.">
+  <title>Updates | Avery Logic Works</title>
+</head>
+<body>
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a class="brand" href="landing.html">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>Avery Logic Works</span>
+      </a>
+      <div class="nav-links">
+        <a href="landing.html">Home</a>
+        <a href="founder.html">Founder</a>
+        <a href="themis.html">Themis</a>
+        <a href="signup.html">Updates</a>
+        <a href="login.html">Sign in</a>
+        <a href="landing.html#support" class="button secondary small">Donate</a>
+      </div>
+    </div>
+  </nav>
+  <main>
+    <section class="page-hero">
+      <div class="container section-intro">
+        <span class="eyebrow">Updates &amp; account shell</span>
+        <h1>Join updates without overcomplicating the experience.</h1>
+        <p class="muted">This page gives you a clean foundation for future signups, newsletters, supporter messages, and product-drop announcements while keeping support and account creation as separate choices.</p>
+      </div>
+    </section>
+
+    <section class="section-tight">
+      <div class="container grid-2">
+        <div class="form-shell">
+          <span class="tag">Create account / join updates</span>
+          <h3>Simple signup structure</h3>
+          <form id="signup-form">
+            <div class="field">
+              <label for="displayName">Display name</label>
+              <input id="displayName" name="displayName" type="text" placeholder="How should we refer to you?">
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="you@example.com" required>
+            </div>
+            <div class="field">
+              <label for="password">Password</label>
+              <input id="password" name="password" type="password" placeholder="Choose a password" required>
+            </div>
+            <div class="checkbox-list">
+              <div class="checkbox-row">
+                <input id="newsletter" name="newsletter" type="checkbox" checked>
+                <label for="newsletter">Receive newsletters and major updates</label>
+              </div>
+              <div class="checkbox-row">
+                <input id="supporterUpdates" name="supporterUpdates" type="checkbox">
+                <label for="supporterUpdates">Receive supporter / donor related updates and perk notices</label>
+              </div>
+              <div class="checkbox-row">
+                <input id="acceptedTerms" name="acceptedTerms" type="checkbox" required>
+                <label for="acceptedTerms">I agree to the site terms and understand this form is a front-end starter until the live backend is connected.</label>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="button primary" type="submit">Create account / save preferences</button>
+            </div>
+          </form>
+          <div class="form-message" id="signup-message"></div>
+        </div>
+
+        <div class="policy-shell">
+          <span class="tag alt">Separate choice</span>
+          <h3>Support does not require an account.</h3>
+          <p class="muted">People can still donate without signing up. Accounts are for updates, settings, future supporter perks, and a cleaner path for later releases.</p>
+          <div class="stack-actions">
+            <a class="button primary" data-stripe-one-time data-pending-text="Donate without account (pending Stripe)" href="#">Donate without account</a>
+            <a class="button secondary" data-stripe-monthly data-pending-text="Monthly support (pending Stripe)" href="#">Monthly support</a>
+          </div>
+          <div class="inline-divider"></div>
+          <span class="tag warm">Operationally simpler</span>
+          <p class="muted">The preference model is intentionally small: newsletters on/off, supporter emails on/off. That keeps the future admin side simpler for a one-person build.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>&copy; <span data-current-year></span> Avery Logic Works. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="support.html">Support</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+      </div>
+    </div>
+  </footer>
+  <script src="assets/site-config.js"></script>
+  <script src="assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/site.css">
+  <meta name="description" content="Manage newsletter and supporter-email settings in your Avery Logic Works account shell.">
+  <title>Account settings | Avery Logic Works</title>
+</head>
+<body>
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a class="brand" href="landing.html">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>Avery Logic Works</span>
+      </a>
+      <div class="nav-links">
+        <a href="landing.html">Home</a>
+        <a href="founder.html">Founder</a>
+        <a href="themis.html">Themis</a>
+        <a href="signup.html">Updates</a>
+        <a href="login.html">Sign in</a>
+        <a href="landing.html#support" class="button secondary small">Donate</a>
+      </div>
+    </div>
+  </nav>
+  <main>
+    <section class="page-hero">
+      <div class="container section-intro">
+        <span class="eyebrow">Account settings</span>
+        <h1>Simple settings, not a giant preference maze.</h1>
+        <p class="muted">This page keeps settings intentionally small: newsletters on/off, supporter emails on/off, and an account lock state shell for later live use.</p>
+      </div>
+    </section>
+
+    <section class="section-tight">
+      <div class="container grid-2">
+        <div class="form-shell">
+          <span class="tag">Preferences</span>
+          <h3>Email and account controls</h3>
+          <form id="account-form">
+            <div class="switch-list">
+              <div class="switch-row">
+                <input id="prefNewsletter" name="newsletter" type="checkbox">
+                <label for="prefNewsletter">Receive newsletters and major updates</label>
+              </div>
+              <div class="switch-row">
+                <input id="prefSupporterUpdates" name="supporterUpdates" type="checkbox">
+                <label for="prefSupporterUpdates">Receive supporter / donor related emails</label>
+              </div>
+              <div class="switch-row">
+                <input id="prefLocked" name="accountLocked" type="checkbox">
+                <label for="prefLocked">Lock account until the next login or support review</label>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="button primary" type="submit">Save settings</button>
+            </div>
+          </form>
+          <div class="form-message" id="account-message"></div>
+        </div>
+
+        <div class="policy-shell">
+          <span class="tag alt">How this is meant to work</span>
+          <h3>Two categories are enough to start.</h3>
+          <ul class="list-clean">
+            <li><strong>Newsletters:</strong> broad updates, drops, and major announcements</li>
+            <li><strong>Supporter emails:</strong> donation-related follow-ups, perk notices, and supporter-only admin messages</li>
+            <li><strong>Lock state:</strong> a front-end placeholder until your live auth system handles it for real</li>
+          </ul>
+          <p class="small-note">This page currently saves to local browser storage so you can preview the experience before wiring a backend.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>&copy; <span data-current-year></span> Avery Logic Works. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="support.html">Support</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+      </div>
+    </div>
+  </footer>
+  <script src="assets/site-config.js"></script>
+  <script src="assets/site.js"></script>
+</body>
+</html>

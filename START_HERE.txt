@@ -1,0 +1,44 @@
+AVERY LOGIC WORKS WEBSITE PACK — START HERE
+
+What is already done
+- Public pages are built.
+- Navigation, styling, and artwork are wired.
+- Donate buttons are Stripe-ready placeholders.
+- Founder image slots are ready.
+- Signup / login / account settings pages are built as front-end shells.
+- Support, refund, dispute, privacy, and terms pages are included.
+
+What you should edit first
+1) Open assets/site-config.js
+2) Replace the Stripe links:
+   - oneTime
+   - monthly
+   - portal (optional, for later subscriptions)
+3) Replace the support and billing emails with your real addresses
+4) Put your real founder photo at:
+   assets/founder-photo.jpg
+
+Fastest launch path
+- Host the site as static HTML first.
+- Use Stripe Payment Links for one-time and monthly support.
+- Keep signup/login/account pages visible as early account shells if you want,
+  or hide them from nav until auth is connected.
+
+Important honesty line
+- The public pages are real.
+- The account/auth flow still needs a backend if you want true sign-in,
+  password resets, saved users, and live account settings.
+
+Suggested next backend when ready
+- Supabase Auth + Supabase database for accounts/settings
+- Stripe Payment Links or Stripe Checkout for support / purchases
+
+Files worth opening
+- landing.html
+- founder.html
+- themis.html
+- signup.html
+- account.html
+- support.html
+- assets/site-config.js
+- backend/supabase_schema.sql
