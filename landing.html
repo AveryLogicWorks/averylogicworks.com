@@ -7,6 +7,16 @@
   <link rel="stylesheet" href="assets/site.css">
   <meta name="description" content="Avery Logic Works is an independent studio building software, AI, apps, games, and careful future releases with a founder-led point of view.">
   <title>Avery Logic Works | Founder-led software, AI, apps & games</title>
+
+  <style>
+    .hero-card.media-card{padding:0; overflow:hidden; background:rgba(10,12,20,.72);}
+    .hero-card.media-card .hero-media-wrap{position:relative; aspect-ratio:16/10; border-radius:inherit; overflow:hidden; background:#05070c;}
+    .hero-card.media-card video, .hero-card.media-card img{width:100%; height:100%; object-fit:cover; display:block;}
+    .hero-card.media-card .hero-media-overlay{position:absolute; inset:auto 0 0 0; padding:18px; background:linear-gradient(to top, rgba(5,7,12,.88), rgba(5,7,12,0));}
+    .hero-card.media-card .hero-media-overlay strong{display:block; margin-bottom:6px;}
+    .hero-card.media-card .hero-media-overlay .small-note{margin:0; color:rgba(255,255,255,.78);}
+    .hero-card.media-card .hero-media-fallback{display:flex; align-items:center; justify-content:center; min-height:280px; padding:24px; text-align:center;}
+  </style>
 </head>
 <body>
   <nav class="site-nav">
@@ -42,9 +52,17 @@
           <span class="info-pill">Selective visibility by design</span>
         </div>
       </div>
-      <aside class="hero-card">
-        <img src="assets/studio-signal.svg" alt="Abstract studio signal artwork for Avery Logic Works">
-        <p class="small-note" style="margin:14px 0 0;">Built in public enough to feel real, and private enough to protect what is not ready yet.</p>
+      <aside class="hero-card media-card">
+        <div class="hero-media-wrap">
+          <video autoplay muted loop playsinline preload="metadata" poster="assets/Timeline-1-poster.jpg" aria-label="Avery Logic Works fabrication ident preview">
+            <source src="assets/Timeline-1.mp4" type="video/mp4">
+            <img src="assets/Timeline-1-poster.jpg" alt="Avery Logic Works ident still image fallback">
+          </video>
+          <div class="hero-media-overlay">
+            <strong>Studio ident preview</strong>
+            <p class="small-note">Using <span class="code-note">assets/Timeline-1.mp4</span> with optional poster <span class="code-note">assets/Timeline-1-poster.jpg</span>.</p>
+          </div>
+        </div>
       </aside>
     </div>
   </header>
