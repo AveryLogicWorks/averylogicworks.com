@@ -5,24 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/site.css">
-  <meta name="description" content="Avery Logic Works is an independent studio building software, AI, apps, games, and careful future releases with a founder-led point of view.">
-  <title>Avery Logic Works | Founder-led software, AI, apps & games</title>
+  <meta name="description" content="Avery Logic Works is a founder-led studio building software, AI, apps, games, and long-term systems work with care, clarity, and intent.">
+  <title>Avery Logic Works | Founder-led software, AI, apps &amp; games</title>
 
   <style>
-    .hero-card.media-card{padding:0; overflow:hidden; background:rgba(10,12,20,.72);}
-    .hero-card.media-card .hero-media-wrap{position:relative; aspect-ratio:16/10; border-radius:inherit; overflow:hidden; background:#05070c;}
-    .hero-card.media-card video, .hero-card.media-card img{width:100%; height:100%; object-fit:cover; display:block;}
-    .hero-card.media-card .hero-media-overlay{position:absolute; inset:auto 0 0 0; padding:18px; background:linear-gradient(to top, rgba(5,7,12,.88), rgba(5,7,12,0));}
-    .hero-card.media-card .hero-media-overlay strong{display:block; margin-bottom:6px;}
-    .hero-card.media-card .hero-media-overlay .small-note{margin:0; color:rgba(255,255,255,.78);}
-    .hero-card.media-card .hero-media-fallback{display:flex; align-items:center; justify-content:center; min-height:280px; padding:24px; text-align:center;}
+    .hero-card.media-card,
+    .image-panel{padding:0; overflow:hidden; background:rgba(10,12,20,.72);}
+    .hero-card.media-card .hero-media-wrap,
+    .image-panel .image-wrap{position:relative; aspect-ratio:16/10; border-radius:inherit; overflow:hidden; background:#05070c;}
+    .hero-card.media-card video,
+    .hero-card.media-card img,
+    .image-panel img{width:100%; height:100%; object-fit:cover; display:block;}
+    .hero-card.media-card .hero-media-overlay,
+    .image-panel .image-overlay{position:absolute; inset:auto 0 0 0; padding:18px; background:linear-gradient(to top, rgba(5,7,12,.90), rgba(5,7,12,0));}
+    .hero-card.media-card .hero-media-overlay strong,
+    .image-panel .image-overlay strong{display:block; margin-bottom:6px;}
+    .hero-card.media-card .hero-media-overlay .small-note,
+    .image-panel .image-overlay .small-note{margin:0; color:rgba(255,255,255,.78);}
+    .support-capacity{margin-top:18px; padding:14px 16px; border:1px solid rgba(255,255,255,.1); border-radius:16px; background:rgba(255,255,255,.03);}
+    .support-capacity p{margin:0; color:rgba(255,255,255,.88);}
+    .stack-image{margin-top:22px;}
+    .image-panel.compact .image-wrap{aspect-ratio:16/9;}
+    .top-emblem-bar{display:flex; justify-content:center; align-items:center; padding:10px 0 2px;}
+    .top-emblem-link{display:inline-flex; align-items:center; justify-content:center; width:58px; height:58px; border-radius:999px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); box-shadow:0 0 24px rgba(111,168,255,.10);}
+    .top-emblem{width:34px; height:34px; display:block; object-fit:contain; filter:drop-shadow(0 0 12px rgba(111,168,255,.22));}
+    .brand-emblem{width:30px; height:30px; display:block; object-fit:contain; filter:drop-shadow(0 0 10px rgba(111,168,255,.18));}
   </style>
 </head>
 <body>
+  <div class="top-emblem-bar">
+    <a class="top-emblem-link" href="landing.html" aria-label="Avery Logic Works home">
+      <img class="top-emblem" src="assets/my Business emblem.jpg" alt="">
+    </a>
+  </div>
+
   <nav class="site-nav">
     <div class="container nav-inner">
       <a class="brand" href="landing.html">
-        <span class="brand-mark" aria-hidden="true"></span>
+        <img class="brand-emblem" src="assets/my Business emblem.jpg" alt="">
         <span>Avery Logic Works</span>
       </a>
       <div class="nav-links">
@@ -35,12 +55,16 @@
       </div>
     </div>
   </nav>
+
   <header class="hero">
     <div class="container hero-grid">
       <div>
         <span class="eyebrow">Founder-led studio · Independent build</span>
-        <h1>Software, AI, apps, and games built with intent.</h1>
-        <p class="lead">Avery Logic Works is an independent studio focused on thoughtful software, AI systems, creative tools, and future releases designed to be useful, legible, and worth coming back to. Some work can be shared early. Some stays private until it is ready. The goal is not noise. The goal is building things that matter.</p>
+        <h1>Software that matters, built with intent.</h1>
+        <p class="lead">Avery Logic Works is a founder-led studio building software with people in mind, including AI, apps, games, and long-term systems work. Some work will be shared early. Some will stay quiet until it is ready. The goal is not noise. The goal is to build carefully, release thoughtfully, and make things worth returning to.</p>
+        <div class="support-capacity">
+          <p>Support helps sustain current development while also increasing the studio’s long-term capacity to build more ambitious work over time.</p>
+        </div>
         <div class="hero-actions">
           <a class="button primary" href="signup.html">Join updates</a>
           <a class="button secondary" href="#support">Support the work</a>
@@ -49,19 +73,14 @@
         <div class="hero-meta">
           <span class="info-pill">Independent R&amp;D</span>
           <span class="info-pill">Apps · games · programs · AI</span>
-          <span class="info-pill">Selective visibility by design</span>
+          <span class="info-pill">Founder-led for the long term</span>
         </div>
       </div>
       <aside class="hero-card media-card">
         <div class="hero-media-wrap">
-          <video autoplay muted loop playsinline preload="metadata" poster="assets/Timeline-1-poster.jpg" aria-label="Avery Logic Works fabrication ident preview">
-            <source src="assets/Timeline-1.mp4" type="video/mp4">
-            <img src="assets/Timeline-1-poster.jpg" alt="Avery Logic Works ident still image fallback">
+          <video autoplay muted loop playsinline preload="metadata" poster="assets/1000008564.png" aria-label="Avery Logic Works ident video">
+            <source src="assets/timeline-1.mp4" type="video/mp4">
           </video>
-          <div class="hero-media-overlay">
-            <strong>Studio ident preview</strong>
-            <p class="small-note">Using <span class="code-note">assets/Timeline-1.mp4</span> with optional poster <span class="code-note">assets/Timeline-1-poster.jpg</span>.</p>
-          </div>
         </div>
       </aside>
     </div>
@@ -73,7 +92,7 @@
         <div class="section-intro">
           <span class="eyebrow">What this studio is</span>
           <h2>Broad enough to grow. Focused enough to mean something.</h2>
-          <p class="muted">This site is intentionally framed as a founder-led studio rather than a one-product splash page.</p>
+          <p class="muted">Avery Logic Works is framed as a founder-led studio with room to grow, not a one-product splash page locked into a single lane.</p>
         </div>
         <div class="grid-3">
           <article class="card">
@@ -91,6 +110,12 @@
             <h3>Not locked to one category forever</h3>
             <p class="muted">Avery Logic Works is not boxed into a single format. Over time the brand can support games, experimental interfaces, software releases, and founder-led R&amp;D.</p>
           </article>
+        </div>
+
+        <div class="panel image-panel compact stack-image">
+          <div class="image-wrap">
+            <img src="1000008565.png" alt="Creative technology workspace">
+          </div>
         </div>
       </div>
     </section>
@@ -114,8 +139,8 @@
           <img src="assets/themis-field.svg" alt="Abstract legal and systems visual concept">
           <div style="margin-top:18px;">
             <span class="tag alt">In development</span>
-            <h3>Selective visibility is part of the strategy.</h3>
-            <p class="muted">The public site communicates category, mission, and direction without giving away every roadmap thread or proprietary concept.</p>
+            <h3>Built carefully and explained carefully.</h3>
+            <p class="muted">The public site shares mission, direction, and visible progress in a way that stays clear, measured, and responsible.</p>
           </div>
         </div>
       </div>
@@ -134,19 +159,36 @@
               <img class="profile-avatar" data-founder-avatar src="assets/founder-avatar-placeholder.svg" alt="Founder photo or placeholder">
               <div>
                 <span class="tag warm">Founder</span>
-                <h3 style="margin-top:10px;"><span data-founder-name>Chad Avery Harris</span> is building this as an independent studio with a serious roadmap.</h3>
-                <p class="muted">This is founder-led work shaped by persistence, systems thinking, and a willingness to build under real-world constraints without giving up the standard of the work.</p>
+                <h3 style="margin-top:10px;"><span data-founder-name>Chad Avery Harris</span> is building Avery Logic Works as an independent, founder-led studio built for the long term.</h3>
+                <p class="muted">This work is shaped by persistence, systems thinking, and a commitment to building under real-world constraints without lowering the standard of the work.</p>
               </div>
             </div>
           </article>
           <article class="card">
             <span class="tag">Support matters</span>
-            <h3>Your support buys time, testing, infrastructure, and momentum.</h3>
-            <p class="muted">Support helps fund development time, hosting, tooling, experiments, iteration, and the ability to keep building releases the right way instead of rushing them the wrong way.</p>
+            <h3>Your support helps turn careful work into real progress.</h3>
+            <p class="muted">Support helps fund development time, hosting, tools, equipment upgrades, testing, and iteration, which gives the studio more ability to keep building and implement new releases in a timely way.</p>
+            <p class="muted" style="margin-top:14px;">Support is not only about keeping current work moving. It helps expand what this studio can build over time, improving the speed, scope, and quality of future releases. Avery Logic Works is being built with long-term intent, and support helps that growth become more real, more capable, and more visible.</p>
             <div class="stack-actions">
               <a class="button secondary" href="founder.html">Read the founder note</a>
             </div>
           </article>
+        </div>
+
+        <div class="panel image-panel compact stack-image" style="max-width:920px; margin:28px auto 0;">
+          <div class="image-wrap">
+            <img src="1000008566.png" alt="Founder-led creative technology scene">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="panel" style="max-width:860px; margin:0 auto;">
+          <span class="tag alt">Trust &amp; privacy</span>
+          <h3>Private information should not be treated like a product.</h3>
+          <p class="muted">Privacy, account controls, and respectful handling of user information are part of the design philosophy here, not an afterthought added later.</p>
         </div>
       </div>
     </section>
@@ -157,7 +199,7 @@
           <div>
             <span class="eyebrow">Support &amp; updates</span>
             <h3>Back the work without turning the site into a hard sell.</h3>
-            <p class="muted">People can donate without creating an account. They can also create an account to follow updates, receive newsletters, and later access supporter perks. Those are separate choices, not forced together.</p>
+            <p class="muted">People can support the work without creating an account. They can also choose to create an account for updates, newsletters, and future supporter access. Those paths stay separate by design.</p>
             <div class="support-tiers" style="display:grid; gap:18px; margin-top:24px;">
               <div>
                 <h4 style="margin:0 0 10px; font-size:1rem;">One-Time Support</h4>
@@ -201,6 +243,7 @@
       </div>
     </section>
   </main>
+
   <footer class="footer">
     <div class="container footer-inner">
       <div>&copy; <span data-current-year></span> Avery Logic Works. All rights reserved.</div>
@@ -211,9 +254,9 @@
       </div>
     </div>
   </footer>
+
   <script src="assets/site-config.js"></script>
   <script src="assets/site.js"></script>
-
   <script>
     (function () {
       var cfg = window.AVERY_CONFIG && window.AVERY_CONFIG.stripeLinks ? window.AVERY_CONFIG.stripeLinks : {};
