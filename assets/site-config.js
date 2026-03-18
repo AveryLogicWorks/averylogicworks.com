@@ -2,6 +2,23 @@ window.AVERY_CONFIG = {
   founderName: 'Chad Avery Harris',
   supportEmail: 'support@averylogicworks.com',
   billingEmail: 'billing@averylogicworks.com',
+  supabase: {
+    url: 'https://esoiezxddkqlmvsgscqw.supabase.co',
+    publishableKey: 'sb_publishable_TYosyp9VRS1S2DEXpNi8eQ_bhMTSFqO'
+  },
+  emailOctopus: {
+    enabled: true,
+    listId: '4cd7acee-230c-11f1-ae61-93533fe48a6e',
+    functionName: 'emailoctopus-subscribe'
+  },
+  paths: {
+    home: 'index.html',
+    login: 'login.html',
+    signup: 'signup.html',
+    account: 'account.html',
+    confirmNotice: 'login.html?check-email=1',
+    resetRedirect: 'login.html?reset=1'
+  },
   stripeLinks: {
     oneTime10: 'https://buy.stripe.com/test_4gM3coe3FgqB3NK8SP1RC00',
     oneTime25: 'https://buy.stripe.com/test_8x2cMY6Bd3DP9845GD1RC01',

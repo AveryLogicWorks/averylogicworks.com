@@ -190,3 +190,11 @@ input::placeholder, textarea::placeholder { color: rgba(237,244,255,0.48); }
   .cta-band { padding: 24px; }
   .footer-inner, .table-row { grid-template-columns: 1fr; display: grid; }
 }
+
+
+.form-message.error { background: rgba(255,120,120,0.12); border-color: rgba(255,120,120,0.28); color: #ffd6d6; }
+.form-message.info { background: rgba(111,168,255,0.12); border-color: rgba(111,168,255,0.24); color: #dce9ff; }
+.account-status { margin-bottom: 18px; }
+.auth-inline-row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:18px; }
+.auth-inline-row .small-note { margin:0; }
+.hidden { display:none !important; }

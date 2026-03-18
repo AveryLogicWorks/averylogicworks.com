@@ -11,17 +11,17 @@
 <body>
   <nav class="site-nav">
     <div class="container nav-inner">
-      <a class="brand" href="landing.html">
+      <a class="brand" href="index.html">
         <span class="brand-mark" aria-hidden="true"></span>
         <span>Avery Logic Works</span>
       </a>
       <div class="nav-links">
-        <a href="landing.html">Home</a>
+        <a href="index.html">Home</a>
         <a href="founder.html">Founder</a>
         <a href="themis.html">Themis</a>
         <a href="signup.html">Updates</a>
         <a href="login.html">Sign in</a>
-        <a href="landing.html#support" class="button secondary small">Donate</a>
+        <a href="index.html#support" class="button secondary small">Donate</a>
       </div>
     </div>
   </nav>
@@ -30,7 +30,7 @@
       <div class="container section-intro">
         <span class="eyebrow">Account access</span>
         <h1>Sign in and password reset layout</h1>
-        <p class="muted">This is the front-end shell for your future live auth flow.</p>
+        <p class="muted">Sign in with your Avery Logic Works account or request a reset email if needed.</p>
       </div>
     </section>
 
@@ -50,7 +50,7 @@
             </div>
             <div class="form-actions">
               <button class="button primary" type="submit">Sign in</button>
-              <a class="button ghost" href="account.html">View settings page</a>
+              
             </div>
           </form>
           <div class="form-message" id="login-message"></div>
@@ -71,6 +71,26 @@
           <div class="form-message" id="reset-message"></div>
           <p class="small-note" style="margin-top:16px;">For live use, connect this page to your auth provider so reset emails come from your real system.</p>
         </div>
+
+        <div class="form-shell hidden" id="complete-reset-wrap">
+          <span class="tag warm">Choose a new password</span>
+          <h3>Finish password reset</h3>
+          <form id="complete-reset-form">
+            <div class="field">
+              <label for="newPassword">New password</label>
+              <input id="newPassword" type="password" placeholder="Enter a new password" required>
+            </div>
+            <div class="field">
+              <label for="confirmNewPassword">Confirm new password</label>
+              <input id="confirmNewPassword" type="password" placeholder="Enter it again" required>
+            </div>
+            <div class="form-actions">
+              <button class="button primary" type="submit">Update password</button>
+            </div>
+          </form>
+          <div class="form-message" id="complete-reset-message"></div>
+        </div>
+
       </div>
     </section>
   </main>
@@ -85,6 +105,7 @@
     </div>
   </footer>
   <script src="assets/site-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/site.js"></script>
 </body>
 </html>

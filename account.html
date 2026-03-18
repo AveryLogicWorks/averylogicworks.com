@@ -11,17 +11,17 @@
 <body>
   <nav class="site-nav">
     <div class="container nav-inner">
-      <a class="brand" href="landing.html">
+      <a class="brand" href="index.html">
         <span class="brand-mark" aria-hidden="true"></span>
         <span>Avery Logic Works</span>
       </a>
       <div class="nav-links">
-        <a href="landing.html">Home</a>
+        <a href="index.html">Home</a>
         <a href="founder.html">Founder</a>
         <a href="themis.html">Themis</a>
         <a href="signup.html">Updates</a>
         <a href="login.html">Sign in</a>
-        <a href="landing.html#support" class="button secondary small">Donate</a>
+        <a href="index.html#support" class="button secondary small">Donate</a>
       </div>
     </div>
   </nav>
@@ -30,7 +30,7 @@
       <div class="container section-intro">
         <span class="eyebrow">Account settings</span>
         <h1>Simple settings, not a giant preference maze.</h1>
-        <p class="muted">This page keeps settings intentionally small: newsletters on/off, supporter emails on/off, and an account lock state shell for later live use.</p>
+        <p class="muted">This page keeps settings intentionally small: newsletters on/off, supporter emails on/off, and a simple account shell after sign-in.</p>
       </div>
     </section>
 
@@ -39,6 +39,13 @@
         <div class="form-shell">
           <span class="tag">Preferences</span>
           <h3>Email and account controls</h3>
+
+          <div class="form-message info show account-status" id="account-status">Checking your session…</div>
+          <div class="auth-inline-row">
+            <p class="small-note">Signed in as <strong id="account-email">&mdash;</strong></p>
+            <button class="button ghost" id="signout-button" type="button">Sign out</button>
+          </div>
+
           <form id="account-form">
             <div class="switch-list">
               <div class="switch-row">
@@ -69,8 +76,35 @@
             <li><strong>Supporter emails:</strong> donation-related follow-ups, perk notices, and supporter-only admin messages</li>
             <li><strong>Lock state:</strong> a front-end placeholder until your live auth system handles it for real</li>
           </ul>
-          <p class="small-note">This page currently saves to local browser storage so you can preview the experience before wiring a backend.</p>
+          <p class="small-note">This page now checks for a real signed-in session first, then saves preference updates to your account metadata.</p>
         </div>
+      </div>
+    </section>
+
+    <section class="section-tight hidden" id="owner-dashboard">
+      <div class="container">
+        <div class="form-shell">
+          <span class="tag">Owner dashboard</span>
+          <h3>Private counters</h3>
+          <p class="small-note">This panel stays hidden unless your signed-in account is recognized as an owner inside Supabase.</p>
+          <div class="metric-grid">
+            <div class="metric"><strong data-stat="visits_24h">0</strong><span>Visits (24h)</span></div>
+            <div class="metric"><strong data-stat="visits_30d">0</strong><span>Visits (30d)</span></div>
+            <div class="metric"><strong data-stat="visits_all_time">0</strong><span>Visits (all time)</span></div>
+            <div class="metric"><strong data-stat="logins_30d">0</strong><span>Logins (30d)</span></div>
+            <div class="metric"><strong data-stat="logins_all_time">0</strong><span>Logins (all time)</span></div>
+            <div class="metric"><strong data-stat="signups_30d">0</strong><span>Signups (30d)</span></div>
+            <div class="metric"><strong data-stat="signups_all_time">0</strong><span>Signups (all time)</span></div>
+            <div class="metric"><strong data-stat="accounts_total">0</strong><span>Total accounts</span></div>
+            <div class="metric"><strong data-stat="newsletter_opt_ins">0</strong><span>Newsletter opt-ins</span></div>
+            <div class="metric"><strong data-stat="supporter_updates_opt_ins">0</strong><span>Supporter update opt-ins</span></div>
+            <div class="metric"><strong data-stat="donation_events">0</strong><span>Donation events</span></div>
+            <div class="metric"><strong data-stat="subscription_events">0</strong><span>Subscription events</span></div>
+            <div class="metric"><strong data-stat="donation_total">$0.00</strong><span>Donation total</span></div>
+            <div class="metric"><strong data-stat="subscription_total">$0.00</strong><span>Subscription total</span></div>
+          </div>
+        </div>
+      </div>
       </div>
     </section>
   </main>
@@ -85,6 +119,7 @@
     </div>
   </footer>
   <script src="assets/site-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/site.js"></script>
 </body>
 </html>

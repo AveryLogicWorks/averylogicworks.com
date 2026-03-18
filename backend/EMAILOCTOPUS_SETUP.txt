@@ -1,0 +1,17 @@
+EMAILOCTOPUS FINAL SETUP
+
+Your site files are patched to call a Supabase Edge Function named: emailoctopus-subscribe
+
+What you need to do in Supabase:
+1. Go to Edge Functions.
+2. Create a new function named emailoctopus-subscribe.
+3. Replace its code with the file at: supabase/functions/emailoctopus-subscribe/index.ts
+4. Deploy the function with JWT verification OFF / no JWT required.
+5. In Supabase project secrets, add:
+   - EMAILOCTOPUS_API_KEY = your EmailOctopus API key
+   - EMAILOCTOPUS_LIST_ID = 4cd7acee-230c-11f1-ae61-93533fe48a6e
+
+After that, anyone who checks the newsletter box during signup will be added to EmailOctopus securely without exposing the API key in the website code.
+
+IMPORTANT:
+Because the API key was pasted into chat, the safest move is to rotate/regenerate that EmailOctopus API key after deployment, then update the Supabase secret with the new one.
