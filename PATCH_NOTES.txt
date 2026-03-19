@@ -1,0 +1,1 @@
+Updated nav auth state, global sign-out, remember-me, show/hide password, confirm password, stricter display-name validation, refreshed support wording, rebuilt terms/privacy pages, and added all-time owner counters. Run backend/owner_dashboard_setup.sql again in Supabase to apply the new all-time dashboard fields.

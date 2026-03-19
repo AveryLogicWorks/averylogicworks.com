@@ -198,3 +198,9 @@ input::placeholder, textarea::placeholder { color: rgba(237,244,255,0.48); }
 .auth-inline-row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:18px; }
 .auth-inline-row .small-note { margin:0; }
 .hidden { display:none !important; }
+
+.password-row { display:grid; grid-template-columns: 1fr auto; gap: 10px; align-items:center; }
+.password-toggle { appearance:none; border:1px solid rgba(255,255,255,0.16); background: rgba(255,255,255,0.06); color:white; border-radius: 14px; padding: 12px 14px; font: inherit; font-weight: 700; cursor: pointer; }
+.password-toggle:hover { background: rgba(255,255,255,0.1); }
+.checkbox-row.compact { margin-top: 4px; padding: 12px 14px; }
+.nav-signout { white-space: nowrap; }

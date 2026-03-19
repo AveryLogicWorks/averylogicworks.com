@@ -17,46 +17,94 @@
     avatar: 'assets/founder-avatar-placeholder.svg'
   };
 
+  const reservedDisplayNames = new Set([
+    'founder', 'owner', 'admin', 'administrator', 'moderator', 'support', 'official', 'staff', 'team',
+    'creator', 'avery logic works', 'averylogicworks', 'averylogicworks.com', 'themis'
+  ]);
+  const bannedFragments = [
+    'fuck', 'shit', 'bitch', 'asshole', 'nigger', 'faggot', 'cunt', 'slut', 'whore', 'rape', 'molest',
+    'kill', 'murder', 'terror', 'fraud', 'scam', 'bomb', 'suicide', 'pedo', 'porn', 'sex', 'nazi'
+  ];
+
   function absoluteUrl(path) {
     return new URL(path, window.location.href).toString();
   }
 
-
-  function getEmailOctopusFunctionUrl() {
-    if (!supabaseCfg.url || !emailOctopusCfg.functionName) return '';
-    return supabaseCfg.url.replace(/\/$/, '') + '/functions/v1/' + emailOctopusCfg.functionName;
+  function getRememberKey() {
+    return 'avery-remember-me';
   }
 
-  async function subscribeNewsletterViaFunction(payload) {
-    if (!emailOctopusCfg.enabled || !emailOctopusCfg.listId || !emailOctopusCfg.functionName) {
-      return { ok: false, skipped: true, reason: 'not-configured' };
-    }
-    const fnUrl = getEmailOctopusFunctionUrl();
-    if (!fnUrl) return { ok: false, skipped: true, reason: 'missing-function-url' };
+  function getRememberPreference() {
+    const raw = localStorage.getItem(getRememberKey());
+    return raw === null ? true : raw === 'true';
+  }
 
-    try {
-      const response = await fetch(fnUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': supabaseCfg.publishableKey || ''
-        },
-        body: JSON.stringify({
-          email: payload.email,
-          name: payload.displayName || '',
-          listId: emailOctopusCfg.listId,
-          source: 'website-signup'
-        })
-      });
+  function setRememberPreference(value) {
+    localStorage.setItem(getRememberKey(), value ? 'true' : 'false');
+  }
 
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        return { ok: false, error: data?.error || 'newsletter-subscribe-failed' };
+  function moveAuthStorage(useLocal) {
+    const keyPrefix = 'sb-' + (supabaseCfg.url || 'avery');
+    const source = useLocal ? sessionStorage : localStorage;
+    const target = useLocal ? localStorage : sessionStorage;
+    Object.keys(source).forEach((key) => {
+      if (key.startsWith(keyPrefix)) {
+        target.setItem(key, source.getItem(key));
+        source.removeItem(key);
       }
-      return { ok: true, data };
-    } catch (err) {
-      return { ok: false, error: err?.message || 'newsletter-subscribe-failed' };
+    });
+  }
+
+  const authStorage = {
+    getItem(key) {
+      return localStorage.getItem(key) || sessionStorage.getItem(key);
+    },
+    setItem(key, value) {
+      if (getRememberPreference()) {
+        localStorage.setItem(key, value);
+        sessionStorage.removeItem(key);
+      } else {
+        sessionStorage.setItem(key, value);
+        localStorage.removeItem(key);
+      }
+    },
+    removeItem(key) {
+      localStorage.removeItem(key);
+      sessionStorage.removeItem(key);
     }
+  };
+
+  let sb = null;
+  if (window.supabase && supabaseCfg.url && supabaseCfg.publishableKey) {
+    try {
+      sb = window.supabase.createClient(supabaseCfg.url, supabaseCfg.publishableKey, {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true,
+          storage: authStorage
+        }
+      });
+    } catch (err) {
+      console.error('Supabase init failed', err);
+    }
+  }
+
+  function normalizeName(value) {
+    return (value || '').trim().replace(/\s+/g, ' ');
+  }
+
+  function validateDisplayName(value) {
+    const name = normalizeName(value);
+    if (!name) return { ok: false, message: 'Add a display name so the account has a readable label.' };
+    if (name.length < 2) return { ok: false, message: 'Display name must be at least 2 characters.' };
+    if (name.length > 32) return { ok: false, message: 'Display name must stay under 33 characters.' };
+    if (!/^[A-Za-z0-9 ._\-]+$/.test(name)) return { ok: false, message: 'Display name can use letters, numbers, spaces, periods, underscores, and hyphens only.' };
+    if (/([._\- ])\1\1/.test(name)) return { ok: false, message: 'Display name cannot use repeated symbol spam.' };
+    const lowered = name.toLowerCase();
+    if (reservedDisplayNames.has(lowered)) return { ok: false, message: 'That display name is reserved. Please choose another.' };
+    if (bannedFragments.some((term) => lowered.includes(term))) return { ok: false, message: 'That display name is not allowed. Please choose another.' };
+    return { ok: true, value: name };
   }
 
   async function trackEvent(eventType, payload) {
@@ -158,13 +206,14 @@
     '[data-stripe-one-time]': stripe.oneTime,
     '[data-stripe-monthly]': stripe.monthly,
     '[data-stripe-shop]': stripe.shop,
-    '[data-stripe-portal]': stripe.portal
+    '[data-stripe-portal]': stripe.portal,
+    '[data-stripe-key]': null
   };
   Object.entries(stripeTargets).forEach(([selector, url]) => {
     document.querySelectorAll(selector).forEach((el) => {
-      if (url && url !== '#') {
-        el.href = url;
-        if (el.dataset.pendingText) el.textContent = el.dataset.pendingText;
+      const mappedUrl = el.dataset.stripeKey ? stripe[el.dataset.stripeKey] : url;
+      if (mappedUrl && mappedUrl !== '#') {
+        el.href = mappedUrl;
       } else {
         el.href = '#';
         el.setAttribute('aria-disabled', 'true');
@@ -174,22 +223,72 @@
     });
   });
 
-  let sb = null;
-  if (window.supabase && supabaseCfg.url && supabaseCfg.publishableKey) {
-    try {
-      sb = window.supabase.createClient(supabaseCfg.url, supabaseCfg.publishableKey, {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true
-        }
+  function hydrateRememberToggles() {
+    const remember = getRememberPreference();
+    document.querySelectorAll('[data-remember-me]').forEach((input) => {
+      input.checked = remember;
+      input.addEventListener('change', () => {
+        const next = !!input.checked;
+        setRememberPreference(next);
+        moveAuthStorage(next);
+        document.querySelectorAll('[data-remember-me]').forEach((other) => {
+          if (other !== input) other.checked = next;
+        });
       });
-    } catch (err) {
-      console.error('Supabase init failed', err);
+    });
+  }
+
+  function hydratePasswordToggles() {
+    document.querySelectorAll('[data-password-toggle]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = document.getElementById(button.getAttribute('data-password-toggle'));
+        if (!target) return;
+        const nextType = target.type === 'password' ? 'text' : 'password';
+        target.type = nextType;
+        button.setAttribute('aria-pressed', nextType === 'text' ? 'true' : 'false');
+        button.textContent = nextType === 'text' ? 'Hide' : 'Show';
+      });
+    });
+  }
+
+  async function updateNavAuth() {
+    const navLinks = document.querySelector('.nav-links');
+    if (!navLinks) return;
+    const loginLink = navLinks.querySelector('a[href="login.html"]');
+    if (!loginLink) return;
+
+    const session = sb ? (await sb.auth.getSession())?.data?.session : null;
+    let accountLink = navLinks.querySelector('[data-auth-account]');
+    let signOutLink = navLinks.querySelector('[data-auth-signout]');
+
+    if (session) {
+      loginLink.textContent = 'Account';
+      loginLink.href = paths.account;
+      loginLink.setAttribute('data-auth-state', 'account');
+      if (!signOutLink) {
+        signOutLink = document.createElement('button');
+        signOutLink.type = 'button';
+        signOutLink.className = 'button ghost small nav-signout';
+        signOutLink.textContent = 'Sign out';
+        signOutLink.setAttribute('data-auth-signout', 'true');
+        navLinks.insertBefore(signOutLink, navLinks.querySelector('.button.secondary.small') || null);
+      }
+      signOutLink.onclick = async function () {
+        if (sb) await sb.auth.signOut();
+        window.location.href = paths.login;
+      };
+    } else {
+      loginLink.textContent = 'Sign in';
+      loginLink.href = paths.login;
+      loginLink.setAttribute('data-auth-state', 'login');
+      if (signOutLink) signOutLink.remove();
+      if (accountLink) accountLink.remove();
     }
   }
 
   maybeTrackVisit();
+  hydrateRememberToggles();
+  hydratePasswordToggles();
 
   const signupForm = document.getElementById('signup-form');
   if (signupForm) {
@@ -197,13 +296,27 @@
       e.preventDefault();
       const messageBox = document.getElementById('signup-message');
       clearMessage(messageBox);
-      const displayName = signupForm.querySelector('[name="displayName"]').value.trim();
+      const displayNameRaw = signupForm.querySelector('[name="displayName"]').value;
+      const nameCheck = validateDisplayName(displayNameRaw);
       const email = signupForm.querySelector('[name="email"]').value.trim();
       const password = signupForm.querySelector('[name="password"]').value;
+      const confirmPassword = signupForm.querySelector('[name="confirmPassword"]').value;
       const newsletter = signupForm.querySelector('[name="newsletter"]').checked;
       const supporterUpdates = signupForm.querySelector('[name="supporterUpdates"]').checked;
       const acceptedTerms = signupForm.querySelector('[name="acceptedTerms"]').checked;
 
+      if (!nameCheck.ok) {
+        setMessage(messageBox, nameCheck.message, 'error');
+        return;
+      }
+      if (password.length < 8) {
+        setMessage(messageBox, 'Use at least 8 characters for your password.', 'error');
+        return;
+      }
+      if (password !== confirmPassword) {
+        setMessage(messageBox, 'Passwords do not match.', 'error');
+        return;
+      }
       if (!acceptedTerms) {
         setMessage(messageBox, 'Please accept the terms before creating an account.', 'error');
         return;
@@ -221,7 +334,7 @@
           options: {
             emailRedirectTo: absoluteUrl(paths.login),
             data: {
-              display_name: displayName,
+              display_name: nameCheck.value,
               newsletter_opt_in: newsletter,
               supporter_updates_opt_in: supporterUpdates,
               accepted_terms: true,
@@ -238,35 +351,18 @@
         }));
         trackEvent('signup_submitted', {
           email: email,
-          display_name: displayName,
+          display_name: nameCheck.value,
           newsletter_opt_in: newsletter,
           supporter_updates_opt_in: supporterUpdates
         });
 
-        let newsletterState = 'not-requested';
-        if (newsletter) {
-          const newsletterResult = await subscribeNewsletterViaFunction({
-            email: email,
-            displayName: displayName
-          });
-          newsletterState = newsletterResult.ok ? 'subscribed' : (newsletterResult.skipped ? 'saved-only' : 'pending');
-          trackEvent('newsletter_attempt', {
-            email: email,
-            status: newsletterState,
-            detail: newsletterResult.error || newsletterResult.reason || null
-          });
-        }
-
         let msg = 'Account created. Check your email to confirm your address, then sign in.';
-        if (newsletter && newsletterState === 'subscribed') {
-          msg += ' You were also added to the newsletter list.';
-        } else if (newsletter && newsletterState === 'saved-only') {
-          msg += ' Newsletter preference was saved, but the EmailOctopus function still needs to be deployed.';
-        } else if (newsletter && newsletterState === 'pending') {
-          msg += ' Newsletter preference was saved, but the newsletter connection still needs one final backend step.';
+        if (newsletter && (!emailOctopusCfg.enabled || !emailOctopusCfg.listId)) {
+          msg += ' Newsletter opt-in was saved to your account profile, and EmailOctopus can be connected next.';
         }
         setMessage(messageBox, msg, 'info');
         signupForm.reset();
+        hydrateRememberToggles();
       } catch (err) {
         setMessage(messageBox, err.message || 'Unable to create your account right now.', 'error');
       } finally {
@@ -287,11 +383,14 @@
       }
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
+      const remember = !!loginForm.querySelector('[data-remember-me]')?.checked;
+      setRememberPreference(remember);
+      moveAuthStorage(remember);
       setBusy(loginForm, true);
       try {
         const { error } = await sb.auth.signInWithPassword({ email: email, password: password });
         if (error) throw error;
-        trackEvent('login_success', { email: email });
+        trackEvent('login_success', { email: email, remember_me: remember });
         window.location.href = paths.account;
       } catch (err) {
         setMessage(messageBox, err.message || 'Sign-in failed.', 'error');
@@ -496,5 +595,12 @@
     heroVideo.addEventListener('loadeddata', tryPlay, { once: true });
     window.addEventListener('pageshow', tryPlay, { once: true });
     setTimeout(tryPlay, 50);
+  }
+
+  updateNavAuth();
+  if (sb) {
+    sb.auth.onAuthStateChange(() => {
+      updateNavAuth();
+    });
   }
 })();

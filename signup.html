@@ -30,7 +30,7 @@
       <div class="container section-intro">
         <span class="eyebrow">Updates &amp; account shell</span>
         <h1>Join updates without overcomplicating the experience.</h1>
-        <p class="muted">Create an account, choose your email preferences, and confirm your address before signing in.</p>
+        <p class="muted">Create an account, choose your preferences, and confirm your email before signing in. The form now includes clearer password controls, terms links, and stricter display-name rules.</p>
       </div>
     </section>
 
@@ -50,7 +50,18 @@
             </div>
             <div class="field">
               <label for="password">Password</label>
-              <input id="password" name="password" type="password" placeholder="Choose a password" required>
+              <div class="password-row">
+                <input id="password" name="password" type="password" placeholder="Choose a password" required>
+                <button class="password-toggle" type="button" data-password-toggle="password" aria-pressed="false">Show</button>
+              </div>
+            </div>
+            <div class="field">
+              <label for="confirmPassword">Confirm password</label>
+              <div class="password-row">
+                <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Enter the same password again" required>
+                <button class="password-toggle" type="button" data-password-toggle="confirmPassword" aria-pressed="false">Show</button>
+              </div>
+              <p class="small-note">Display names cannot impersonate site authority, break basic safety rules, or use explicit language.</p>
             </div>
             <div class="checkbox-list">
               <div class="checkbox-row">
@@ -63,7 +74,7 @@
               </div>
               <div class="checkbox-row">
                 <input id="acceptedTerms" name="acceptedTerms" type="checkbox" required>
-                <label for="acceptedTerms">I agree to the site terms and understand account signup uses email confirmation.</label>
+                <label for="acceptedTerms">I agree to the <a href="terms.html" class="text-link">Terms of Use</a>, acknowledge the <a href="privacy.html" class="text-link">Privacy Policy</a>, and understand account signup uses email confirmation.</label>
               </div>
             </div>
             <div class="form-actions">
@@ -76,14 +87,14 @@
         <div class="policy-shell">
           <span class="tag alt">Separate choice</span>
           <h3>Support does not require an account.</h3>
-          <p class="muted">People can still donate without signing up. Accounts are for updates, settings, future supporter perks, and a cleaner path for later releases.</p>
+          <p class="muted">People can support the work without creating an account. Accounts exist for updates, settings, future perks, and a cleaner member path once more systems go live.</p>
           <div class="stack-actions">
             <a class="button primary" data-stripe-one-time data-pending-text="Donate without account (pending Stripe)" href="#">Donate without account</a>
             <a class="button secondary" data-stripe-monthly data-pending-text="Monthly support (pending Stripe)" href="#">Monthly support</a>
           </div>
           <div class="inline-divider"></div>
           <span class="tag warm">Operationally simpler</span>
-          <p class="muted">The preference model is intentionally small: newsletters on/off, supporter emails on/off. That keeps the future admin side simpler for a one-person build.</p>
+          <p class="muted">The preference model stays intentionally compact: newsletter emails on or off, supporter emails on or off, nothing more. That keeps the public flow clear and the admin side manageable.</p>
         </div>
       </div>
     </section>

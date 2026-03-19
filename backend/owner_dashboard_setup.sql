@@ -25,8 +25,25 @@ create index if not exists idx_site_events_type_created on public.site_events (e
 create index if not exists idx_site_events_email on public.site_events (user_email);
 create index if not exists idx_site_events_visitor on public.site_events (visitor_token);
 
+create table if not exists public.profiles (
+  user_id uuid primary key references auth.users (id) on delete cascade,
+  display_name text not null default '',
+  newsletter_opt_in boolean not null default false,
+  supporter_updates_opt_in boolean not null default false,
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.supporter_events (
+  id bigserial primary key,
+  event_type text not null,
+  amount_cents bigint not null default 0,
+  created_at timestamptz not null default now()
+);
+
 alter table public.site_admins enable row level security;
 alter table public.site_events enable row level security;
+alter table public.profiles enable row level security;
+alter table public.supporter_events enable row level security;
 
 create or replace function public.is_site_admin()
 returns boolean
@@ -53,6 +70,16 @@ with check (true);
 drop policy if exists "Admins can read site events" on public.site_events;
 create policy "Admins can read site events"
 on public.site_events for select
+using (public.is_site_admin());
+
+drop policy if exists "Users can read own profile" on public.profiles;
+create policy "Users can read own profile"
+on public.profiles for select
+using (auth.uid() = user_id or public.is_site_admin());
+
+drop policy if exists "Admins can read supporter events" on public.supporter_events;
+create policy "Admins can read supporter events"
+on public.supporter_events for select
 using (public.is_site_admin());
 
 create or replace function public.handle_new_user_profile()

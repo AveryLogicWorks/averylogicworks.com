@@ -7,9 +7,8 @@ window.AVERY_CONFIG = {
     publishableKey: 'sb_publishable_TYosyp9VRS1S2DEXpNi8eQ_bhMTSFqO'
   },
   emailOctopus: {
-    enabled: true,
-    listId: '4cd7acee-230c-11f1-ae61-93533fe48a6e',
-    functionName: 'emailoctopus-subscribe'
+    enabled: false,
+    listId: ''
   },
   paths: {
     home: 'index.html',
