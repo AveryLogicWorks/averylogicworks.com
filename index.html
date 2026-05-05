@@ -1,266 +1,580 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/site.css">
-  <meta name="description" content="Avery Logic Works is a founder-led studio building software, AI, apps, games, and long-term systems work with care, clarity, and intent.">
-  <title>Avery Logic Works | Founder-led software, AI, apps &amp; games</title>
-  <link rel="preload" as="video" href="assets/Timeline-1.mp4" type="video/mp4">
-  <!-- forced refresh 2026-03-16: repaired for GitHub detection -->
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Avery Logic Works | Software, AI, and digital systems</title>
+  <meta name="description" content="Avery Logic Works is a founder-led independent studio building software, AI, and digital systems designed for lasting usefulness." />
   <style>
-    .hero-card.media-card,
-    .image-panel{padding:0; overflow:hidden; background:rgba(10,12,20,.72);}
-    .hero-card.media-card .hero-media-wrap,
-    .image-panel .image-wrap{position:relative; aspect-ratio:16/10; border-radius:inherit; overflow:hidden; background:#05070c;}
-    .hero-card.media-card video,
-    .hero-card.media-card img,
-    .image-panel img{width:100%; height:100%; object-fit:cover; display:block;}
-    .hero-card.media-card .hero-media-overlay,
-    .image-panel .image-overlay{position:absolute; inset:auto 0 0 0; padding:18px; background:linear-gradient(to top, rgba(5,7,12,.90), rgba(5,7,12,0));}
-    .hero-card.media-card .hero-media-overlay strong,
-    .image-panel .image-overlay strong{display:block; margin-bottom:6px;}
-    .hero-card.media-card .hero-media-overlay .small-note,
-    .image-panel .image-overlay .small-note{margin:0; color:rgba(255,255,255,.78);}
-    .support-capacity{margin-top:18px; padding:14px 16px; border:1px solid rgba(255,255,255,.1); border-radius:16px; background:rgba(255,255,255,.03);}
-    .support-capacity p{margin:0; color:rgba(255,255,255,.88);}
-    .stack-image{margin-top:22px;}
-    .image-panel.compact .image-wrap{aspect-ratio:16/9;}
-    .top-emblem-bar{display:flex; justify-content:center; align-items:center; padding:10px 0 2px;}
-    .top-emblem-link{display:inline-flex; align-items:center; justify-content:center; width:58px; height:58px; border-radius:999px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); box-shadow:0 0 24px rgba(111,168,255,.10);}
-    .top-emblem{width:34px; height:34px; display:block; object-fit:contain; filter:drop-shadow(0 0 12px rgba(111,168,255,.22));}
-    .brand-emblem{width:30px; height:30px; display:block; object-fit:contain; filter:drop-shadow(0 0 10px rgba(111,168,255,.18));}
-    .hero-clarifier{margin:12px 0 0; font-size:.98rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.72);}
-    .hero-lead{margin-top:12px;}
+    :root {
+      --bg: #05070d;
+      --panel: rgba(255, 255, 255, 0.055);
+      --panel-strong: rgba(255, 255, 255, 0.095);
+      --text: #f7f9ff;
+      --muted: #b7bfd1;
+      --soft: #8790a6;
+      --line: rgba(255,255,255,.14);
+      --accent: #7dd3fc;
+      --accent-2: #a78bfa;
+      --accent-3: #22d3ee;
+      --max: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 20% 5%, rgba(125, 211, 252, .18), transparent 32rem),
+        radial-gradient(circle at 80% 15%, rgba(167, 139, 250, .14), transparent 34rem),
+        linear-gradient(180deg, #05070d 0%, #090d18 52%, #05070d 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; }
+
+    .skip-link {
+      position: absolute;
+      left: 1rem;
+      top: -4rem;
+      z-index: 100;
+      padding: .75rem 1rem;
+      border-radius: 999px;
+      background: #fff;
+      color: #05070d;
+      transition: top .2s ease;
+    }
+
+    .skip-link:focus { top: 1rem; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(5, 7, 13, .78);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: .65rem;
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: .01em;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 32px rgba(125, 211, 252, .35);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: .35rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      padding: .55rem .8rem;
+      border-radius: 999px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .94rem;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      color: var(--text);
+      background: var(--panel);
+      outline: none;
+    }
+
+    .nav-links .nav-primary {
+      color: #041016;
+      background: linear-gradient(135deg, var(--accent), var(--accent-3));
+      font-weight: 800;
+    }
+
+    main { overflow: hidden; }
+
+    section {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 5rem 0;
+    }
+
+    .hero {
+      min-height: calc(100vh - 72px);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+
+    .hero-inner { max-width: 960px; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      padding: .45rem .8rem;
+      margin-bottom: 1.35rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(255,255,255,.04);
+      font-size: .95rem;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 1.25rem;
+      font-size: clamp(3.1rem, 8vw, 6.75rem);
+      line-height: .95;
+      letter-spacing: -.075em;
+      font-weight: 950;
+      text-wrap: balance;
+    }
+
+    .hero-subhead {
+      max-width: 780px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: clamp(1.08rem, 2vw, 1.32rem);
+      text-wrap: balance;
+    }
+
+    .cta-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: .85rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: .78rem 1.15rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      text-decoration: none;
+      color: var(--text);
+      background: rgba(255,255,255,.06);
+      font-weight: 800;
+    }
+
+    .button.primary {
+      color: #041016;
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent-3));
+      box-shadow: 0 12px 40px rgba(34, 211, 238, .24);
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .video-section { padding-top: 1rem; }
+
+    .video-intro {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 1.35rem;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.18rem);
+    }
+
+    .video-frame {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(125, 211, 252, .12), rgba(167, 139, 250, .10));
+      box-shadow: 0 24px 90px rgba(0,0,0,.36);
+    }
+
+    .video-frame::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 0%, rgba(125,211,252,.22), transparent 40%);
+      z-index: 1;
+    }
+
+    .video-frame video,
+    .video-fallback {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+
+    .video-fallback {
+      display: grid;
+      place-items: center;
+      padding: 3rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 2rem;
+    }
+
+    .section-label {
+      color: var(--accent);
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: .78rem;
+      margin-bottom: .75rem;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.04;
+      letter-spacing: -.045em;
+      margin-bottom: 1rem;
+      text-wrap: balance;
+    }
+
+    h3 {
+      font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+      line-height: 1.15;
+      margin-bottom: .75rem;
+    }
+
+    .muted { color: var(--muted); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .card {
+      padding: 1.35rem;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--panel);
+    }
+
+    .card p:last-child { margin-bottom: 0; }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .list {
+      display: grid;
+      gap: .85rem;
+      padding: 0;
+      list-style: none;
+      margin: 0;
+    }
+
+    .list li {
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.045);
+    }
+
+    .support-panel {
+      max-width: 840px;
+      margin: 0 auto;
+      padding: clamp(1.5rem, 4vw, 2.5rem);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background: linear-gradient(135deg, rgba(125, 211, 252, .105), rgba(167, 139, 250, .095));
+      text-align: center;
+    }
+
+    .donation-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      text-align: left;
+    }
+
+    .donation-group {
+      padding: 1.2rem;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(0,0,0,.16);
+    }
+
+    .amounts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+      margin-top: .85rem;
+    }
+
+    .amounts a {
+      min-width: 72px;
+      text-align: center;
+      padding: .62rem .78rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.07);
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 800;
+    }
+
+    .site-footer {
+      border-top: 1px solid var(--line);
+      padding: 2rem 0;
+      color: var(--soft);
+    }
+
+    .footer-inner {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    @media (max-width: 760px) {
+      .nav { align-items: flex-start; flex-direction: column; padding: 1rem 0; }
+      .nav-links { justify-content: flex-start; }
+      .hero { min-height: auto; padding-top: 5rem; }
+      .grid, .split, .donation-grid { grid-template-columns: 1fr; }
+      h1 { font-size: clamp(2.8rem, 15vw, 4.35rem); }
+    }
   </style>
 </head>
-<body data-page-version="2026-03-16-github-fix">
-  <div class="top-emblem-bar">
-    <a class="top-emblem-link" href="index.html" aria-label="Avery Logic Works home">
-      <img class="top-emblem" src="assets/my Business emblem.jpg" alt="">
-    </a>
-  </div>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-  <nav class="site-nav">
-    <div class="container nav-inner">
-      <a class="brand" href="index.html">
-        <img class="brand-emblem" src="assets/my Business emblem.jpg" alt="">
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="index.html" aria-label="Avery Logic Works home">
+        <span class="brand-mark" aria-hidden="true"></span>
         <span>Avery Logic Works</span>
       </a>
       <div class="nav-links">
         <a href="index.html">Home</a>
         <a href="founder.html">Founder</a>
         <a href="themis.html">Themis</a>
-        <a href="login.html">Sign in</a>
-        <a href="signup.html">Sign up</a>
-        <a href="index.html#support" class="button secondary small">Donate</a>
+        <a href="signin.html">Sign in</a>
+        <a class="nav-primary" href="signup.html">Sign up</a>
+        <a href="#donation-options">Donate</a>
       </div>
-    </div>
-  </nav>
-
-  <header class="hero">
-    <div class="container hero-grid">
-      <div>
-        <span class="eyebrow">Founder-led studio · Independent build</span>
-        <h1>Software that matters, built with intent.</h1>
-        <p class="hero-clarifier">Independent AI and software systems studio.</p>
-        <p class="lead hero-lead">Avery Logic Works is an independent studio focused on thoughtful systems development across AI, software, and long-term digital tools. Some work will be shared early. Some will remain quiet until it is ready. The goal is not noise. The goal is to build carefully, release thoughtfully, and make things worth returning to.</p>
-        <div class="support-capacity">
-          <p>Support helps expand the studio’s tools, infrastructure, and development capacity, making it possible to build more capable work over time.</p>
-        </div>
-        <div class="hero-actions">
-          <a class="button primary" href="signup.html">Join updates</a>
-          <a class="button secondary" href="#support">Support the work</a>
-          <a class="button ghost" href="founder.html">Meet the founder</a>
-        </div>
-        <div class="hero-meta">
-          <span class="info-pill">Independent research and development</span>
-          <span class="info-pill">Apps · games · programs · AI</span>
-          <span class="info-pill">Founder-led for the long term</span>
-        </div>
-      </div>
-      <aside class="hero-card media-card">
-        <div class="hero-media-wrap">
-          <video autoplay muted loop playsinline preload="auto" poster="assets/1000008564.png" fetchpriority="high" aria-label="Avery Logic Works ident video">
-            <source src="assets/Timeline-1.mp4" type="video/mp4">
-          </video>
-        </div>
-      </aside>
-    </div>
+    </nav>
   </header>
 
-  <main>
-    <section class="section">
-      <div class="container">
-        <div class="section-intro">
-          <span class="eyebrow">Built to be understood. Built to endure.</span>
-          <h2>Broad enough to grow. Focused enough to mean something.</h2>
-          <p class="muted">Avery Logic Works exists to create software that matters with limited noise. The goal is not to chase every trend or lock into a single category. The goal is to build strong, adaptable systems that can expand over time&mdash;across AI, apps, games, and other emerging forms of technology.</p>
-          <p class="muted">Some work will be shared early. Some will remain private until it is ready. What matters is that it is built with intention, designed to grow, and made to serve people rather than bury them under hype or confusion.</p>
-        </div>
-        <div class="grid-3">
-          <article class="card">
-            <span class="tag">Purpose</span>
-            <h3>Technology should exist for a reason.</h3>
-            <p class="muted">The work here is meant to solve real problems, create real value, and move with intention.</p>
-          </article>
-          <article class="card">
-            <span class="tag alt">Precision</span>
-            <h3>Details matter. Structure matters.</h3>
-            <p class="muted">Execution is part of the message. Clarity, design discipline, and careful implementation are part of the standard.</p>
-          </article>
-          <article class="card">
-            <span class="tag warm">Progress</span>
-            <h3>Built for the long term.</h3>
-            <p class="muted">This is not a one-off splash. The work is meant to keep growing steadily, intelligently, and with staying power.</p>
-          </article>
-        </div>
-
-        <div class="panel" style="max-width:860px; margin:28px auto 32px; text-align:left;">
-          <span class="tag alt">Support the build</span>
-          <h3>Support helps expand what can be designed, tested, refined, and released.</h3>
-          <p class="muted">Support increases capability while keeping the direction independent and founder-led. The deeper support section is below.</p>
-        </div>
-
-        <div class="panel image-panel compact stack-image">
-          <div class="image-wrap">
-            <img src="assets/1000008565.png" alt="Creative technology workspace">
-          </div>
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <div class="eyebrow">Founder-led studio · Independent build</div>
+        <h1 id="hero-title">We build software, AI, and digital systems designed for lasting usefulness.</h1>
+        <p class="hero-subhead">Avery Logic Works is a founder-led independent studio focused on building thoughtful technology, while selectively working with clients to apply the same principles to real-world systems.</p>
+        <div class="cta-row" aria-label="Homepage actions">
+          <a class="button primary" href="#work">Explore the work</a>
+          <a class="button" href="founder.html">Meet the founder</a>
+          <a class="button" href="signup.html">Join updates</a>
         </div>
       </div>
     </section>
 
-    <section class="section" id="projects">
-      <div class="container split-grid">
-        <div>
-          <span class="eyebrow">Capability overview</span>
-          <h2>What is being built here</h2>
-          <p class="muted">Avery Logic Works is being built to produce technology that is useful, understandable, and capable of lasting beyond short-term cycles. The work is not confined to one narrow lane. It is structured to grow into multiple forms where it makes sense.</p>
-          <ul class="list-clean">
-            <li><strong>AI systems:</strong> tools designed for clarity, control, usefulness, and human-centered direction</li>
-            <li><strong>Applications:</strong> software built to support real workflows and solve real problems</li>
-            <li><strong>Interactive projects:</strong> games and experiments developed with the same emphasis on structure and long-term potential</li>
-            <li><strong>Transparent design direction:</strong> work that can be examined, understood, and improved&mdash;not treated like a sealed black box</li>
-          </ul>
-          <div class="stack-actions">
-            <a class="button primary" href="themis.html">Read more about Themis</a>
-          </div>
+    <section class="video-section" aria-labelledby="video-title">
+      <p id="video-title" class="video-intro">Built through controlled iteration, using proprietary systems and AI-assisted automation to produce real, working software.</p>
+      <div class="video-frame">
+        <video autoplay muted loop playsinline poster="assets/avery-logic-works-poster.jpg" aria-label="Avery Logic Works visual identity animation">
+          <source src="assets/avery-logic-works-logo-reveal.webm" type="video/webm" />
+          <source src="assets/avery-logic-works-logo-reveal.mp4" type="video/mp4" />
+          <div class="video-fallback">Avery Logic Works visual identity animation</div>
+        </video>
+      </div>
+    </section>
+
+    <section id="philosophy" aria-labelledby="philosophy-title">
+      <div class="section-head">
+        <div class="section-label">What Avery Logic Works is</div>
+        <h2 id="philosophy-title">Technology that matters, designed for lasting usefulness instead of momentary attention.</h2>
+      </div>
+      <div class="split">
+        <div class="card">
+          <p>Avery Logic Works exists to build technology that matters, designed for lasting usefulness instead of momentary attention.</p>
+          <p>The work is not built around constant churn or surface-level updates. It is built to remain useful, understandable, and worth returning to over time.</p>
         </div>
-        <div class="panel">
-          <img src="assets/1000008564.png" alt="Futuristic engineering workspace">
-          <div style="margin-top:18px;">
-            <span class="tag alt">Selective visibility</span>
-            <h3>Some work can be shared early. Some stays private until it is ready.</h3>
-            <p class="muted">The public site communicates mission, direction, and visible progress without giving away every roadmap thread or internal system at once.</p>
-          </div>
+        <div class="card">
+          <p>Client work is part of that process. It serves as real-world proof. Systems are built to be clear, dependable, and usable, with a focus on delivering something real quickly, then refining it meaningfully as it evolves.</p>
         </div>
       </div>
     </section>
 
-    <section class="section">
-      <div class="container">
-        <div class="section-intro">
-          <span class="eyebrow">Built independently</span>
-          <h2>A founder building carefully, independently, and for the long term.</h2>
-          <p class="muted">The images here are reinforcement, not the whole pitch. The real point is a growing lab built with intention, constraint, and durability in mind.</p>
-        </div>
-        <div class="grid-2">
-          <article class="card">
-            <div class="profile">
-              <img class="profile-avatar" data-founder-avatar src="assets/founder-avatar-placeholder.svg" alt="Founder photo or placeholder">
-              <div>
-                <span class="tag warm">Founder</span>
-                <h3 style="margin-top:10px;"><span data-founder-name>Chad Avery Harris</span> is building Avery Logic Works as an independent, founder-led studio built for the long term.</h3>
-                <p class="muted">Avery Logic Works is an independent, founder-led software studio building long-term systems across AI, software, and interactive technology. Work is developed within a growing set of internal tools, automation systems, and studio infrastructure designed to support research and development and disciplined release. Many parts of the studio’s workflow are intentionally system-assisted, allowing complex work to move forward efficiently without sacrificing clarity or care.</p>
-                <p class="muted">The objective is simple: build software that matters, and build it carefully enough that it continues to matter over time.</p>
-              </div>
-            </div>
-          </article>
-          <article class="card">
-            <span class="tag">Support matters</span>
-            <h3>Support turns momentum into real build capacity.</h3>
-            <p class="muted">Contributions help widen the studio’s practical bandwidth: development time, hosting, testing cycles, equipment upgrades, implementation work, and the infrastructure required to ship carefully.</p>
-            <p class="muted" style="margin-top:14px;">That support does not just keep the lights on. It increases the speed, depth, and reliability of what can be built next.</p>
-            <div class="stack-actions">
-              <a class="button secondary" href="founder.html">Read the founder note</a>
-            </div>
-          </article>
-        </div>
+    <section id="work" aria-labelledby="work-title">
+      <div class="section-head">
+        <div class="section-label">Capability overview</div>
+        <h2 id="work-title">What is being built here</h2>
+        <p class="muted">Avery Logic Works is being built to produce technology that is useful, understandable, and capable of lasting beyond short-term cycles. The work is structured to grow into multiple forms where it makes sense.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <h3>AI systems</h3>
+          <p>Tools and workflows designed for clarity, control, usefulness, and human-centered direction.</p>
+        </article>
+        <article class="card">
+          <h3>Applications</h3>
+          <p>Software built to support real workflows, solve real problems, and remain understandable as it grows.</p>
+        </article>
+        <article class="card">
+          <h3>Interactive projects</h3>
+          <p>Games, experiments, and digital systems developed with structure, intention, and long-term potential.</p>
+        </article>
+      </div>
+    </section>
 
-        <div class="panel image-panel compact stack-image" style="max-width:920px; margin:28px auto 0;">
-          <div class="image-wrap">
-            <img src="assets/1000008566.png" alt="Founder-led creative technology scene">
-          </div>
+    <section aria-labelledby="together-title">
+      <div class="section-head">
+        <div class="section-label">Working together</div>
+        <h2 id="together-title">How working together works</h2>
+      </div>
+      <ul class="list">
+        <li>Clear scope, focused outcome</li>
+        <li>Built quickly with intention</li>
+        <li>Designed for real use, not just presentation</li>
+        <li>Includes a dedicated refinement pass to ensure the system works as intended</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="founder-title">
+      <div class="split">
+        <div class="section-head">
+          <div class="section-label">Founder-led</div>
+          <h2 id="founder-title">Built independently, carefully, and for the long term.</h2>
+        </div>
+        <div class="card">
+          <p>Avery Logic Works is an independent, founder-led software studio building long-term systems across AI, software, and interactive technology.</p>
+          <p>Work is developed within a growing set of internal tools, automation systems, and studio infrastructure designed to support research, development, and disciplined release.</p>
+          <a class="button" href="founder.html">Read the founder note</a>
         </div>
       </div>
     </section>
 
-    <section class="section">
-      <div class="container">
-        <div class="panel" style="max-width:860px; margin:0 auto;">
-          <span class="tag alt">Trust &amp; privacy</span>
-          <h3>Private information should not be treated like a product.</h3>
-          <p class="muted">Privacy, account controls, and respectful handling of user information are part of the design philosophy here, not an afterthought added later.</p>
-        </div>
+    <section aria-labelledby="privacy-title">
+      <div class="grid">
+        <article class="card">
+          <div class="section-label">Selective visibility</div>
+          <h3>Some work can be shared early. Some stays private until it is ready.</h3>
+          <p>The public site communicates mission, direction, and visible progress without giving away every roadmap thread or internal system at once.</p>
+        </article>
+        <article class="card">
+          <div class="section-label">Trust & privacy</div>
+          <h3 id="privacy-title">Private information should not be treated like a product.</h3>
+          <p>Privacy, account controls, and respectful handling of user information are part of the design philosophy here, not an afterthought added later.</p>
+        </article>
+        <article class="card">
+          <div class="section-label">Updates</div>
+          <h3>Updates should make the work meaningfully better.</h3>
+          <p>The aim is not constant change for its own sake. Updates should improve the system, extend usefulness, or strengthen what already works.</p>
+        </article>
       </div>
     </section>
 
-    <section class="section" id="support">
-      <div class="container cta-band">
-        <div class="grid-2" style="align-items:start; position:relative; z-index:1;">
-          <div>
-            <span class="eyebrow">Support &amp; updates</span>
-            <h3>Back the work without turning the site into a hard sell.</h3>
-            <p class="muted">Visitors can back the work immediately without opening an account, or create an account for updates, preferences, and future supporter access. Those paths stay separate by design so the page stays clear instead of forcing one funnel on everyone.</p>
-            <div class="support-tiers" style="display:grid; gap:18px; margin-top:24px;">
-              <div>
-                <h4 style="margin:0 0 10px; font-size:1rem;">One-Time Support</h4>
-                <div class="stack-actions" style="display:flex; flex-wrap:wrap; gap:12px;">
-                  <a class="button primary small" data-stripe-key="oneTime10" href="#">$10</a>
-                  <a class="button primary small" data-stripe-key="oneTime25" href="#">$25</a>
-                  <a class="button primary small" data-stripe-key="oneTime50" href="#">$50</a>
-                  <a class="button primary small" data-stripe-key="oneTime100" href="#">$100</a>
-                </div>
-              </div>
-              <div>
-                <h4 style="margin:0 0 10px; font-size:1rem;">Monthly Support</h4>
-                <div class="stack-actions" style="display:flex; flex-wrap:wrap; gap:12px;">
-                  <a class="button secondary small" data-stripe-key="monthly10" href="#">$10/mo</a>
-                  <a class="button secondary small" data-stripe-key="monthly25" href="#">$25/mo</a>
-                  <a class="button secondary small" data-stripe-key="monthly50" href="#">$50/mo</a>
-                  <a class="button secondary small" data-stripe-key="monthly100" href="#">$100/mo</a>
-                </div>
-              </div>
-            </div>
-            <div class="small-actions">
-              <a class="text-link" href="support.html">Support, refund &amp; dispute policy <span>&rarr;</span></a>
-              <a class="text-link" href="privacy.html">Email preferences &amp; privacy <span>&rarr;</span></a>
-            </div>
-            <p class="small-note" style="margin-top:14px;">Stripe-ready placeholders are already wired in. Replace the links in <span class="code-note">assets/site-config.js</span> when your Stripe links are ready.</p>
-          </div>
-          <div class="panel" style="background: rgba(255,255,255,0.04);">
-            <span class="tag alt">Two clean paths</span>
-            <h3>Choose the path that actually fits what you want to do.</h3>
-            <ul class="list-clean">
-              <li><strong>Donate only:</strong> quick support with no account required</li>
-              <li><strong>Create an account:</strong> manage updates, preferences, and future member perks</li>
-              <li><strong>Monthly support:</strong> cancel any time once the billing portal is connected</li>
-            </ul>
-            <div class="stack-actions">
-              <a class="button primary" href="signup.html">Sign up / join updates</a>
-              <a class="button ghost" href="login.html">Sign in</a>
-            </div>
+    <section id="your-support" aria-labelledby="support-title">
+      <div class="support-panel">
+        <div class="section-label">Your support</div>
+        <h2 id="support-title">Your support helps this grow.</h2>
+        <p>If you find value in what is being built here, your support helps it grow.</p>
+        <p>Whether that is following the work, sharing it, or contributing directly, each action helps move development forward and allows more of this to be built over time.</p>
+        <p>If you wish to support beyond services or future products, donation options are available at the bottom of the page.</p>
+        <a class="button primary" href="#donation-options">Go to donation options</a>
+      </div>
+    </section>
+
+    <section id="donation-options" aria-labelledby="donation-title">
+      <div class="section-head">
+        <div class="section-label">Donation options</div>
+        <h2 id="donation-title">Support outside of services or future products.</h2>
+        <p class="muted">Donation paths stay separate from accounts, services, and future products so the site remains clear.</p>
+      </div>
+      <div class="donation-grid">
+        <div class="donation-group">
+          <h3>One-time support</h3>
+          <div class="amounts" aria-label="One-time support amounts">
+            <a href="support.html">$10</a>
+            <a href="support.html">$25</a>
+            <a href="support.html">$50</a>
+            <a href="support.html">$100</a>
           </div>
         </div>
+        <div class="donation-group">
+          <h3>Monthly support</h3>
+          <div class="amounts" aria-label="Monthly support amounts">
+            <a href="support.html">$10/mo</a>
+            <a href="support.html">$25/mo</a>
+            <a href="support.html">$50/mo</a>
+            <a href="support.html">$100/mo</a>
+          </div>
+        </div>
+      </div>
+      <div class="cta-row">
+        <a class="button" href="support.html">Support, refund & dispute policy</a>
+        <a class="button" href="privacy.html">Email preferences & privacy</a>
+        <a class="button primary" href="signup.html">Sign up / join updates</a>
+        <a class="button" href="signin.html">Sign in</a>
       </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div>&copy; <span data-current-year></span> Avery Logic Works. All rights reserved.</div>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>© <span id="year"></span> Avery Logic Works. All rights reserved.</p>
       <div class="footer-links">
         <a href="support.html">Support</a>
         <a href="terms.html">Terms</a>
@@ -269,24 +583,8 @@
     </div>
   </footer>
 
-  <script src="assets/site-config.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/site.js"></script>
   <script>
-    (function () {
-      var cfg = window.AVERY_CONFIG && window.AVERY_CONFIG.stripeLinks ? window.AVERY_CONFIG.stripeLinks : {};
-      document.querySelectorAll('[data-stripe-key]').forEach(function (el) {
-        var key = el.getAttribute('data-stripe-key');
-        var href = cfg[key];
-        if (href && href !== '#') {
-          el.href = href;
-          el.target = '_blank';
-          el.rel = 'noopener noreferrer';
-        } else {
-          el.setAttribute('aria-disabled', 'true');
-        }
-      });
-    })();
+    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
