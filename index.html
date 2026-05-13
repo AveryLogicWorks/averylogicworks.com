@@ -348,6 +348,42 @@
       background: rgba(255,255,255,.045);
     }
 
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .service-card {
+      display: flex;
+      flex-direction: column;
+      gap: .95rem;
+    }
+
+    .service-price {
+      display: inline-flex;
+      align-self: flex-start;
+      padding: .42rem .78rem;
+      border-radius: 999px;
+      border: 1px solid rgba(125, 211, 252, .28);
+      background: rgba(125, 211, 252, .12);
+      color: var(--accent);
+      font-weight: 900;
+      letter-spacing: .01em;
+    }
+
+    .service-card .button {
+      width: 100%;
+      margin-top: auto;
+    }
+
+    .service-note {
+      max-width: 780px;
+      margin: 1.25rem auto 0;
+      text-align: center;
+      color: var(--muted);
+    }
+
     .support-panel {
       max-width: 840px;
       margin: 0 auto;
@@ -423,7 +459,7 @@
       .nav { align-items: flex-start; flex-direction: column; padding: 1rem 0; }
       .nav-links { justify-content: flex-start; }
       .hero { min-height: auto; padding-top: 5rem; }
-      .grid, .split, .donation-grid { grid-template-columns: 1fr; }
+      .grid, .split, .service-grid, .donation-grid { grid-template-columns: 1fr; }
       h1 { font-size: clamp(2.8rem, 15vw, 4.35rem); }
     }
   </style>
@@ -449,6 +485,7 @@
         <a href="themis.html">Themis</a>
         <a href="signin.html">Sign in</a>
         <a class="nav-primary" href="signup.html">Sign up</a>
+        <a href="#services">Services</a>
         <a href="#donation-options">Donate</a>
       </div>
     </nav>
@@ -461,7 +498,7 @@
         <h1 id="hero-title">We build software, AI, and digital systems designed for lasting usefulness.</h1>
         <p class="hero-subhead">Avery Logic Works is a founder-led independent studio focused on building thoughtful technology, while selectively working with clients to apply the same principles to real-world systems.</p>
         <div class="cta-row" aria-label="Homepage actions">
-          <a class="button primary" href="#work">Explore the work</a>
+          <a class="button primary" href="#services">Explore services</a>
           <a class="button" href="founder.html">Meet the founder</a>
           <a class="button" href="signup.html">Join updates</a>
         </div>
@@ -561,6 +598,38 @@
           <p>The aim is not constant change for its own sake. Updates should improve the system, extend usefulness, or strengthen what already works.</p>
         </article>
       </div>
+    </section>
+
+    <section id="services" aria-labelledby="services-title">
+      <div class="section-head">
+        <div class="section-label">Services</div>
+        <h2 id="services-title">Small custom software help, scoped carefully before work begins.</h2>
+        <p class="muted">Scripts, automations, bug fixes, and small custom programs. These are intentionally tight entry-level offers designed to be easy to trust and easy to upgrade later if the request is larger.</p>
+      </div>
+      <div class="service-grid">
+        <article class="card service-card">
+          <div class="service-price">$20</div>
+          <h3>Starter Build</h3>
+          <p>Best for a tiny script, one focused automation step, a simple code edit, or a narrow bug fix.</p>
+          <p class="muted">After purchase, you send the request and I confirm whether it fits this tier before work begins.</p>
+          <a class="button primary" href="https://buy.stripe.com/dRm4gs4t52zLckgb0X1RC03" target="_blank" rel="noopener noreferrer">Reserve Starter Build</a>
+        </article>
+        <article class="card service-card">
+          <div class="service-price">$50</div>
+          <h3>Standard Build</h3>
+          <p>Best for a small custom script, a simple automation, a lightweight utility program, or a more involved bug fix.</p>
+          <p class="muted">If the request turns out to be larger than this tier, I will recommend an upgrade, reduced scope, or refund before starting.</p>
+          <a class="button primary" href="https://buy.stripe.com/dRm8wIe3F2zL4ROd951RC04" target="_blank" rel="noopener noreferrer">Reserve Standard Build</a>
+        </article>
+        <article class="card service-card">
+          <div class="service-price">$100</div>
+          <h3>Expanded Build</h3>
+          <p>Best for a larger small-program request, a multi-part script, a deeper fix, or a small custom tool with more complexity.</p>
+          <p class="muted">This is still a scoped small-build offer. It is not an open-ended custom software contract.</p>
+          <a class="button primary" href="https://buy.stripe.com/3cIfZaf7J2zLac8glh1RC05" target="_blank" rel="noopener noreferrer">Reserve Expanded Build</a>
+        </article>
+      </div>
+      <p class="service-note">No completion-time guarantee is included. Questions before buying can be sent to <a href="mailto:Averylogicworks@gmail.com">Averylogicworks@gmail.com</a>.</p>
     </section>
 
     <section id="your-support" aria-labelledby="support-title">
