@@ -1,7 +1,8 @@
 window.AVERY_CONFIG = {
   founderName: 'Chad Avery Harris',
-  supportEmail: 'support@averylogicworks.com',
-  billingEmail: 'billing@averylogicworks.com',
+  supportEmail: 'Averylogicworks@gmail.com',
+  billingEmail: 'Averylogicworks@gmail.com',
+  serviceEmail: 'Averylogicworks@gmail.com',
   supabase: {
     url: 'https://esoiezxddkqlmvsgscqw.supabase.co',
     publishableKey: 'sb_publishable_TYosyp9VRS1S2DEXpNi8eQ_bhMTSFqO'
@@ -27,6 +28,9 @@ window.AVERY_CONFIG = {
     monthly25: 'https://buy.stripe.com/test_3cIfZaf7J2zLac8glh1RC05',
     monthly50: 'https://buy.stripe.com/test_8x25kwe3F5LX840d951RC06',
     monthly100: 'https://buy.stripe.com/test_dRm3cobVx6Q14RO3yv1RC07',
+    serviceStarter20: 'https://buy.stripe.com/dRm4gs4t52zLckgb0X1RC03',
+    serviceStandard50: 'https://buy.stripe.com/dRm8wIe3F2zL4ROd951RC04',
+    serviceExpanded100: 'https://buy.stripe.com/3cIfZaf7J2zLac8glh1RC05',
     shop: '#',
     portal: '#'
   },
