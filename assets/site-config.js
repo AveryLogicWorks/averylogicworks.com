@@ -3,6 +3,20 @@ window.AVERY_CONFIG = {
   supportEmail: 'Averylogicworks@gmail.com',
   billingEmail: 'Averylogicworks@gmail.com',
   serviceEmail: 'Averylogicworks@gmail.com',
+  ownerEmails: [
+    'averylogicworks@gmail.com',
+    'theaverylogicworks@gmail.com'
+  ],
+  adminPath: 'operator-vault-7c9.html',
+  publicPaths: {
+    feedback: 'feedback.html',
+    serviceIntake: 'service-intake.html'
+  },
+  githubRepo: {
+    fullName: 'AveryLogicWorks/averylogicworks.com',
+    branch: 'main',
+    editBase: 'https://github.com/AveryLogicWorks/averylogicworks.com/edit/main/'
+  },
   supabase: {
     url: 'https://esoiezxddkqlmvsgscqw.supabase.co',
     publishableKey: 'sb_publishable_TYosyp9VRS1S2DEXpNi8eQ_bhMTSFqO'
