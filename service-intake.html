@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Service Intake | Avery Logic Works</title>
+  <meta name="description" content="Describe your build request privately before completing a service-slot purchase with Avery Logic Works." />
+  <style>
+    :root {
+      --bg: #05070d;
+      --panel: rgba(255, 255, 255, 0.055);
+      --panel-strong: rgba(255, 255, 255, 0.095);
+      --text: #f7f9ff;
+      --muted: #b7bfd1;
+      --soft: #8790a6;
+      --line: rgba(255,255,255,.14);
+      --accent: #7dd3fc;
+      --accent-2: #a78bfa;
+      --accent-3: #22d3ee;
+      --max: 980px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 15% 5%, rgba(125, 211, 252, .18), transparent 32rem),
+        radial-gradient(circle at 82% 14%, rgba(167, 139, 250, .12), transparent 34rem),
+        linear-gradient(180deg, #05070d 0%, #090d18 52%, #05070d 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(5, 7, 13, .82);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: .7rem;
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: .01em;
+    }
+
+    .brand img {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      object-fit: contain;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      padding: .55rem .8rem;
+      border-radius: 999px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .94rem;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible,
+    .button:hover,
+    .button:focus-visible {
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    .page-shell {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 4.25rem 0 5rem;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .45rem .8rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(255,255,255,.04);
+      font-size: .95rem;
+      margin-bottom: 1.2rem;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 4.4rem);
+      line-height: 1.02;
+      letter-spacing: -.045em;
+      margin-bottom: 1rem;
+    }
+
+    .lead {
+      max-width: 760px;
+      color: var(--muted);
+      font-size: clamp(1.02rem, 2vw, 1.22rem);
+    }
+
+    .hero-note {
+      max-width: 760px;
+      margin-top: 1rem;
+      color: var(--soft);
+      font-size: .98rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 1rem;
+      margin-top: 2rem;
+      align-items: start;
+    }
+
+    .card {
+      padding: clamp(1.3rem, 3vw, 1.8rem);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: var(--panel);
+      box-shadow: 0 20px 70px rgba(0, 0, 0, .28);
+    }
+
+    .section-label {
+      color: var(--accent);
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: .78rem;
+      margin-bottom: .8rem;
+    }
+
+    .tier-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .48rem .82rem;
+      border-radius: 999px;
+      border: 1px solid rgba(125, 211, 252, .28);
+      background: rgba(125, 211, 252, .12);
+      color: var(--accent);
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+
+    .tier-summary {
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .guidance {
+      padding: 1rem 1.05rem;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .guidance strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: .35rem;
+    }
+
+    .intake-form {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .field {
+      display: grid;
+      gap: .45rem;
+    }
+
+    label {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: .9rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      font: inherit;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #93a0b8;
+    }
+
+    textarea {
+      min-height: 240px;
+      resize: vertical;
+    }
+
+    .small-note {
+      margin-top: -.2rem;
+      color: var(--soft);
+      font-size: .92rem;
+    }
+
+    .button-row {
+      display: flex;
+      gap: .75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: .8rem 1.15rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .button.primary {
+      color: #041016;
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent-3));
+      box-shadow: 0 12px 40px rgba(34, 211, 238, .24);
+    }
+
+    .confirmation {
+      display: none;
+      padding: 1rem 1.05rem;
+      border-radius: 22px;
+      border: 1px solid rgba(34, 211, 238, .28);
+      background: rgba(34, 211, 238, .12);
+      color: var(--text);
+    }
+
+    .confirmation.show {
+      display: block;
+    }
+
+    .confirmation a {
+      color: var(--text);
+      font-weight: 800;
+    }
+
+    .info-list {
+      display: grid;
+      gap: .85rem;
+      padding: 0;
+      list-style: none;
+      margin: 0;
+    }
+
+    .info-list li {
+      padding: 1rem;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+    }
+
+    .info-list strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: .3rem;
+    }
+
+    .disclaimer {
+      color: var(--soft);
+      font-size: .94rem;
+    }
+
+    .site-footer {
+      border-top: 1px solid var(--line);
+      padding: 2rem 0;
+      color: var(--soft);
+    }
+
+    .footer-inner {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    @media (max-width: 860px) {
+      .layout,
+      .field-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 1rem 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="index.html" aria-label="Avery Logic Works home">
+        <img src="assets/my Business emblem.jpg" alt="Avery Logic Works emblem" />
+        <span>Avery Logic Works</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html#services">Services</a>
+        <a href="founder.html">Founder</a>
+        <a href="support.html">Support</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    <div class="eyebrow">Private service intake</div>
+    <h1 id="page-title">Describe the build before checkout.</h1>
+    <p class="lead">Use this private intake page to explain exactly what you want. When you submit, the site prepares a direct message to the founder and opens the matching payment page in a new tab.</p>
+    <p class="hero-note">The founder will contact you within 24 hours about the build and let you know that your request has been received once your message is sent and the purchase is completed.</p>
+
+    <div class="layout">
+      <section class="card" aria-labelledby="intake-form-title">
+        <div class="section-label">Selected build slot</div>
+        <div class="tier-pill" id="selected-tier-pill">Starter Build · $20</div>
+        <p class="tier-summary" id="selected-tier-summary">Best for a tiny script, one focused automation step, a simple code edit, or a narrow bug fix.</p>
+        <div class="guidance" id="tier-guidance">
+          <strong>What to ask for here</strong>
+          Keep it specific. Say what you want built, fixed, or automated, and what success should look like when it is done.
+        </div>
+
+        <form class="intake-form" id="service-intake-form">
+          <div class="field-grid">
+            <div class="field">
+              <label for="customer-name">Your name</label>
+              <input id="customer-name" name="customerName" type="text" placeholder="How should the founder address you?" autocomplete="name" required />
+            </div>
+            <div class="field">
+              <label for="customer-email">Your email</label>
+              <input id="customer-email" name="customerEmail" type="email" placeholder="you@example.com" autocomplete="email" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="service-subject">Subject</label>
+            <input id="service-subject" name="subject" type="text" placeholder="Short summary of the build you want" required />
+          </div>
+
+          <div class="field">
+            <label for="service-details">Project details</label>
+            <textarea id="service-details" name="details" required></textarea>
+            <p class="small-note">This is the part where the buyer explains exactly what they want from the service they selected.</p>
+          </div>
+
+          <p class="disclaimer">Disclaimer: purchases are reviewed against the selected build slot before work begins. If the request needs broader scope than the slot you chose, the founder will contact you about the next step before starting the build.</p>
+
+          <div class="button-row">
+            <button class="button primary" type="submit">Open message draft &amp; payment page</button>
+            <a class="button" href="index.html#services">Back to services</a>
+          </div>
+
+          <div class="confirmation" id="service-confirmation"></div>
+        </form>
+      </section>
+
+      <aside class="card" aria-labelledby="what-happens-title">
+        <div class="section-label">What happens next</div>
+        <h2 id="what-happens-title">A clean handoff before the build starts.</h2>
+        <ul class="info-list">
+          <li>
+            <strong>1. You describe the request.</strong>
+            Share the problem, the result you want, and any links, files, or code references that matter.
+          </li>
+          <li>
+            <strong>2. Your message draft opens.</strong>
+            The page prepares a direct message to the founder using the details you entered here instead of printing the email address on the public page.
+          </li>
+          <li>
+            <strong>3. The checkout page opens in a new tab.</strong>
+            Complete the payment for the selected slot after the request details are ready.
+          </li>
+          <li>
+            <strong>4. Founder follow-up happens within 24 hours.</strong>
+            Once the request and purchase are received, the founder will reply about the build and confirm receipt.
+          </li>
+        </ul>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>© <span id="year"></span> Avery Logic Works. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="support.html">Support</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    (function () {
+      const serviceCatalog = {
+        starter: {
+          label: 'Starter Build',
+          price: '$20',
+          checkout: 'https://buy.stripe.com/dRm4gs4t52zLckgb0X1RC03',
+          summary: 'Best for a tiny script, one focused automation step, a simple code edit, or a narrow bug fix.',
+          guidanceTitle: 'Starter Build fits best when you need one small, clear outcome.',
+          guidanceText: 'Ask for a tiny script, one focused automation step, one simple code edit, or one narrow bug fix. Keep the request contained and concrete.',
+          subject: 'Starter Build request',
+          prompt: 'What you want built, fixed, or automated:\n\nWhat success should look like when it is done:\n\nAny links, files, code references, or screenshots:\n\nAny timing or deadline notes:'
+        },
+        standard: {
+          label: 'Standard Build',
+          price: '$50',
+          checkout: 'https://buy.stripe.com/dRm8wIe3F2zL4ROd951RC04',
+          summary: 'Best for a small custom script, a simple automation, a lightweight utility program, or a more involved bug fix.',
+          guidanceTitle: 'Standard Build is the strongest fit for contained real work.',
+          guidanceText: 'Use this when the request needs more than a one-step fix but is still clearly scoped: a small script, a simple automation, a lightweight utility, or a deeper contained bug fix.',
+          subject: 'Standard Build request',
+          prompt: 'What you want built, fixed, or automated:\n\nWhat the tool, script, or fix needs to do:\n\nAny links, files, code references, or screenshots:\n\nAnything that must be included before the build is considered complete:'
+        },
+        expanded: {
+          label: 'Expanded Build',
+          price: '$100',
+          checkout: 'https://buy.stripe.com/3cIfZaf7J2zLac8glh1RC05',
+          summary: 'Best for a larger small-program request, a multi-part script, a deeper fix, or a compact custom tool with more complexity.',
+          guidanceTitle: 'Expanded Build is for deeper small builds with a little more moving structure.',
+          guidanceText: 'Use this when the request has multiple connected parts, a deeper fix, or a compact custom tool that needs more depth than the smaller tiers.',
+          subject: 'Expanded Build request',
+          prompt: 'What you want built, fixed, or automated:\n\nWhat parts or features need to be included:\n\nAny links, files, code references, or screenshots:\n\nWhat outcome you want at the end of this build:'
+        }
+      };
+
+      const params = new URLSearchParams(window.location.search);
+      const selectedKey = serviceCatalog[params.get('tier')] ? params.get('tier') : 'starter';
+      const selectedService = serviceCatalog[selectedKey];
+      const serviceEmail = ['theaverylogicworks', 'gmail.com'].join('@');
+
+      const pageTitle = document.getElementById('page-title');
+      const selectedTierPill = document.getElementById('selected-tier-pill');
+      const selectedTierSummary = document.getElementById('selected-tier-summary');
+      const guidanceBox = document.getElementById('tier-guidance');
+      const subjectField = document.getElementById('service-subject');
+      const detailsField = document.getElementById('service-details');
+      const form = document.getElementById('service-intake-form');
+      const confirmation = document.getElementById('service-confirmation');
+
+      pageTitle.textContent = 'Describe the ' + selectedService.label + ' before checkout.';
+      selectedTierPill.textContent = selectedService.label + ' · ' + selectedService.price;
+      selectedTierSummary.textContent = selectedService.summary;
+      guidanceBox.innerHTML = '<strong>' + selectedService.guidanceTitle + '</strong>' + selectedService.guidanceText;
+      subjectField.value = selectedService.subject;
+      detailsField.value = selectedService.prompt;
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (!form.reportValidity()) return;
+
+        const customerName = document.getElementById('customer-name').value.trim();
+        const customerEmail = document.getElementById('customer-email').value.trim();
+        const subject = subjectField.value.trim() || selectedService.subject;
+        const details = detailsField.value.trim();
+
+        const bodyLines = [
+          'Selected service: ' + selectedService.label + ' (' + selectedService.price + ')',
+          'Customer name: ' + customerName,
+          'Customer email: ' + customerEmail,
+          '',
+          'Project details:',
+          details,
+          '',
+          'Follow-up expectation:',
+          'The founder will contact you within 24 hours about the build and confirm that the request has been received.'
+        ];
+
+        const mailtoUrl = 'mailto:' + serviceEmail + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(bodyLines.join('\n'));
+        const paymentWindow = window.open(selectedService.checkout, '_blank', 'noopener,noreferrer');
+        window.location.href = mailtoUrl;
+
+        confirmation.innerHTML = 'Your message draft is ready and the payment page should now be open in a new tab. After your message is sent and the purchase is completed, the founder will contact you within 24 hours about the build and let you know it has been received. If the payment page did not open, use <a href="' + selectedService.checkout + '" target="_blank" rel="noopener noreferrer">this checkout link</a>.';
+        confirmation.classList.add('show');
+
+        if (paymentWindow && typeof paymentWindow.focus === 'function') {
+          paymentWindow.focus();
+        }
+      });
+    }());
+  </script>
+</body>
+</html>
