@@ -7,7 +7,6 @@ window.AVERY_CONFIG = {
     'averylogicworks@gmail.com',
     'theaverylogicworks@gmail.com'
   ],
-  adminPath: 'operator-vault-7c9.html',
   publicPaths: {
     feedback: 'feedback.html',
     serviceIntake: 'service-intake.html'
