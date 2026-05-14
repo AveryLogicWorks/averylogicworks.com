@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/site.css">
+  <meta name="description" content="Leave a comment or rating for Avery Logic Works.">
+  <title>Feedback | Avery Logic Works</title>
+</head>
+<body>
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>Avery Logic Works</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="founder.html">Founder</a>
+        <a href="support.html">Support</a>
+        <a href="feedback.html">Feedback</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="page-hero">
+      <div class="container section-intro">
+        <span class="eyebrow">Comments and ratings</span>
+        <h1>Leave a rating or comment.</h1>
+        <p class="muted">This page gives people a simple way to leave feedback, comments, and a rating that the founder can review privately inside the operator vault.</p>
+      </div>
+    </section>
+
+    <section class="section-tight">
+      <div class="container grid-2">
+        <div class="form-shell">
+          <span class="tag">Public feedback</span>
+          <h3>Share your experience</h3>
+          <form id="feedback-form">
+            <div class="field">
+              <label for="feedbackName">Name</label>
+              <input id="feedbackName" type="text" placeholder="Optional name">
+            </div>
+            <div class="field">
+              <label for="feedbackEmail">Email</label>
+              <input id="feedbackEmail" type="email" placeholder="Optional email for follow-up">
+            </div>
+            <div class="field">
+              <label for="feedbackTarget">What is this feedback about?</label>
+              <input id="feedbackTarget" type="text" placeholder="Homepage, service build, support, founder page, or general experience">
+            </div>
+            <div class="field">
+              <label for="feedbackRating">Rating</label>
+              <select id="feedbackRating" required>
+                <option value="">Choose a rating</option>
+                <option value="5">5 / 5</option>
+                <option value="4">4 / 5</option>
+                <option value="3">3 / 5</option>
+                <option value="2">2 / 5</option>
+                <option value="1">1 / 5</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="feedbackComment">Comment</label>
+              <textarea id="feedbackComment" placeholder="Tell Avery Logic Works what worked, what did not, or what should be improved." required></textarea>
+            </div>
+            <div class="form-actions">
+              <button class="button primary" id="feedback-submit-button" type="submit">Send feedback</button>
+            </div>
+          </form>
+          <div class="form-message" id="feedback-message"></div>
+        </div>
+
+        <div class="policy-shell">
+          <span class="tag alt">How it is handled</span>
+          <h3>Private review, clearer follow-up.</h3>
+          <ul class="list-clean">
+            <li>Ratings and comments are stored privately for founder review.</li>
+            <li>Contact details are optional unless you want a reply.</li>
+            <li>This page is meant for feedback, not customer support emergencies.</li>
+          </ul>
+          <p class="small-note">If you need billing help or support review, use the support policy page instead of this form.</p>
+          <div class="form-actions">
+            <a class="button secondary" href="support.html">Open support policy</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>&copy; <span data-current-year></span> Avery Logic Works. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="support.html">Support</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/site-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    (function () {
+      const cfg = window.AVERY_CONFIG || {};
+      const supabaseCfg = cfg.supabase || {};
+      const messageBox = document.getElementById('feedback-message');
+      const form = document.getElementById('feedback-form');
+      const submitButton = document.getElementById('feedback-submit-button');
+      let sb = null;
+
+      document.querySelectorAll('[data-current-year]').forEach((el) => {
+        el.textContent = new Date().getFullYear();
+      });
+
+      if (window.supabase && supabaseCfg.url && supabaseCfg.publishableKey) {
+        sb = window.supabase.createClient(supabaseCfg.url, supabaseCfg.publishableKey, {
+          auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+        });
+      }
+
+      function getVisitorToken() {
+        const key = 'avery-visitor-token';
+        let token = localStorage.getItem(key);
+        if (!token) {
+          token = 'v_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+          localStorage.setItem(key, token);
+        }
+        return token;
+      }
+
+      function setMessage(text, tone) {
+        messageBox.textContent = text;
+        messageBox.className = 'form-message show' + (tone ? ' ' + tone : '');
+      }
+
+      form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        if (!form.reportValidity()) return;
+        if (!sb) {
+          setMessage('Feedback is temporarily unavailable right now.', 'error');
+          return;
+        }
+        submitButton.disabled = true;
+        try {
+          const rating = Number(document.getElementById('feedbackRating').value || 0);
+          const name = document.getElementById('feedbackName').value.trim();
+          const email = document.getElementById('feedbackEmail').value.trim();
+          const target = document.getElementById('feedbackTarget').value.trim();
+          const comment = document.getElementById('feedbackComment').value.trim();
+          const { error } = await sb.from('site_events').insert({
+            event_type: 'public_feedback_submitted',
+            page_path: window.location.pathname || '/feedback.html',
+            visitor_token: getVisitorToken(),
+            user_email: email || null,
+            metadata: {
+              name: name || null,
+              email: email || null,
+              target_page: target || 'General feedback',
+              rating: rating,
+              comment: comment,
+              submitted_at: new Date().toISOString(),
+              source: 'feedback.html'
+            }
+          });
+          if (error) throw error;
+          form.reset();
+          setMessage('Your feedback has been received. Thank you for taking the time to leave a rating or comment.', 'info');
+        } catch (err) {
+          setMessage('Your feedback could not be saved right now. Please try again shortly.', 'error');
+        } finally {
+          submitButton.disabled = false;
+        }
+      });
+    }());
+  </script>
+</body>
+</html>
