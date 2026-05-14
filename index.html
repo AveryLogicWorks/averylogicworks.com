@@ -795,8 +795,81 @@
     </div>
   </footer>
 
+  <script src="assets/site-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    (function () {
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      const cfg = window.AVERY_CONFIG || {};
+      const supabaseCfg = cfg.supabase || {};
+      let sb = null;
+
+      if (window.supabase && supabaseCfg.url && supabaseCfg.publishableKey) {
+        sb = window.supabase.createClient(supabaseCfg.url, supabaseCfg.publishableKey, {
+          auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+        });
+      }
+
+      if (!sb) return;
+
+      function getVisitorToken() {
+        const key = 'avery-visitor-token';
+        let token = localStorage.getItem(key);
+        if (!token) {
+          token = 'v_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+          localStorage.setItem(key, token);
+        }
+        return token;
+      }
+
+      async function logEvent(eventType, payload) {
+        try {
+          await sb.from('site_events').insert({
+            event_type: eventType,
+            page_path: window.location.pathname || '/index.html',
+            visitor_token: getVisitorToken(),
+            metadata: payload || {}
+          });
+        } catch (err) {
+          console.debug('homepage event skipped', eventType, err?.message || err);
+        }
+      }
+
+      const visitKey = 'avery-homepage-last-visit';
+      const now = Date.now();
+      const lastVisit = Number(localStorage.getItem(visitKey) || 0);
+      if (!lastVisit || (now - lastVisit) > (30 * 60 * 1000)) {
+        localStorage.setItem(visitKey, String(now));
+        logEvent('homepage_visit', {
+          href: window.location.href,
+          title: document.title || '',
+          source: 'index.html'
+        });
+      }
+
+      function trackClick(selector, eventType, label) {
+        document.querySelectorAll(selector).forEach(function (node) {
+          node.addEventListener('click', function () {
+            logEvent(eventType, {
+              href: node.getAttribute('href') || '',
+              label: label || node.textContent.trim(),
+              source: 'index.html'
+            });
+          });
+        });
+      }
+
+      trackClick('header .nav-links a[href="login.html"]', 'homepage_signin_click', 'Header sign in');
+      trackClick('header .nav-links a[href="signup.html"]', 'homepage_signup_click', 'Header sign up');
+      trackClick('.hero .cta-row a[href="#services"]', 'homepage_service_cta_click', 'Hero reserve build slot');
+      trackClick('.hero .cta-row a[href="#good-fit"]', 'homepage_fit_cta_click', 'Hero see what fits');
+      trackClick('.hero .cta-row a[href="founder.html"]', 'homepage_founder_cta_click', 'Hero meet the founder');
+      trackClick('#support .button.primary[href="#donation-options"]', 'homepage_support_cta_click', 'Support panel to donation options');
+      trackClick('#donation-options .amounts a', 'homepage_donation_click');
+      trackClick('#donation-options .cta-row a[href="signup.html"]', 'homepage_signup_click', 'Bottom sign up');
+      trackClick('#donation-options .cta-row a[href="login.html"]', 'homepage_signin_click', 'Bottom sign in');
+    }());
   </script>
 </body>
 </html>
