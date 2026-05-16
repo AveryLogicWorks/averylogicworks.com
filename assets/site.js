@@ -94,7 +94,14 @@
     return (value || '').trim().replace(/\s+/g, ' ');
   }
 
-  function validateDisplayName(value) {
+  function isOwnerEmail(email) {
+    const normalizedEmail = String(email || '').trim().toLowerCase();
+    return normalizedEmail && Array.isArray(cfg.ownerEmails) && cfg.ownerEmails.some((value) => {
+      return String(value || '').trim().toLowerCase() === normalizedEmail;
+    });
+  }
+
+  function validateDisplayName(value, email) {
     const name = normalizeName(value);
     if (!name) return { ok: false, message: 'Add a display name so the account has a readable label.' };
     if (name.length < 2) return { ok: false, message: 'Display name must be at least 2 characters.' };
@@ -102,7 +109,12 @@
     if (!/^[A-Za-z0-9 ._\-]+$/.test(name)) return { ok: false, message: 'Display name can use letters, numbers, spaces, periods, underscores, and hyphens only.' };
     if (/([._\- ])\1\1/.test(name)) return { ok: false, message: 'Display name cannot use repeated symbol spam.' };
     const lowered = name.toLowerCase();
-    if (reservedDisplayNames.has(lowered)) return { ok: false, message: 'That display name is reserved. Please choose another.' };
+    if (reservedDisplayNames.has(lowered)) {
+      if (lowered === 'founder' && isOwnerEmail(email)) {
+        return { ok: true, value: name };
+      }
+      return { ok: false, message: 'That display name is reserved. Please choose another.' };
+    }
     if (bannedFragments.some((term) => lowered.includes(term))) return { ok: false, message: 'That display name is not allowed. Please choose another.' };
     return { ok: true, value: name };
   }
@@ -297,8 +309,8 @@
       const messageBox = document.getElementById('signup-message');
       clearMessage(messageBox);
       const displayNameRaw = signupForm.querySelector('[name="displayName"]').value;
-      const nameCheck = validateDisplayName(displayNameRaw);
       const email = signupForm.querySelector('[name="email"]').value.trim();
+      const nameCheck = validateDisplayName(displayNameRaw, email);
       const password = signupForm.querySelector('[name="password"]').value;
       const confirmPassword = signupForm.querySelector('[name="confirmPassword"]').value;
       const newsletter = signupForm.querySelector('[name="newsletter"]').checked;
