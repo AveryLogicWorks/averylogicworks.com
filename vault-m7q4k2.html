@@ -62,7 +62,7 @@
             <div class="snapshot-item"><strong id="snapshot-logins">0</strong><span>Total logins</span></div>
             <div class="snapshot-item"><strong id="snapshot-signups">0</strong><span>Total signups</span></div>
           </div>
-          <p class="small-note">Vault build: <strong id="vault-build-id">2026-05-16-3</strong></p>
+          <p class="small-note">Vault build: <strong id="vault-build-id">2026-05-16-4</strong></p>
         </div>
 
         <div class="form-shell">
@@ -424,93 +424,103 @@
         return response.count || 0;
       }
 
-      async function loadVaultSummary(buildId) {
-        const response = await sb.functions.invoke('owner-vault-summary', {
-          body: {
-            source: 'vault-m7q4k2.html',
-            build: buildId || 'unknown'
+      async function fetchJsonWithAuth(url, session, options, timeoutMs) {
+        const controller = new AbortController();
+        const timer = setTimeout(function () {
+          controller.abort();
+        }, timeoutMs || 8000);
+        try {
+          const headers = Object.assign({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'apikey': supabaseCfg.publishableKey || ''
+          }, options && options.headers ? options.headers : {});
+          if (session && session.access_token) {
+            headers.Authorization = 'Bearer ' + session.access_token;
           }
-        });
-        if (response.error) throw response.error;
-        if (!response.data || typeof response.data !== 'object') {
-          throw new Error('Owner vault service returned no readable data.');
+          const response = await fetch(url, Object.assign({}, options || {}, {
+            headers: headers,
+            signal: controller.signal
+          }));
+          const raw = await response.text();
+          let data = null;
+          if (raw) {
+            try {
+              data = JSON.parse(raw);
+            } catch (_parseErr) {
+              if (response.ok) {
+                throw new Error('Owner endpoint returned unreadable data.');
+              }
+            }
+          }
+          if (!response.ok) {
+            const message = data && (data.error || data.message)
+              ? (data.error || data.message)
+              : ('Request failed with status ' + response.status + '.');
+            throw new Error(message);
+          }
+          return data;
+        } catch (err) {
+          if (err && err.name === 'AbortError') {
+            throw new Error('Timed out');
+          }
+          throw err;
+        } finally {
+          clearTimeout(timer);
         }
-        return response.data;
       }
 
-      async function loadCoreMetricsFallback() {
-        const now = Date.now();
-        const dayAgoIso = new Date(now - (24 * 60 * 60 * 1000)).toISOString();
-        const monthAgoIso = new Date(now - (30 * 24 * 60 * 60 * 1000)).toISOString();
+      async function loadVaultSummary(buildId, session) {
+        const baseUrl = String(supabaseCfg.url || '').replace(/\/+$/, '');
+        if (!baseUrl) {
+          throw new Error('Supabase URL is missing.');
+        }
+        const data = await fetchJsonWithAuth(baseUrl + '/functions/v1/owner-vault-summary', session, {
+          method: 'POST',
+          body: JSON.stringify({
+            source: 'vault-m7q4k2.html',
+            build: buildId || 'unknown'
+          })
+        }, 8000);
+        if (!data || typeof data !== 'object') {
+          throw new Error('Owner vault service returned no readable data.');
+        }
+        return data;
+      }
 
-        const [
-          visits24h,
-          visits30d,
-          visitsAllTime,
-          logins30d,
-          loginsAllTime,
-          signups30d,
-          signupsAllTime,
-          accountsTotal,
-          newsletterOptIns,
-          supporterUpdatesOptIns,
-          supporterEventRows
-        ] = await Promise.all([
-          countEvent('page_visit', dayAgoIso),
-          countEvent('page_visit', monthAgoIso),
-          countEvent('page_visit'),
-          countEvent('login_success', monthAgoIso),
-          countEvent('login_success'),
-          countEvent('signup_submitted', monthAgoIso),
-          countEvent('signup_submitted'),
-          sb.from('profiles').select('*', { count: 'exact', head: true }),
-          countRows('profiles', 'newsletter_opt_in', true),
-          countRows('profiles', 'supporter_updates_opt_in', true),
-          sb.from('supporter_events').select('event_type,amount_cents')
-        ]);
-
-        if (accountsTotal.error) throw accountsTotal.error;
-        if (supporterEventRows.error) throw supporterEventRows.error;
-
-        const supporterRows = supporterEventRows.data || [];
-        let donationEvents = 0;
-        let subscriptionEvents = 0;
-        let donationTotalCents = 0;
-        let subscriptionTotalCents = 0;
-
-        supporterRows.forEach(function (row) {
-          const eventType = String(row.event_type || '').toLowerCase();
-          const amountCents = Number(row.amount_cents || 0);
-          if (eventType.indexOf('donation') === 0) {
-            donationEvents += 1;
-            donationTotalCents += amountCents;
-          }
-          if (eventType.indexOf('subscription') === 0 || eventType.indexOf('monthly') === 0) {
-            subscriptionEvents += 1;
-            subscriptionTotalCents += amountCents;
-          }
-        });
-
+      async function loadCoreMetricsFallback(session) {
+        const baseUrl = String(supabaseCfg.url || '').replace(/\/+$/, '');
+        if (!baseUrl) {
+          throw new Error('Supabase URL is missing.');
+        }
+        const data = await fetchJsonWithAuth(baseUrl + '/rest/v1/rpc/get_owner_dashboard_counts', session, {
+          method: 'POST',
+          body: '{}'
+        }, 8000);
+        const stats = Array.isArray(data) ? data[0] : data;
+        if (!stats || typeof stats !== 'object') {
+          throw new Error('Owner dashboard counts returned no readable data.');
+        }
         return {
-          visits_24h: visits24h,
-          visits_30d: visits30d,
-          visits_all_time: visitsAllTime,
-          logins_30d: logins30d,
-          logins_all_time: loginsAllTime,
-          signups_30d: signups30d,
-          signups_all_time: signupsAllTime,
-          accounts_total: accountsTotal.count || 0,
-          newsletter_opt_ins: newsletterOptIns,
-          supporter_updates_opt_ins: supporterUpdatesOptIns,
-          donation_events: donationEvents,
-          subscription_events: subscriptionEvents,
-          donation_total_display: '$' + (donationTotalCents / 100).toFixed(2),
-          subscription_total_display: '$' + (subscriptionTotalCents / 100).toFixed(2)
+          visits_24h: stats.visits_24h ?? 0,
+          visits_30d: stats.visits_30d ?? 0,
+          visits_all_time: stats.visits_all_time ?? 0,
+          logins_30d: stats.logins_30d ?? 0,
+          logins_all_time: stats.logins_all_time ?? stats.logins_30d ?? 0,
+          signups_30d: stats.signups_30d ?? 0,
+          signups_all_time: stats.signups_all_time ?? stats.signups_30d ?? 0,
+          accounts_total: stats.accounts_total ?? 0,
+          newsletter_opt_ins: stats.newsletter_opt_ins ?? 0,
+          supporter_updates_opt_ins: stats.supporter_updates_opt_ins ?? 0,
+          donation_events: stats.donation_events ?? 0,
+          subscription_events: stats.subscription_events ?? 0,
+          donation_total_display: stats.donation_total_display || '$0.00',
+          subscription_total_display: stats.subscription_total_display || '$0.00'
         };
       }
 
-      async function loadCoreMetrics() {
-        const fallbackStats = await loadCoreMetricsFallback();
+      async function loadCoreMetrics(session) {
+        const fallbackStats = await loadCoreMetricsFallback(session);
         applyCoreMetrics(fallbackStats);
         setSnapshot(snapshotProfiles, fallbackStats.accounts_total, '0');
         setSnapshot(snapshotVisits, fallbackStats.visits_all_time, '0');
@@ -608,7 +618,7 @@
 
         const buildId = vaultBuildId ? vaultBuildId.textContent : 'unknown';
         try {
-          const payload = await withTimeout(loadVaultSummary(buildId), 8000);
+          const payload = await withTimeout(loadVaultSummary(buildId, session), 8000);
           applyVaultSummary(payload);
           settleAdminLists();
           setMessage(adminStatus, 'Owner session confirmed. Snapshot: profiles ' + snapshotProfiles.textContent + ', visits ' + snapshotVisits.textContent + ', logins ' + snapshotLogins.textContent + ', signups ' + snapshotSignups.textContent + '. Loaded through the owner vault service.', 'info');
@@ -621,7 +631,7 @@
 
         let metricLoad;
         try {
-          metricLoad = await loadCoreMetrics();
+          metricLoad = await loadCoreMetrics(session);
         } catch (err) {
           console.debug('core metrics unavailable after fallback', err?.message || err);
           setMessage(adminStatus, 'Owner session confirmed, but the vault could not load its core counters yet.', 'error');
@@ -636,7 +646,7 @@
         settleAdminLists();
 
         if (metricLoad) {
-          setMessage(adminStatus, 'Owner session confirmed. Snapshot: profiles ' + snapshotProfiles.textContent + ', visits ' + snapshotVisits.textContent + ', logins ' + snapshotLogins.textContent + ', signups ' + snapshotSignups.textContent + '. Loaded through fallback reads.', 'info');
+          setMessage(adminStatus, 'Owner session confirmed. Snapshot: profiles ' + snapshotProfiles.textContent + ', visits ' + snapshotVisits.textContent + ', logins ' + snapshotLogins.textContent + ', signups ' + snapshotSignups.textContent + '. Loaded through direct authenticated fallback reads.', 'info');
         }
       }
 
