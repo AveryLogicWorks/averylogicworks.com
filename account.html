@@ -29,8 +29,8 @@
     <section class="page-hero">
       <div class="container section-intro">
         <span class="eyebrow">Account settings</span>
-        <h1>Simple settings, not a giant preference maze.</h1>
-        <p class="muted">This page keeps settings intentionally small: newsletters on or off, supporter emails on or off, and a clean account shell after sign-in.</p>
+        <h1>Manage your email preferences and account access.</h1>
+        <p class="muted">This page keeps settings intentionally small: newsletters on or off, supporter emails on or off, and a clean account view after sign-in.</p>
       </div>
     </section>
 
@@ -56,10 +56,6 @@
                 <input id="prefSupporterUpdates" name="supporterUpdates" type="checkbox">
                 <label for="prefSupporterUpdates">Receive supporter / donor related emails</label>
               </div>
-              <div class="switch-row">
-                <input id="prefLocked" name="accountLocked" type="checkbox">
-                <label for="prefLocked">Lock account until the next login or support review</label>
-              </div>
             </div>
             <div class="form-actions">
               <button class="button primary" type="submit">Save settings</button>
@@ -70,13 +66,13 @@
 
         <div class="policy-shell">
           <span class="tag alt">How this is meant to work</span>
-          <h3>Two categories are enough to start.</h3>
+          <h3>Small, clear preferences.</h3>
           <ul class="list-clean">
             <li><strong>Newsletters:</strong> broad updates, drops, and major announcements</li>
             <li><strong>Supporter emails:</strong> donation-related follow-ups, perk notices, and supporter-only admin messages</li>
-            <li><strong>Lock state:</strong> a front-end placeholder until your live auth system handles it for real</li>
+            <li><strong>Owner tools:</strong> the owner dashboard appears automatically for authorized owner accounts</li>
           </ul>
-          <p class="small-note">This page now checks for a real signed-in session first, then saves preference updates to your account metadata.</p>
+          <p class="small-note">This page checks for a real signed-in session first, then saves preference updates to your account metadata.</p>
         </div>
       </div>
     </section>
