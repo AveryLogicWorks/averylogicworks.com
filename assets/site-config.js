@@ -27,6 +27,7 @@ window.AVERY_CONFIG = {
     home: 'index.html',
     login: 'login.html',
     signup: 'signup.html',
+    signupSuccess: 'signup-success.html',
     account: 'account.html',
     confirmNotice: 'login.html?check-email=1',
     resetRedirect: 'login.html?reset=1'
