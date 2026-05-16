@@ -49,6 +49,7 @@ create or replace function public.is_site_admin()
 returns boolean
 language sql
 stable
+set search_path = public
 as $$
   select exists (
     select 1
@@ -112,6 +113,10 @@ create trigger on_auth_user_created_profile
 after insert on auth.users
 for each row
 execute function public.handle_new_user_profile();
+
+revoke execute on function public.handle_new_user_profile() from public;
+revoke execute on function public.handle_new_user_profile() from anon;
+revoke execute on function public.handle_new_user_profile() from authenticated;
 
 create or replace function public.get_owner_dashboard_counts()
 returns table (
@@ -200,4 +205,6 @@ begin
 end;
 $$;
 
+revoke execute on function public.get_owner_dashboard_counts() from public;
+revoke execute on function public.get_owner_dashboard_counts() from anon;
 grant execute on function public.get_owner_dashboard_counts() to authenticated;
