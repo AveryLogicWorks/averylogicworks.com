@@ -24,8 +24,11 @@
     .mono-block { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.92rem; word-break:break-all; }
     .empty-state { color:var(--muted); }
     .unavailable-shell { max-width: 720px; margin: 0 auto; }
+    .snapshot-grid { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:12px; margin-top:18px; }
+    .snapshot-item { padding:14px 16px; border-radius:16px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.04); }
+    .snapshot-item strong { display:block; font-size:1.25rem; line-height:1.1; margin-bottom:6px; }
     @media (max-width: 980px) {
-      .admin-grid, .quick-links, .metric-grid.admin-metrics { grid-template-columns: 1fr; }
+      .admin-grid, .quick-links, .metric-grid.admin-metrics, .snapshot-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -53,6 +56,13 @@
           </div>
           <div class="form-message info show" id="admin-console-status">Loading owner counters and private queues…</div>
           <p class="small-note">This hidden page is no longer published in the public site config. It only opens when an owner account is already signed in.</p>
+          <div class="snapshot-grid" id="owner-snapshot">
+            <div class="snapshot-item"><strong id="snapshot-profiles">0</strong><span>Total profiles</span></div>
+            <div class="snapshot-item"><strong id="snapshot-visits">0</strong><span>Total page visits</span></div>
+            <div class="snapshot-item"><strong id="snapshot-logins">0</strong><span>Total logins</span></div>
+            <div class="snapshot-item"><strong id="snapshot-signups">0</strong><span>Total signups</span></div>
+          </div>
+          <p class="small-note">Vault build: <strong id="vault-build-id">2026-05-16-2</strong></p>
         </div>
 
         <div class="form-shell">
@@ -183,6 +193,10 @@
       const serviceRequestList = document.getElementById('service-request-list');
       const feedbackList = document.getElementById('feedback-list');
       const securityEventList = document.getElementById('security-event-list');
+      const snapshotProfiles = document.getElementById('snapshot-profiles');
+      const snapshotVisits = document.getElementById('snapshot-visits');
+      const snapshotLogins = document.getElementById('snapshot-logins');
+      const snapshotSignups = document.getElementById('snapshot-signups');
 
       function getRememberKey() {
         return 'avery-remember-me';
@@ -257,6 +271,11 @@
       function setStatValue(key, value, fallback) {
         if (!statEls[key]) return;
         statEls[key].textContent = formatStatValue(value, fallback);
+      }
+
+      function setSnapshot(node, value, fallback) {
+        if (!node) return;
+        node.textContent = formatStatValue(value, fallback);
       }
 
       function ensureListState(node, emptyText) {
@@ -405,6 +424,10 @@
         setStatValue('subscription_events', stats.subscription_events, '0');
         setStatValue('donation_total', stats.donation_total_display, '$0.00');
         setStatValue('subscription_total', stats.subscription_total_display, '$0.00');
+        setSnapshot(snapshotProfiles, stats.accounts_total, '0');
+        setSnapshot(snapshotVisits, stats.visits_all_time, '0');
+        setSnapshot(snapshotLogins, stats.logins_all_time ?? stats.logins_30d, '0');
+        setSnapshot(snapshotSignups, stats.signups_all_time ?? stats.signups_30d, '0');
       }
 
       async function loadCoreMetrics() {
@@ -494,7 +517,7 @@
 
       async function loadSecurityEvents() {
         try {
-          const securityTypes = ['admin_access_denied', 'admin_hidden_path_hit', 'service_intake_save_failed'];
+          const securityTypes = ['admin_access_denied', 'admin_hidden_path_hit', 'service_intake_save_failed', 'owner_vault_opened'];
           const total = await sb.from('site_events').select('*', { count: 'exact', head: true }).in('event_type', securityTypes);
           if (total.error) throw total.error;
           setStatValue('security_events', total.count || 0, '0');
@@ -504,12 +527,17 @@
           if (error) throw error;
           renderList(securityEventList, data || [], function (row) {
             const meta = row.metadata || {};
+            let label = 'Security event logged';
+            if (row.event_type === 'admin_access_denied') label = 'Blocked admin attempt';
+            if (row.event_type === 'admin_hidden_path_hit') label = 'Hidden vault hit without access';
+            if (row.event_type === 'service_intake_save_failed') label = 'Service intake save failure';
+            if (row.event_type === 'owner_vault_opened') label = 'Owner vault opened';
             return '<div class="data-item">'
-              + '<strong>' + row.event_type + '</strong>'
+              + '<strong>' + label + '</strong>'
               + '<div class="data-meta">' + (row.user_email || meta.email || 'Unknown email') + ' · ' + (row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div>'
-              + '<div class="data-meta">' + (meta.reason || meta.source || 'Security event logged') + '</div>'
+              + '<div class="data-meta">' + (meta.reason || meta.source || row.event_type) + '</div>'
               + '</div>';
-          }, 'No suspicious access events are recorded yet.');
+          }, 'No blocked or suspicious access events are recorded yet.');
         } catch (err) {
           renderList(securityEventList, [], null, 'Security events are not readable from this owner session yet.');
         }
@@ -521,6 +549,7 @@
         publicShell.classList.add('hidden');
         adminShell.classList.remove('hidden');
         settleAdminLists();
+        await logEvent('owner_vault_opened', { email: session.user.email || null, source: 'vault-m7q4k2.html' });
 
         let metricLoad;
         try {
@@ -539,11 +568,11 @@
         settleAdminLists();
 
         if (metricLoad && metricLoad.source === 'fallback') {
-          setMessage(adminStatus, 'Owner session confirmed. The vault loaded with fallback counter reads while the main counter RPC was flaky.', 'info');
+          setMessage(adminStatus, 'Owner session confirmed. Snapshot: profiles ' + snapshotProfiles.textContent + ', visits ' + snapshotVisits.textContent + ', logins ' + snapshotLogins.textContent + ', signups ' + snapshotSignups.textContent + '. The vault used fallback counter reads.', 'info');
           return;
         }
         if (metricLoad) {
-          setMessage(adminStatus, 'Owner session confirmed. The hidden operator vault is loaded.', 'info');
+          setMessage(adminStatus, 'Owner session confirmed. Snapshot: profiles ' + snapshotProfiles.textContent + ', visits ' + snapshotVisits.textContent + ', logins ' + snapshotLogins.textContent + ', signups ' + snapshotSignups.textContent + '.', 'info');
         }
       }
 
