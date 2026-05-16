@@ -219,6 +219,27 @@
         node.className = 'form-message show' + (tone ? ' ' + tone : '');
       }
 
+      function ensureListState(node, emptyText) {
+        if (!node) return;
+        const text = (node.textContent || '').trim();
+        if (!text || /^Loading/i.test(text)) {
+          node.innerHTML = '<div class="empty-state">' + emptyText + '</div>';
+        }
+      }
+
+      function settleAdminLists() {
+        ensureListState(serviceRequestList, 'No private service requests have been captured yet.');
+        ensureListState(feedbackList, 'No ratings or suggestions have been submitted yet.');
+        ensureListState(securityEventList, 'No suspicious access events are recorded yet.');
+      }
+
+      function withTimeout(promise, ms) {
+        return Promise.race([
+          promise,
+          new Promise((resolve) => setTimeout(resolve, ms))
+        ]);
+      }
+
       async function logEvent(eventType, payload) {
         if (!sb) return;
         try {
@@ -374,8 +395,15 @@
         ownerEmailNode.textContent = session.user.email || 'owner';
         publicShell.classList.add('hidden');
         adminShell.classList.remove('hidden');
+        settleAdminLists();
         await loadCoreMetrics();
-        await Promise.allSettled([loadClickMetrics(), loadServiceRequests(), loadFeedback(), loadSecurityEvents()]);
+        await Promise.allSettled([
+          withTimeout(loadClickMetrics(), 4000),
+          withTimeout(loadServiceRequests(), 4000),
+          withTimeout(loadFeedback(), 4000),
+          withTimeout(loadSecurityEvents(), 4000)
+        ]);
+        settleAdminLists();
         setMessage(adminStatus, 'Owner session confirmed. The hidden operator vault is loaded.', 'info');
       }
 
