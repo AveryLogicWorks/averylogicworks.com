@@ -4,8 +4,7 @@ window.AVERY_CONFIG = {
   billingEmail: 'Averylogicworks@gmail.com',
   serviceEmail: 'Averylogicworks@gmail.com',
   ownerEmails: [
-    'averylogicworks@gmail.com',
-    'theaverylogicworks@gmail.com'
+    'adminaverylogicworks@gmail.com'
   ],
   publicPaths: {
     feedback: 'feedback.html',
