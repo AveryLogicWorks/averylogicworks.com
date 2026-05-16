@@ -62,7 +62,7 @@
             <div class="snapshot-item"><strong id="snapshot-logins">0</strong><span>Total logins</span></div>
             <div class="snapshot-item"><strong id="snapshot-signups">0</strong><span>Total signups</span></div>
           </div>
-          <p class="small-note">Vault build: <strong id="vault-build-id">2026-05-16-2</strong></p>
+          <p class="small-note">Vault build: <strong id="vault-build-id">2026-05-16-3</strong></p>
         </div>
 
         <div class="form-shell">
@@ -197,6 +197,7 @@
       const snapshotVisits = document.getElementById('snapshot-visits');
       const snapshotLogins = document.getElementById('snapshot-logins');
       const snapshotSignups = document.getElementById('snapshot-signups');
+      const vaultBuildId = document.getElementById('vault-build-id');
 
       function getRememberKey() {
         return 'avery-remember-me';
@@ -278,6 +279,10 @@
         node.textContent = formatStatValue(value, fallback);
       }
 
+      function escapeHtml(value) {
+        return String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+
       function ensureListState(node, emptyText) {
         if (!node) return;
         const text = (node.textContent || '').trim();
@@ -289,13 +294,13 @@
       function settleAdminLists() {
         ensureListState(serviceRequestList, 'No private service requests have been captured yet.');
         ensureListState(feedbackList, 'No ratings or suggestions have been submitted yet.');
-        ensureListState(securityEventList, 'No suspicious access events are recorded yet.');
+        ensureListState(securityEventList, 'No blocked or suspicious access events are recorded yet.');
       }
 
       function withTimeout(promise, ms) {
         return Promise.race([
           promise,
-          new Promise((resolve) => setTimeout(resolve, ms))
+          new Promise((resolve, reject) => setTimeout(() => reject(new Error('Timed out')), ms))
         ]);
       }
 
@@ -326,6 +331,85 @@
         node.innerHTML = rows.map(renderRow).join('');
       }
 
+      function renderServiceRequestRows(rows) {
+        renderList(serviceRequestList, rows || [], function (row) {
+          const meta = row.metadata || {};
+          return '<div class="data-item">'
+            + '<strong>' + escapeHtml(meta.subject || 'Untitled service request') + '</strong>'
+            + '<div class="data-meta">' + escapeHtml(meta.customer_name || 'Unknown name') + ' · ' + escapeHtml(meta.customer_email || row.user_email || 'No email') + '</div>'
+            + '<div class="data-meta">' + escapeHtml(meta.tier_label || 'Unknown tier') + ' · ' + escapeHtml(row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div>'
+            + '<p>' + escapeHtml(meta.details || '') + '</p>'
+            + '<div class="data-meta"><code>' + escapeHtml(meta.request_id || 'No request id') + '</code></div>'
+            + '</div>';
+        }, 'No private service requests have been captured yet.');
+      }
+
+      function renderFeedbackRows(rows) {
+        renderList(feedbackList, rows || [], function (row) {
+          const meta = row.metadata || {};
+          return '<div class="data-item">'
+            + '<strong>' + escapeHtml(meta.rating ? ('Rating: ' + meta.rating + '/5') : 'Comment received') + '</strong>'
+            + '<div class="data-meta">' + escapeHtml(meta.name || 'Anonymous') + ' · ' + escapeHtml(meta.email || row.user_email || 'No email') + '</div>'
+            + '<div class="data-meta">' + escapeHtml(meta.target_page || 'General feedback') + ' · ' + escapeHtml(row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div>'
+            + '<p>' + escapeHtml(meta.comment || '') + '</p>'
+            + '</div>';
+        }, 'No ratings or suggestions have been submitted yet.');
+      }
+
+      function renderSecurityRows(rows) {
+        renderList(securityEventList, rows || [], function (row) {
+          const meta = row.metadata || {};
+          return '<div class="data-item">'
+            + '<strong>' + escapeHtml(row.label || row.event_type || 'Security event logged') + '</strong>'
+            + '<div class="data-meta">' + escapeHtml(row.user_email || meta.email || 'Unknown email') + ' · ' + escapeHtml(row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div>'
+            + '<div class="data-meta">' + escapeHtml(meta.reason || meta.source || row.event_type || 'Security event logged') + '</div>'
+            + '</div>';
+        }, 'No blocked or suspicious access events are recorded yet.');
+      }
+
+      function applyCoreMetrics(stats) {
+        setStatValue('visits_24h', stats.visits_24h, '0');
+        setStatValue('visits_30d', stats.visits_30d, '0');
+        setStatValue('visits_all_time', stats.visits_all_time, '0');
+        setStatValue('logins_30d', stats.logins_30d, '0');
+        setStatValue('signups_30d', stats.signups_30d, '0');
+        setStatValue('accounts_total', stats.accounts_total, '0');
+        setStatValue('newsletter_opt_ins', stats.newsletter_opt_ins, '0');
+        setStatValue('supporter_updates_opt_ins', stats.supporter_updates_opt_ins, '0');
+        setStatValue('donation_events', stats.donation_events, '0');
+        setStatValue('subscription_events', stats.subscription_events, '0');
+        setStatValue('donation_total', stats.donation_total_display, '$0.00');
+        setStatValue('subscription_total', stats.subscription_total_display, '$0.00');
+      }
+
+      function applyVaultSummary(payload) {
+        const core = payload && payload.core ? payload.core : {};
+        const snapshot = payload && payload.snapshot ? payload.snapshot : {};
+        const clicks = payload && payload.clicks ? payload.clicks : {};
+        const funnel = payload && payload.funnel ? payload.funnel : {};
+
+        applyCoreMetrics(core);
+        setSnapshot(snapshotProfiles, snapshot.profiles_total ?? core.accounts_total, '0');
+        setSnapshot(snapshotVisits, snapshot.page_visits_total ?? core.visits_all_time, '0');
+        setSnapshot(snapshotLogins, snapshot.login_success_total ?? core.logins_all_time ?? core.logins_30d, '0');
+        setSnapshot(snapshotSignups, snapshot.signup_submitted_total ?? core.signups_all_time ?? core.signups_30d, '0');
+
+        Object.entries(clicks).forEach(function (entry) {
+          setStatValue(entry[0], entry[1], '0');
+        });
+
+        setStatValue('service_requests', funnel.service_requests, '0');
+        setStatValue('checkout_opens', funnel.checkout_opens, '0');
+        setStatValue('feedback_count', funnel.feedback_count, '0');
+        setStatValue('average_rating', funnel.average_rating, '0.0');
+        setStatValue('security_events', funnel.security_events, '0');
+        setStatValue('admin_denied', funnel.admin_denied, '0');
+
+        renderServiceRequestRows(payload && payload.service_requests ? payload.service_requests : []);
+        renderFeedbackRows(payload && payload.feedback ? payload.feedback : []);
+        renderSecurityRows(payload && payload.security ? payload.security : []);
+      }
+
       async function countEvent(eventType, sinceIso) {
         let query = sb.from('site_events').select('*', { count: 'exact', head: true }).eq('event_type', eventType);
         if (sinceIso) query = query.gte('created_at', sinceIso);
@@ -338,6 +422,20 @@
         const response = await sb.from(table).select('*', { count: 'exact', head: true }).eq(column, value);
         if (response.error) throw response.error;
         return response.count || 0;
+      }
+
+      async function loadVaultSummary(buildId) {
+        const response = await sb.functions.invoke('owner-vault-summary', {
+          body: {
+            source: 'vault-m7q4k2.html',
+            build: buildId || 'unknown'
+          }
+        });
+        if (response.error) throw response.error;
+        if (!response.data || typeof response.data !== 'object') {
+          throw new Error('Owner vault service returned no readable data.');
+        }
+        return response.data;
       }
 
       async function loadCoreMetricsFallback() {
@@ -411,39 +509,14 @@
         };
       }
 
-      function applyCoreMetrics(stats) {
-        setStatValue('visits_24h', stats.visits_24h, '0');
-        setStatValue('visits_30d', stats.visits_30d, '0');
-        setStatValue('visits_all_time', stats.visits_all_time, '0');
-        setStatValue('logins_30d', stats.logins_30d, '0');
-        setStatValue('signups_30d', stats.signups_30d, '0');
-        setStatValue('accounts_total', stats.accounts_total, '0');
-        setStatValue('newsletter_opt_ins', stats.newsletter_opt_ins, '0');
-        setStatValue('supporter_updates_opt_ins', stats.supporter_updates_opt_ins, '0');
-        setStatValue('donation_events', stats.donation_events, '0');
-        setStatValue('subscription_events', stats.subscription_events, '0');
-        setStatValue('donation_total', stats.donation_total_display, '$0.00');
-        setStatValue('subscription_total', stats.subscription_total_display, '$0.00');
-        setSnapshot(snapshotProfiles, stats.accounts_total, '0');
-        setSnapshot(snapshotVisits, stats.visits_all_time, '0');
-        setSnapshot(snapshotLogins, stats.logins_all_time ?? stats.logins_30d, '0');
-        setSnapshot(snapshotSignups, stats.signups_all_time ?? stats.signups_30d, '0');
-      }
-
       async function loadCoreMetrics() {
-        try {
-          const { data, error } = await sb.rpc('get_owner_dashboard_counts');
-          if (error) throw error;
-          const stats = Array.isArray(data) ? (data[0] || null) : data;
-          if (!stats || typeof stats !== 'object') throw new Error('Owner counts returned no readable data.');
-          applyCoreMetrics(stats);
-          return { source: 'rpc' };
-        } catch (rpcErr) {
-          console.debug('core metrics rpc unavailable', rpcErr?.message || rpcErr);
-          const fallbackStats = await loadCoreMetricsFallback();
-          applyCoreMetrics(fallbackStats);
-          return { source: 'fallback', error: rpcErr };
-        }
+        const fallbackStats = await loadCoreMetricsFallback();
+        applyCoreMetrics(fallbackStats);
+        setSnapshot(snapshotProfiles, fallbackStats.accounts_total, '0');
+        setSnapshot(snapshotVisits, fallbackStats.visits_all_time, '0');
+        setSnapshot(snapshotLogins, fallbackStats.logins_all_time ?? fallbackStats.logins_30d, '0');
+        setSnapshot(snapshotSignups, fallbackStats.signups_all_time ?? fallbackStats.signups_30d, '0');
+        return { source: 'fallback' };
       }
 
       async function loadClickMetrics() {
@@ -476,16 +549,7 @@
           setStatValue('checkout_opens', checkoutOpens, '0');
           const { data, error } = await sb.from('site_events').select('created_at,user_email,metadata').eq('event_type', 'service_request_submitted').order('created_at', { ascending: false }).limit(12);
           if (error) throw error;
-          renderList(serviceRequestList, data || [], function (row) {
-            const meta = row.metadata || {};
-            return '<div class="data-item">'
-              + '<strong>' + (meta.subject || 'Untitled service request') + '</strong>'
-              + '<div class="data-meta">' + (meta.customer_name || 'Unknown name') + ' · ' + (meta.customer_email || row.user_email || 'No email') + '</div>'
-              + '<div class="data-meta">' + (meta.tier_label || 'Unknown tier') + ' · ' + (row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div>'
-              + '<p>' + String(meta.details || '').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</p>'
-              + '<div class="data-meta"><code>' + (meta.request_id || 'No request id') + '</code></div>'
-              + '</div>';
-          }, 'No private service requests have been captured yet.');
+          renderServiceRequestRows(data || []);
         } catch (err) {
           renderList(serviceRequestList, [], null, 'Recent service requests are not readable from this owner session yet.');
         }
@@ -493,23 +557,14 @@
 
       async function loadFeedback() {
         try {
-          const total = await countEvent('public_feedback_submitted');
-          setStatValue('feedback_count', total, '0');
           const { data, error } = await sb.from('site_events').select('created_at,user_email,metadata').eq('event_type', 'public_feedback_submitted').order('created_at', { ascending: false }).limit(20);
           if (error) throw error;
           const rows = data || [];
           const ratings = rows.map((row) => Number((row.metadata || {}).rating || 0)).filter((value) => value > 0);
           const average = ratings.length ? (ratings.reduce((sum, value) => sum + value, 0) / ratings.length).toFixed(1) : '0.0';
+          setStatValue('feedback_count', rows.length, '0');
           setStatValue('average_rating', average, '0.0');
-          renderList(feedbackList, rows, function (row) {
-            const meta = row.metadata || {};
-            return '<div class="data-item">'
-              + '<strong>' + (meta.rating ? ('Rating: ' + meta.rating + '/5') : 'Comment received') + '</strong>'
-              + '<div class="data-meta">' + (meta.name || 'Anonymous') + ' · ' + (meta.email || row.user_email || 'No email') + '</div>'
-              + '<div class="data-meta">' + (meta.target_page || 'General feedback') + ' · ' + (row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div>'
-              + '<p>' + String(meta.comment || '').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</p>'
-              + '</div>';
-          }, 'No ratings or suggestions have been submitted yet.');
+          renderFeedbackRows(rows);
         } catch (err) {
           renderList(feedbackList, [], null, 'Feedback items are not readable from this owner session yet.');
         }
@@ -525,19 +580,20 @@
           setStatValue('admin_denied', denied, '0');
           const { data, error } = await sb.from('site_events').select('created_at,event_type,user_email,metadata').in('event_type', securityTypes).order('created_at', { ascending: false }).limit(20);
           if (error) throw error;
-          renderList(securityEventList, data || [], function (row) {
-            const meta = row.metadata || {};
+          renderSecurityRows((data || []).map(function (row) {
             let label = 'Security event logged';
             if (row.event_type === 'admin_access_denied') label = 'Blocked admin attempt';
             if (row.event_type === 'admin_hidden_path_hit') label = 'Hidden vault hit without access';
             if (row.event_type === 'service_intake_save_failed') label = 'Service intake save failure';
             if (row.event_type === 'owner_vault_opened') label = 'Owner vault opened';
-            return '<div class="data-item">'
-              + '<strong>' + label + '</strong>'
-              + '<div class="data-meta">' + (row.user_email || meta.email || 'Unknown email') + ' · ' + (row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div>'
-              + '<div class="data-meta">' + (meta.reason || meta.source || row.event_type) + '</div>'
-              + '</div>';
-          }, 'No blocked or suspicious access events are recorded yet.');
+            return {
+              created_at: row.created_at,
+              event_type: row.event_type,
+              label: label,
+              user_email: row.user_email,
+              metadata: row.metadata || {}
+            };
+          }));
         } catch (err) {
           renderList(securityEventList, [], null, 'Security events are not readable from this owner session yet.');
         }
@@ -549,7 +605,19 @@
         publicShell.classList.add('hidden');
         adminShell.classList.remove('hidden');
         settleAdminLists();
-        await logEvent('owner_vault_opened', { email: session.user.email || null, source: 'vault-m7q4k2.html' });
+
+        const buildId = vaultBuildId ? vaultBuildId.textContent : 'unknown';
+        try {
+          const payload = await withTimeout(loadVaultSummary(buildId), 8000);
+          applyVaultSummary(payload);
+          settleAdminLists();
+          setMessage(adminStatus, 'Owner session confirmed. Snapshot: profiles ' + snapshotProfiles.textContent + ', visits ' + snapshotVisits.textContent + ', logins ' + snapshotLogins.textContent + ', signups ' + snapshotSignups.textContent + '. Loaded through the owner vault service.', 'info');
+          return;
+        } catch (summaryErr) {
+          console.debug('owner vault service unavailable', summaryErr?.message || summaryErr);
+        }
+
+        await logEvent('owner_vault_opened', { email: session.user.email || null, source: 'vault-m7q4k2.html', build: buildId });
 
         let metricLoad;
         try {
@@ -567,12 +635,8 @@
         ]);
         settleAdminLists();
 
-        if (metricLoad && metricLoad.source === 'fallback') {
-          setMessage(adminStatus, 'Owner session confirmed. Snapshot: profiles ' + snapshotProfiles.textContent + ', visits ' + snapshotVisits.textContent + ', logins ' + snapshotLogins.textContent + ', signups ' + snapshotSignups.textContent + '. The vault used fallback counter reads.', 'info');
-          return;
-        }
         if (metricLoad) {
-          setMessage(adminStatus, 'Owner session confirmed. Snapshot: profiles ' + snapshotProfiles.textContent + ', visits ' + snapshotVisits.textContent + ', logins ' + snapshotLogins.textContent + ', signups ' + snapshotSignups.textContent + '.', 'info');
+          setMessage(adminStatus, 'Owner session confirmed. Snapshot: profiles ' + snapshotProfiles.textContent + ', visits ' + snapshotVisits.textContent + ', logins ' + snapshotLogins.textContent + ', signups ' + snapshotSignups.textContent + '. Loaded through fallback reads.', 'info');
         }
       }
 
