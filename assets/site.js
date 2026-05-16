@@ -8,6 +8,7 @@
     home: 'index.html',
     login: 'login.html',
     signup: 'signup.html',
+    signupSuccess: 'signup-success.html',
     account: 'account.html',
     confirmNotice: 'login.html?check-email=1',
     resetRedirect: 'login.html?reset=1'
@@ -367,14 +368,9 @@
           newsletter_opt_in: newsletter,
           supporter_updates_opt_in: supporterUpdates
         });
-
-        let msg = 'Account created. Check your email to confirm your address, then sign in.';
-        if (newsletter && (!emailOctopusCfg.enabled || !emailOctopusCfg.listId)) {
-          msg += ' Newsletter opt-in was saved to your account profile, and EmailOctopus can be connected next.';
-        }
-        setMessage(messageBox, msg, 'info');
         signupForm.reset();
         hydrateRememberToggles();
+        window.location.href = paths.signupSuccess;
       } catch (err) {
         setMessage(messageBox, err.message || 'Unable to create your account right now.', 'error');
       } finally {
