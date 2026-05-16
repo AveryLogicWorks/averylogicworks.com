@@ -33,6 +33,8 @@ window.AVERY_CONFIG = {
     resetRedirect: 'login.html?reset=1'
   },
   stripeLinks: {
+    oneTime: 'index.html#donation-options',
+    monthly: 'index.html#donation-options',
     oneTime10: 'https://buy.stripe.com/8x25kwe3F5LX840d951RC06',
     oneTime25: 'https://buy.stripe.com/dRm3cobVx6Q14RO3yv1RC07',
     oneTime50: 'https://buy.stripe.com/5kQ3co1gTb6hckgfhd1RC08',
