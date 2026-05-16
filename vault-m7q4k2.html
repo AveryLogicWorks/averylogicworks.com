@@ -183,6 +183,35 @@
       const serviceRequestList = document.getElementById('service-request-list');
       const feedbackList = document.getElementById('feedback-list');
       const securityEventList = document.getElementById('security-event-list');
+
+      function getRememberKey() {
+        return 'avery-remember-me';
+      }
+
+      function getRememberPreference() {
+        const raw = localStorage.getItem(getRememberKey());
+        return raw === null ? true : raw === 'true';
+      }
+
+      const authStorage = {
+        getItem(key) {
+          return localStorage.getItem(key) || sessionStorage.getItem(key);
+        },
+        setItem(key, value) {
+          if (getRememberPreference()) {
+            localStorage.setItem(key, value);
+            sessionStorage.removeItem(key);
+          } else {
+            sessionStorage.setItem(key, value);
+            localStorage.removeItem(key);
+          }
+        },
+        removeItem(key) {
+          localStorage.removeItem(key);
+          sessionStorage.removeItem(key);
+        }
+      };
+
       let sb = null;
 
       document.querySelectorAll('[data-edit-path]').forEach((el) => {
@@ -194,7 +223,8 @@
           auth: {
             persistSession: true,
             autoRefreshToken: true,
-            detectSessionInUrl: true
+            detectSessionInUrl: true,
+            storage: authStorage
           }
         });
       }
