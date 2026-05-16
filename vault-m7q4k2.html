@@ -249,6 +249,16 @@
         node.className = 'form-message show' + (tone ? ' ' + tone : '');
       }
 
+      function formatStatValue(value, fallback) {
+        if (value === null || value === undefined || value === '') return fallback;
+        return String(value);
+      }
+
+      function setStatValue(key, value, fallback) {
+        if (!statEls[key]) return;
+        statEls[key].textContent = formatStatValue(value, fallback);
+      }
+
       function ensureListState(node, emptyText) {
         if (!node) return;
         const text = (node.textContent || '').trim();
@@ -297,35 +307,119 @@
         node.innerHTML = rows.map(renderRow).join('');
       }
 
-      async function countEvent(eventType) {
-        const response = await sb.from('site_events').select('*', { count: 'exact', head: true }).eq('event_type', eventType);
+      async function countEvent(eventType, sinceIso) {
+        let query = sb.from('site_events').select('*', { count: 'exact', head: true }).eq('event_type', eventType);
+        if (sinceIso) query = query.gte('created_at', sinceIso);
+        const response = await query;
         if (response.error) throw response.error;
         return response.count || 0;
+      }
+
+      async function countRows(table, column, value) {
+        const response = await sb.from(table).select('*', { count: 'exact', head: true }).eq(column, value);
+        if (response.error) throw response.error;
+        return response.count || 0;
+      }
+
+      async function loadCoreMetricsFallback() {
+        const now = Date.now();
+        const dayAgoIso = new Date(now - (24 * 60 * 60 * 1000)).toISOString();
+        const monthAgoIso = new Date(now - (30 * 24 * 60 * 60 * 1000)).toISOString();
+
+        const [
+          visits24h,
+          visits30d,
+          visitsAllTime,
+          logins30d,
+          loginsAllTime,
+          signups30d,
+          signupsAllTime,
+          accountsTotal,
+          newsletterOptIns,
+          supporterUpdatesOptIns,
+          supporterEventRows
+        ] = await Promise.all([
+          countEvent('page_visit', dayAgoIso),
+          countEvent('page_visit', monthAgoIso),
+          countEvent('page_visit'),
+          countEvent('login_success', monthAgoIso),
+          countEvent('login_success'),
+          countEvent('signup_submitted', monthAgoIso),
+          countEvent('signup_submitted'),
+          sb.from('profiles').select('*', { count: 'exact', head: true }),
+          countRows('profiles', 'newsletter_opt_in', true),
+          countRows('profiles', 'supporter_updates_opt_in', true),
+          sb.from('supporter_events').select('event_type,amount_cents')
+        ]);
+
+        if (accountsTotal.error) throw accountsTotal.error;
+        if (supporterEventRows.error) throw supporterEventRows.error;
+
+        const supporterRows = supporterEventRows.data || [];
+        let donationEvents = 0;
+        let subscriptionEvents = 0;
+        let donationTotalCents = 0;
+        let subscriptionTotalCents = 0;
+
+        supporterRows.forEach(function (row) {
+          const eventType = String(row.event_type || '').toLowerCase();
+          const amountCents = Number(row.amount_cents || 0);
+          if (eventType.indexOf('donation') === 0) {
+            donationEvents += 1;
+            donationTotalCents += amountCents;
+          }
+          if (eventType.indexOf('subscription') === 0 || eventType.indexOf('monthly') === 0) {
+            subscriptionEvents += 1;
+            subscriptionTotalCents += amountCents;
+          }
+        });
+
+        return {
+          visits_24h: visits24h,
+          visits_30d: visits30d,
+          visits_all_time: visitsAllTime,
+          logins_30d: logins30d,
+          logins_all_time: loginsAllTime,
+          signups_30d: signups30d,
+          signups_all_time: signupsAllTime,
+          accounts_total: accountsTotal.count || 0,
+          newsletter_opt_ins: newsletterOptIns,
+          supporter_updates_opt_ins: supporterUpdatesOptIns,
+          donation_events: donationEvents,
+          subscription_events: subscriptionEvents,
+          donation_total_display: '$' + (donationTotalCents / 100).toFixed(2),
+          subscription_total_display: '$' + (subscriptionTotalCents / 100).toFixed(2)
+        };
+      }
+
+      function applyCoreMetrics(stats) {
+        setStatValue('visits_24h', stats.visits_24h, '0');
+        setStatValue('visits_30d', stats.visits_30d, '0');
+        setStatValue('visits_all_time', stats.visits_all_time, '0');
+        setStatValue('logins_30d', stats.logins_30d, '0');
+        setStatValue('signups_30d', stats.signups_30d, '0');
+        setStatValue('accounts_total', stats.accounts_total, '0');
+        setStatValue('newsletter_opt_ins', stats.newsletter_opt_ins, '0');
+        setStatValue('supporter_updates_opt_ins', stats.supporter_updates_opt_ins, '0');
+        setStatValue('donation_events', stats.donation_events, '0');
+        setStatValue('subscription_events', stats.subscription_events, '0');
+        setStatValue('donation_total', stats.donation_total_display, '$0.00');
+        setStatValue('subscription_total', stats.subscription_total_display, '$0.00');
       }
 
       async function loadCoreMetrics() {
         try {
           const { data, error } = await sb.rpc('get_owner_dashboard_counts');
           if (error) throw error;
-          const stats = (data && data[0]) || {};
-          Object.entries({
-            visits_24h: stats.visits_24h,
-            visits_30d: stats.visits_30d,
-            visits_all_time: stats.visits_all_time,
-            logins_30d: stats.logins_30d,
-            signups_30d: stats.signups_30d,
-            accounts_total: stats.accounts_total,
-            newsletter_opt_ins: stats.newsletter_opt_ins,
-            supporter_updates_opt_ins: stats.supporter_updates_opt_ins,
-            donation_events: stats.donation_events,
-            subscription_events: stats.subscription_events,
-            donation_total: stats.donation_total_display,
-            subscription_total: stats.subscription_total_display
-          }).forEach(([key, value]) => {
-            if (statEls[key]) statEls[key].textContent = value ?? '0';
-          });
-        } catch (err) {
-          console.debug('core metrics unavailable', err?.message || err);
+          const stats = Array.isArray(data) ? (data[0] || null) : data;
+          if (!stats || typeof stats !== 'object') throw new Error('Owner counts returned no readable data.');
+          applyCoreMetrics(stats);
+          return { source: 'rpc' };
+        } catch (rpcErr) {
+          console.debug('core metrics rpc unavailable', rpcErr?.message || rpcErr);
+          const fallbackStats = await loadCoreMetricsFallback();
+          applyCoreMetrics(fallbackStats);
+          return { source: 'fallback', error: rpcErr };
         }
       }
 
@@ -343,9 +437,10 @@
         await Promise.all(clickEvents.map(async function (eventType) {
           try {
             const total = await countEvent(eventType);
-            if (statEls[eventType]) statEls[eventType].textContent = String(total);
+            setStatValue(eventType, total, '0');
           } catch (err) {
             console.debug('click metric unavailable', eventType, err?.message || err);
+            setStatValue(eventType, '0', '0');
           }
         }));
       }
@@ -353,9 +448,9 @@
       async function loadServiceRequests() {
         try {
           const total = await countEvent('service_request_submitted');
-          if (statEls.service_requests) statEls.service_requests.textContent = String(total);
+          setStatValue('service_requests', total, '0');
           const checkoutOpens = await countEvent('service_checkout_opened');
-          if (statEls.checkout_opens) statEls.checkout_opens.textContent = String(checkoutOpens);
+          setStatValue('checkout_opens', checkoutOpens, '0');
           const { data, error } = await sb.from('site_events').select('created_at,user_email,metadata').eq('event_type', 'service_request_submitted').order('created_at', { ascending: false }).limit(12);
           if (error) throw error;
           renderList(serviceRequestList, data || [], function (row) {
@@ -376,13 +471,13 @@
       async function loadFeedback() {
         try {
           const total = await countEvent('public_feedback_submitted');
-          if (statEls.feedback_count) statEls.feedback_count.textContent = String(total);
+          setStatValue('feedback_count', total, '0');
           const { data, error } = await sb.from('site_events').select('created_at,user_email,metadata').eq('event_type', 'public_feedback_submitted').order('created_at', { ascending: false }).limit(20);
           if (error) throw error;
           const rows = data || [];
           const ratings = rows.map((row) => Number((row.metadata || {}).rating || 0)).filter((value) => value > 0);
           const average = ratings.length ? (ratings.reduce((sum, value) => sum + value, 0) / ratings.length).toFixed(1) : '0.0';
-          if (statEls.average_rating) statEls.average_rating.textContent = average;
+          setStatValue('average_rating', average, '0.0');
           renderList(feedbackList, rows, function (row) {
             const meta = row.metadata || {};
             return '<div class="data-item">'
@@ -402,9 +497,9 @@
           const securityTypes = ['admin_access_denied', 'admin_hidden_path_hit', 'service_intake_save_failed'];
           const total = await sb.from('site_events').select('*', { count: 'exact', head: true }).in('event_type', securityTypes);
           if (total.error) throw total.error;
-          if (statEls.security_events) statEls.security_events.textContent = String(total.count || 0);
+          setStatValue('security_events', total.count || 0, '0');
           const denied = await countEvent('admin_access_denied');
-          if (statEls.admin_denied) statEls.admin_denied.textContent = String(denied);
+          setStatValue('admin_denied', denied, '0');
           const { data, error } = await sb.from('site_events').select('created_at,event_type,user_email,metadata').in('event_type', securityTypes).order('created_at', { ascending: false }).limit(20);
           if (error) throw error;
           renderList(securityEventList, data || [], function (row) {
@@ -426,7 +521,15 @@
         publicShell.classList.add('hidden');
         adminShell.classList.remove('hidden');
         settleAdminLists();
-        await loadCoreMetrics();
+
+        let metricLoad;
+        try {
+          metricLoad = await loadCoreMetrics();
+        } catch (err) {
+          console.debug('core metrics unavailable after fallback', err?.message || err);
+          setMessage(adminStatus, 'Owner session confirmed, but the vault could not load its core counters yet.', 'error');
+        }
+
         await Promise.allSettled([
           withTimeout(loadClickMetrics(), 4000),
           withTimeout(loadServiceRequests(), 4000),
@@ -434,7 +537,14 @@
           withTimeout(loadSecurityEvents(), 4000)
         ]);
         settleAdminLists();
-        setMessage(adminStatus, 'Owner session confirmed. The hidden operator vault is loaded.', 'info');
+
+        if (metricLoad && metricLoad.source === 'fallback') {
+          setMessage(adminStatus, 'Owner session confirmed. The vault loaded with fallback counter reads while the main counter RPC was flaky.', 'info');
+          return;
+        }
+        if (metricLoad) {
+          setMessage(adminStatus, 'Owner session confirmed. The hidden operator vault is loaded.', 'info');
+        }
       }
 
       async function showUnavailable(reason) {
