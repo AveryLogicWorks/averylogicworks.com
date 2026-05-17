@@ -141,43 +141,52 @@
           </div>
 
           <div class="policy-shell">
-            <span class="tag alt">Feature shelf</span>
-            <h3>What you can already do without me</h3>
+            <span class="tag alt">Website edit desk</span>
+            <h3>Fast browser-based page editing</h3>
+            <p class="small-note">These buttons open GitHub's browser editor for the exact file you need. No terminal is needed. Change the text, use GitHub's commit button, and the site updates from there.</p>
             <div class="quick-links">
               <div class="quick-card">
-                <strong>Reviews and suggestions</strong>
-                <p class="small-note">Already live through the public feedback page. Customers can send comments, suggestions, and ratings now.</p>
-                <a class="button secondary small" href="feedback.html" target="_blank" rel="noopener noreferrer">Open feedback page</a>
-              </div>
-              <div class="quick-card">
-                <strong>Homepage and page text edits</strong>
-                <p class="small-note">These buttons open the exact page file in GitHub's web editor. No terminal is needed, but the content is still file-based text today.</p>
+                <strong>Homepage words and main buttons</strong>
+                <p class="small-note">Hero text, homepage sections, paid-service wording, donation copy, and the main homepage buttons all live in the homepage file.</p>
                 <a class="button secondary small" data-edit-path="index.html" target="_blank" rel="noopener noreferrer">Edit homepage</a>
               </div>
               <div class="quick-card">
-                <strong>Service and intake edits</strong>
-                <p class="small-note">Change how the service offers and intake wording read without touching your payment links unless you want to.</p>
+                <strong>Shared links, emails, and checkout destinations</strong>
+                <p class="small-note">Support email, billing email, Stripe links, service checkout links, founder name, and owner allowlist all live in the shared config.</p>
+                <a class="button secondary small" data-edit-path="assets/site-config.js" target="_blank" rel="noopener noreferrer">Edit shared config</a>
+              </div>
+              <div class="quick-card">
+                <strong>Service offers and intake wording</strong>
+                <p class="small-note">Use this when you want to change service descriptions, what buyers are asked before checkout, or the intake page wording.</p>
                 <a class="button secondary small" data-edit-path="service-intake.html" target="_blank" rel="noopener noreferrer">Edit service intake</a>
               </div>
               <div class="quick-card">
-                <strong>Button and link controls</strong>
-                <p class="small-note">Use the shared config for support links, billing addresses, service checkout destinations, and the generic support buttons. The homepage donation amount buttons still live in the homepage file.</p>
-                <div class="form-actions" style="margin-top:0;">
-                  <a class="button secondary small" data-edit-path="assets/site-config.js" target="_blank" rel="noopener noreferrer">Edit shared links</a>
-                  <a class="button secondary small" data-edit-path="index.html" target="_blank" rel="noopener noreferrer">Edit homepage buttons</a>
-                </div>
-              </div>
-              <div class="quick-card">
-                <strong>Support and policy edits</strong>
-                <p class="small-note">Update support wording, billing copy, privacy text, or founder copy from the browser.</p>
+                <strong>Support, founder, and policy pages</strong>
+                <p class="small-note">Use these for support wording, billing notes, founder story, privacy language, and terms copy.</p>
                 <div class="form-actions" style="margin-top:0;">
                   <a class="button secondary small" data-edit-path="support.html" target="_blank" rel="noopener noreferrer">Edit support page</a>
                   <a class="button secondary small" data-edit-path="founder.html" target="_blank" rel="noopener noreferrer">Edit founder page</a>
+                  <a class="button secondary small" data-edit-path="privacy.html" target="_blank" rel="noopener noreferrer">Edit privacy page</a>
+                  <a class="button secondary small" data-edit-path="terms.html" target="_blank" rel="noopener noreferrer">Edit terms page</a>
                 </div>
+              </div>
+              <div class="quick-card">
+                <strong>Account, signup, and login pages</strong>
+                <p class="small-note">Use these when you want to change the sign-up wording, login text, or account-page customer settings copy.</p>
+                <div class="form-actions" style="margin-top:0;">
+                  <a class="button secondary small" data-edit-path="signup.html" target="_blank" rel="noopener noreferrer">Edit signup page</a>
+                  <a class="button secondary small" data-edit-path="login.html" target="_blank" rel="noopener noreferrer">Edit login page</a>
+                  <a class="button secondary small" data-edit-path="account.html" target="_blank" rel="noopener noreferrer">Edit account page</a>
+                </div>
+              </div>
+              <div class="quick-card">
+                <strong>Reviews and suggestions</strong>
+                <p class="small-note">The customer feedback page is already live. Use it to view or share the public route where people can leave ratings and suggestions.</p>
+                <a class="button secondary small" href="feedback.html" target="_blank" rel="noopener noreferrer">Open feedback page</a>
               </div>
             </div>
             <div class="inline-divider"></div>
-            <p class="small-note">Chat with customers is not live yet. That needs a separate tool or backend layer. The next clean upgrade for truly easy no-code site edits is a tiny owner-only content panel backed by Supabase instead of raw page files.</p>
+            <p class="small-note">This is the fastest safe no-terminal editing setup now. A fuller no-code CMS can be added later, but this vault is now organized so you can edit the main website surfaces from the browser without hunting through files.</p>
           </div>
         </div>
       </div>
