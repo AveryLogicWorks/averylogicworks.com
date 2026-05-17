@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/site.css">
+  <meta name="description" content="This page is unavailable.">
+  <title>Page unavailable | Avery Logic Works</title>
+</head>
+<body>
+  <main>
+    <section class="page-hero" id="public-shell">
+      <div class="container" style="max-width: 720px; margin: 0 auto;">
+        <div class="form-shell">
+          <span class="tag alt">Unavailable</span>
+          <h1>This page is unavailable.</h1>
+          <p class="muted">The page you requested is not available from this session.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-tight hidden" id="admin-shell">
+      <div class="container" style="display:grid; gap:24px; max-width: 920px;">
+        <div class="form-shell">
+          <span class="tag">Owner session</span>
+          <h3>Homepage content editor</h3>
+          <div class="auth-inline-row">
+            <p class="small-note">Signed in as <strong id="admin-owner-email">—</strong></p>
+            <a class="button ghost" href="vault-m7q4k2.html">Back to vault</a>
+            <a class="button ghost" href="index.html" target="_blank" rel="noopener noreferrer">Open homepage</a>
+            <button class="button ghost" id="admin-signout-button" type="button">Sign out</button>
+          </div>
+          <div class="form-message info show" id="editor-status">Loading homepage content…</div>
+          <p class="small-note">This editor updates the live homepage hero text and its three main buttons. Save here, then refresh the homepage to check the result.</p>
+        </div>
+
+        <div class="form-shell">
+          <span class="tag alt">Live homepage fields</span>
+          <form id="homepage-content-form" class="settings-form">
+            <label>
+              <span>Top eyebrow</span>
+              <input id="homepage-eyebrow" name="eyebrow" type="text" maxlength="120" />
+            </label>
+            <label>
+              <span>Main headline</span>
+              <textarea id="homepage-headline" name="headline" rows="3" maxlength="240"></textarea>
+            </label>
+            <label>
+              <span>Subhead</span>
+              <textarea id="homepage-subhead" name="subhead" rows="5" maxlength="700"></textarea>
+            </label>
+            <label>
+              <span>Support note under the subhead</span>
+              <textarea id="homepage-note" name="note" rows="4" maxlength="420"></textarea>
+            </label>
+            <div class="settings-grid">
+              <label>
+                <span>Primary button</span>
+                <input id="homepage-primary-cta" name="primary_cta" type="text" maxlength="80" />
+              </label>
+              <label>
+                <span>Secondary button</span>
+                <input id="homepage-secondary-cta" name="secondary_cta" type="text" maxlength="80" />
+              </label>
+              <label>
+                <span>Founder button</span>
+                <input id="homepage-founder-cta" name="founder_cta" type="text" maxlength="80" />
+              </label>
+            </div>
+            <div class="form-message" id="homepage-content-message"></div>
+            <div class="form-actions">
+              <button class="button primary" type="submit">Save live homepage content</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/site-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    (function () {
+      const cfg = window.AVERY_CONFIG || {};
+      const ownerEmails = (cfg.ownerEmails || []).map((value) => String(value || '').trim().toLowerCase());
+      const supabaseCfg = cfg.supabase || {};
+      const publicShell = document.getElementById('public-shell');
+      const adminShell = document.getElementById('admin-shell');
+      const editorStatus = document.getElementById('editor-status');
+      const ownerEmailNode = document.getElementById('admin-owner-email');
+      const signOutButton = document.getElementById('admin-signout-button');
+      const form = document.getElementById('homepage-content-form');
+      const formMessage = document.getElementById('homepage-content-message');
+      const fields = {
+        eyebrow: document.getElementById('homepage-eyebrow'),
+        headline: document.getElementById('homepage-headline'),
+        subhead: document.getElementById('homepage-subhead'),
+        note: document.getElementById('homepage-note'),
+        primary_cta: document.getElementById('homepage-primary-cta'),
+        secondary_cta: document.getElementById('homepage-secondary-cta'),
+        founder_cta: document.getElementById('homepage-founder-cta')
+      };
+
+      const defaultContent = {
+        eyebrow: 'Independent studio in active development',
+        headline: 'Avery Logic Works is a founder-led software, AI, and digital systems studio.',
+        subhead: 'This site exists to introduce the studio first: what Avery Logic Works is, what it is growing into, and why the work matters. Limited support-backed collaboration may be available, but the larger purpose is building long-term software, AI, and interactive systems with a clear point of view.',
+        note: 'If you want to purchase a paid service or look at the current collaboration options, more information is below, and the paid services button is always at the top.',
+        primary_cta: 'View paid services',
+        secondary_cta: 'See what fits',
+        founder_cta: 'Meet the founder'
+      };
+
+      function getRememberKey() {
+        return 'avery-remember-me';
+      }
+
+      function getRememberPreference() {
+        const raw = localStorage.getItem(getRememberKey());
+        return raw === null ? true : raw === 'true';
+      }
+
+      const authStorage = {
+        getItem(key) {
+          return localStorage.getItem(key) || sessionStorage.getItem(key);
+        },
+        setItem(key, value) {
+          if (getRememberPreference()) {
+            localStorage.setItem(key, value);
+            sessionStorage.removeItem(key);
+          } else {
+            sessionStorage.setItem(key, value);
+            localStorage.removeItem(key);
+          }
+        },
+        removeItem(key) {
+          localStorage.removeItem(key);
+          sessionStorage.removeItem(key);
+        }
+      };
+
+      function setMessage(node, text, tone) {
+        if (!node) return;
+        node.textContent = text;
+        node.className = 'form-message show' + (tone ? ' ' + tone : '');
+      }
+
+      function clearMessage(node) {
+        if (!node) return;
+        node.textContent = '';
+        node.className = 'form-message';
+      }
+
+      function setBusy(busy) {
+        if (!form) return;
+        form.querySelectorAll('button, input, textarea').forEach((el) => {
+          el.disabled = !!busy;
+        });
+      }
+
+      function isOwner(email) {
+        return ownerEmails.includes(String(email || '').trim().toLowerCase());
+      }
+
+      function applyContent(content) {
+        const merged = Object.assign({}, defaultContent, content || {});
+        Object.keys(fields).forEach((key) => {
+          if (fields[key]) fields[key].value = merged[key] || '';
+        });
+      }
+
+      function collectContent() {
+        const payload = {};
+        Object.keys(fields).forEach((key) => {
+          payload[key] = String(fields[key] && fields[key].value || '').trim();
+        });
+        return payload;
+      }
+
+      if (!window.supabase || !supabaseCfg.url || !supabaseCfg.publishableKey) {
+        setMessage(editorStatus, 'Supabase is not connected for this editor yet.', 'error');
+        return;
+      }
+
+      const sb = window.supabase.createClient(supabaseCfg.url, supabaseCfg.publishableKey, {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true,
+          storage: authStorage
+        }
+      });
+
+      async function showUnavailable() {
+        publicShell.classList.remove('hidden');
+        adminShell.classList.add('hidden');
+      }
+
+      async function loadContent() {
+        try {
+          const response = await sb.from('site_content').select('content').eq('key', 'homepage_content').maybeSingle();
+          if (response.error) throw response.error;
+          applyContent(response.data && response.data.content ? response.data.content : defaultContent);
+          setMessage(editorStatus, 'Owner session confirmed. You can edit the live homepage hero fields here.', 'info');
+        } catch (err) {
+          applyContent(defaultContent);
+          setMessage(editorStatus, 'Owner session confirmed, but the saved homepage content could not be read. The default values are still loaded here.', 'error');
+        }
+      }
+
+      async function handleOwnerSession(session) {
+        if (!session) {
+          await showUnavailable();
+          return;
+        }
+        const email = session.user && session.user.email;
+        if (!isOwner(email)) {
+          await sb.auth.signOut();
+          await showUnavailable();
+          return;
+        }
+        ownerEmailNode.textContent = email || 'owner';
+        publicShell.classList.add('hidden');
+        adminShell.classList.remove('hidden');
+        await loadContent();
+
+        form.addEventListener('submit', async function (event) {
+          event.preventDefault();
+          clearMessage(formMessage);
+          setBusy(true);
+          try {
+            const content = collectContent();
+            const payload = {
+              key: 'homepage_content',
+              content: content,
+              updated_at: new Date().toISOString(),
+              updated_by: session.user.id
+            };
+            const response = await sb.from('site_content').upsert(payload, { onConflict: 'key' }).select('content').single();
+            if (response.error) throw response.error;
+            applyContent(response.data && response.data.content ? response.data.content : content);
+            setMessage(formMessage, 'Homepage content saved. Refresh the homepage to confirm the new wording.', 'info');
+            setMessage(editorStatus, 'Owner session confirmed. The live homepage content was updated successfully.', 'info');
+          } catch (err) {
+            setMessage(formMessage, err.message || 'Unable to save the homepage content right now.', 'error');
+          } finally {
+            setBusy(false);
+          }
+        }, { once: true });
+      }
+
+      signOutButton.addEventListener('click', async function () {
+        await sb.auth.signOut();
+        adminShell.classList.add('hidden');
+        publicShell.classList.remove('hidden');
+      });
+
+      sb.auth.getSession().then(async function (sessionData) {
+        await handleOwnerSession(sessionData && sessionData.data ? sessionData.data.session : null);
+      });
+
+      sb.auth.onAuthStateChange(async function (_event, session) {
+        await handleOwnerSession(session || null);
+      });
+    }());
+  </script>
+</body>
+</html>
