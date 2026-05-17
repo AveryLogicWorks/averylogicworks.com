@@ -7,7 +7,7 @@
   const paths = Object.assign({
     home: 'index.html',
     login: 'login.html',
-    signup: 'signup.html',
+    signup: 'signup-success.html',
     signupSuccess: 'signup-success.html',
     account: 'account.html',
     confirmNotice: 'login.html?check-email=1',
@@ -264,11 +264,39 @@
     });
   }
 
+  function normalizeNavPath(href) {
+    if (!href || href.startsWith('#')) return '';
+    try {
+      const url = new URL(href, window.location.href);
+      return url.pathname.replace(/^\/+/, '') || paths.home;
+    } catch (_err) {
+      return '';
+    }
+  }
+
+  function syncCurrentNavLink() {
+    const navLinks = document.querySelector('.nav-links');
+    if (!navLinks) return;
+    const currentPath = window.location.pathname.replace(/^\/+/, '') || paths.home;
+    navLinks.querySelectorAll('a[href]').forEach((link) => {
+      link.hidden = false;
+      link.removeAttribute('aria-current');
+      const targetPath = normalizeNavPath(link.getAttribute('href') || '');
+      if (targetPath && targetPath === currentPath) {
+        link.hidden = true;
+        link.setAttribute('aria-current', 'page');
+      }
+    });
+  }
+
   async function updateNavAuth() {
     const navLinks = document.querySelector('.nav-links');
     if (!navLinks) return;
     const loginLink = navLinks.querySelector('a[href="login.html"]');
-    if (!loginLink) return;
+    if (!loginLink) {
+      syncCurrentNavLink();
+      return;
+    }
 
     const session = sb ? (await sb.auth.getSession())?.data?.session : null;
     let accountLink = navLinks.querySelector('[data-auth-account]');
@@ -297,6 +325,8 @@
       if (signOutLink) signOutLink.remove();
       if (accountLink) accountLink.remove();
     }
+
+    syncCurrentNavLink();
   }
 
   maybeTrackVisit();
