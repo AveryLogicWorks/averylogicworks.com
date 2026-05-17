@@ -7,7 +7,7 @@
   const paths = Object.assign({
     home: 'index.html',
     login: 'login.html',
-    signup: 'signup-success.html',
+    signup: 'signup.html',
     signupSuccess: 'signup-success.html',
     account: 'account.html',
     confirmNotice: 'login.html?check-email=1',
