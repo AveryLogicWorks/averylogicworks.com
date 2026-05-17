@@ -801,6 +801,27 @@
     (function () {
       document.getElementById('year').textContent = new Date().getFullYear();
 
+      function syncCurrentNavLink() {
+        const navLinks = document.querySelector('.nav-links');
+        if (!navLinks) return;
+        const currentPath = window.location.pathname.replace(/^\/+/, '') || 'index.html';
+        navLinks.querySelectorAll('a[href]').forEach(function (link) {
+          const href = link.getAttribute('href') || '';
+          link.hidden = false;
+          link.removeAttribute('aria-current');
+          if (!href || href.startsWith('#')) return;
+          try {
+            const targetPath = new URL(href, window.location.href).pathname.replace(/^\/+/, '') || 'index.html';
+            if (targetPath === currentPath) {
+              link.hidden = true;
+              link.setAttribute('aria-current', 'page');
+            }
+          } catch (_err) {}
+        });
+      }
+
+      syncCurrentNavLink();
+
       const cfg = window.AVERY_CONFIG || {};
       const supabaseCfg = cfg.supabase || {};
       let sb = null;
