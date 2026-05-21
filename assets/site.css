@@ -204,3 +204,12 @@ input::placeholder, textarea::placeholder { color: rgba(237,244,255,0.48); }
 .password-toggle:hover { background: rgba(255,255,255,0.1); }
 .checkbox-row.compact { margin-top: 4px; padding: 12px 14px; }
 .nav-signout { white-space: nowrap; }
+
+
+.nav-links .nav-hidden { display: none !important; }
+.nav-links a.active, .nav-links button.active { color: white; }
+.nav-links a.active:not(.button), .nav-links button.active:not(.button) { text-shadow: 0 0 14px rgba(255,255,255,0.22); }
+.nav-links [data-auth-account] { text-decoration: none; color: rgba(237,244,255,0.82); font-size: 0.96rem; }
+.nav-links [data-auth-account]:hover, .nav-links [data-auth-account].active { color: white; }
+.support-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; }
+@media (max-width: 760px) { .support-actions { justify-content:center; } }

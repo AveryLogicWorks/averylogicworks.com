@@ -205,15 +205,16 @@
   const stripeTargets = {
     '[data-stripe-one-time]': stripe.oneTime,
     '[data-stripe-monthly]': stripe.monthly,
-    '[data-stripe-shop]': stripe.shop,
-    '[data-stripe-portal]': stripe.portal,
-    '[data-stripe-key]': null
+    '[data-stripe-portal]': stripe.portal
   };
   Object.entries(stripeTargets).forEach(([selector, url]) => {
     document.querySelectorAll(selector).forEach((el) => {
-      const mappedUrl = el.dataset.stripeKey ? stripe[el.dataset.stripeKey] : url;
-      if (mappedUrl && mappedUrl !== '#') {
-        el.href = mappedUrl;
+      if (url && url !== '#') {
+        el.href = url;
+        if (selector !== '[data-stripe-portal]') {
+          el.target = '_blank';
+          el.rel = 'noopener noreferrer';
+        }
       } else {
         el.href = '#';
         el.setAttribute('aria-disabled', 'true');
@@ -251,44 +252,77 @@
     });
   }
 
+  function applyActiveNavState() {
+    const current = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    const currentWithHash = current + window.location.hash.toLowerCase();
+    document.querySelectorAll('.nav-links a, .nav-links button, .footer-links a').forEach((el) => {
+      el.classList.remove('active');
+      if (el.tagName.toLowerCase() === 'button') return;
+      const href = (el.getAttribute('href') || '').toLowerCase();
+      if (!href || href === '#') return;
+      const normalized = href.split('/').pop();
+      if (normalized === current || normalized === currentWithHash) {
+        el.classList.add('active');
+      }
+      if (current === 'index.html' && href === 'index.html#support' && window.location.hash.toLowerCase() === '#support') {
+        el.classList.add('active');
+      }
+    });
+  }
+
   async function updateNavAuth() {
     const navLinks = document.querySelector('.nav-links');
-    if (!navLinks) return;
-    const loginLink = navLinks.querySelector('a[href="login.html"]');
-    if (!loginLink) return;
+    if (!navLinks) {
+      applyActiveNavState();
+      return;
+    }
+    const loginLink = navLinks.querySelector('a[href="login.html"], a[data-auth-state="login"], a[data-auth-account="true"]');
+    const signupLink = navLinks.querySelector('a[href="signup.html"]');
+    const donateLink = navLinks.querySelector('a.button.secondary.small[href*="#support"], a.button.secondary.small[data-nav-donate]');
+    if (!loginLink) {
+      applyActiveNavState();
+      return;
+    }
 
     const session = sb ? (await sb.auth.getSession())?.data?.session : null;
-    let accountLink = navLinks.querySelector('[data-auth-account]');
+    let accountLink = navLinks.querySelector('[data-auth-account="true"]');
     let signOutLink = navLinks.querySelector('[data-auth-signout]');
 
     if (session) {
-      loginLink.textContent = 'Account';
-      loginLink.href = paths.account;
-      loginLink.setAttribute('data-auth-state', 'account');
+      if (!accountLink) {
+        accountLink = document.createElement('a');
+        accountLink.href = paths.account;
+        accountLink.textContent = 'Account';
+        accountLink.setAttribute('data-auth-account', 'true');
+        navLinks.insertBefore(accountLink, donateLink || null);
+      }
+      loginLink.classList.add('nav-hidden');
+      if (signupLink) signupLink.classList.add('nav-hidden');
       if (!signOutLink) {
         signOutLink = document.createElement('button');
         signOutLink.type = 'button';
         signOutLink.className = 'button ghost small nav-signout';
-        signOutLink.textContent = 'Sign out';
+        signOutLink.textContent = 'Log out';
         signOutLink.setAttribute('data-auth-signout', 'true');
-        navLinks.insertBefore(signOutLink, navLinks.querySelector('.button.secondary.small') || null);
+        navLinks.insertBefore(signOutLink, donateLink || null);
       }
       signOutLink.onclick = async function () {
         if (sb) await sb.auth.signOut();
         window.location.href = paths.login;
       };
     } else {
-      loginLink.textContent = 'Sign in';
-      loginLink.href = paths.login;
-      loginLink.setAttribute('data-auth-state', 'login');
-      if (signOutLink) signOutLink.remove();
+      loginLink.classList.remove('nav-hidden');
+      if (signupLink) signupLink.classList.remove('nav-hidden');
       if (accountLink) accountLink.remove();
+      if (signOutLink) signOutLink.remove();
     }
+    applyActiveNavState();
   }
 
   maybeTrackVisit();
   hydrateRememberToggles();
   hydratePasswordToggles();
+  applyActiveNavState();
 
   const signupForm = document.getElementById('signup-form');
   if (signupForm) {
