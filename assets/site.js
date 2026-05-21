@@ -8,6 +8,7 @@
     home: 'index.html',
     login: 'login.html',
     signup: 'signup.html',
+    signupSuccess: 'signup-success.html',
     account: 'account.html',
     confirmNotice: 'login.html?check-email=1',
     resetRedirect: 'login.html?reset=1'
@@ -94,7 +95,14 @@
     return (value || '').trim().replace(/\s+/g, ' ');
   }
 
-  function validateDisplayName(value) {
+  function isOwnerEmail(email) {
+    const normalizedEmail = String(email || '').trim().toLowerCase();
+    return normalizedEmail && Array.isArray(cfg.ownerEmails) && cfg.ownerEmails.some((value) => {
+      return String(value || '').trim().toLowerCase() === normalizedEmail;
+    });
+  }
+
+  function validateDisplayName(value, email) {
     const name = normalizeName(value);
     if (!name) return { ok: false, message: 'Add a display name so the account has a readable label.' };
     if (name.length < 2) return { ok: false, message: 'Display name must be at least 2 characters.' };
@@ -102,7 +110,12 @@
     if (!/^[A-Za-z0-9 ._\-]+$/.test(name)) return { ok: false, message: 'Display name can use letters, numbers, spaces, periods, underscores, and hyphens only.' };
     if (/([._\- ])\1\1/.test(name)) return { ok: false, message: 'Display name cannot use repeated symbol spam.' };
     const lowered = name.toLowerCase();
-    if (reservedDisplayNames.has(lowered)) return { ok: false, message: 'That display name is reserved. Please choose another.' };
+    if (reservedDisplayNames.has(lowered)) {
+      if (lowered === 'founder' && isOwnerEmail(email)) {
+        return { ok: true, value: name };
+      }
+      return { ok: false, message: 'That display name is reserved. Please choose another.' };
+    }
     if (bannedFragments.some((term) => lowered.includes(term))) return { ok: false, message: 'That display name is not allowed. Please choose another.' };
     return { ok: true, value: name };
   }
@@ -252,6 +265,7 @@
     });
   }
 
+<<<<<<< HEAD
   function applyActiveNavState() {
     const current = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
     const currentWithHash = current + window.location.hash.toLowerCase();
@@ -266,12 +280,36 @@
       }
       if (current === 'index.html' && href === 'index.html#support' && window.location.hash.toLowerCase() === '#support') {
         el.classList.add('active');
+=======
+  function normalizeNavPath(href) {
+    if (!href || href.startsWith('#')) return '';
+    try {
+      const url = new URL(href, window.location.href);
+      return url.pathname.replace(/^\/+/, '') || paths.home;
+    } catch (_err) {
+      return '';
+    }
+  }
+
+  function syncCurrentNavLink() {
+    const navLinks = document.querySelector('.nav-links');
+    if (!navLinks) return;
+    const currentPath = window.location.pathname.replace(/^\/+/, '') || paths.home;
+    navLinks.querySelectorAll('a[href]').forEach((link) => {
+      link.hidden = false;
+      link.removeAttribute('aria-current');
+      const targetPath = normalizeNavPath(link.getAttribute('href') || '');
+      if (targetPath && targetPath === currentPath) {
+        link.hidden = true;
+        link.setAttribute('aria-current', 'page');
+>>>>>>> f7f4b5e852432845960b23bb359c40f155c87411
       }
     });
   }
 
   async function updateNavAuth() {
     const navLinks = document.querySelector('.nav-links');
+<<<<<<< HEAD
     if (!navLinks) {
       applyActiveNavState();
       return;
@@ -281,6 +319,12 @@
     const donateLink = navLinks.querySelector('a.button.secondary.small[href*="#support"], a.button.secondary.small[data-nav-donate]');
     if (!loginLink) {
       applyActiveNavState();
+=======
+    if (!navLinks) return;
+    const loginLink = navLinks.querySelector('a[href="login.html"]');
+    if (!loginLink) {
+      syncCurrentNavLink();
+>>>>>>> f7f4b5e852432845960b23bb359c40f155c87411
       return;
     }
 
@@ -316,7 +360,12 @@
       if (accountLink) accountLink.remove();
       if (signOutLink) signOutLink.remove();
     }
+<<<<<<< HEAD
     applyActiveNavState();
+=======
+
+    syncCurrentNavLink();
+>>>>>>> f7f4b5e852432845960b23bb359c40f155c87411
   }
 
   maybeTrackVisit();
@@ -331,8 +380,8 @@
       const messageBox = document.getElementById('signup-message');
       clearMessage(messageBox);
       const displayNameRaw = signupForm.querySelector('[name="displayName"]').value;
-      const nameCheck = validateDisplayName(displayNameRaw);
       const email = signupForm.querySelector('[name="email"]').value.trim();
+      const nameCheck = validateDisplayName(displayNameRaw, email);
       const password = signupForm.querySelector('[name="password"]').value;
       const confirmPassword = signupForm.querySelector('[name="confirmPassword"]').value;
       const newsletter = signupForm.querySelector('[name="newsletter"]').checked;
@@ -389,14 +438,9 @@
           newsletter_opt_in: newsletter,
           supporter_updates_opt_in: supporterUpdates
         });
-
-        let msg = 'Account created. Check your email to confirm your address, then sign in.';
-        if (newsletter && (!emailOctopusCfg.enabled || !emailOctopusCfg.listId)) {
-          msg += ' Newsletter opt-in was saved to your account profile, and EmailOctopus can be connected next.';
-        }
-        setMessage(messageBox, msg, 'info');
         signupForm.reset();
         hydrateRememberToggles();
+        window.location.href = paths.signupSuccess;
       } catch (err) {
         setMessage(messageBox, err.message || 'Unable to create your account right now.', 'error');
       } finally {

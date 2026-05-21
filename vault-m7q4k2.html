@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/site.css">
+  <meta name="description" content="This page is unavailable.">
+  <title>Page unavailable | Avery Logic Works</title>
+  <style>
+    .admin-grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:24px; }
+    .admin-grid-full { display:grid; gap:24px; }
+    .metric-grid.admin-metrics { grid-template-columns: repeat(4, minmax(0,1fr)); }
+    .data-list { display:grid; gap:14px; }
+    .data-item { padding:16px 18px; border-radius:18px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.04); }
+    .data-item strong { display:block; margin-bottom:6px; }
+    .data-item code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.92rem; }
+    .data-meta { color: var(--muted); font-size:.92rem; }
+    .quick-links { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:14px; }
+    .quick-card { padding:18px; border-radius:18px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.04); display:grid; gap:12px; }
+    .quick-card p { margin:0; }
+    .status-pill { display:inline-flex; align-items:center; padding:8px 12px; border-radius:999px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.05); font-size:.85rem; color:var(--muted); }
+    .mono-block { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.92rem; word-break:break-all; }
+    .empty-state { color:var(--muted); }
+    .unavailable-shell { max-width: 720px; margin: 0 auto; }
+    .snapshot-grid { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:12px; margin-top:18px; }
+    .snapshot-item { padding:14px 16px; border-radius:16px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.04); }
+    .snapshot-item strong { display:block; font-size:1.25rem; line-height:1.1; margin-bottom:6px; }
+    @media (max-width: 980px) {
+      .admin-grid, .quick-links, .metric-grid.admin-metrics, .snapshot-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="page-hero" id="public-shell">
+      <div class="container unavailable-shell">
+        <div class="form-shell">
+          <span class="tag alt">Unavailable</span>
+          <h1>This page is unavailable.</h1>
+          <p class="muted">The page you requested is not available from this session.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-tight hidden" id="admin-shell">
+      <div class="container admin-grid-full">
+        <div class="form-shell">
+          <span class="tag">Owner session</span>
+          <h3>Operator vault</h3>
+          <div class="auth-inline-row">
+            <p class="small-note">Signed in as <strong id="admin-owner-email">—</strong></p>
+            <span class="status-pill">Owner-only session confirmed</span>
+            <button class="button ghost" id="admin-signout-button" type="button">Sign out</button>
+          </div>
+          <div class="form-message info show" id="admin-console-status">Loading owner counters and private queues…</div>
+          <p class="small-note">This hidden page is no longer published in the public site config. It only opens when an owner account is already signed in.</p>
+          <div class="snapshot-grid" id="owner-snapshot">
+            <div class="snapshot-item"><strong id="snapshot-profiles">0</strong><span>Total profiles</span></div>
+            <div class="snapshot-item"><strong id="snapshot-visits">0</strong><span>Total page visits</span></div>
+            <div class="snapshot-item"><strong id="snapshot-logins">0</strong><span>Total logins</span></div>
+            <div class="snapshot-item"><strong id="snapshot-signups">0</strong><span>Total signups</span></div>
+          </div>
+          <p class="small-note">Vault build: <strong id="vault-build-id">2026-05-16-4</strong></p>
+        </div>
+
+        <div class="form-shell">
+          <span class="tag alt">Core counters</span>
+          <h3>Visitors, accounts, donations, and subscriptions</h3>
+          <div class="metric-grid admin-metrics">
+            <div class="metric"><strong data-admin-stat="visits_24h">0</strong><span>Visits (24h)</span></div>
+            <div class="metric"><strong data-admin-stat="visits_30d">0</strong><span>Visits (30d)</span></div>
+            <div class="metric"><strong data-admin-stat="visits_all_time">0</strong><span>Visits (all time)</span></div>
+            <div class="metric"><strong data-admin-stat="accounts_total">0</strong><span>Total accounts</span></div>
+            <div class="metric"><strong data-admin-stat="signups_30d">0</strong><span>Signups (30d)</span></div>
+            <div class="metric"><strong data-admin-stat="logins_30d">0</strong><span>Logins (30d)</span></div>
+            <div class="metric"><strong data-admin-stat="newsletter_opt_ins">0</strong><span>Mailing list</span></div>
+            <div class="metric"><strong data-admin-stat="supporter_updates_opt_ins">0</strong><span>Supporter emails</span></div>
+            <div class="metric"><strong data-admin-stat="donation_events">0</strong><span>Donation events</span></div>
+            <div class="metric"><strong data-admin-stat="subscription_events">0</strong><span>Subscription events</span></div>
+            <div class="metric"><strong data-admin-stat="donation_total">$0.00</strong><span>Donation total</span></div>
+            <div class="metric"><strong data-admin-stat="subscription_total">$0.00</strong><span>Subscription total</span></div>
+          </div>
+        </div>
+
+        <div class="form-shell">
+          <span class="tag warm">Click counters</span>
+          <h3>Homepage CTA activity</h3>
+          <div class="metric-grid admin-metrics">
+            <div class="metric"><strong data-admin-stat="homepage_visit">0</strong><span>Homepage visits</span></div>
+            <div class="metric"><strong data-admin-stat="homepage_service_cta_click">0</strong><span>Reserve build clicks</span></div>
+            <div class="metric"><strong data-admin-stat="homepage_donation_click">0</strong><span>Donation clicks</span></div>
+            <div class="metric"><strong data-admin-stat="homepage_signup_click">0</strong><span>Sign-up clicks</span></div>
+            <div class="metric"><strong data-admin-stat="homepage_signin_click">0</strong><span>Sign-in clicks</span></div>
+            <div class="metric"><strong data-admin-stat="homepage_founder_cta_click">0</strong><span>Founder clicks</span></div>
+            <div class="metric"><strong data-admin-stat="homepage_support_cta_click">0</strong><span>Support CTA clicks</span></div>
+            <div class="metric"><strong data-admin-stat="homepage_fit_cta_click">0</strong><span>Good-fit clicks</span></div>
+          </div>
+        </div>
+
+        <div class="form-shell">
+          <span class="tag">Queues and funnel</span>
+          <h3>Requests, checkout opens, and reviews</h3>
+          <div class="metric-grid admin-metrics">
+            <div class="metric"><strong data-admin-stat="service_requests">0</strong><span>Service requests</span></div>
+            <div class="metric"><strong data-admin-stat="checkout_opens">0</strong><span>Checkout opens</span></div>
+            <div class="metric"><strong data-admin-stat="feedback_count">0</strong><span>Reviews / suggestions</span></div>
+            <div class="metric"><strong data-admin-stat="average_rating">0.0</strong><span>Average rating</span></div>
+            <div class="metric"><strong data-admin-stat="security_events">0</strong><span>Security events</span></div>
+            <div class="metric"><strong data-admin-stat="admin_denied">0</strong><span>Denied admin tries</span></div>
+          </div>
+          <p class="small-note">Service purchases are not fully counted yet as completed payments unless the payment processor sends that event back into your analytics layer. Right now, the strongest service-sales signal is checkout opens plus private intake submissions.</p>
+        </div>
+
+        <div class="admin-grid">
+          <div class="policy-shell">
+            <span class="tag">Recent service requests</span>
+            <h3>Private intake queue</h3>
+            <div class="data-list" id="service-request-list">
+              <div class="empty-state">Loading recent service requests…</div>
+            </div>
+          </div>
+
+          <div class="policy-shell">
+            <span class="tag alt">Latest feedback</span>
+            <h3>Reviews, comments, and suggestions</h3>
+            <div class="data-list" id="feedback-list">
+              <div class="empty-state">Loading recent feedback…</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-grid">
+          <div class="policy-shell">
+            <span class="tag warm">Security watch</span>
+            <h3>Blocked or suspicious access</h3>
+            <div class="data-list" id="security-event-list">
+              <div class="empty-state">Loading security events…</div>
+            </div>
+          </div>
+
+          <div class="policy-shell">
+            <span class="tag alt">Website edit desk</span>
+            <h3>Fast browser-based page editing</h3>
+            <p class="small-note">These buttons open GitHub's browser editor for the exact file you need. No terminal is needed. Change the text, use GitHub's commit button, and the site updates from there.</p>
+            <div class="quick-links">
+              <div class="quick-card">
+                <strong>Homepage words and main buttons</strong>
+                <p class="small-note">Hero text, homepage sections, paid-service wording, donation copy, and the main homepage buttons all live in the homepage file.</p>
+                <a class="button secondary small" data-edit-path="index.html" target="_blank" rel="noopener noreferrer">Edit homepage</a>
+              </div>
+              <div class="quick-card">
+                <strong>Shared links, emails, and checkout destinations</strong>
+                <p class="small-note">Support email, billing email, Stripe links, service checkout links, founder name, and owner allowlist all live in the shared config.</p>
+                <a class="button secondary small" data-edit-path="assets/site-config.js" target="_blank" rel="noopener noreferrer">Edit shared config</a>
+              </div>
+              <div class="quick-card">
+                <strong>Service offers and intake wording</strong>
+                <p class="small-note">Use this when you want to change service descriptions, what buyers are asked before checkout, or the intake page wording.</p>
+                <a class="button secondary small" data-edit-path="service-intake.html" target="_blank" rel="noopener noreferrer">Edit service intake</a>
+              </div>
+              <div class="quick-card">
+                <strong>Support, founder, and policy pages</strong>
+                <p class="small-note">Use these for support wording, billing notes, founder story, privacy language, and terms copy.</p>
+                <div class="form-actions" style="margin-top:0;">
+                  <a class="button secondary small" data-edit-path="support.html" target="_blank" rel="noopener noreferrer">Edit support page</a>
+                  <a class="button secondary small" data-edit-path="founder.html" target="_blank" rel="noopener noreferrer">Edit founder page</a>
+                  <a class="button secondary small" data-edit-path="privacy.html" target="_blank" rel="noopener noreferrer">Edit privacy page</a>
+                  <a class="button secondary small" data-edit-path="terms.html" target="_blank" rel="noopener noreferrer">Edit terms page</a>
+                </div>
+              </div>
+              <div class="quick-card">
+                <strong>Account, signup, and login pages</strong>
+                <p class="small-note">Use these when you want to change the sign-up wording, login text, or account-page customer settings copy.</p>
+                <div class="form-actions" style="margin-top:0;">
+                  <a class="button secondary small" data-edit-path="signup.html" target="_blank" rel="noopener noreferrer">Edit signup page</a>
+                  <a class="button secondary small" data-edit-path="login.html" target="_blank" rel="noopener noreferrer">Edit login page</a>
+                  <a class="button secondary small" data-edit-path="account.html" target="_blank" rel="noopener noreferrer">Edit account page</a>
+                </div>
+              </div>
+              <div class="quick-card">
+                <strong>Reviews and suggestions</strong>
+                <p class="small-note">The customer feedback page is already live. Use it to view or share the public route where people can leave ratings and suggestions.</p>
+                <a class="button secondary small" href="feedback.html" target="_blank" rel="noopener noreferrer">Open feedback page</a>
+              </div>
+            </div>
+            <div class="inline-divider"></div>
+            <p class="small-note">This is the fastest safe no-terminal editing setup now. A fuller no-code CMS can be added later, but this vault is now organized so you can edit the main website surfaces from the browser without hunting through files.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/site-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    (function () {
+      const cfg = window.AVERY_CONFIG || {};
+      const ownerEmails = (cfg.ownerEmails || []).map((value) => String(value || '').trim().toLowerCase());
+      const supabaseCfg = cfg.supabase || {};
+      const editBase = (cfg.githubRepo && cfg.githubRepo.editBase) || '';
+      const publicShell = document.getElementById('public-shell');
+      const adminShell = document.getElementById('admin-shell');
+      const adminStatus = document.getElementById('admin-console-status');
+      const ownerEmailNode = document.getElementById('admin-owner-email');
+      const signOutButton = document.getElementById('admin-signout-button');
+      const statEls = Object.fromEntries(Array.from(document.querySelectorAll('[data-admin-stat]')).map((el) => [el.dataset.adminStat, el]));
+      const serviceRequestList = document.getElementById('service-request-list');
+      const feedbackList = document.getElementById('feedback-list');
+      const securityEventList = document.getElementById('security-event-list');
+      const snapshotProfiles = document.getElementById('snapshot-profiles');
+      const snapshotVisits = document.getElementById('snapshot-visits');
+      const snapshotLogins = document.getElementById('snapshot-logins');
+      const snapshotSignups = document.getElementById('snapshot-signups');
+      const vaultBuildId = document.getElementById('vault-build-id');
+
+      function getRememberKey() {
+        return 'avery-remember-me';
+      }
+
+      function getRememberPreference() {
+        const raw = localStorage.getItem(getRememberKey());
+        return raw === null ? true : raw === 'true';
+      }
+
+      const authStorage = {
+        getItem(key) {
+          return localStorage.getItem(key) || sessionStorage.getItem(key);
+        },
+        setItem(key, value) {
+          if (getRememberPreference()) {
+            localStorage.setItem(key, value);
+            sessionStorage.removeItem(key);
+          } else {
+            sessionStorage.setItem(key, value);
+            localStorage.removeItem(key);
+          }
+        },
+        removeItem(key) {
+          localStorage.removeItem(key);
+          sessionStorage.removeItem(key);
+        }
+      };
+
+      let sb = null;
+
+      document.querySelectorAll('[data-edit-path]').forEach((el) => {
+        if (editBase) el.href = editBase + el.getAttribute('data-edit-path');
+      });
+
+      if (window.supabase && supabaseCfg.url && supabaseCfg.publishableKey) {
+        sb = window.supabase.createClient(supabaseCfg.url, supabaseCfg.publishableKey, {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true,
+            storage: authStorage
+          }
+        });
+      }
+
+      function getVisitorToken() {
+        const key = 'avery-visitor-token';
+        let token = localStorage.getItem(key);
+        if (!token) {
+          token = 'v_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+          localStorage.setItem(key, token);
+        }
+        return token;
+      }
+
+      function isOwner(email) {
+        return ownerEmails.includes(String(email || '').trim().toLowerCase());
+      }
+
+      function setMessage(node, text, tone) {
+        if (!node) return;
+        node.textContent = text;
+        node.className = 'form-message show' + (tone ? ' ' + tone : '');
+      }
+
+      function formatStatValue(value, fallback) {
+        if (value === null || value === undefined || value === '') return fallback;
+        return String(value);
+      }
+
+      function setStatValue(key, value, fallback) {
+        if (!statEls[key]) return;
+        statEls[key].textContent = formatStatValue(value, fallback);
+      }
+
+      function setSnapshot(node, value, fallback) {
+        if (!node) return;
+        node.textContent = formatStatValue(value, fallback);
+      }
+
+      function escapeHtml(value) {
+        return String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+
+      function ensureListState(node, emptyText) {
+        if (!node) return;
+        const text = (node.textContent || '').trim();
+        if (!text || /^Loading/i.test(text)) {
+          node.innerHTML = '<div class="empty-state">' + emptyText + '</div>';
+        }
+      }
+
+      function settleAdminLists() {
+        ensureListState(serviceRequestList, 'No private service requests have been captured yet.');
+        ensureListState(feedbackList, 'No ratings or suggestions have been submitted yet.');
+        ensureListState(securityEventList, 'No blocked or suspicious access events are recorded yet.');
+      }
+
+      function withTimeout(promise, ms) {
+        return Promise.race([
+          promise,
+          new Promise((resolve, reject) => setTimeout(() => reject(new Error('Timed out')), ms))
+        ]);
+      }
+
+      async function logEvent(eventType, payload) {
+        if (!sb) return;
+        try {
+          const sessionData = await sb.auth.getSession();
+          const session = sessionData?.data?.session || null;
+          await sb.from('site_events').insert({
+            event_type: eventType,
+            page_path: window.location.pathname || '/vault-m7q4k2.html',
+            visitor_token: getVisitorToken(),
+            user_id: session?.user?.id || null,
+            user_email: payload?.email || session?.user?.email || null,
+            metadata: payload || {}
+          });
+        } catch (err) {
+          console.debug('vault log skipped', eventType, err?.message || err);
+        }
+      }
+
+      function renderList(node, rows, renderRow, emptyText) {
+        if (!node) return;
+        if (!rows || !rows.length) {
+          node.innerHTML = '<div class="empty-state">' + emptyText + '</div>';
+          return;
+        }
+        node.innerHTML = rows.map(renderRow).join('');
+      }
+
+      function renderServiceRequestRows(rows) {
+        renderList(serviceRequestList, rows || [], function (row) {
+          const meta = row.metadata || {};
+          return '<div class="data-item">'
+            + '<strong>' + escapeHtml(meta.subject || 'Untitled service request') + '</strong>'
+            + '<div class="data-meta">' + escapeHtml(meta.customer_name || 'Unknown name') + ' · ' + escapeHtml(meta.customer_email || row.user_email || 'No email') + '</div>'
+            + '<div class="data-meta">' + escapeHtml(meta.tier_label || 'Unknown tier') + ' · ' + escapeHtml(row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div>'
+            + '<p>' + escapeHtml(meta.details || '') + '</p>'
+            + '<div class="data-meta"><code>' + escapeHtml(meta.request_id || 'No request id') + '</code></div>'
+            + '</div>';
+        }, 'No private service requests have been captured yet.');
+      }
+
+      function renderFeedbackRows(rows) {
+        renderList(feedbackList, rows || [], function (row) {
+          const meta = row.metadata || {};
+          return '<div class="data-item">'
+            + '<strong>' + escapeHtml(meta.rating ? ('Rating: ' + meta.rating + '/5') : 'Comment received') + '</strong>'
+            + '<div class="data-meta">' + escapeHtml(meta.name || 'Anonymous') + ' · ' + escapeHtml(meta.email || row.user_email || 'No email') + '</div>'
+            + '<div class="data-meta">' + escapeHtml(meta.target_page || 'General feedback') + ' · ' + escapeHtml(row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div>'
+            + '<p>' + escapeHtml(meta.comment || '') + '</p>'
+            + '</div>';
+        }, 'No ratings or suggestions have been submitted yet.');
+      }
+
+      function renderSecurityRows(rows) {
+        renderList(securityEventList, rows || [], function (row) {
+          const meta = row.metadata || {};
+          return '<div class="data-item">'
+            + '<strong>' + escapeHtml(row.label || row.event_type || 'Security event logged') + '</strong>'
+            + '<div class="data-meta">' + escapeHtml(row.user_email || meta.email || 'Unknown email') + ' · ' + escapeHtml(row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div>'
+            + '<div class="data-meta">' + escapeHtml(meta.reason || meta.source || row.event_type || 'Security event logged') + '</div>'
+            + '</div>';
+        }, 'No blocked or suspicious access events are recorded yet.');
+      }
+
+      function applyCoreMetrics(stats) {
+        setStatValue('visits_24h', stats.visits_24h, '0');
+        setStatValue('visits_30d', stats.visits_30d, '0');
+        setStatValue('visits_all_time', stats.visits_all_time, '0');
+        setStatValue('logins_30d', stats.logins_30d, '0');
+        setStatValue('signups_30d', stats.signups_30d, '0');
+        setStatValue('accounts_total', stats.accounts_total, '0');
+        setStatValue('newsletter_opt_ins', stats.newsletter_opt_ins, '0');
+        setStatValue('supporter_updates_opt_ins', stats.supporter_updates_opt_ins, '0');
+        setStatValue('donation_events', stats.donation_events, '0');
+        setStatValue('subscription_events', stats.subscription_events, '0');
+        setStatValue('donation_total', stats.donation_total_display, '$0.00');
+        setStatValue('subscription_total', stats.subscription_total_display, '$0.00');
+      }
+
+      function applyVaultSummary(payload) {
+        const core = payload && payload.core ? payload.core : {};
+        const snapshot = payload && payload.snapshot ? payload.snapshot : {};
+        const clicks = payload && payload.clicks ? payload.clicks : {};
+        const funnel = payload && payload.funnel ? payload.funnel : {};
+
+        applyCoreMetrics(core);
+        setSnapshot(snapshotProfiles, snapshot.profiles_total ?? core.accounts_total, '0');
+        setSnapshot(snapshotVisits, snapshot.page_visits_total ?? core.visits_all_time, '0');
+        setSnapshot(snapshotLogins, snapshot.login_success_total ?? core.logins_all_time ?? core.logins_30d, '0');
+        setSnapshot(snapshotSignups, snapshot.signup_submitted_total ?? core.signups_all_time ?? core.signups_30d, '0');
+
+        Object.entries(clicks).forEach(function (entry) {
+          setStatValue(entry[0], entry[1], '0');
+        });
+
+        setStatValue('service_requests', funnel.service_requests, '0');
+        setStatValue('checkout_opens', funnel.checkout_opens, '0');
+        setStatValue('feedback_count', funnel.feedback_count, '0');
+        setStatValue('average_rating', funnel.average_rating, '0.0');
+        setStatValue('security_events', funnel.security_events, '0');
+        setStatValue('admin_denied', funnel.admin_denied, '0');
+
+        renderServiceRequestRows(payload && payload.service_requests ? payload.service_requests : []);
+        renderFeedbackRows(payload && payload.feedback ? payload.feedback : []);
+        renderSecurityRows(payload && payload.security ? payload.security : []);
+      }
+
+      async function countEvent(eventType, sinceIso) {
+        let query = sb.from('site_events').select('*', { count: 'exact', head: true }).eq('event_type', eventType);
+        if (sinceIso) query = query.gte('created_at', sinceIso);
+        const response = await query;
+        if (response.error) throw response.error;
+        return response.count || 0;
+      }
+
+      async function countRows(table, column, value) {
+        const response = await sb.from(table).select('*', { count: 'exact', head: true }).eq(column, value);
+        if (response.error) throw response.error;
+        return response.count || 0;
+      }
+
+      async function fetchJsonWithAuth(url, session, options, timeoutMs) {
+        const controller = new AbortController();
+        const timer = setTimeout(function () {
+          controller.abort();
+        }, timeoutMs || 8000);
+        try {
+          const headers = Object.assign({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'apikey': supabaseCfg.publishableKey || ''
+          }, options && options.headers ? options.headers : {});
+          if (session && session.access_token) {
+            headers.Authorization = 'Bearer ' + session.access_token;
+          }
+          const response = await fetch(url, Object.assign({}, options || {}, {
+            headers: headers,
+            signal: controller.signal
+          }));
+          const raw = await response.text();
+          let data = null;
+          if (raw) {
+            try {
+              data = JSON.parse(raw);
+            } catch (_parseErr) {
+              if (response.ok) {
+                throw new Error('Owner endpoint returned unreadable data.');
+              }
+            }
+          }
+          if (!response.ok) {
+            const message = data && (data.error || data.message)
+              ? (data.error || data.message)
+              : ('Request failed with status ' + response.status + '.');
+            throw new Error(message);
+          }
+          return data;
+        } catch (err) {
+          if (err && err.name === 'AbortError') {
+            throw new Error('Timed out');
+          }
+          throw err;
+        } finally {
+          clearTimeout(timer);
+        }
+      }
+
+      async function loadVaultSummary(buildId, session) {
+        const baseUrl = String(supabaseCfg.url || '').replace(/\/+$/, '');
+        if (!baseUrl) {
+          throw new Error('Supabase URL is missing.');
+        }
+        const data = await fetchJsonWithAuth(baseUrl + '/functions/v1/owner-vault-summary', session, {
+          method: 'POST',
+          body: JSON.stringify({
+            source: 'vault-m7q4k2.html',
+            build: buildId || 'unknown'
+          })
+        }, 8000);
+        if (!data || typeof data !== 'object') {
+          throw new Error('Owner vault service returned no readable data.');
+        }
+        return data;
+      }
+
+      async function loadCoreMetricsFallback(session) {
+        const baseUrl = String(supabaseCfg.url || '').replace(/\/+$/, '');
+        if (!baseUrl) {
+          throw new Error('Supabase URL is missing.');
+        }
+        const data = await fetchJsonWithAuth(baseUrl + '/rest/v1/rpc/get_owner_dashboard_counts', session, {
+          method: 'POST',
+          body: '{}'
+        }, 8000);
+        const stats = Array.isArray(data) ? data[0] : data;
+        if (!stats || typeof stats !== 'object') {
+          throw new Error('Owner dashboard counts returned no readable data.');
+        }
+        return {
+          visits_24h: stats.visits_24h ?? 0,
+          visits_30d: stats.visits_30d ?? 0,
+          visits_all_time: stats.visits_all_time ?? 0,
+          logins_30d: stats.logins_30d ?? 0,
+          logins_all_time: stats.logins_all_time ?? stats.logins_30d ?? 0,
+          signups_30d: stats.signups_30d ?? 0,
+          signups_all_time: stats.signups_all_time ?? stats.signups_30d ?? 0,
+          accounts_total: stats.accounts_total ?? 0,
+          newsletter_opt_ins: stats.newsletter_opt_ins ?? 0,
+          supporter_updates_opt_ins: stats.supporter_updates_opt_ins ?? 0,
+          donation_events: stats.donation_events ?? 0,
+          subscription_events: stats.subscription_events ?? 0,
+          donation_total_display: stats.donation_total_display || '$0.00',
+          subscription_total_display: stats.subscription_total_display || '$0.00'
+        };
+      }
+
+      async function loadCoreMetrics(session) {
+        const fallbackStats = await loadCoreMetricsFallback(session);
+        applyCoreMetrics(fallbackStats);
+        setSnapshot(snapshotProfiles, fallbackStats.accounts_total, '0');
+        setSnapshot(snapshotVisits, fallbackStats.visits_all_time, '0');
+        setSnapshot(snapshotLogins, fallbackStats.logins_all_time ?? fallbackStats.logins_30d, '0');
+        setSnapshot(snapshotSignups, fallbackStats.signups_all_time ?? fallbackStats.signups_30d, '0');
+        return { source: 'fallback' };
+      }
+
+      async function loadClickMetrics() {
+        const clickEvents = [
+          'homepage_visit',
+          'homepage_service_cta_click',
+          'homepage_donation_click',
+          'homepage_signup_click',
+          'homepage_signin_click',
+          'homepage_founder_cta_click',
+          'homepage_support_cta_click',
+          'homepage_fit_cta_click'
+        ];
+        await Promise.all(clickEvents.map(async function (eventType) {
+          try {
+            const total = await countEvent(eventType);
+            setStatValue(eventType, total, '0');
+          } catch (err) {
+            console.debug('click metric unavailable', eventType, err?.message || err);
+            setStatValue(eventType, '0', '0');
+          }
+        }));
+      }
+
+      async function loadServiceRequests() {
+        try {
+          const total = await countEvent('service_request_submitted');
+          setStatValue('service_requests', total, '0');
+          const checkoutOpens = await countEvent('service_checkout_opened');
+          setStatValue('checkout_opens', checkoutOpens, '0');
+          const { data, error } = await sb.from('site_events').select('created_at,user_email,metadata').eq('event_type', 'service_request_submitted').order('created_at', { ascending: false }).limit(12);
+          if (error) throw error;
+          renderServiceRequestRows(data || []);
+        } catch (err) {
+          renderList(serviceRequestList, [], null, 'Recent service requests are not readable from this owner session yet.');
+        }
+      }
+
+      async function loadFeedback() {
+        try {
+          const { data, error } = await sb.from('site_events').select('created_at,user_email,metadata').eq('event_type', 'public_feedback_submitted').order('created_at', { ascending: false }).limit(20);
+          if (error) throw error;
+          const rows = data || [];
+          const ratings = rows.map((row) => Number((row.metadata || {}).rating || 0)).filter((value) => value > 0);
+          const average = ratings.length ? (ratings.reduce((sum, value) => sum + value, 0) / ratings.length).toFixed(1) : '0.0';
+          setStatValue('feedback_count', rows.length, '0');
+          setStatValue('average_rating', average, '0.0');
+          renderFeedbackRows(rows);
+        } catch (err) {
+          renderList(feedbackList, [], null, 'Feedback items are not readable from this owner session yet.');
+        }
+      }
+
+      async function loadSecurityEvents() {
+        try {
+          const securityTypes = ['admin_access_denied', 'admin_hidden_path_hit', 'service_intake_save_failed', 'owner_vault_opened'];
+          const total = await sb.from('site_events').select('*', { count: 'exact', head: true }).in('event_type', securityTypes);
+          if (total.error) throw total.error;
+          setStatValue('security_events', total.count || 0, '0');
+          const denied = await countEvent('admin_access_denied');
+          setStatValue('admin_denied', denied, '0');
+          const { data, error } = await sb.from('site_events').select('created_at,event_type,user_email,metadata').in('event_type', securityTypes).order('created_at', { ascending: false }).limit(20);
+          if (error) throw error;
+          renderSecurityRows((data || []).map(function (row) {
+            let label = 'Security event logged';
+            if (row.event_type === 'admin_access_denied') label = 'Blocked admin attempt';
+            if (row.event_type === 'admin_hidden_path_hit') label = 'Hidden vault hit without access';
+            if (row.event_type === 'service_intake_save_failed') label = 'Service intake save failure';
+            if (row.event_type === 'owner_vault_opened') label = 'Owner vault opened';
+            return {
+              created_at: row.created_at,
+              event_type: row.event_type,
+              label: label,
+              user_email: row.user_email,
+              metadata: row.metadata || {}
+            };
+          }));
+        } catch (err) {
+          renderList(securityEventList, [], null, 'Security events are not readable from this owner session yet.');
+        }
+      }
+
+      async function loadConsole(session) {
+        document.title = 'Operator Vault | Avery Logic Works';
+        ownerEmailNode.textContent = session.user.email || 'owner';
+        publicShell.classList.add('hidden');
+        adminShell.classList.remove('hidden');
+        settleAdminLists();
+
+        const buildId = vaultBuildId ? vaultBuildId.textContent : 'unknown';
+        try {
+          const payload = await withTimeout(loadVaultSummary(buildId, session), 8000);
+          applyVaultSummary(payload);
+          settleAdminLists();
+          setMessage(adminStatus, 'Owner session confirmed. Snapshot: profiles ' + snapshotProfiles.textContent + ', visits ' + snapshotVisits.textContent + ', logins ' + snapshotLogins.textContent + ', signups ' + snapshotSignups.textContent + '. Loaded through the owner vault service.', 'info');
+          return;
+        } catch (summaryErr) {
+          console.debug('owner vault service unavailable', summaryErr?.message || summaryErr);
+        }
+
+        await logEvent('owner_vault_opened', { email: session.user.email || null, source: 'vault-m7q4k2.html', build: buildId });
+
+        let metricLoad;
+        try {
+          metricLoad = await loadCoreMetrics(session);
+        } catch (err) {
+          console.debug('core metrics unavailable after fallback', err?.message || err);
+          setMessage(adminStatus, 'Owner session confirmed, but the vault could not load its core counters yet.', 'error');
+        }
+
+        await Promise.allSettled([
+          withTimeout(loadClickMetrics(), 4000),
+          withTimeout(loadServiceRequests(), 4000),
+          withTimeout(loadFeedback(), 4000),
+          withTimeout(loadSecurityEvents(), 4000)
+        ]);
+        settleAdminLists();
+
+        if (metricLoad) {
+          setMessage(adminStatus, 'Owner session confirmed. Snapshot: profiles ' + snapshotProfiles.textContent + ', visits ' + snapshotVisits.textContent + ', logins ' + snapshotLogins.textContent + ', signups ' + snapshotSignups.textContent + '. Loaded through direct authenticated fallback reads.', 'info');
+        }
+      }
+
+      async function showUnavailable(reason) {
+        publicShell.classList.remove('hidden');
+        adminShell.classList.add('hidden');
+        if (reason && sb) {
+          await logEvent('admin_hidden_path_hit', { reason: reason, source: 'vault-m7q4k2.html' });
+        }
+      }
+
+      async function handleOwnerSession(session) {
+        if (!session) {
+          await showUnavailable('no active session');
+          return;
+        }
+        const email = session.user && session.user.email;
+        if (!isOwner(email)) {
+          await logEvent('admin_access_denied', { email: email, reason: 'signed-in user is not on the owner allowlist', source: 'vault-m7q4k2.html' });
+          await sb.auth.signOut();
+          await showUnavailable('signed-in user is not authorized');
+          return;
+        }
+        await loadConsole(session);
+      }
+
+      signOutButton.addEventListener('click', async function () {
+        if (!sb) return;
+        await sb.auth.signOut();
+        document.title = 'Page unavailable | Avery Logic Works';
+        adminShell.classList.add('hidden');
+        publicShell.classList.remove('hidden');
+      });
+
+      if (!sb) {
+        return;
+      }
+
+      sb.auth.getSession().then(async function (sessionData) {
+        await handleOwnerSession(sessionData?.data?.session || null);
+      });
+
+      sb.auth.onAuthStateChange(async function (_event, session) {
+        await handleOwnerSession(session || null);
+      });
+    }());
+  </script>
+</body>
+</html>

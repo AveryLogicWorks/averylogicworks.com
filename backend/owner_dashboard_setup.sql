@@ -40,15 +40,24 @@ create table if not exists public.supporter_events (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.site_content (
+  key text primary key,
+  content jsonb not null default '{}'::jsonb,
+  updated_at timestamptz not null default now(),
+  updated_by uuid references auth.users (id) on delete set null
+);
+
 alter table public.site_admins enable row level security;
 alter table public.site_events enable row level security;
 alter table public.profiles enable row level security;
 alter table public.supporter_events enable row level security;
+alter table public.site_content enable row level security;
 
 create or replace function public.is_site_admin()
 returns boolean
 language sql
 stable
+set search_path = public
 as $$
   select exists (
     select 1
@@ -82,6 +91,42 @@ create policy "Admins can read supporter events"
 on public.supporter_events for select
 using (public.is_site_admin());
 
+grant select on table public.site_content to anon, authenticated;
+grant insert, update on table public.site_content to authenticated;
+
+drop policy if exists "Anyone can read site content" on public.site_content;
+create policy "Anyone can read site content"
+on public.site_content for select
+using (true);
+
+drop policy if exists "Admins can insert site content" on public.site_content;
+create policy "Admins can insert site content"
+on public.site_content for insert
+to authenticated
+with check (public.is_site_admin());
+
+drop policy if exists "Admins can update site content" on public.site_content;
+create policy "Admins can update site content"
+on public.site_content for update
+to authenticated
+using (public.is_site_admin())
+with check (public.is_site_admin());
+
+insert into public.site_content (key, content)
+values (
+  'homepage_content',
+  jsonb_build_object(
+    'eyebrow', 'Independent studio in active development',
+    'headline', 'Avery Logic Works is a founder-led software, AI, and digital systems studio.',
+    'subhead', 'This site exists to introduce the studio first: what Avery Logic Works is, what it is growing into, and why the work matters. Limited support-backed collaboration may be available, but the larger purpose is building long-term software, AI, and interactive systems with a clear point of view.',
+    'note', 'If you want to purchase a paid service or look at the current collaboration options, more information is below, and the paid services button is always at the top.',
+    'primary_cta', 'View paid services',
+    'secondary_cta', 'See what fits',
+    'founder_cta', 'Meet the founder'
+  )
+)
+on conflict (key) do nothing;
+
 create or replace function public.handle_new_user_profile()
 returns trigger
 language plpgsql
@@ -112,6 +157,10 @@ create trigger on_auth_user_created_profile
 after insert on auth.users
 for each row
 execute function public.handle_new_user_profile();
+
+revoke execute on function public.handle_new_user_profile() from public;
+revoke execute on function public.handle_new_user_profile() from anon;
+revoke execute on function public.handle_new_user_profile() from authenticated;
 
 create or replace function public.get_owner_dashboard_counts()
 returns table (
@@ -200,4 +249,6 @@ begin
 end;
 $$;
 
+revoke execute on function public.get_owner_dashboard_counts() from public;
+revoke execute on function public.get_owner_dashboard_counts() from anon;
 grant execute on function public.get_owner_dashboard_counts() to authenticated;
