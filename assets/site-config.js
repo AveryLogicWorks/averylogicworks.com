@@ -33,10 +33,6 @@ window.AVERY_CONFIG = {
     resetRedirect: 'login.html?reset=1'
   },
   stripeLinks: {
-<<<<<<< HEAD
-    oneTime: 'https://donate.stripe.com/8x2cMY6Bd3DP9845GD1RC01',
-    monthly: 'https://donate.stripe.com/4gM3coe3FgqB3NK8SP1RC00',
-=======
     oneTime: 'index.html#donation-options',
     monthly: 'index.html#donation-options',
     oneTime10: 'https://buy.stripe.com/8x25kwe3F5LX840d951RC06',
@@ -51,7 +47,6 @@ window.AVERY_CONFIG = {
     serviceStandard50: 'https://buy.stripe.com/dRm8wIe3F2zL4ROd951RC04',
     serviceExpanded100: 'https://buy.stripe.com/3cIfZaf7J2zLac8glh1RC05',
     shop: '#',
->>>>>>> f7f4b5e852432845960b23bb359c40f155c87411
     portal: '#'
   },
   founderImages: {
