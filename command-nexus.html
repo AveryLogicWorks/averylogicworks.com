@@ -448,6 +448,7 @@
     }
 
     .tier-card .button { width: 100%; margin-top: auto; }
+    .tier-card .button + .button { margin-top: .5rem; }
 
     .sub-note {
       max-width: 820px;
@@ -622,7 +623,8 @@
             <li>Free starter agents included</li>
             <li>Full Visibility Window &amp; AI Creation Engine</li>
           </ul>
-          <a class="button primary" data-cn-link="proMonthly" data-pending-text="Choose Pro" href="#">Choose Pro</a>
+          <a class="button primary" data-cn-link="proMonthly" data-pending-text="Choose Pro" href="#">Choose Pro &mdash; $30/mo</a>
+          <a class="button" data-cn-link="proYearly" data-pending-text="Pay yearly &mdash; $324" href="#">Pay yearly &mdash; $324 (save $36)</a>
         </article>
 
         <article class="tier-card featured">
@@ -635,7 +637,8 @@
             <li>Free starter agents included</li>
             <li>Full Visibility Window &amp; AI Creation Engine</li>
           </ul>
-          <a class="button primary" data-cn-link="businessMonthly" data-pending-text="Choose Business" href="#">Choose Business</a>
+          <a class="button primary" data-cn-link="businessMonthly" data-pending-text="Choose Business" href="#">Choose Business &mdash; $50/mo</a>
+          <a class="button" data-cn-link="businessYearly" data-pending-text="Pay yearly &mdash; $552" href="#">Pay yearly &mdash; $552 (save $48)</a>
         </article>
 
         <article class="tier-card">
@@ -647,7 +650,8 @@
             <li>Free starter agents included</li>
             <li>Full Visibility Window &amp; AI Creation Engine</li>
           </ul>
-          <a class="button primary" data-cn-link="unlimitedMonthly" data-pending-text="Choose Unlimited" href="#">Choose Unlimited</a>
+          <a class="button primary" data-cn-link="unlimitedMonthly" data-pending-text="Choose Unlimited" href="#">Choose Unlimited &mdash; $80/mo</a>
+          <a class="button" data-cn-link="unlimitedYearly" data-pending-text="Pay yearly &mdash; $900" href="#">Pay yearly &mdash; $900 (save $60)</a>
         </article>
       </div>
 
@@ -687,8 +691,11 @@
       var map = {
         trial: links.commandNexusTrial,
         proMonthly: links.commandNexusProMonthly,
+        proYearly: links.commandNexusProYearly,
         businessMonthly: links.commandNexusBusinessMonthly,
-        unlimitedMonthly: links.commandNexusUnlimitedMonthly
+        businessYearly: links.commandNexusBusinessYearly,
+        unlimitedMonthly: links.commandNexusUnlimitedMonthly,
+        unlimitedYearly: links.commandNexusUnlimitedYearly
       };
       document.querySelectorAll('[data-cn-link]').forEach(function (el) {
         var key = el.getAttribute('data-cn-link');
