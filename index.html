@@ -303,6 +303,28 @@
       object-fit: cover;
     }
 
+    .video-frame video {
+      opacity: 0;
+      transition: opacity .7s ease;
+    }
+
+    .video-frame.video-playing video { opacity: 1; }
+
+    .video-intro-still {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 2;
+      transition: opacity .7s ease;
+    }
+
+    .video-frame.video-playing .video-intro-still {
+      opacity: 0;
+      pointer-events: none;
+    }
+
     .video-fallback {
       display: grid;
       place-items: center;
@@ -590,11 +612,12 @@
 
     <section class="video-section" aria-labelledby="video-title">
       <p id="video-title" class="video-intro">Built through controlled iteration, using proprietary systems and AI-assisted automation to produce real, working software.</p>
-      <div class="video-frame">
-        <video autoplay muted loop playsinline preload="metadata" poster="assets/1000008564.png" aria-label="Avery Logic Works visual identity animation">
+      <div class="video-frame" data-reveal-video data-reveal-delay="2500">
+        <video muted loop playsinline preload="auto" poster="assets/1000008564.png" aria-label="Avery Logic Works visual identity animation">
           <source src="assets/Timeline-1.mp4" type="video/mp4" />
           <img class="video-fallback" src="assets/1000008564.png" alt="Avery Logic Works visual identity animation" />
         </video>
+        <img class="video-intro-still" src="assets/1000008564.png" alt="Founder building Avery Logic Works systems by hand" />
       </div>
     </section>
 
@@ -804,5 +827,27 @@
 
   <script src="assets/site-config.js"></script>
   <script src="assets/site.js"></script>
+  <script>
+    (function () {
+      var frame = document.querySelector('[data-reveal-video]');
+      if (!frame) return;
+      var video = frame.querySelector('video');
+      if (!video) return;
+      var delay = parseInt(frame.getAttribute('data-reveal-delay'), 10);
+      if (isNaN(delay)) delay = 2500;
+      window.setTimeout(function () {
+        var attempt = video.play();
+        if (attempt && typeof attempt.then === 'function') {
+          attempt.then(function () {
+            frame.classList.add('video-playing');
+          }).catch(function () {
+            // Autoplay blocked: keep the still image visible.
+          });
+        } else {
+          frame.classList.add('video-playing');
+        }
+      }, delay);
+    })();
+  </script>
 </body>
 </html>
