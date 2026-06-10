@@ -46,6 +46,13 @@ window.AVERY_CONFIG = {
     serviceStarter20: 'https://buy.stripe.com/dRm4gs4t52zLckgb0X1RC03',
     serviceStandard50: 'https://buy.stripe.com/dRm8wIe3F2zL4ROd951RC04',
     serviceExpanded100: 'https://buy.stripe.com/3cIfZaf7J2zLac8glh1RC05',
+    commandNexusTrial: '#',
+    commandNexusProMonthly: '#',
+    commandNexusProYearly: '#',
+    commandNexusBusinessMonthly: '#',
+    commandNexusBusinessYearly: '#',
+    commandNexusUnlimitedMonthly: '#',
+    commandNexusUnlimitedYearly: '#',
     shop: '#',
     portal: '#'
   },

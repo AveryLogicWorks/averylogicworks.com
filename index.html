@@ -147,6 +147,12 @@
       font-weight: 800;
     }
 
+    .nav-links .nav-flagship {
+      color: #0c0716;
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+      font-weight: 800;
+    }
+
     main { overflow: hidden; }
 
     section {
@@ -545,6 +551,77 @@
       text-decoration: none;
     }
 
+    .flagship-section { padding-top: 2rem; padding-bottom: 2rem; }
+
+    .flagship-panel {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(2rem, 5vw, 3.25rem);
+      border: 1px solid rgba(167, 139, 250, .4);
+      border-radius: 32px;
+      background: linear-gradient(135deg, rgba(167, 139, 250, .16), rgba(125, 211, 252, .1));
+      box-shadow: 0 24px 90px rgba(167, 139, 250, .16);
+      text-align: center;
+    }
+
+    .flagship-badges {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: .6rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .flagship-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      padding: .42rem .85rem;
+      border-radius: 999px;
+      border: 1px solid rgba(167, 139, 250, .4);
+      background: rgba(167, 139, 250, .14);
+      color: var(--text);
+      font-size: .82rem;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .flagship-badge .badge-dot {
+      width: .55rem;
+      height: .55rem;
+      border-radius: 999px;
+      background: var(--accent-3);
+      box-shadow: 0 0 12px rgba(34, 211, 238, .8);
+    }
+
+    .flagship-name {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      line-height: 1.02;
+      letter-spacing: -.04em;
+      font-weight: 900;
+      margin-bottom: .65rem;
+    }
+
+    .flagship-phrase {
+      max-width: 880px;
+      margin: 0 auto 1.1rem;
+      font-size: clamp(1.35rem, 3vw, 2.1rem);
+      line-height: 1.18;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      text-wrap: balance;
+    }
+
+    .flagship-teaser {
+      max-width: 720px;
+      margin: 0 auto 1.75rem;
+      color: var(--muted);
+      font-size: clamp(1.02rem, 2vw, 1.18rem);
+    }
+
+    .flagship-teaser .no-code { color: var(--accent); font-weight: 900; }
+
     @media (max-width: 760px) {
       .nav { align-items: flex-start; flex-direction: column; padding: 1rem 0; }
       .nav-links { justify-content: flex-start; }
@@ -573,6 +650,7 @@
         <a href="index.html">Home</a>
         <a href="founder.html">Founder</a>
         <a href="themis.html">Themis</a>
+        <a class="nav-flagship" href="command-nexus.html">Command Nexus</a>
         <a href="login.html">Sign in</a>
         <a class="nav-primary" href="signup.html">Sign up</a>
         <a href="#services">Paid services</a>
@@ -606,6 +684,21 @@
             <strong>Built for usefulness, not fluff</strong>
             The goal is a working result that solves something real, not a pile of vague promises.
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="flagship-section" aria-labelledby="flagship-title">
+      <div class="flagship-panel">
+        <div class="flagship-badges">
+          <span class="flagship-badge"><span class="badge-dot"></span> Flagship product</span>
+          <span class="flagship-badge">In Alpha-Beta</span>
+        </div>
+        <div class="flagship-name" id="flagship-title">Command Nexus</div>
+        <p class="flagship-phrase">AI used to be powerful if you knew how to code. Now it&rsquo;s powerful even if you don&rsquo;t.</p>
+        <p class="flagship-teaser">Use and make AI with <span class="no-code">no coding required</span> &mdash; pick a ready-made starter agent or build your own. Subscription-based, with a 15-day trial to start.</p>
+        <div class="cta-row" aria-label="Command Nexus actions">
+          <a class="button primary" href="command-nexus.html">Explore Command Nexus</a>
         </div>
       </div>
     </section>
