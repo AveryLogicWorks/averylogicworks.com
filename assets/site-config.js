@@ -53,6 +53,11 @@ window.AVERY_CONFIG = {
     commandNexusBusinessYearly: 'https://buy.stripe.com/dRm7sE9Np8Y9gAwed91RC0i',
     commandNexusUnlimitedMonthly: 'https://buy.stripe.com/7sYdR28Jl7U5fws2ur1RC0j',
     commandNexusUnlimitedYearly: 'https://buy.stripe.com/cNi5kw8Jl0rD2JG6KH1RC0k',
+    // Early Access Alpha plans (monthly only). Set these to the new Stripe Payment Links.
+    // The older commandNexus* links above are kept for reference/rollback and are no longer shown on the page.
+    commandNexusProAlpha: '#',
+    commandNexusBusinessAlpha: '#',
+    commandNexusUnlimitedAlpha: '#',
     shop: '#',
     portal: '#'
   },
