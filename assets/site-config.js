@@ -23,6 +23,9 @@ window.AVERY_CONFIG = {
     enabled: false,
     listId: ''
   },
+  // Command Nexus pricing stage shown on command-nexus.html: 'alpha' (live now), 'beta', or 'full'.
+  // Flip this to roll prices forward once the matching Stripe links below are filled in.
+  commandNexusStage: 'alpha',
   paths: {
     home: 'index.html',
     login: 'login.html',
@@ -53,11 +56,18 @@ window.AVERY_CONFIG = {
     commandNexusBusinessYearly: 'https://buy.stripe.com/dRm7sE9Np8Y9gAwed91RC0i',
     commandNexusUnlimitedMonthly: 'https://buy.stripe.com/7sYdR28Jl7U5fws2ur1RC0j',
     commandNexusUnlimitedYearly: 'https://buy.stripe.com/cNi5kw8Jl0rD2JG6KH1RC0k',
-    // Early Access Alpha plans (monthly only). Set these to the new Stripe Payment Links.
-    // The older commandNexus* links above are kept for reference/rollback and are no longer shown on the page.
+    // Alpha stage (live now). Monthly only. Fill with the $10/$30/$50 Stripe Payment Links.
     commandNexusProAlpha: '#',
     commandNexusBusinessAlpha: '#',
     commandNexusUnlimitedAlpha: '#',
+    // Beta stage (built for the future, hidden until commandNexusStage = 'beta').
+    // Fill with the $5 trial / $20 / $40 / $60 Stripe Payment Links when ready.
+    commandNexusTrialBeta: '#',
+    commandNexusProBeta: '#',
+    commandNexusBusinessBeta: '#',
+    commandNexusUnlimitedBeta: '#',
+    // Full Release stage reuses the existing commandNexus* monthly/yearly links above
+    // ($10 trial, $30/$50/$80 + yearly $324/$552/$900). No new links needed for that stage.
     shop: '#',
     portal: '#'
   },
