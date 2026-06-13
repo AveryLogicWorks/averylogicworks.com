@@ -78,6 +78,9 @@ async function validateKey(rawKey: string, publicSalt: Uint8Array) {
     const expiryTs = parseInt(expiryHex, 16);
     if (!Number.isFinite(expiryTs)) return null;
     const expiry = new Date(expiryTs * 1000);
+    // API contract: `valid` means the key is genuine (HMAC verified). `expired`
+    // is a SEPARATE status. Consumers must check BOTH — a key can be
+    // valid:true AND expired:true. Only grant access when valid && !expired.
     return {
       valid: true,
       tier: name,
