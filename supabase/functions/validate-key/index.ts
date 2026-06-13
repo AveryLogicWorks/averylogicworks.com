@@ -62,7 +62,7 @@ function timingSafeEqual(a: string, b: string): boolean {
 async function validateKey(rawKey: string, publicSalt: Uint8Array) {
   // Tier prefix (e.g. TR, PR) is letters, not hex; only the trailing 38 chars
   // are hex. Require 40 uppercase alphanumerics and let the HMAC do the real work.
-  const key = rawKey.trim().toUpperCase().replace(/-/g, "");
+  const key = rawKey.trim().toUpperCase().replace(/[\s-]/g, "");
   if (!/^[A-Z0-9]{40}$/.test(key)) return null;
 
   const tierCode = key.slice(0, 2);

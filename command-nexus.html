@@ -1126,10 +1126,11 @@
                 setStatus('err', '<strong>That key isn\u2019t valid.</strong><span class="key-meta">Double-check it, or contact support if you believe it should work.</span>');
               } else {
                 // Function missing/misconfigured: provisional format-only result.
+                console.warn('validate-key: unexpected response', res.status, res.data);
                 renderResult(fmt, key, false);
               }
             })
-            .catch(function () { renderResult(fmt, key, false); })
+            .catch(function (err) { console.warn('validate-key: request failed', err); renderResult(fmt, key, false); })
             .then(function () {
               if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = orig; }
             });
