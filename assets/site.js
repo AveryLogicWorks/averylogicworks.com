@@ -332,6 +332,28 @@
     applyActiveNavState();
   }
 
+  async function updateAuthCtas() {
+    const ctas = document.querySelectorAll('[data-auth-cta]');
+    if (!ctas.length) return;
+    const session = sb ? (await sb.auth.getSession())?.data?.session : null;
+    ctas.forEach(function (el) {
+      if (session) {
+        if (!el.hasAttribute('data-auth-cta-default-href')) {
+          el.setAttribute('data-auth-cta-default-href', el.getAttribute('href') || '');
+        }
+        if (!el.hasAttribute('data-auth-cta-default-text')) {
+          el.setAttribute('data-auth-cta-default-text', el.textContent);
+        }
+        el.href = el.getAttribute('data-auth-cta') || paths.account;
+        const signedInText = el.getAttribute('data-auth-cta-text');
+        if (signedInText) el.textContent = signedInText;
+      } else if (el.hasAttribute('data-auth-cta-default-href')) {
+        el.href = el.getAttribute('data-auth-cta-default-href');
+        el.textContent = el.getAttribute('data-auth-cta-default-text');
+      }
+    });
+  }
+
   maybeTrackVisit();
   hydrateRememberToggles();
   hydratePasswordToggles();
@@ -640,9 +662,11 @@
   }
 
   updateNavAuth();
+  updateAuthCtas();
   if (sb) {
     sb.auth.onAuthStateChange(() => {
       updateNavAuth();
+      updateAuthCtas();
     });
   }
 })();
