@@ -1028,6 +1028,11 @@
         statusEl.className = 'key-status show ' + kind;
         statusEl.innerHTML = html;
       }
+      function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+          return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+      }
       function normalizeKey(v) { return (v || '').trim().toUpperCase().replace(/[\s-]/g, ''); }
       function fmtDate(iso) {
         try { return new Date(iso).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }); }
@@ -1048,7 +1053,12 @@
       function showDownload() {
         if (!downloadNote) return;
         if (cn.downloadUrl) {
-          downloadNote.innerHTML = 'Your download is ready: <a class="text-link" href="' + cn.downloadUrl + '">Download Command Nexus</a>';
+          downloadNote.textContent = 'Your download is ready: ';
+          var dl = document.createElement('a');
+          dl.className = 'text-link';
+          dl.href = cn.downloadUrl;
+          dl.textContent = 'Download Command Nexus';
+          downloadNote.appendChild(dl);
         } else {
           downloadNote.textContent = 'Access confirmed. Your Command Nexus download link opens here as soon as the build is published.';
         }
@@ -1059,8 +1069,8 @@
         var isTrial = (result.tier === 'trial') || tier === 'TR';
         var expIso = result.expires;
         if (result.expired) {
-          setStatus('warn', '<strong>' + label + ' key recognized, but it has expired.</strong>' +
-            '<span class="key-meta">Expired ' + fmtDate(expIso) + '. ' +
+          setStatus('warn', '<strong>' + esc(label) + ' key recognized, but it has expired.</strong>' +
+            '<span class="key-meta">Expired ' + esc(fmtDate(expIso)) + '. ' +
             (isTrial ? 'Start a paid plan, then activate your new key here.' : 'Renew your plan, then activate your new key.') + '</span>');
           return;
         }
@@ -1077,8 +1087,8 @@
         var next = isTrial
           ? 'You\u2019re on the free trial. When it ends, upgrade and activate your paid key here.'
           : 'Your plan is active \u2014 thank you for supporting Command Nexus.';
-        setStatus('ok', '<strong>' + label + ' activated.</strong>' +
-          '<span class="key-meta">Valid until ' + fmtDate(expIso) + '. ' + next + '</span>');
+        setStatus('ok', '<strong>' + esc(label) + ' activated.</strong>' +
+          '<span class="key-meta">Valid until ' + esc(fmtDate(expIso)) + '. ' + next + '</span>');
         showDownload();
       }
 
