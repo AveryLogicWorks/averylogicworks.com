@@ -104,7 +104,9 @@ serve(async (req) => {
   try {
     const secret = Deno.env.get("NEXUS_KEY_SECRET") || "";
     if (!secret) {
-      return new Response(JSON.stringify({ error: "Missing NEXUS_KEY_SECRET secret" }), {
+      // Generic message to the caller; log the specifics server-side only.
+      console.error("validate-key: NEXUS_KEY_SECRET is not configured");
+      return new Response(JSON.stringify({ error: "Server not configured" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -133,7 +135,8 @@ serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: (error as Error)?.message || "Unexpected error" }), {
+    console.error("validate-key error:", (error as Error)?.message || error);
+    return new Response(JSON.stringify({ error: "Unexpected error" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
