@@ -413,6 +413,23 @@
         });
         if (error) throw error;
 
+        // If newsletter opted in, add to EmailOctopus immediately
+        if (newsletter && emailOctopusCfg.enabled && emailOctopusCfg.listId) {
+          try {
+            await fetch(emailOctopusCfg.edgeFunctionUrl || '/api/emailoctopus-subscribe', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                email: email,
+                name: nameCheck.value,
+                listId: emailOctopusCfg.listId
+              })
+            });
+          } catch (eoErr) {
+            console.debug('EmailOctopus signup failed silently', eoErr);
+          }
+        }
+
         localStorage.setItem('avery-account-settings', JSON.stringify({
           newsletter: newsletter,
           supporterUpdates: supporterUpdates,
@@ -616,6 +633,24 @@
           }
         });
         if (error) throw error;
+
+        // Sync newsletter preference to EmailOctopus
+        if (next.newsletter && emailOctopusCfg.enabled && emailOctopusCfg.listId) {
+          try {
+            await fetch(emailOctopusCfg.edgeFunctionUrl || '/api/emailoctopus-subscribe', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                email: session.user.email,
+                name: session.user.user_metadata?.display_name || '',
+                listId: emailOctopusCfg.listId
+              })
+            });
+          } catch (eoErr) {
+            console.debug('EmailOctopus account sync failed silently', eoErr);
+          }
+        }
+
         localStorage.setItem('avery-account-settings', JSON.stringify(next));
         let msg = 'Settings saved.';
         if (next.newsletter && (!emailOctopusCfg.enabled || !emailOctopusCfg.listId)) {

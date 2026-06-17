@@ -20,8 +20,9 @@ window.AVERY_CONFIG = {
     publishableKey: 'sb_publishable_TYosyp9VRS1S2DEXpNi8eQ_bhMTSFqO'
   },
   emailOctopus: {
-    enabled: false,
-    listId: ''
+    enabled: true,
+    listId: '4cd7acee-230c-11f1-ae61-93533fe48a6e',
+    edgeFunctionUrl: 'https://esoiezxddkqlmvsgscqw.supabase.co/functions/v1/emailoctopus-subscribe'
   },
   // Command Nexus pricing stage shown on command-nexus.html: 'alpha' (live now), 'beta', or 'full'.
   // Flip this to roll prices forward once the matching Stripe links below are filled in.
