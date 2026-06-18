@@ -369,6 +369,33 @@
       gap: 1rem;
     }
 
+    .download-panel {
+      max-width: 840px;
+      margin: 0 auto 1.5rem;
+      padding: clamp(1.5rem, 4vw, 2.25rem);
+      border: 1px solid rgba(34, 211, 238, .35);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(125, 211, 252, .14), rgba(167, 139, 250, .12));
+      text-align: center;
+    }
+
+    .download-panel .button.primary {
+      font-size: 1.05rem;
+      padding: .9rem 1.6rem;
+    }
+
+    .download-meta {
+      margin-top: .9rem;
+    }
+
+    .download-meta code,
+    .download-panel code {
+      font-size: .85em;
+      padding: .1rem .35rem;
+      border-radius: 6px;
+      background: rgba(125, 211, 252, .12);
+    }
+
     .prerelease-note {
       max-width: 840px;
       margin: 0 auto 1.5rem;
@@ -573,7 +600,7 @@
           It's for <em>using</em> and <em>making</em> AI.
         </p>
         <div class="cta-row">
-          <a class="button primary" href="#pricing">Buy your license early</a>
+          <a class="button primary" href="#download">Download for Windows</a>
           <a class="button" href="#pricing">See licenses &amp; pricing</a>
         </div>
       </div>
@@ -623,6 +650,20 @@
           <h3>No Coding Required</h3>
           <p>Built for almost everyone. Use and make AI without writing a single line of code &mdash; the power is yours whether you code or not.</p>
         </article>
+      </div>
+    </section>
+
+    <section id="download" aria-labelledby="cn-download-title">
+      <div class="section-head">
+        <div class="section-label">Download</div>
+        <h2 id="cn-download-title">Get Command Nexus.</h2>
+        <p class="lead">Download the Windows build now. Launch it, then activate with your license key &mdash; a Trial key, or a Pro/Business/Unlimited key after you purchase below.</p>
+      </div>
+
+      <div class="download-panel">
+        <a class="button primary" href="downloads/CommandNexus.exe" download>Download for Windows (64-bit)</a>
+        <p class="muted download-meta">Windows 10/11, 64-bit &middot; ~40&nbsp;MB &middot; <code>CommandNexus.exe</code></p>
+        <p class="muted">A license key is required to activate. Linux and macOS builds are on the way.</p>
       </div>
     </section>
 
