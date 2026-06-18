@@ -26,6 +26,18 @@ window.AVERY_CONFIG = {
   // Command Nexus pricing stage shown on command-nexus.html: 'alpha' (live now), 'beta', or 'full'.
   // Flip this to roll prices forward once the matching Stripe links below are filled in.
   commandNexusStage: 'alpha',
+  // Command Nexus membership / key activation (command-nexus.html #membership).
+  commandNexus: {
+    // Key activation calls the server-side validator so the secret salt never
+    // ships to the browser. Path is appended to supabase.url. Deploy with:
+    //   supabase functions deploy validate-key
+    //   supabase secrets set NEXUS_KEY_SECRET="<your public key salt>"
+    keyActivation: true,
+    validateKeyPath: 'functions/v1/validate-key',
+    // Optional: direct download link for the Command Nexus program once available.
+    // Leave '' to show "download access opens after activation / coming soon".
+    downloadUrl: ''
+  },
   paths: {
     home: 'index.html',
     login: 'login.html',
