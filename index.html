@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -630,6 +630,61 @@
       h1 { font-size: clamp(2.35rem, 11vw, 3.85rem); }
     }
   </style>
+<style id="command-nexus-early-access-style">
+  #command-nexus-early-access {
+    max-width: 900px;
+    margin: 32px auto;
+    padding: 28px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(10,10,18,0.72);
+    box-shadow: 0 12px 34px rgba(0,0,0,0.28);
+  }
+
+  #command-nexus-early-access h2 {
+    margin-top: 0;
+    font-size: 2rem;
+  }
+
+  #command-nexus-early-access p {
+    line-height: 1.55;
+  }
+
+  #command-nexus-early-access .cnx-download-button {
+    display: inline-block;
+    margin: 14px 0;
+    padding: 14px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 800;
+    border: 1px solid rgba(255,255,255,0.22);
+  }
+
+  #command-nexus-early-access .cnx-key-note {
+    font-size: 0.95rem;
+    opacity: 0.88;
+  }
+
+  video,
+  .command-nexus-video,
+  #command-nexus-video,
+  iframe[src*="youtube"],
+  iframe[src*="vimeo"] {
+    transform: none !important;
+    scale: 1 !important;
+    transition: none !important;
+    animation: none !important;
+    object-fit: contain !important;
+    max-width: 100% !important;
+  }
+
+  video:hover,
+  .command-nexus-video:hover,
+  #command-nexus-video:hover {
+    transform: none !important;
+    scale: 1 !important;
+  }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -909,7 +964,7 @@
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <p>© <span id="year"></span> Avery Logic Works. All rights reserved.</p>
+      <p>Â© <span id="year"></span> Avery Logic Works. All rights reserved.</p>
       <div class="footer-links">
         <a href="support.html">Your Support</a>
         <a href="terms.html">Terms</a>
@@ -942,5 +997,29 @@
       }, delay);
     })();
   </script>
+<!-- COMMAND_NEXUS_EARLY_ACCESS_START -->
+<section id="command-nexus-early-access">
+  <h2>Command Nexus Early Access</h2>
+
+  <p>
+    Command Nexus is available as an early-access Windows build from Avery Logic Works.
+    Download it, open the app, and enter a valid 15-day Early Access key to unlock the usable current version.
+  </p>
+
+  <p>
+    Early Access includes creating, saving, and testing AI assistants while Command Nexus continues toward beta polish.
+  </p>
+
+  <a class="cnx-download-button" href="downloads/CommandNexus_EarlyAccess.exe" download>
+    Download Command Nexus Early Access
+  </a>
+
+  <p class="cnx-key-note">
+    License key format: XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX.
+    Keys may also be entered without dashes.
+  </p>
+</section>
+<!-- COMMAND_NEXUS_EARLY_ACCESS_END -->
 </body>
 </html>
+
