@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Command Nexus license key | Avery Logic Works</title>
+  <meta name="description" content="Your Command Nexus license key after purchase." />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <style>
+    :root {
+      --bg: #05070d;
+      --panel: rgba(255, 255, 255, 0.055);
+      --text: #f7f9ff;
+      --muted: #b7bfd1;
+      --line: rgba(255,255,255,.14);
+      --accent: #7dd3fc;
+      --accent-2: #a78bfa;
+      --ok: #34d399;
+      --bad: #f87171;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px;
+    }
+    .card {
+      width: 100%; max-width: 620px; background: var(--panel); border: 1px solid var(--line);
+      border-radius: 16px; padding: 32px;
+    }
+    h1 { margin: 0 0 6px; font-size: 1.5rem; }
+    .sub { color: var(--muted); margin: 0 0 24px; }
+    .status { color: var(--muted); }
+    .keybox {
+      display: none; margin: 18px 0; padding: 16px; border-radius: 12px;
+      background: rgba(125,211,252,.08); border: 1px solid rgba(125,211,252,.35);
+    }
+    .keybox .label { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); }
+    .keyrow { display: flex; gap: 10px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+    code#key {
+      font-size: 1.15rem; font-weight: 700; letter-spacing: .04em; word-break: break-all; flex: 1 1 auto;
+    }
+    .meta { color: var(--muted); font-size: .9rem; margin-top: 8px; }
+    button {
+      cursor: pointer; border: 1px solid var(--line); background: rgba(255,255,255,.08);
+      color: var(--text); border-radius: 9px; padding: 9px 14px; font-weight: 600;
+    }
+    button.primary { background: linear-gradient(120deg, var(--accent), var(--accent-2)); color: #04121f; border: 0; }
+    a.button {
+      display: inline-block; text-decoration: none; margin-top: 16px;
+      border: 1px solid var(--line); background: rgba(255,255,255,.06); color: var(--text);
+      border-radius: 9px; padding: 10px 16px; font-weight: 600;
+    }
+    ol { color: var(--muted); line-height: 1.6; padding-left: 20px; }
+    .error { display: none; color: var(--bad); margin: 16px 0; }
+    .spin { display:inline-block; width:14px; height:14px; border:2px solid var(--line); border-top-color: var(--accent); border-radius:50%; animation: s .8s linear infinite; vertical-align:-2px; margin-right:8px; }
+    @keyframes s { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Thank you for your purchase</h1>
+    <p class="sub">Your Command Nexus license key is being issued.</p>
+
+    <p class="status" id="status"><span class="spin"></span>Verifying your payment and generating your key…</p>
+
+    <div class="keybox" id="keybox">
+      <div class="label">Your license key</div>
+      <div class="keyrow">
+        <code id="key"></code>
+        <button class="primary" id="copy" type="button">Copy</button>
+      </div>
+      <div class="meta" id="meta"></div>
+    </div>
+
+    <p class="error" id="error"></p>
+
+    <div id="next" style="display:none">
+      <h2 style="font-size:1.05rem;margin:22px 0 8px;">Activate it</h2>
+      <ol>
+        <li>Download Command Nexus and run <code>CommandNexus.exe</code>.</li>
+        <li>On the activation screen, paste the key above.</li>
+        <li>Your tier unlocks (Create AI, governance, and the rest) immediately.</li>
+      </ol>
+      <a class="button" href="command-nexus.html#download">Go to download</a>
+    </div>
+
+    <p class="meta" style="margin-top:22px;">
+      Didn't get a key, or need help? Email <a id="supportlink" href="#" style="color:var(--accent)">support</a> with your receipt and we'll sort it out.
+    </p>
+  </main>
+
+  <script src="assets/site-config.js"></script>
+  <script>
+    (function () {
+      var cfg = (window.AVERY_CONFIG || {});
+      var sb = cfg.supabase || {};
+      var support = cfg.supportEmail || 'Averylogicworks@gmail.com';
+      document.getElementById('supportlink').href = 'mailto:' + support;
+
+      var params = new URLSearchParams(location.search);
+      var sessionId = params.get('session_id');
+
+      var statusEl = document.getElementById('status');
+      var errorEl = document.getElementById('error');
+      var keybox = document.getElementById('keybox');
+
+      function showError(msg) {
+        statusEl.style.display = 'none';
+        errorEl.style.display = 'block';
+        errorEl.textContent = msg;
+      }
+
+      if (!sessionId) {
+        showError('No checkout session found in the link. If you just paid, check your email receipt or contact support.');
+        return;
+      }
+      if (!sb.url) {
+        showError('Site is not configured for key issuance yet. Please contact support with your receipt.');
+        return;
+      }
+
+      var endpoint = sb.url.replace(/\/$/, '') + '/functions/v1/issue-license-key';
+      var headers = { 'Content-Type': 'application/json' };
+      if (sb.publishableKey) {
+        headers['apikey'] = sb.publishableKey;
+        headers['Authorization'] = 'Bearer ' + sb.publishableKey;
+      }
+
+      fetch(endpoint, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({ session_id: sessionId })
+      })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+      .then(function (res) {
+        if (!res.ok || !res.data || !res.data.key) {
+          showError((res.data && res.data.error) || 'We could not issue your key automatically. Please contact support with your receipt.');
+          return;
+        }
+        statusEl.style.display = 'none';
+        keybox.style.display = 'block';
+        document.getElementById('next').style.display = 'block';
+        document.getElementById('key').textContent = res.data.key;
+        var bits = [];
+        if (res.data.tier) bits.push('Tier: ' + res.data.tier);
+        if (res.data.expires) bits.push('Valid until ' + new Date(res.data.expires).toLocaleDateString());
+        document.getElementById('meta').textContent = bits.join('  \u00b7  ');
+      })
+      .catch(function () {
+        showError('Network error while issuing your key. Please refresh, or contact support with your receipt.');
+      });
+
+      document.getElementById('copy').addEventListener('click', function () {
+        var key = document.getElementById('key').textContent;
+        navigator.clipboard.writeText(key).then(function () {
+          var b = document.getElementById('copy');
+          b.textContent = 'Copied';
+          setTimeout(function () { b.textContent = 'Copy'; }, 1500);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
