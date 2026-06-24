@@ -289,7 +289,7 @@
       applyActiveNavState();
       return;
     }
-    const loginLink = navLinks.querySelector('a[href="login.html"], a[data-auth-state="login"], a[data-auth-account="true"]');
+    const loginLink = navLinks.querySelector('a[href="login.html"], a[data-auth-state="login"]');
     const signupLink = navLinks.querySelector('a[href="signup.html"]');
     const donateLink = navLinks.querySelector('a.button.secondary.small[href*="#support"], a.button.secondary.small[data-nav-donate]');
     if (!loginLink) {

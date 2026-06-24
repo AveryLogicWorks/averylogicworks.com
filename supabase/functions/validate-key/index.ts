@@ -11,7 +11,7 @@
 // MUST stay server-side: shipping the salt to the browser would let anyone mint
 // unlimited free keys.
 //
-// Key format: TIER(2) + EXPIRY_HEX(10) + RANDOM(8) + HMAC(20) = 40 chars.
+// Key format: TIER(2) + EXPIRY_HEX(10) + RANDOM(8) + HMAC(16) = 36 chars.
 
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
@@ -27,7 +27,7 @@ const enc = new TextEncoder();
 // intentionally excluded from website validation.
 const PUBLIC_TIERS: Array<[string, string, string]> = [
   // [tier code, internal name, customer-facing label]
-  ["TR", "trial", "7-Day Free Trial"],
+  ["TR", "trial", "15-Day Trial"],
   ["ST", "starter", "Starter"],
   ["PR", "pro", "Pro"],
   ["BU", "business", "Business"],
@@ -49,7 +49,7 @@ async function hmacSig(payload: string, saltBytes: Uint8Array): Promise<string> 
     ["sign"],
   );
   const sig = await crypto.subtle.sign("HMAC", key, enc.encode(payload));
-  return toHex(new Uint8Array(sig)).slice(0, 20).toUpperCase();
+  return toHex(new Uint8Array(sig)).slice(0, 16).toUpperCase();
 }
 
 function timingSafeEqual(a: string, b: string): boolean {
@@ -61,14 +61,14 @@ function timingSafeEqual(a: string, b: string): boolean {
 
 async function validateKey(rawKey: string, publicSalt: Uint8Array) {
   // Tier prefix (e.g. TR, PR) is letters, not hex; only the trailing 38 chars
-  // are hex. Require 40 uppercase alphanumerics and let the HMAC do the real work.
+  // are hex. Require 36 uppercase alphanumerics and let the HMAC do the real work.
   const key = rawKey.trim().toUpperCase().replace(/[\s-]/g, "");
-  if (!/^[A-Z0-9]{40}$/.test(key)) return null;
+  if (!/^[A-Z0-9]{36}$/.test(key)) return null;
 
   const tierCode = key.slice(0, 2);
   const expiryHex = key.slice(2, 12);
   const payload = key.slice(0, 20);
-  const hmacPart = key.slice(20, 40);
+  const hmacPart = key.slice(20, 36);
 
   for (const [code, name, label] of PUBLIC_TIERS) {
     if (tierCode !== code) continue;

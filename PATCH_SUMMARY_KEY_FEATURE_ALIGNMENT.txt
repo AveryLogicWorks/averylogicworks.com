@@ -1,0 +1,16 @@
+COMMAND NEXUS WEBSITE PATCH - KEY + FEATURES ALIGNMENT
+=========================================================
+
+Applied fixes:
+1. command-nexus.html now describes code-backed Command Nexus systems instead of vague placeholder-style cards.
+2. Website key activation now expects 36 raw characters, matching license_manager.py and license_key_generator.py.
+3. Supabase validate-key function now validates the same 36-character HMAC format:
+   TIER(2) + EXPIRY_HEX(10) + RANDOM(8) + HMAC(16).
+4. Trial label changed from old 7-day wording to 15-Day Trial.
+5. Full Access pricing text now matches uploaded license tier limits:
+   Pro = 4 AIs, Business = 5 AIs, Unlimited = saved AIs unlocked with runtime depending on hardware.
+6. Homepage video source no longer points to missing assets/Timeline-1.mp4. It now points to the existing Command Nexus video asset and uses preload="metadata".
+
+Important:
+- If you deploy the Supabase function, deploy the patched supabase/functions/validate-key/index.ts.
+- The desktop app still must be tested on Windows because this sandbox cannot run Windows EXE files.

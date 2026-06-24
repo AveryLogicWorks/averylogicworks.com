@@ -24,9 +24,9 @@ window.AVERY_CONFIG = {
     listId: '4cd7acee-230c-11f1-ae61-93533fe48a6e',
     edgeFunctionUrl: 'https://esoiezxddkqlmvsgscqw.supabase.co/functions/v1/emailoctopus-subscribe'
   },
-  // Command Nexus pricing stage shown on command-nexus.html: 'alpha' (live now), 'beta', or 'full'.
-  // Flip this to roll prices forward once the matching Stripe links below are filled in.
-  commandNexusStage: 'alpha',
+  // Command Nexus pricing stage shown on command-nexus.html: 'alpha', 'beta', or 'full'.
+  // Full uses the live Stripe links already configured below.
+  commandNexusStage: 'full',
   // Command Nexus membership / key activation (command-nexus.html #membership).
   commandNexus: {
     // Key activation calls the server-side validator so the secret salt never
@@ -37,7 +37,7 @@ window.AVERY_CONFIG = {
     validateKeyPath: 'functions/v1/validate-key',
     // Optional: direct download link for the Command Nexus program once available.
     // Leave '' to show "download access opens after activation / coming soon".
-    downloadUrl: ''
+    downloadUrl: 'CommandNexus.exe'
   },
   paths: {
     home: 'index.html',
@@ -69,12 +69,11 @@ window.AVERY_CONFIG = {
     commandNexusBusinessYearly: 'https://buy.stripe.com/dRm7sE9Np8Y9gAwed91RC0i',
     commandNexusUnlimitedMonthly: 'https://buy.stripe.com/7sYdR28Jl7U5fws2ur1RC0j',
     commandNexusUnlimitedYearly: 'https://buy.stripe.com/cNi5kw8Jl0rD2JG6KH1RC0k',
-    // Alpha stage (live now). Monthly only. Fill with the $10/$30/$50 Stripe Payment Links.
+    // Legacy Alpha stage. Monthly only. Kept as a fallback/archive, not the public default.
     commandNexusProAlpha: '#',
     commandNexusBusinessAlpha: '#',
     commandNexusUnlimitedAlpha: '#',
-    // Beta stage (built for the future, hidden until commandNexusStage = 'beta').
-    // Fill with the $5 trial / $20 / $40 / $60 Stripe Payment Links when ready.
+    // Legacy Beta stage. Kept as a fallback/archive, not the public default.
     commandNexusTrialBeta: '#',
     commandNexusProBeta: '#',
     commandNexusBusinessBeta: '#',

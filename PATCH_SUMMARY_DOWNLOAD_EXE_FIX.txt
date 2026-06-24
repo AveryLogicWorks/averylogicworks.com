@@ -1,0 +1,8 @@
+Command Nexus download wiring fix
+
+- Added CommandNexus.exe to the website root.
+- Set assets/site-config.js commandNexus.downloadUrl to 'CommandNexus.exe'.
+- Did not replace the live index.html with uploaded index(1).html because that file is a standalone/simple Command Nexus landing page and would overwrite the existing full Avery Logic Works homepage.
+- Public download filename remains CommandNexus.exe.
+
+Important: main.exe was not used because the PyInstaller spec names the intended public output CommandNexus, and the current website download link expects CommandNexus.exe. If main.exe passes local testing better, rename it to CommandNexus.exe and replace the root file before publishing.

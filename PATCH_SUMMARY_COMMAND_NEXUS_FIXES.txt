@@ -1,0 +1,18 @@
+Command Nexus website fixes applied
+
+1. Restored the main Command Nexus headline exactly.
+2. Added a real #features anchor and pointed homepage/hero feature links to it.
+3. Replaced placeholder-ish Command Nexus feature cards with fuller current capability cards: governance visibility, AI Forge, adaptive intelligence model, starter agents, capability upgrades, knowledge infuser, API/workflow capability, and owner/license access.
+4. Changed Command Nexus public status language from Alpha-heavy to Beta / early access.
+5. Set commandNexusStage to beta in assets/site-config.js so the beta pricing block is what displays.
+6. Fixed the Command Nexus nav hiding CSS so logged-in visitors do not see Sign in / Sign up along with Account / Log out.
+7. Tightened the auth nav selector in assets/site.js so Account is never mistaken for the login link.
+8. Removed a broken homepage Command Nexus Early Access download block that pointed to downloads/CommandNexus_EarlyAccess.exe, because that EXE is not present in this zip.
+
+Not changed:
+- No redesign.
+- No color/theme rewrite.
+- No Stripe URLs invented. Beta Stripe link placeholders still need real Stripe links or they fall back to email contact.
+- No actual EXE added. Add the real build and set commandNexus.downloadUrl in assets/site-config.js when ready.
+9. Prevented beta/alpha flicker by making the beta pricing block visible in markup and the legacy alpha block hidden by default.
+10. Changed the command-nexus page stage fallback from alpha to beta.

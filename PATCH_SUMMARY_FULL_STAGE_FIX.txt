@@ -1,0 +1,21 @@
+COMMAND NEXUS FULL ACCESS / STRIPE STAGE FIX
+
+Changed files:
+- assets/site-config.js
+- command-nexus.html
+- index.html
+
+What changed:
+1. Set commandNexusStage to full so the public Command Nexus pricing block uses the existing live Stripe checkout links already in site-config.js.
+2. Made the Full Access pricing block visible by default and hid the legacy Beta block by default, so the correct pricing shows even before JavaScript finishes loading.
+3. Changed the pricing fallback from Beta to Full, so a bad or missing stage value does not expose placeholder Beta links.
+4. Updated visible Command Nexus status language from Beta / early access to Full access where it appeared on the public pages.
+5. Kept the legacy Alpha/Beta pricing blocks in the file as hidden fallbacks, but they are no longer the public default.
+6. Simplified the active development notice so it no longer says Command Nexus is beta.
+
+Important note:
+No Stripe URLs were invented or edited. Full Access uses the Stripe links that were already present in assets/site-config.js:
+- commandNexusTrial
+- commandNexusProMonthly / commandNexusProYearly
+- commandNexusBusinessMonthly / commandNexusBusinessYearly
+- commandNexusUnlimitedMonthly / commandNexusUnlimitedYearly
