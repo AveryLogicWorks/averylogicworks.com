@@ -24,34 +24,15 @@ window.AVERY_CONFIG = {
     listId: '4cd7acee-230c-11f1-ae61-93533fe48a6e',
     edgeFunctionUrl: 'https://esoiezxddkqlmvsgscqw.supabase.co/functions/v1/emailoctopus-subscribe'
   },
-  // Command Nexus pricing stage shown on command-nexus.html: 'alpha', 'beta', or 'full'.
-  // Full uses the live Stripe links already configured below.
+  // Command Nexus pricing stage shown on command-nexus.html: 'alpha' (live now), 'beta', or 'full'.
+  // Flip this to roll prices forward once the matching Stripe links below are filled in.
   commandNexusStage: 'full',
-  // Command Nexus membership / key activation (command-nexus.html #membership).
-  commandNexus: {
-    // Key activation calls the server-side validator so the secret salt never
-    // ships to the browser. Path is appended to supabase.url. Deploy with:
-    //   supabase functions deploy validate-key
-    //   supabase secrets set NEXUS_KEY_SECRET="<your public key salt>"
-    keyActivation: true,
-    validateKeyPath: 'functions/v1/validate-key',
-    // Optional: direct download link for the Command Nexus program once available.
-    // Leave '' to show "download access opens after activation / coming soon".
-    downloadUrl: 'CommandNexus.exe',
-    // Enterprise inquiry form posts to Supabase enterprise_inquiries table.
-    // Run backend/enterprise_inquiries.sql in Supabase SQL Editor to set up.
-    enterpriseInquiry: {
-      enabled: true,
-      table: 'enterprise_inquiries'
-    }
-  },
   paths: {
     home: 'index.html',
     login: 'login.html',
     signup: 'signup.html',
     signupSuccess: 'signup-success.html',
     account: 'account.html',
-    download: 'download.html',
     confirmNotice: 'login.html?check-email=1',
     resetRedirect: 'login.html?reset=1'
   },
@@ -76,11 +57,12 @@ window.AVERY_CONFIG = {
     commandNexusBusinessYearly: 'https://buy.stripe.com/dRm7sE9Np8Y9gAwed91RC0i',
     commandNexusUnlimitedMonthly: 'https://buy.stripe.com/7sYdR28Jl7U5fws2ur1RC0j',
     commandNexusUnlimitedYearly: 'https://buy.stripe.com/cNi5kw8Jl0rD2JG6KH1RC0k',
-    // Legacy Alpha stage. Monthly only. Kept as a fallback/archive, not the public default.
+    // Alpha stage (live now). Monthly only. Fill with the $10/$30/$50 Stripe Payment Links.
     commandNexusProAlpha: '#',
     commandNexusBusinessAlpha: '#',
     commandNexusUnlimitedAlpha: '#',
-    // Legacy Beta stage. Kept as a fallback/archive, not the public default.
+    // Beta stage (built for the future, hidden until commandNexusStage = 'beta').
+    // Fill with the $5 trial / $20 / $40 / $60 Stripe Payment Links when ready.
     commandNexusTrialBeta: '#',
     commandNexusProBeta: '#',
     commandNexusBusinessBeta: '#',
