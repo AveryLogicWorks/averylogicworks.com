@@ -915,6 +915,91 @@
       <p class="sub-note">Prices, features, and plan limits may change as Command Nexus is updated. If you&rsquo;re already subscribed, your current price stays in place until your paid period ends; when it ends under new pricing, you&rsquo;ll be asked whether to continue at the new price before anything renews. See the <a href="terms.html#pricing-evolution">pricing &amp; price-change terms</a>.</p>
     </section>
 
+    <!-- Enterprise Inquiry -->
+    <section id="enterprise" aria-labelledby="cn-enterprise-title">
+      <div class="section-head">
+        <div class="section-label">Enterprise</div>
+        <h2 id="cn-enterprise-title">Need something bigger? Let&rsquo;s talk.</h2>
+        <p class="muted">Enterprise licenses are negotiated based on your scope: number of users, deployment type, custom workflows, integrations, and support level. Tell us what you&rsquo;re building and we&rsquo;ll get back to you personally.</p>
+      </div>
+
+      <div class="form-shell" style="max-width:640px;margin:0 auto;">
+        <form id="enterprise-inquiry-form" autocomplete="on" novalidate>
+          <div class="form-row" style="display:grid;gap:16px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div>
+                <label for="ent-name" class="small-note"><strong>Name *</strong></label>
+                <input type="text" id="ent-name" name="name" required placeholder="Your full name" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:14px;margin-top:4px;" />
+              </div>
+              <div>
+                <label for="ent-email" class="small-note"><strong>Email *</strong></label>
+                <input type="email" id="ent-email" name="email" required placeholder="you@company.com" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:14px;margin-top:4px;" />
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div>
+                <label for="ent-company" class="small-note"><strong>Company / Organization</strong></label>
+                <input type="text" id="ent-company" name="company" placeholder="Company name" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:14px;margin-top:4px;" />
+              </div>
+              <div>
+                <label for="ent-phone" class="small-note"><strong>Phone (optional)</strong></label>
+                <input type="tel" id="ent-phone" name="phone" placeholder="Optional" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:14px;margin-top:4px;" />
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div>
+                <label for="ent-team-size" class="small-note"><strong>Team Size</strong></label>
+                <select id="ent-team-size" name="team_size" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:14px;margin-top:4px;">
+                  <option value="">Select...</option>
+                  <option value="1-5">1-5 people</option>
+                  <option value="6-20">6-20 people</option>
+                  <option value="21-50">21-50 people</option>
+                  <option value="51-100">51-100 people</option>
+                  <option value="100+">100+ people</option>
+                </select>
+              </div>
+              <div>
+                <label for="ent-budget" class="small-note"><strong>Budget Range</strong></label>
+                <select id="ent-budget" name="budget_range" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:14px;margin-top:4px;">
+                  <option value="">Select...</option>
+                  <option value="under-500">Under $500/mo</option>
+                  <option value="500-2000">$500-$2,000/mo</option>
+                  <option value="2000-5000">$2,000-$5,000/mo</option>
+                  <option value="5000+">$5,000+/mo</option>
+                  <option value="one-time">One-time / project-based</option>
+                  <option value="undecided">Not sure yet</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="ent-timeline" class="small-note"><strong>Timeline</strong></label>
+              <select id="ent-timeline" name="timeline" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:14px;margin-top:4px;">
+                <option value="">Select...</option>
+                <option value="immediate">Immediate (within 2 weeks)</option>
+                <option value="1-month">Within 1 month</option>
+                <option value="3-months">Within 3 months</option>
+                <option value="exploring">Just exploring options</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="ent-use-case" class="small-note"><strong>What do you plan to use Command Nexus for? *</strong></label>
+              <p class="small-note" style="margin:4px 0;color:var(--soft);">Some examples to spark ideas: automating customer support workflows, building internal knowledge assistants, creating specialized data-analysis agents, managing multi-agent content pipelines, deploying AI-powered quality control, streamlining research and document processing.</p>
+              <textarea id="ent-use-case" name="use_case" required rows="5" placeholder="Describe what you want to build or automate..." style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:14px;margin-top:4px;resize:vertical;"></textarea>
+            </div>
+          </div>
+
+          <div class="form-actions" style="margin-top:20px;display:flex;gap:12px;align-items:center;">
+            <button type="submit" class="button primary" id="ent-submit" style="padding:12px 28px;font-size:15px;font-weight:bold;">Send Enterprise Inquiry</button>
+            <span id="ent-status" class="form-message" style="display:none;"></span>
+          </div>
+        </form>
+      </div>
+    </section>
+
     <section id="disclaimers" aria-labelledby="cn-disclaimer-title">
       <div class="section-head">
         <div class="section-label">Before you start</div>
@@ -948,6 +1033,7 @@
         <h2 id="cn-closing-title">Come and take command of the Nexus &mdash; build agents, guide them, and see what they can do for you.</h2>
         <div class="cta-row">
           <a class="button primary" href="#membership">Start or activate access</a>
+          <a class="button" href="#enterprise">Enterprise &mdash; let&rsquo;s talk</a>
           <a class="button" href="index.html">Back to Avery Logic Works</a>
         </div>
       </div>
@@ -1160,6 +1246,77 @@
             .then(function () {
               if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = orig; }
             });
+        });
+      }
+
+      // ----- Enterprise Inquiry Form -----
+      var entForm = document.getElementById('enterprise-inquiry-form');
+      var entSubmit = document.getElementById('ent-submit');
+      var entStatus = document.getElementById('ent-status');
+
+      if (entForm) {
+        entForm.addEventListener('submit', function (ev) {
+          ev.preventDefault();
+
+          var name = document.getElementById('ent-name').value.trim();
+          var email = document.getElementById('ent-email').value.trim();
+          var useCase = document.getElementById('ent-use-case').value.trim();
+
+          if (!name || !email || !useCase) {
+            entStatus.style.display = 'inline-block';
+            entStatus.className = 'form-message show error';
+            entStatus.textContent = 'Please fill in name, email, and your use case.';
+            return;
+          }
+
+          var payload = {
+            name: name,
+            email: email,
+            company: document.getElementById('ent-company').value.trim(),
+            phone: document.getElementById('ent-phone').value.trim(),
+            team_size: document.getElementById('ent-team-size').value,
+            budget_range: document.getElementById('ent-budget').value,
+            timeline: document.getElementById('ent-timeline').value,
+            use_case: useCase,
+            use_case_examples: ''
+          };
+
+          entSubmit.disabled = true;
+          entSubmit.textContent = 'Sending...';
+          entStatus.style.display = 'inline-block';
+          entStatus.className = 'form-message show info';
+          entStatus.textContent = 'Sending your inquiry...';
+
+          var sbUrl = (sbCfg.url || '').replace(/\/$/, '');
+          var headers = { 'Content-Type': 'application/json' };
+          if (sbCfg.publishableKey) {
+            headers['apikey'] = sbCfg.publishableKey;
+            headers['Authorization'] = 'Bearer ' + sbCfg.publishableKey;
+          }
+
+          fetch(sbUrl + '/rest/v1/enterprise_inquiries', {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(payload)
+          })
+          .then(function (r) {
+            if (!r.ok) throw new Error('Server returned ' + r.status);
+            return r.json();
+          })
+          .then(function () {
+            entStatus.className = 'form-message show success';
+            entStatus.innerHTML = '<strong>Inquiry sent!</strong> We\'ll review your details and get back to you personally at ' + esc(email) + '.';
+            entForm.reset();
+            entSubmit.textContent = 'Send Enterprise Inquiry';
+            entSubmit.disabled = false;
+          })
+          .catch(function (err) {
+            console.warn('enterprise inquiry failed', err);
+            entStatus.className = 'form-message show error';
+            entStatus.innerHTML = '<strong>Could not send.</strong> Please try again, or email us directly at <a class="text-link" href="mailto:' + (billing || 'Averylogicworks@gmail.com') + '">' + (billing || 'Averylogicworks@gmail.com') + '</a>.';
+            entSubmit.textContent = 'Send Enterprise Inquiry';
+            entSubmit.disabled = false;
+          });
         });
       }
     })();

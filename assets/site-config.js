@@ -37,7 +37,13 @@ window.AVERY_CONFIG = {
     validateKeyPath: 'functions/v1/validate-key',
     // Optional: direct download link for the Command Nexus program once available.
     // Leave '' to show "download access opens after activation / coming soon".
-    downloadUrl: 'CommandNexus.exe'
+    downloadUrl: 'CommandNexus.exe',
+    // Enterprise inquiry form posts to Supabase enterprise_inquiries table.
+    // Run backend/enterprise_inquiries.sql in Supabase SQL Editor to set up.
+    enterpriseInquiry: {
+      enabled: true,
+      table: 'enterprise_inquiries'
+    }
   },
   paths: {
     home: 'index.html',

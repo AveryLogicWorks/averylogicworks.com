@@ -141,6 +141,16 @@
           </div>
 
           <div class="policy-shell">
+            <span class="tag">Enterprise inquiries</span>
+            <h3>Message center — enterprise leads</h3>
+            <div class="data-list" id="enterprise-inquiry-list">
+              <div class="empty-state">Loading enterprise inquiries…</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-grid">
+          <div class="policy-shell">
             <span class="tag alt">Website edit desk</span>
             <h3>Fast browser-based page editing</h3>
             <p class="small-note">These buttons open GitHub's browser editor for the exact file you need. No terminal is needed. Change the text, use GitHub's commit button, and the site updates from there.</p>
@@ -210,6 +220,9 @@
       const serviceRequestList = document.getElementById('service-request-list');
       const feedbackList = document.getElementById('feedback-list');
       const securityEventList = document.getElementById('security-event-list');
+      const enterpriseInquiryList = document.getElementById('enterprise-inquiry-list');
+      let lastInquiryCount = 0;
+      let notificationPollTimer = null;
       const snapshotProfiles = document.getElementById('snapshot-profiles');
       const snapshotVisits = document.getElementById('snapshot-visits');
       const snapshotLogins = document.getElementById('snapshot-logins');
@@ -626,6 +639,158 @@
         }
       }
 
+      async function loadEnterpriseInquiries() {
+        if (!sb) return;
+        try {
+          const { data, error } = await sb
+            .from('enterprise_inquiries')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(30);
+          if (error) throw error;
+          renderEnterpriseInquiries(data || []);
+          lastInquiryCount = (data || []).filter(function (r) { return r.status === 'new'; }).length;
+        } catch (err) {
+          if (enterpriseInquiryList) {
+            enterpriseInquiryList.innerHTML = '<div class="empty-state">Enterprise inquiries are not readable from this owner session yet. Run the enterprise_inquiries.sql setup script.</div>';
+          }
+        }
+      }
+
+      function renderEnterpriseInquiries(rows) {
+        if (!enterpriseInquiryList) return;
+        if (!rows || !rows.length) {
+          enterpriseInquiryList.innerHTML = '<div class="empty-state">No enterprise inquiries yet.</div>';
+          return;
+        }
+        enterpriseInquiryList.innerHTML = rows.map(function (row) {
+          var statusColor = row.status === 'new' ? '#3fb950' : row.status === 'replied' ? '#58a6ff' : '#8b949e';
+          var statusLabel = row.status === 'new' ? 'NEW' : row.status === 'replied' ? 'REPLIED' : (row.status || 'NEW').toUpperCase();
+          var dateStr = row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp';
+          var html = '<div class="data-item" data-inquiry-id="' + row.id + '">'
+            + '<div style="display:flex;justify-content:space-between;align-items:start;gap:8px;">'
+            + '<div>'
+            + '<strong>' + escapeHtml(row.name || 'Unknown') + '</strong>'
+            + ' <span style="color:' + statusColor + ';font-size:.8rem;font-weight:bold;">[' + statusLabel + ']</span>'
+            + '</div>'
+            + '<span class="data-meta">' + escapeHtml(dateStr) + '</span>'
+            + '</div>'
+            + '<div class="data-meta">' + escapeHtml(row.email || 'No email')
+            + (row.company ? ' · ' + escapeHtml(row.company) : '')
+            + (row.phone ? ' · ' + escapeHtml(row.phone) : '')
+            + '</div>'
+            + '<div class="data-meta">'
+            + (row.team_size ? 'Team: ' + escapeHtml(row.team_size) + ' · ' : '')
+            + (row.budget_range ? 'Budget: ' + escapeHtml(row.budget_range) + ' · ' : '')
+            + (row.timeline ? 'Timeline: ' + escapeHtml(row.timeline) : '')
+            + '</div>'
+            + '<p style="margin:8px 0;">' + escapeHtml(row.use_case || '') + '</p>';
+          if (row.owner_reply) {
+            html += '<div class="data-meta" style="border-left:2px solid #58a6ff;padding-left:8px;margin-top:8px;">'
+              + '<strong>Your reply:</strong> ' + escapeHtml(row.owner_reply)
+              + (row.replied_at ? '<br><span style="font-size:.8rem;">Replied ' + new Date(row.replied_at).toLocaleString() + '</span>' : '')
+              + '</div>';
+          } else {
+            html += '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">'
+              + '<textarea placeholder="Type your reply..." style="flex:1;min-height:60px;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:var(--text);font-size:.9rem;resize:vertical;" data-reply-text="' + row.id + '"></textarea>'
+              + '<button class="button primary small" data-reply-btn="' + row.id + '" style="align-self:flex-start;">Send Reply</button>'
+              + '</div>';
+          }
+          html += '</div>';
+          return html;
+        }).join('');
+
+        // Wire reply buttons
+        enterpriseInquiryList.querySelectorAll('[data-reply-btn]').forEach(function (btn) {
+          btn.addEventListener('click', async function () {
+            var id = btn.getAttribute('data-reply-btn');
+            var textarea = enterpriseInquiryList.querySelector('[data-reply-text="' + id + '"]');
+            var replyText = textarea ? textarea.value.trim() : '';
+            if (!replyText) {
+              alert('Please type a reply first.');
+              return;
+            }
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+            try {
+              var sessionData = await sb.auth.getSession();
+              var session = sessionData?.data?.session;
+              var baseUrl = String(supabaseCfg.url || '').replace(/\/+$/, '');
+              var resp = await fetch(baseUrl + '/rest/v1/enterprise_inquiries?id=eq.' + id, {
+                method: 'PATCH',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'apikey': supabaseCfg.publishableKey || '',
+                  'Authorization': 'Bearer ' + (session ? session.access_token : ''),
+                  'Prefer': 'return=minimal'
+                },
+                body: JSON.stringify({
+                  owner_reply: replyText,
+                  replied_at: new Date().toISOString(),
+                  status: 'replied'
+                })
+              });
+              if (!resp.ok) throw new Error('Update failed: ' + resp.status);
+              btn.textContent = 'Reply Sent!';
+              btn.style.backgroundColor = '#3fb950';
+              setTimeout(function () { loadEnterpriseInquiries(); }, 1000);
+            } catch (err) {
+              btn.disabled = false;
+              btn.textContent = 'Send Reply';
+              alert('Failed to send reply: ' + (err.message || err));
+            }
+          });
+        });
+      }
+
+      // ----- Desktop persistent notifications for new enterprise inquiries -----
+      async function requestNotificationPermission() {
+        if (!('Notification' in window)) return false;
+        if (Notification.permission === 'granted') return true;
+        if (Notification.permission !== 'denied') {
+          var result = await Notification.requestPermission();
+          return result === 'granted';
+        }
+        return false;
+      }
+
+      async function pollForNewInquiries() {
+        if (!sb) return;
+        try {
+          var { count, error } = await sb
+            .from('enterprise_inquiries')
+            .select('*', { count: 'exact', head: true })
+            .eq('status', 'new');
+          if (error) return;
+          var newCount = count || 0;
+          if (newCount > lastInquiryCount && lastInquiryCount >= 0) {
+            var diff = newCount - lastInquiryCount;
+            if (Notification.permission === 'granted') {
+              var notification = new Notification('Command Nexus — New Enterprise Inquiry', {
+                body: diff + ' new enterprise ' + (diff === 1 ? 'inquiry' : 'inquiries') + ' received. Click to open the vault.',
+                tag: 'enterprise-inquiry',
+                requireInteraction: true
+              });
+              notification.onclick = function () {
+                window.focus();
+                notification.close();
+              };
+            }
+          }
+          lastInquiryCount = newCount;
+        } catch (err) {
+          // Silent fail
+        }
+      }
+
+      function startNotificationPolling() {
+        requestNotificationPermission().then(function (granted) {
+          if (granted) {
+            notificationPollTimer = setInterval(pollForNewInquiries, 60000);
+          }
+        });
+      }
+
       async function loadConsole(session) {
         document.title = 'Operator Vault | Avery Logic Works';
         ownerEmailNode.textContent = session.user.email || 'owner';
@@ -638,6 +803,8 @@
           const payload = await withTimeout(loadVaultSummary(buildId, session), 8000);
           applyVaultSummary(payload);
           settleAdminLists();
+          loadEnterpriseInquiries();
+          startNotificationPolling();
           setMessage(adminStatus, 'Owner session confirmed. Snapshot: profiles ' + snapshotProfiles.textContent + ', visits ' + snapshotVisits.textContent + ', logins ' + snapshotLogins.textContent + ', signups ' + snapshotSignups.textContent + '. Loaded through the owner vault service.', 'info');
           return;
         } catch (summaryErr) {
@@ -658,9 +825,11 @@
           withTimeout(loadClickMetrics(), 4000),
           withTimeout(loadServiceRequests(), 4000),
           withTimeout(loadFeedback(), 4000),
-          withTimeout(loadSecurityEvents(), 4000)
+          withTimeout(loadSecurityEvents(), 4000),
+          withTimeout(loadEnterpriseInquiries(), 4000)
         ]);
         settleAdminLists();
+        startNotificationPolling();
 
         if (metricLoad) {
           setMessage(adminStatus, 'Owner session confirmed. Snapshot: profiles ' + snapshotProfiles.textContent + ', visits ' + snapshotVisits.textContent + ', logins ' + snapshotLogins.textContent + ', signups ' + snapshotSignups.textContent + '. Loaded through direct authenticated fallback reads.', 'info');
