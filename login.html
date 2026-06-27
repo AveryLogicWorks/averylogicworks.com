@@ -19,9 +19,11 @@
         <a href="index.html">Home</a>
         <a href="founder.html">Founder</a>
         <a href="themis.html">Themis</a>
+        <a href="command-nexus.html">Command Nexus</a>
+        <a href="programs.html">Buyable Programs</a>
         <a href="login.html">Sign in</a>
         <a href="signup.html">Sign up</a>
-        <a href="index.html#support" class="button secondary small">Donate</a>
+        <a href="index.html#donation-options" class="button secondary small">Donate</a>
       </div>
     </div>
   </nav>
@@ -31,6 +33,7 @@
         <span class="eyebrow">Account access</span>
         <h1>Sign in to your Avery Logic Works account.</h1>
         <p class="muted">Use your email and password to sign in, choose whether this device should remember you, or request a reset link if you need to set a new password.</p>
+        <p class="small-note" id="login-redirect-hint" style="display:none;">After signing in, you&rsquo;ll be taken back to <strong id="login-redirect-target">Command Nexus</strong>.</p>
       </div>
     </section>
 
@@ -117,6 +120,22 @@
     </div>
   </footer>
   <script src="assets/site-config.js"></script>
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var next = params.get('next');
+      if (next) {
+        var hint = document.getElementById('login-redirect-hint');
+        var target = document.getElementById('login-redirect-target');
+        if (hint) hint.style.display = 'block';
+        if (target) {
+          var decoded = decodeURIComponent(next);
+          var pageName = decoded.split('#')[0].replace('.html', '').replace(/-/g, ' ');
+          target.textContent = pageName.charAt(0).toUpperCase() + pageName.slice(1);
+        }
+      }
+    })();
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/site.js"></script>
 </body>

@@ -57,7 +57,7 @@ def generate_key(tier_code: str, days: int | None = None) -> str:
     duration = days if days is not None else info["default_days"]
 
     expiry_ts = int((datetime.now() + timedelta(days=duration)).timestamp())
-    expiry_hex = f"{expiry_ts:010x}"
+    expiry_hex = f"{expiry_ts:010X}"
     random_part = secrets.token_hex(4).upper()
 
     payload = f"{tier_code}{expiry_hex}{random_part}"

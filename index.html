@@ -141,6 +141,8 @@
       outline: none;
     }
 
+    .nav-links .nav-hidden { display: none !important; }
+
     .nav-links .nav-primary {
       color: #041016;
       background: linear-gradient(135deg, var(--accent), var(--accent-3));
@@ -706,9 +708,10 @@
         <a href="founder.html">Founder</a>
         <a href="themis.html">Themis</a>
         <a class="nav-flagship" href="command-nexus.html">Command Nexus</a>
+        <a href="programs.html">Buyable Programs</a>
         <a href="login.html">Sign in</a>
         <a class="nav-primary" href="signup.html">Sign up</a>
-        <a href="#services">Paid services</a>
+        <a href="#custom-software">Custom Software</a>
         <a href="#donation-options">Donate</a>
       </div>
     </nav>
@@ -759,6 +762,14 @@
       </div>
     </section>
 
+    <section aria-labelledby="programs-teaser-title">
+      <div class="section-head" style="text-align:center;margin:0 auto 2rem;">
+        <div class="section-label">Small programs &amp; utilities</div>
+        <h2 id="programs-teaser-title" style="font-size:clamp(1.6rem,3vw,2.2rem);">Not everything needs to be a flagship.</h2>
+        <p class="muted">Sometimes you just need a small, focused tool that does one thing well. No subscriptions, no bloat &mdash; just a program that works. <a href="programs.html" style="color:var(--accent);text-decoration:none;font-weight:700;">Browse small programs &rarr;</a></p>
+      </div>
+    </section>
+
     <section class="video-section" aria-labelledby="video-title">
       <p id="video-title" class="video-intro">Built through controlled iteration, using proprietary systems and AI-assisted automation to produce real, working software.</p>
       <div class="video-frame" data-reveal-video data-reveal-delay="2500">
@@ -771,39 +782,23 @@
     </section>
 
 
-    <section id="services" aria-labelledby="services-title">
+    <section id="custom-software" aria-labelledby="services-title">
       <div class="section-head">
-        <div class="section-label">Paid services</div>
-        <h2 id="services-title">If you want to purchase a paid service, the current options are below.</h2>
-        <p class="muted">These are limited, tightly scoped collaboration paths for people who want to back the studio and get something useful in return. They are not the full identity of Avery Logic Works, just one practical way to help fund the larger work early.</p>
+        <div class="section-label">Paid service</div>
+        <h2 id="services-title">Custom software, built by the founder.</h2>
+        <p class="muted">Have a specific problem that needs a custom solution? Describe what you need, and the founder will build it. One scoped build, one price, one conversation.</p>
       </div>
-      <div class="service-grid">
+      <div class="service-grid" style="grid-template-columns:1fr;max-width:480px;">
         <article class="card service-card">
-          <div class="service-kicker">Early-stage slot</div>
-          <div class="service-price">$20</div>
-          <h3>Starter Build</h3>
-          <p>Best for a tiny script, one focused automation step, a simple code edit, or a narrow bug fix.</p>
-          <p class="muted">A good entry point if you want to test working together on something small and specific.</p>
-          <a class="button primary" href="service-intake.html?tier=starter">Reserve Starter Build</a>
-        </article>
-        <article class="card service-card">
-          <div class="service-kicker">Most practical</div>
-          <div class="service-price">$50</div>
-          <h3>Standard Build</h3>
-          <p>Best for a small custom script, a simple automation, a lightweight utility program, or a more involved bug fix.</p>
-          <p class="muted">This is the strongest fit when the request is real work but still clearly contained.</p>
-          <a class="button primary" href="service-intake.html?tier=standard">Reserve Standard Build</a>
-        </article>
-        <article class="card service-card">
-          <div class="service-kicker">For deeper small builds</div>
+          <div class="service-kicker">Custom software build</div>
           <div class="service-price">$100</div>
-          <h3>Expanded Build</h3>
-          <p>Best for a larger small-program request, a multi-part script, a deeper fix, or a compact custom tool with more complexity.</p>
-          <p class="muted">Still intentionally scoped. If you need something broader, this becomes the starting point for that conversation.</p>
-          <a class="button primary" href="service-intake.html?tier=expanded">Reserve Expanded Build</a>
+          <h3>Custom Software</h3>
+          <p>Tell the founder what you need built &mdash; a custom script, a utility program, an automation, a tool, or a focused fix. The request is reviewed and the build is scoped to match.</p>
+          <p class="muted">You&rsquo;ll describe exactly what you want on a private intake page before checkout. The founder follows up within 24 hours after the request and purchase are both received.</p>
+          <a class="button primary" href="service-intake.html?tier=custom">Request Custom Software Build</a>
         </article>
       </div>
-      <p class="service-note">Each collaboration button opens a private intake page before checkout so the buyer can describe exactly what they want built. If the request needs broader scope than the selected slot, the founder will contact the buyer about the next step before work begins.</p>
+      <p class="service-note">The intake form sends your project details privately to the founder before checkout opens. If the request needs broader scope, the founder will contact you about the next step before work begins.</p>
     </section>
 
     <section id="good-fit" aria-labelledby="fit-title">

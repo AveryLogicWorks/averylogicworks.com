@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Small Programs & Utilities | Avery Logic Works</title>
+  <meta name="description" content="Small programs and simple utilities from Avery Logic Works — built with people in mind. Lightweight, focused tools that solve real problems without bloat." />
+  <style>
+    :root {
+      --bg: #05070d;
+      --panel: rgba(255, 255, 255, 0.055);
+      --panel-strong: rgba(255, 255, 255, 0.095);
+      --text: #f7f9ff;
+      --muted: #b7bfd1;
+      --soft: #8790a6;
+      --line: rgba(255,255,255,.14);
+      --accent: #7dd3fc;
+      --accent-2: #a78bfa;
+      --accent-3: #22d3ee;
+      --max: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 20% 5%, rgba(125, 211, 252, .18), transparent 32rem),
+        radial-gradient(circle at 80% 15%, rgba(167, 139, 250, .12), transparent 34rem),
+        linear-gradient(180deg, #05070d 0%, #090d18 52%, #05070d 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(5, 7, 13, .78);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: .65rem;
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: .01em;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      flex: 0 0 auto;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: .35rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      padding: .55rem .8rem;
+      border-radius: 999px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .94rem;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      color: var(--text);
+      background: var(--panel);
+      outline: none;
+    }
+
+    .nav-links .nav-hidden { display: none !important; }
+
+    .nav-links .nav-primary {
+      color: #041016;
+      background: linear-gradient(135deg, var(--accent), var(--accent-3));
+      font-weight: 800;
+    }
+
+    .nav-links .nav-flagship {
+      color: #0c0716;
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+      font-weight: 800;
+    }
+
+    main { overflow: hidden; }
+
+    section {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 4.5rem 0;
+    }
+
+    .hero {
+      min-height: auto;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding-top: 4rem;
+      padding-bottom: 2.5rem;
+    }
+
+    .hero-inner { max-width: 900px; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      padding: .45rem .8rem;
+      margin-bottom: 1.35rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(255,255,255,.04);
+      font-size: .95rem;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 1.25rem;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      line-height: 1.05;
+      letter-spacing: -.04em;
+      font-weight: 900;
+      text-wrap: balance;
+    }
+
+    .hero-subhead {
+      max-width: 760px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 2vw, 1.28rem);
+      text-wrap: balance;
+    }
+
+    .cta-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: .85rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: .78rem 1.15rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      text-decoration: none;
+      color: var(--text);
+      background: rgba(255,255,255,.06);
+      font-weight: 800;
+    }
+
+    .button.primary {
+      color: #041016;
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent-3));
+      box-shadow: 0 12px 40px rgba(34, 211, 238, .24);
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .section-head {
+      max-width: 780px;
+      margin-bottom: 2rem;
+    }
+
+    .section-label {
+      color: var(--accent);
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: .78rem;
+      margin-bottom: .75rem;
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      line-height: 1.08;
+      letter-spacing: -.035em;
+      margin-bottom: 1rem;
+      text-wrap: balance;
+    }
+
+    h3 {
+      font-size: clamp(1.2rem, 2vw, 1.5rem);
+      line-height: 1.2;
+      margin-bottom: .6rem;
+    }
+
+    .muted { color: var(--muted); }
+    .soft { color: var(--soft); }
+
+    .program-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .program-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1.5rem;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--panel);
+      transition: border-color .2s ease, transform .2s ease;
+    }
+
+    .program-card:hover {
+      border-color: rgba(125, 211, 252, .3);
+      transform: translateY(-2px);
+    }
+
+    .program-badge {
+      display: inline-flex;
+      align-self: flex-start;
+      padding: .35rem .7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(34, 211, 238, .24);
+      background: rgba(34, 211, 238, .10);
+      color: var(--accent-3);
+      font-size: .78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .program-price {
+      display: inline-flex;
+      align-self: flex-start;
+      padding: .42rem .78rem;
+      border-radius: 999px;
+      border: 1px solid rgba(125, 211, 252, .28);
+      background: rgba(125, 211, 252, .12);
+      color: var(--accent);
+      font-weight: 900;
+      font-size: 1.1rem;
+    }
+
+    .program-features {
+      display: grid;
+      gap: .5rem;
+      padding: 0;
+      list-style: none;
+      margin: 0;
+    }
+
+    .program-features li {
+      padding: .6rem .8rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,.03);
+      font-size: .92rem;
+      color: var(--muted);
+    }
+
+    .program-features li::before {
+      content: "\2713\00a0\00a0";
+      color: var(--accent-3);
+      font-weight: bold;
+    }
+
+    .program-card .button {
+      width: 100%;
+      margin-top: auto;
+    }
+
+    .program-status {
+      font-size: .85rem;
+      color: var(--soft);
+      padding: .4rem .7rem;
+      border-radius: 10px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--line);
+    }
+
+    .program-status.ready { color: #3fb950; border-color: rgba(63, 185, 80, .25); }
+    .program-status.coming { color: var(--accent-2); border-color: rgba(167, 139, 250, .25); }
+
+    .coming-soon-card {
+      opacity: .6;
+    }
+
+    .coming-soon-card .program-badge {
+      border-color: rgba(167, 139, 250, .24);
+      background: rgba(167, 139, 250, .10);
+      color: var(--accent-2);
+    }
+
+    .mission-section {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .mission-pills {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: .85rem;
+      margin-top: 2rem;
+      text-align: left;
+    }
+
+    .mission-pill {
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.045);
+      color: var(--muted);
+    }
+
+    .mission-pill strong {
+      display: block;
+      margin-bottom: .25rem;
+      color: var(--text);
+      font-size: .98rem;
+    }
+
+    .site-footer {
+      border-top: 1px solid var(--line);
+      padding: 2rem 0;
+    }
+
+    .footer-inner {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1rem;
+      font-size: .9rem;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover { color: var(--text); }
+
+    .sub-note {
+      font-size: .85rem;
+      color: var(--soft);
+      max-width: 700px;
+    }
+
+    @media (max-width: 768px) {
+      .nav { flex-direction: column; padding: 1rem 0; }
+      .nav-links { justify-content: flex-start; }
+      .program-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="index.html" aria-label="Avery Logic Works home">
+        <img class="brand-mark" src="assets/my Business emblem.jpg" alt="Avery Logic Works emblem" />
+        <span>Avery Logic Works</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="founder.html">Founder</a>
+        <a href="themis.html">Themis</a>
+        <a class="nav-flagship" href="command-nexus.html">Command Nexus</a>
+        <a href="programs.html">Buyable Programs</a>
+        <a href="login.html">Sign in</a>
+        <a class="nav-primary" href="signup.html">Sign up</a>
+        <a href="index.html#donation-options">Donate</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <div class="eyebrow">Small Programs &amp; Simple Utilities</div>
+        <h1 id="hero-title">Tools that do one thing well.</h1>
+        <p class="hero-subhead">Not every problem needs a flagship. Sometimes you just need a small, focused program that solves something real &mdash; without bloat, without subscriptions, without a learning curve. These are those tools.</p>
+        <div class="cta-row">
+          <a class="button primary" href="#programs">Browse programs</a>
+          <a class="button" href="command-nexus.html">Explore Command Nexus</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="mission" aria-labelledby="mission-title">
+      <div class="mission-section">
+        <div class="section-label">The mission</div>
+        <h2 id="mission-title">Small programs and simple utilities, made with people in mind.</h2>
+        <p class="muted">These tools are built to be lightweight, affordable, and genuinely useful. No telemetry empires, no dark patterns, no monthly traps. You pay once, you own it, it works. That&rsquo;s the deal.</p>
+        <div class="mission-pills">
+          <div class="mission-pill">
+            <strong>One-time purchase</strong>
+            Buy it once. It&rsquo;s yours. No subscriptions, no renewals, no surprise charges.
+          </div>
+          <div class="mission-pill">
+            <strong>Small and focused</strong>
+            Each program does one thing well. No feature bloat, no unnecessary complexity.
+          </div>
+          <div class="mission-pill">
+            <strong>Built by a person</strong>
+            Every tool is built and tested by the founder. If something breaks, you talk to the person who made it.
+          </div>
+          <div class="mission-pill">
+            <strong>Fair pricing</strong>
+            Prices that respect both the work that went in and the person buying it.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="programs" aria-labelledby="programs-title">
+      <div class="section-head">
+        <div class="section-label">Available now</div>
+        <h2 id="programs-title">Programs you can get today.</h2>
+        <p class="muted">Each program is a one-time purchase. Pay once, download, and run it on your computer. No subscriptions, no license keys, no recurring charges.</p>
+      </div>
+
+      <div class="program-grid">
+        <!-- Speakeasy -->
+        <article class="card program-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;">
+            <span class="program-badge">Available now</span>
+            <span class="program-status ready">Ready</span>
+          </div>
+          <h3>Speakeasy</h3>
+          <p class="muted">A lightweight text-to-speech reader that lives in your system tray. Select any text, hit a hotkey, and Speakeasy reads it aloud using natural-sounding Piper TTS voices. No window required &mdash; it runs quietly in the background until you need it.</p>
+          <ul class="program-features">
+            <li>System tray icon &mdash; stays out of your way</li>
+            <li>Ctrl+Shift+Space reads any selected text instantly</li>
+            <li>Reads clipboard text from anywhere</li>
+            <li>Download free Piper voices in multiple languages</li>
+            <li>Full UI with text editor, voice picker, and controls</li>
+            <li>Works offline &mdash; no internet required after voice download</li>
+          </ul>
+          <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
+            <span class="program-price">$10</span>
+            <span class="soft" style="font-size:.9rem;">one-time purchase</span>
+          </div>
+          <a class="button primary" href="#speakeasy-purchase">Get Speakeasy &mdash; $10</a>
+        </article>
+
+        <!-- Coming soon placeholders -->
+        <article class="card program-card coming-soon-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;">
+            <span class="program-badge">Coming soon</span>
+            <span class="program-status coming">In development</span>
+          </div>
+          <h3>Quadra Hydra</h3>
+          <p class="muted">A process priority manager for heavy workloads. When you&rsquo;re running AI models, video encoders, and other resource-hungry apps at the same time, Quadra Hydra lets you assign which gets priority &mdash; so the thing you need working right now doesn&rsquo;t get starved by background tasks.</p>
+          <ul class="program-features">
+            <li>Set high/low priority for running processes</li>
+            <li>Real-time resource monitoring</li>
+            <li>One-click priority presets</li>
+            <li>Stops resource gobbling by background apps</li>
+          </ul>
+          <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
+            <span class="program-price">$15</span>
+            <span class="soft" style="font-size:.9rem;">one-time purchase</span>
+          </div>
+          <a class="button" href="signup.html">Get notified at launch</a>
+        </article>
+
+        <article class="card program-card coming-soon-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;">
+            <span class="program-badge">Coming soon</span>
+            <span class="program-status coming">In development</span>
+          </div>
+          <h3>More on the way</h3>
+          <p class="muted">Several more small programs and utilities are in active development. Sign up to get notified when each one launches &mdash; or check back here periodically.</p>
+          <a class="button" href="signup.html">Sign up for updates</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Speakeasy Purchase Section -->
+    <section id="speakeasy-purchase" aria-labelledby="speakeasy-purchase-title">
+      <div class="section-head">
+        <div class="section-label">Get Speakeasy</div>
+        <h2 id="speakeasy-purchase-title">Speakeasy &mdash; $10 one-time.</h2>
+        <p class="muted">Pay once, download, and run. No subscriptions, no license keys, no recurring charges. It&rsquo;s yours.</p>
+      </div>
+
+      <div style="max-width:560px;margin:0 auto;">
+        <div style="padding:1.5rem;border:1px solid var(--line);border-radius:24px;background:var(--panel);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+            <div>
+              <strong style="font-size:1.3rem;">Speakeasy</strong>
+              <p class="soft" style="font-size:.9rem;margin:.25rem 0 0;">Text-to-speech tray reader</p>
+            </div>
+            <span class="program-price" style="font-size:1.4rem;">$10</span>
+          </div>
+
+          <ul class="program-features" style="margin-bottom:1.25rem;">
+            <li>Full program download (Windows EXE)</li>
+            <li>Free Piper voice downloads included</li>
+            <li>Offline operation &mdash; no internet needed after voice download</li>
+            <li>Speakeasy&trade; &mdash; Avery Logic Works</li>
+          </ul>
+
+          <div style="display:flex;flex-direction:column;gap:.75rem;">
+            <a class="button primary" href="https://www.paypal.com/checkoutnow/enable" target="_blank" rel="noopener noreferrer" style="font-size:1.05rem;padding:1rem 2rem;" id="speakeasy-paypal-btn">Buy Speakeasy &mdash; $10 via PayPal</a>
+            <p class="soft" style="font-size:.85rem;text-align:center;">After payment, you&rsquo;ll receive a download link by email. Just run the EXE &mdash; no installation, no activation, no hassle.</p>
+          </div>
+        </div>
+
+        <p class="sub-note" style="margin-top:1.5rem;text-align:center;">
+          Questions? Email <a href="mailto:Averylogicworks@gmail.com" style="color:var(--accent);">Averylogicworks@gmail.com</a><br>
+          See our <a href="support.html" style="color:var(--accent);">support &amp; refund policy</a>.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <div class="cta-row">
+        <a class="button" href="index.html">Back to home</a>
+        <a class="button primary" href="command-nexus.html">Explore Command Nexus</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>&copy; <span id="year"></span> Avery Logic Works. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="support.html">Your Support</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    (function () {
+      var current = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+      document.querySelectorAll('.nav-links a').forEach(function (el) {
+        var href = (el.getAttribute('href') || '').toLowerCase();
+        var normalized = href.split('/').pop();
+        if (normalized === current) {
+          el.classList.add('nav-hidden');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

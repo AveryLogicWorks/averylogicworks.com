@@ -623,10 +623,11 @@
         <a href="index.html">Home</a>
         <a href="founder.html">Founder</a>
         <a href="themis.html">Themis</a>
-        <a class="nav-flagship" href="command-nexus.html" aria-current="page">Command Nexus</a>
-        <a href="command-nexus.html#membership">Nexus Membership</a>
+        <a class="nav-flagship" href="command-nexus.html">Command Nexus</a>
+        <a href="programs.html">Buyable Programs</a>
         <a href="login.html">Sign in</a>
         <a class="nav-primary" href="signup.html">Sign up</a>
+        <a href="index.html#donation-options">Donate</a>
       </div>
     </nav>
   </header>
@@ -1011,6 +1012,7 @@
 
         <h3>Trial &amp; account terms</h3>
         <p class="muted">A free website account is required. The free trial is tied to your account and is meant as a genuine trial &mdash; not permanent free access. Trial length and renewal rules may change over time. Keys are issued per account; sharing, reselling, or abusing keys may result in access being paused or revoked.</p>
+        <p class="muted">If access is paused or revoked, the event will be reviewed before any final action is taken. We understand that life happens &mdash; sometimes in the worst way possible, sometimes when you least expect it, and sometimes when you are not even conscious enough to expect it. A child may press keys. A phone may butt-dial. Inputs may be repeated accidentally in ways that look wrong but were not intentional. If something looks accidental, it will be reviewed as accidental. The activity pattern, what was done, and how it was done may be examined to tell the difference between a real violation and an accident &mdash; because we have seen proof that life happens, and it does not always happen in the easiest way.</p>
 
         <h3>AI safety &amp; content notice</h3>
         <p class="muted">Command Nexus lets you use and build AI agents. AI output can be inaccurate, unexpected, or unsuitable for some audiences. You are responsible for how you configure and use your agents. A built-in governance system is designed to keep activity within safe, ethical bounds, but no automated system is perfect &mdash; review what your agents do.</p>
@@ -1234,6 +1236,8 @@
             .then(function (res) {
               if (res.status === 200 && res.data && res.data.valid === true) {
                 renderResult(res.data, key, true);
+              } else if (res.status === 200 && res.data && res.data.already_activated === true) {
+                setStatus('err', '<strong>This key has already been activated.</strong><span class="key-meta">Each key works once on one machine. If this is your key and you need to reinstall, contact support for help.</span>');
               } else if (res.status === 200 && res.data && res.data.valid === false) {
                 setStatus('err', '<strong>That key isn\u2019t valid.</strong><span class="key-meta">Double-check it, or contact support if you believe it should work.</span>');
               } else {

@@ -11,9 +11,15 @@
 // MUST stay server-side: shipping the salt to the browser would let anyone mint
 // unlimited free keys.
 //
+// SINGLE-USE ENFORCEMENT: After HMAC verification, the key hash is checked
+// against the used_license_keys table. If not found, the key is "burned"
+// (inserted into the table) and returned as valid. If found, the key is
+// rejected as already activated — one key, one machine, one activation.
+//
 // Key format: TIER(2) + EXPIRY_HEX(10) + RANDOM(8) + HMAC(16) = 36 chars.
 
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -59,9 +65,13 @@ function timingSafeEqual(a: string, b: string): boolean {
   return diff === 0;
 }
 
+async function sha256Hash(input: string): Promise<string> {
+  const data = enc.encode(input);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  return toHex(new Uint8Array(hashBuffer));
+}
+
 async function validateKey(rawKey: string, publicSalt: Uint8Array) {
-  // Tier prefix (e.g. TR, PR) is letters, not hex; only the trailing 38 chars
-  // are hex. Require 36 uppercase alphanumerics and let the HMAC do the real work.
   const key = rawKey.trim().toUpperCase().replace(/[\s-]/g, "");
   if (!/^[A-Z0-9]{36}$/.test(key)) return null;
 
@@ -78,9 +88,6 @@ async function validateKey(rawKey: string, publicSalt: Uint8Array) {
     const expiryTs = parseInt(expiryHex, 16);
     if (!Number.isFinite(expiryTs)) return null;
     const expiry = new Date(expiryTs * 1000);
-    // API contract: `valid` means the key is genuine (HMAC verified). `expired`
-    // is a SEPARATE status. Consumers must check BOTH — a key can be
-    // valid:true AND expired:true. Only grant access when valid && !expired.
     return {
       valid: true,
       tier: name,
@@ -89,7 +96,6 @@ async function validateKey(rawKey: string, publicSalt: Uint8Array) {
       expired: Date.now() > expiry.getTime(),
     };
   }
-  // Unknown / non-public tier code -> not valid here.
   return null;
 }
 
@@ -107,7 +113,6 @@ serve(async (req) => {
   try {
     const secret = Deno.env.get("NEXUS_KEY_SECRET") || "";
     if (!secret) {
-      // Generic message to the caller; log the specifics server-side only.
       console.error("validate-key: NEXUS_KEY_SECRET is not configured");
       return new Response(JSON.stringify({ error: "Server not configured" }), {
         status: 500,
@@ -124,6 +129,7 @@ serve(async (req) => {
       });
     }
 
+    // Step 1: Verify HMAC signature
     const result = await validateKey(rawKey, enc.encode(secret));
 
     if (!result) {
@@ -133,6 +139,71 @@ serve(async (req) => {
       });
     }
 
+    // Step 2: Check if key is already used (single-use enforcement)
+    const normalizedKey = rawKey.trim().toUpperCase().replace(/[\s-]/g, "");
+    const keyHash = await sha256Hash(normalizedKey);
+    const tierCode = normalizedKey.slice(0, 2);
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
+    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+
+    if (supabaseUrl && serviceRoleKey) {
+      const adminClient = createClient(supabaseUrl, serviceRoleKey);
+
+      // Check if this key hash is already in the used table
+      const { data: existing, error: queryError } = await adminClient
+        .from("used_license_keys")
+        .select("id, activated_at")
+        .eq("key_hash", keyHash)
+        .maybeSingle();
+
+      if (queryError) {
+        console.error("validate-key: failed to check used_license_keys:", queryError.message);
+        // Fail open — return valid but log the error
+        return new Response(JSON.stringify(result), {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      if (existing) {
+        // Key was already activated — reject it
+        return new Response(JSON.stringify({
+          valid: false,
+          already_activated: true,
+          reason: "This key has already been activated and cannot be used again.",
+        }), {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      // Key is genuine and not yet used — burn it (insert into used table)
+      const { error: insertError } = await adminClient
+        .from("used_license_keys")
+        .insert({
+          key_hash: keyHash,
+          tier_code: tierCode,
+        });
+
+      if (insertError) {
+        console.error("validate-key: failed to burn key:", insertError.message);
+        // If it's a unique constraint violation, key was burned by a concurrent request
+        if (String(insertError.message).includes("duplicate") || String(insertError.message).includes("unique")) {
+          return new Response(JSON.stringify({
+            valid: false,
+            already_activated: true,
+            reason: "This key has already been activated and cannot be used again.",
+          }), {
+            status: 200,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        // Other error — fail open, return valid
+      }
+    }
+
+    // Step 3: Return the valid result
     return new Response(JSON.stringify(result), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

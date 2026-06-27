@@ -274,8 +274,11 @@
       const href = (el.getAttribute('href') || '').toLowerCase();
       if (!href || href === '#') return;
       const normalized = href.split('/').pop();
+      // Hide the link if it points to the current page
       if (normalized === current || normalized === currentWithHash) {
-        el.classList.add('active');
+        el.classList.add('nav-hidden');
+      } else {
+        el.classList.remove('nav-hidden');
       }
       if (current === 'index.html' && href === 'index.html#support' && window.location.hash.toLowerCase() === '#support') {
         el.classList.add('active');
@@ -472,7 +475,12 @@
         const { error } = await sb.auth.signInWithPassword({ email: email, password: password });
         if (error) throw error;
         trackEvent('login_success', { email: email, remember_me: remember });
-        window.location.href = paths.account;
+        const nextParam = searchParams.get('next');
+        if (nextParam) {
+          window.location.href = decodeURIComponent(nextParam);
+        } else {
+          window.location.href = paths.account;
+        }
       } catch (err) {
         setMessage(messageBox, err.message || 'Sign-in failed.', 'error');
       } finally {

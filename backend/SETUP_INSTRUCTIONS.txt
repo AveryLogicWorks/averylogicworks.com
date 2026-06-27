@@ -1,0 +1,165 @@
+# Command Nexus — Website Setup Instructions
+
+Follow these steps in order. Everything is done through the Supabase dashboard
+at: https://supabase.com/dashboard (or your project URL).
+
+Your Supabase project URL: https://esoiezxddkqlmvsgscqw.supabase.co
+
+---
+
+## Step 1: Run the SQL Scripts
+
+You need to run 2 SQL scripts in the Supabase SQL Editor.
+
+### 1A: Enterprise Inquiries Table
+
+1. Go to your Supabase dashboard
+2. Click **SQL Editor** in the left sidebar
+3. Click **New query**
+4. Open this file on your computer:
+   `B:\Documents\GitHub\averylogicworks.com\backend\enterprise_inquiries.sql`
+5. Copy ALL the text from that file
+6. Paste it into the SQL Editor
+7. Click **Run**
+8. You should see "Success" — this creates the enterprise inquiries table
+
+### 1B: Used License Keys Table (Single-Use Enforcement)
+
+1. In the same SQL Editor, click **New query** again
+2. Open this file:
+   `B:\Documents\GitHub\averylogicworks.com\backend\used_license_keys.sql`
+3. Copy ALL the text
+4. Paste it into the SQL Editor
+5. Click **Run**
+6. You should see "Success" — this creates the used keys table that burns keys after first use
+
+---
+
+## Step 2: Set the NEXUS_KEY_SECRET
+
+This is the secret salt that makes your license keys work. It must match
+what the key generator uses.
+
+1. Go to your Supabase dashboard
+2. Click **Edge Functions** in the left sidebar
+3. Click **Secrets** at the top
+4. Click **Add new secret**
+5. Name: `NEXUS_KEY_SECRET`
+6. Value: `AVERY_LOGIC_WORKS_COMMAND_NEXUS_2026`
+7. Click **Save**
+
+If `SUPABASE_SERVICE_ROLE_KEY` is not already set as a secret:
+1. Go to **Settings** → **API** in the left sidebar
+2. Find the **service_role** key (the long one, NOT the anon/public one)
+3. Copy it
+4. Go back to **Edge Functions** → **Secrets**
+5. Click **Add new secret**
+6. Name: `SUPABASE_SERVICE_ROLE_KEY`
+7. Value: (paste the service role key you copied)
+8. Click **Save**
+
+---
+
+## Step 3: Deploy the Updated validate-key Function
+
+The edge function has been updated to burn keys after first use.
+
+If you have the Supabase CLI installed:
+```
+cd B:\Documents\GitHub\averylogicworks.com
+supabase functions deploy validate-key
+```
+
+If you DON'T have the CLI:
+1. Go to your Supabase dashboard
+2. Click **Edge Functions** in the left sidebar
+3. Find the existing `validate-key` function
+4. Click it, then look for an option to update/edit the code
+5. Open this file on your computer:
+   `B:\Documents\GitHub\averylogicworks.com\supabase\functions\validate-key\index.ts`
+6. Copy ALL the text
+7. Paste it into the function editor
+8. Click **Deploy** or **Save**
+
+---
+
+## Step 4: Generate License Keys
+
+Now you can generate license keys to give to customers after they purchase.
+
+Open a terminal and run:
+
+```
+cd B:\Documents\GitHub\averylogicworks.com
+python backend\key_generator.py
+```
+
+This starts interactive mode — it'll ask you which tier and generate keys.
+
+### Quick commands:
+
+```
+# Generate a 15-day trial key
+python backend\key_generator.py --tier TR
+
+# Generate a 30-day Pro key
+python backend\key_generator.py --tier PR
+
+# Generate a 1-year Pro key
+python backend\key_generator.py --tier PR --days 365
+
+# Generate 10 Business keys and save to CSV
+python backend\key_generator.py --tier BU --batch 10 --csv keys.csv
+
+# Generate an Unlimited key
+python backend\key_generator.py --tier UN
+```
+
+### Available tiers:
+- TR = Trial ($10, 15 days)
+- ST = Starter ($20/mo, 30 days)
+- PR = Pro ($30/mo, 30 days)
+- BU = Business ($50/mo, 30 days)
+- UN = Unlimited ($80/mo, 30 days)
+- TE = Enterprise Evaluation (15 days, full access)
+- EP = Enterprise Property (negotiated)
+- EC = Enterprise Corporate (negotiated)
+
+---
+
+## Step 5: Push Website Updates to GitHub
+
+Push the updated files to your website repo:
+
+```
+cd B:\Documents\GitHub\averylogicworks.com
+git add -A
+git commit -m "Add enterprise inquiry form, single-use key enforcement, key generator"
+git push
+```
+
+---
+
+## How It All Works Together
+
+1. **Customer pays** through Stripe (existing buttons on your website)
+2. **You generate a key** using `key_generator.py` and send it to the customer
+3. **Customer enters the key** on `averylogicworks.com/command-nexus.html#membership`
+4. **Website validates the key** by calling the `validate-key` edge function:
+   - Checks the HMAC signature (is it genuine?)
+   - Checks the `used_license_keys` table (has it been used before?)
+   - If genuine AND not used → **burns the key** (marks it as used) → returns valid
+   - If genuine BUT already used → returns "already activated"
+   - If fake → returns "not valid"
+5. **Customer downloads the app** and enters the same key
+6. **App validates locally** (HMAC check works offline — the key is still genuine)
+7. **License is stored** on that machine in `~/.command_nexus/license.json`
+8. **If someone copies the app** to another computer → no license file → fresh install
+9. **If someone tries the same key** on the website again → "already activated"
+
+### Enterprise Inquiries
+- Enterprise customers fill out the form on your website
+- The inquiry goes into the `enterprise_inquiries` table in Supabase
+- You see it in your **Owner Vault** (`vault-m7q4k2.html`) under "Enterprise inquiries"
+- You can read their details and type a reply directly in the vault
+- You get a **desktop notification** when a new inquiry comes in (if the vault is open)

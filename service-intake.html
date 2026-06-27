@@ -16,10 +16,14 @@
         <span>Avery Logic Works</span>
       </a>
       <div class="nav-links">
-        <a href="index.html#services">Services</a>
+        <a href="index.html">Home</a>
         <a href="founder.html">Founder</a>
-        <a href="support.html">Support</a>
-        <a href="feedback.html">Feedback</a>
+        <a href="themis.html">Themis</a>
+        <a href="command-nexus.html">Command Nexus</a>
+        <a href="programs.html">Buyable Programs</a>
+        <a href="login.html">Sign in</a>
+        <a href="signup.html">Sign up</a>
+        <a href="index.html#donation-options" class="button secondary small">Donate</a>
       </div>
     </div>
   </nav>
@@ -126,6 +130,15 @@
       }
 
       const serviceCatalog = {
+        custom: {
+          label: 'Custom Software',
+          price: '$100',
+          checkout: (cfg.stripeLinks || {}).serviceExpanded100,
+          summary: 'Tell the founder what you need built \u2014 a custom script, a utility program, an automation, a tool, or a focused fix. The request is reviewed and the build is scoped to match.',
+          guidance: 'Describe what you want built, fixed, or automated. Include what success looks like when it is done, and any links, files, or references that help explain the request.',
+          subject: 'Custom Software Build request',
+          prompt: 'What you want built, fixed, or automated:\n\nWhat success should look like when it is done:\n\nAny links, files, code references, or screenshots:\n\nAny timing or deadline notes:'
+        },
         starter: {
           label: 'Starter Build',
           price: '$20',
@@ -156,7 +169,7 @@
       };
 
       const params = new URLSearchParams(window.location.search);
-      const selectedKey = serviceCatalog[params.get('tier')] ? params.get('tier') : 'starter';
+      const selectedKey = serviceCatalog[params.get('tier')] ? params.get('tier') : 'custom';
       const selectedService = serviceCatalog[selectedKey];
 
       titleNode.textContent = 'Describe the ' + selectedService.label + ' before checkout.';
