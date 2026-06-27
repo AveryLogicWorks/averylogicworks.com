@@ -40,9 +40,19 @@
       <div class="form-message info show">When you are ready, you can head back to the main page and continue from there.</div>
       <div class="stack-actions signup-success-actions">
         <a class="button primary" href="index.html">Back to main page</a>
+        <a class="button" href="download.html" id="download-cta" style="display:none;">Download Command Nexus</a>
       </div>
       <p class="small-note" style="margin-top:18px;">After confirmation, sign in from the account link whenever you want to return.</p>
     </section>
   </main>
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('product') === 'command-nexus' || params.get('trial') === '1') {
+        var cta = document.getElementById('download-cta');
+        if (cta) cta.style.display = '';
+      }
+    })();
+  </script>
 </body>
 </html>

@@ -96,6 +96,7 @@
       position: sticky;
       top: 0;
       z-index: 50;
+      -webkit-backdrop-filter: blur(18px);
       backdrop-filter: blur(18px);
       background: rgba(5, 7, 13, .78);
       border-bottom: 1px solid var(--line);
@@ -720,7 +721,7 @@
           <p>Create or sign into your free website account, then activate a trial or paid key for Command Nexus. This keeps the download and license path tied to the right account.</p>
           <div class="cta-row">
             <a class="button primary" href="signup.html?trial=1&amp;product=command-nexus">Create account / start access</a>
-            <a class="button" href="login.html?next=command-nexus.html%23membership">Sign in</a>
+            <a class="button" href="login.html?next=download.html">Sign in to download</a>
           </div>
         </div>
         <div class="access-card">
@@ -736,7 +737,7 @@
             </div>
             <div class="key-status" id="cn-key-status" role="status" aria-live="polite"></div>
           </form>
-          <p class="fineprint" id="cn-download-note">After activation, your Command Nexus download access appears here.</p>
+          <p class="fineprint" id="cn-download-note">After activation, <a href="download.html">go to the download page</a> to get Command Nexus. You'll need to be signed in.</p>
         </div>
       </div>
       <p class="sub-note">Your key never leaves your browser unencrypted &mdash; it&rsquo;s checked by a secure server, and the validation secret is never exposed to the page.</p>
@@ -862,7 +863,7 @@
         <div class="trial-panel">
           <div class="section-label">Trial</div>
           <div class="trial-price">$10 <span>/ 15 days</span></div>
-          <p class="muted">A 15-day trial to explore Command Nexus. A website account is required.</p>
+          <p class="muted">A 15-day trial to explore Command Nexus. All common capabilities available, plus a few premium capabilities to try. Select up to 3 capabilities per AI agent. A website account is required.</p>
           <div class="cta-row">
             <a class="button primary" data-cn-link="trialFull" data-pending-text="Start the 15-day trial" href="#">Start the 15-day trial &mdash; $10</a>
           </div>
@@ -870,47 +871,60 @@
 
         <div class="tier-grid">
           <article class="tier-card">
-            <div class="tier-name">Pro</div>
+            <div class="tier-name">Basic</div>
             <div class="tier-price">$30 <span>/mo</span></div>
             <div class="tier-yearly">or $324 / year</div>
             <ul class="tier-list">
-              <li>Create up to <strong>4</strong> custom AI agents</li>
+              <li>All common capabilities + premium upgrades (Memory Bridge, Voice Interface, Visual Canvas, and more)</li>
+              <li>Select up to <strong>5</strong> capabilities per AI agent</li>
               <li>Advanced libraries and approval-gated outward actions</li>
               <li>Full Visibility Window &amp; AI Creation Engine</li>
             </ul>
-            <a class="button primary" data-cn-link="proMonthly" data-pending-text="Choose Pro" href="#">Choose Pro &mdash; $30/mo</a>
+            <a class="button primary" data-cn-link="proMonthly" data-pending-text="Choose Basic" href="#">Choose Basic &mdash; $30/mo</a>
             <a class="button" data-cn-link="proYearly" data-pending-text="Pay yearly &mdash; $324" href="#">Pay yearly &mdash; $324 (save $36)</a>
           </article>
 
           <article class="tier-card featured">
             <span class="tier-flag">Most popular</span>
-            <div class="tier-name">Business</div>
+            <div class="tier-name">Pro</div>
             <div class="tier-price">$50 <span>/mo</span></div>
             <div class="tier-yearly">or $552 / year</div>
             <ul class="tier-list">
-              <li>Create up to <strong>5</strong> custom AI agents</li>
+              <li>Everything in Basic, plus business-tier capabilities (Team Orchestrator, Data Analyst Pro, API Integrator, and more)</li>
+              <li>Select up to <strong>8</strong> capabilities per AI agent</li>
               <li>Business workflows, advanced libraries, and longer audit retention</li>
               <li>Full Visibility Window &amp; AI Creation Engine</li>
             </ul>
-            <a class="button primary" data-cn-link="businessMonthly" data-pending-text="Choose Business" href="#">Choose Business &mdash; $50/mo</a>
+            <a class="button primary" data-cn-link="businessMonthly" data-pending-text="Choose Pro" href="#">Choose Pro &mdash; $50/mo</a>
             <a class="button" data-cn-link="businessYearly" data-pending-text="Pay yearly &mdash; $552" href="#">Pay yearly &mdash; $552 (save $48)</a>
           </article>
 
           <article class="tier-card">
-            <div class="tier-name">Unlimited</div>
+            <div class="tier-name">Business</div>
             <div class="tier-price">$80 <span>/mo</span></div>
             <div class="tier-yearly">or $900 / year</div>
             <ul class="tier-list">
-              <li>Create unlimited saved AI agents</li>
+              <li>Everything in Pro, plus enterprise capabilities (Security Auditor, Code Reviewer, Medical Researcher, Legal Assistant)</li>
+              <li><strong>Unlimited</strong> capabilities per AI agent</li>
               <li>All libraries and full customer-facing workflow access</li>
-              <li>Runtime depends on available hardware and system resources</li>
+              <li>Full audit trail and compliance reporting</li>
             </ul>
-            <a class="button primary" data-cn-link="unlimitedMonthly" data-pending-text="Choose Unlimited" href="#">Choose Unlimited &mdash; $80/mo</a>
+            <a class="button primary" data-cn-link="unlimitedMonthly" data-pending-text="Choose Business" href="#">Choose Business &mdash; $80/mo</a>
             <a class="button" data-cn-link="unlimitedYearly" data-pending-text="Pay yearly &mdash; $900" href="#">Pay yearly &mdash; $900 (save $60)</a>
           </article>
         </div>
 
-        <p class="sub-note">Full Release pricing. Monthly and yearly plans are billed through secure Stripe checkout.</p>
+        <!-- All-Rounder special tier -->
+        <div class="trial-panel" style="margin-top: 24px; border-color: #58a6ff;">
+          <div class="section-label" style="color: #58a6ff;">All-Rounder &mdash; Best Value</div>
+          <div class="trial-price">$39.99</div>
+          <p class="muted">Everything unlocked across all use cases &mdash; no restrictions. <strong>Unlimited</strong> capabilities per AI agent. All premium upgrades, all enterprise features, all future capabilities automatically included. The best value for power users and multitaskers.</p>
+          <div class="cta-row">
+            <a class="button primary" data-cn-link="allRounderFull" data-pending-text="Choose All-Rounder" href="#">Choose All-Rounder &mdash; $39.99</a>
+          </div>
+        </div>
+
+        <p class="sub-note">Full Release pricing. Monthly and yearly plans are billed through secure Stripe checkout. Most capabilities are available to all tiers &mdash; the main difference is how many capabilities you can assign to each AI agent, plus a few premium/enterprise capabilities reserved for higher tiers.</p>
       </div>
 
       <p class="sub-note">Prices, features, and plan limits may change as Command Nexus is updated. If you&rsquo;re already subscribed, your current price stays in place until your paid period ends; when it ends under new pricing, you&rsquo;ll be asked whether to continue at the new price before anything renews. See the <a href="terms.html#pricing-evolution">pricing &amp; price-change terms</a>.</p>
@@ -1166,16 +1180,7 @@
       }
       function showDownload() {
         if (!downloadNote) return;
-        if (cn.downloadUrl) {
-          downloadNote.textContent = 'Your download is ready: ';
-          var dl = document.createElement('a');
-          dl.className = 'text-link';
-          dl.href = cn.downloadUrl;
-          dl.textContent = 'Download Command Nexus';
-          downloadNote.appendChild(dl);
-        } else {
-          downloadNote.textContent = 'Access confirmed. Your Command Nexus download link opens here as soon as the build is published.';
-        }
+        downloadNote.innerHTML = 'Access confirmed. <a class="text-link" href="download.html">Go to the download page</a> to get Command Nexus. You&rsquo;ll need to be signed in.';
       }
       function renderResult(result, key, verified) {
         var tier = key.slice(0, 2);
