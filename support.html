@@ -21,6 +21,8 @@
         <a href="themis.html">Themis</a>
         <a href="command-nexus.html">Command Nexus</a>
         <a href="programs.html">Buyable Programs</a>
+        <a href="feedback.html">Feedback</a>
+        <a href="support.html">Support</a>
         <a href="login.html">Sign in</a>
         <a href="signup.html">Sign up</a>
         <a href="index.html#donation-options" class="button secondary small">Donate</a>
@@ -85,6 +87,59 @@
           <span class="tag">Support contact</span>
           <h2>Use the right inbox for the right issue</h2>
           <p class="muted">For general support, contact <a data-support-email-link href="#" class="text-link"><span data-support-email-text>Averylogicworks@gmail.com</span></a>. For billing, refunds, cancellations, and charge questions, use <a data-billing-email-link href="#" class="text-link"><span data-billing-email-text>Averylogicworks@gmail.com</span></a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-tight">
+      <div class="container grid-2">
+        <div class="form-shell">
+          <span class="tag">Submit a support request</span>
+          <h3>How can we help?</h3>
+          <form id="support-form">
+            <div class="field">
+              <label for="supportName">Name</label>
+              <input id="supportName" type="text" placeholder="Your name" required>
+            </div>
+            <div class="field">
+              <label for="supportEmail">Email</label>
+              <input id="supportEmail" type="email" placeholder="Your email for follow-up" required>
+            </div>
+            <div class="field">
+              <label for="supportCategory">Category</label>
+              <select id="supportCategory" required>
+                <option value="">Choose a category</option>
+                <option value="billing">Billing or refund</option>
+                <option value="technical">Technical issue</option>
+                <option value="account">Account access</option>
+                <option value="command-nexus">Command Nexus help</option>
+                <option value="general">General question</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="supportSubject">Subject</label>
+              <input id="supportSubject" type="text" placeholder="Brief summary of your issue" required>
+            </div>
+            <div class="field">
+              <label for="supportMessage">Message</label>
+              <textarea id="supportMessage" placeholder="Describe your issue in detail." required rows="5"></textarea>
+            </div>
+            <div class="form-actions">
+              <button class="button primary" id="support-submit-button" type="submit">Send request</button>
+            </div>
+          </form>
+          <div class="form-message" id="support-message"></div>
+        </div>
+
+        <div class="policy-shell">
+          <span class="tag alt">What happens next</span>
+          <h3>Your request goes straight to the founder.</h3>
+          <ul class="list-clean">
+            <li>Every support request is reviewed personally.</li>
+            <li>You will receive a response at the email you provide.</li>
+            <li>Typical response time: 24-48 hours.</li>
+            <li>For urgent billing issues, mention "URGENT" in your subject line.</li>
+          </ul>
         </div>
       </div>
     </section>
