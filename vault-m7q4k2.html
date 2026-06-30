@@ -1016,7 +1016,7 @@
           var email = row.email || '';
           var who = classifyVisitor(email);
           var dateStr = row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp';
-          var name = row.full_name || row.name || '';
+          var name = row.display_name || '';
           var newsletter = row.newsletter_opt_in ? 'Yes' : 'No';
           var supporter = row.supporter_updates_opt_in ? 'Yes' : 'No';
           return '<div class="vault-event-row">'
@@ -1053,7 +1053,7 @@
       async function loadProfileDetail() {
         if (!sb) { modalBody.innerHTML = '<div class="vault-modal-empty">Not connected to database.</div>'; return; }
         try {
-          var resp = await sb.from('profiles').select('id,email,full_name,created_at,newsletter_opt_in,supporter_updates_opt_in').order('created_at', { ascending: false }).limit(50);
+          var resp = await sb.from('profiles').select('user_id,display_name,created_at,newsletter_opt_in,supporter_updates_opt_in').order('created_at', { ascending: false }).limit(50);
           if (resp.error) throw resp.error;
           renderProfileRows(resp.data || []);
         } catch (err) {
