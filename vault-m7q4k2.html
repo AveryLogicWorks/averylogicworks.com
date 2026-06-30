@@ -30,6 +30,32 @@
     @media (max-width: 980px) {
       .admin-grid, .quick-links, .metric-grid.admin-metrics, .snapshot-grid { grid-template-columns: 1fr; }
     }
+    .metric { cursor: pointer; transition: border-color .15s, background .15s; }
+    .metric:hover { border-color: rgba(88,166,255,0.4); background: rgba(88,166,255,0.06); }
+    .metric:active { transform: scale(.98); }
+    .snapshot-item { cursor: pointer; transition: border-color .15s, background .15s; }
+    .snapshot-item:hover { border-color: rgba(88,166,255,0.4); background: rgba(88,166,255,0.06); }
+    .snapshot-item:active { transform: scale(.98); }
+    .vault-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 9999; display: none; justify-content: center; align-items: flex-start; padding: 40px 16px; overflow-y: auto; }
+    .vault-modal-overlay.show { display: flex; }
+    .vault-modal { background: var(--card, #161b22); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; max-width: 720px; width: 100%; padding: 24px; margin-bottom: 40px; }
+    .vault-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .vault-modal-header h3 { margin: 0; }
+    .vault-modal-close { background: none; border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; color: var(--text, #c9d1d9); padding: 6px 14px; cursor: pointer; font-size: .9rem; }
+    .vault-modal-close:hover { border-color: rgba(255,255,255,0.3); }
+    .vault-modal-body { display: grid; gap: 12px; max-height: 60vh; overflow-y: auto; }
+    .vault-event-row { padding: 14px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.03); }
+    .vault-event-row .event-who { font-weight: 600; margin-bottom: 4px; }
+    .vault-event-row .event-meta { color: var(--muted, #8b949e); font-size: .85rem; }
+    .vault-event-row .event-detail { font-size: .9rem; margin-top: 6px; color: var(--text, #c9d1d9); }
+    .vault-event-row .event-token { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .8rem; color: var(--muted, #8b949e); }
+    .vault-modal-loading { text-align: center; padding: 32px; color: var(--muted, #8b949e); }
+    .vault-modal-empty { text-align: center; padding: 32px; color: var(--muted, #8b949e); }
+    .vault-self-badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: .75rem; font-weight: 700; margin-left: 8px; }
+    .vault-self-badge.owner { background: rgba(35,134,54,0.2); color: #3fb950; border: 1px solid rgba(35,134,54,0.3); }
+    .vault-self-badge.you { background: rgba(88,166,255,0.15); color: #58a6ff; border: 1px solid rgba(88,166,255,0.25); }
+    .vault-self-badge.customer { background: rgba(210,153,34,0.15); color: #d29922; border: 1px solid rgba(210,153,34,0.25); }
+    .vault-self-badge.unknown { background: rgba(139,148,158,0.1); color: #8b949e; border: 1px solid rgba(139,148,158,0.2); }
   </style>
 </head>
 <body>
@@ -202,6 +228,18 @@
       </div>
     </section>
   </main>
+
+  <div class="vault-modal-overlay" id="vault-detail-modal">
+    <div class="vault-modal">
+      <div class="vault-modal-header">
+        <h3 id="vault-modal-title">Event details</h3>
+        <button class="vault-modal-close" id="vault-modal-close" type="button">Close</button>
+      </div>
+      <div class="vault-modal-body" id="vault-modal-body">
+        <div class="vault-modal-loading">Loading…</div>
+      </div>
+    </div>
+  </div>
 
   <script src="assets/site-config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -865,6 +903,202 @@
         document.title = 'Page unavailable | Avery Logic Works';
         adminShell.classList.add('hidden');
         publicShell.classList.remove('hidden');
+      });
+
+      // ─── Clickable counter detail modal ───────────────────────────────
+      var STAT_TO_EVENT = {
+        'visits_24h': { event: 'page_visit', label: 'Page visits (24h)', since: 24 },
+        'visits_30d': { event: 'page_visit', label: 'Page visits (30d)', since: 720 },
+        'visits_all_time': { event: 'page_visit', label: 'Page visits (all time)' },
+        'accounts_total': { table: 'profiles', label: 'All profiles' },
+        'signups_30d': { event: 'signup_submitted', label: 'Signups (30d)', since: 720 },
+        'logins_30d': { event: 'login_success', label: 'Logins (30d)', since: 720 },
+        'newsletter_opt_ins': { event: 'newsletter_opt_in', label: 'Newsletter opt-ins' },
+        'supporter_updates_opt_ins': { event: 'supporter_updates_opt_in', label: 'Supporter email opt-ins' },
+        'donation_events': { event: 'donation_completed', label: 'Donation events' },
+        'subscription_events': { event: 'subscription_completed', label: 'Subscription events' },
+        'donation_total': { event: 'donation_completed', label: 'Donation events (detail)' },
+        'subscription_total': { event: 'subscription_completed', label: 'Subscription events (detail)' },
+        'homepage_visit': { event: 'homepage_visit', label: 'Homepage visits' },
+        'homepage_service_cta_click': { event: 'homepage_service_cta_click', label: 'Reserve build clicks' },
+        'homepage_donation_click': { event: 'homepage_donation_click', label: 'Donation clicks' },
+        'homepage_signup_click': { event: 'homepage_signup_click', label: 'Sign-up clicks' },
+        'homepage_signin_click': { event: 'homepage_signin_click', label: 'Sign-in clicks' },
+        'homepage_founder_cta_click': { event: 'homepage_founder_cta_click', label: 'Founder page clicks' },
+        'homepage_support_cta_click': { event: 'homepage_support_cta_click', label: 'Support CTA clicks' },
+        'homepage_fit_cta_click': { event: 'homepage_fit_cta_click', label: 'Good-fit clicks' },
+        'service_requests': { event: 'service_request_submitted', label: 'Service requests' },
+        'checkout_opens': { event: 'service_checkout_opened', label: 'Checkout opens' },
+        'feedback_count': { event: 'public_feedback_submitted', label: 'Reviews & suggestions' },
+        'average_rating': { event: 'public_feedback_submitted', label: 'Reviews & suggestions (detail)' },
+        'security_events': { event: ['admin_access_denied','admin_hidden_path_hit','service_intake_save_failed','owner_vault_opened'], label: 'Security events' },
+        'admin_denied': { event: 'admin_access_denied', label: 'Denied admin attempts' }
+      };
+
+      var SNAPSHOT_TO_EVENT = {
+        'snapshot-profiles': { table: 'profiles', label: 'All profiles' },
+        'snapshot-visits': { event: 'page_visit', label: 'All page visits' },
+        'snapshot-logins': { event: 'login_success', label: 'All logins' },
+        'snapshot-signups': { event: 'signup_submitted', label: 'All signups' }
+      };
+
+      var modalOverlay = document.getElementById('vault-detail-modal');
+      var modalTitle = document.getElementById('vault-modal-title');
+      var modalBody = document.getElementById('vault-modal-body');
+      var modalClose = document.getElementById('vault-modal-close');
+
+      function openModal(title) {
+        modalTitle.textContent = title || 'Event details';
+        modalBody.innerHTML = '<div class="vault-modal-loading">Loading…</div>';
+        modalOverlay.classList.add('show');
+      }
+
+      function closeModal() {
+        modalOverlay.classList.remove('show');
+      }
+
+      modalClose.addEventListener('click', closeModal);
+      modalOverlay.addEventListener('click', function (e) {
+        if (e.target === modalOverlay) closeModal();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modalOverlay.classList.contains('show')) closeModal();
+      });
+
+      function classifyVisitor(email, visitorToken) {
+        var e = String(email || '').trim().toLowerCase();
+        if (!e) return { label: 'Anonymous', cls: 'unknown' };
+        if (ownerEmails.includes(e)) return { label: 'YOU (Owner)', cls: 'owner' };
+        if (/averylogicworks/i.test(e)) return { label: 'YOU (Owner)', cls: 'owner' };
+        return { label: 'Customer', cls: 'customer' };
+      }
+
+      function renderEventRows(rows) {
+        if (!rows || !rows.length) {
+          modalBody.innerHTML = '<div class="vault-modal-empty">No individual events found for this counter.</div>';
+          return;
+        }
+        modalBody.innerHTML = rows.map(function (row) {
+          var meta = row.metadata || {};
+          var email = row.user_email || meta.email || '';
+          var vToken = row.visitor_token || '';
+          var who = classifyVisitor(email, vToken);
+          var dateStr = row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp';
+          var pagePath = row.page_path || meta.page_path || '';
+          var detailParts = [];
+          if (meta.subject) detailParts.push('Subject: ' + meta.subject);
+          if (meta.customer_name) detailParts.push('Name: ' + meta.customer_name);
+          if (meta.tier_label) detailParts.push('Tier: ' + meta.tier_label);
+          if (meta.rating) detailParts.push('Rating: ' + meta.rating + '/5');
+          if (meta.comment) detailParts.push('Comment: ' + meta.comment);
+          if (meta.reason) detailParts.push('Reason: ' + meta.reason);
+          if (meta.source) detailParts.push('Source: ' + meta.source);
+          if (meta.amount) detailParts.push('Amount: ' + meta.amount);
+          if (meta.plan) detailParts.push('Plan: ' + meta.plan);
+          if (pagePath) detailParts.push('Page: ' + pagePath);
+          var detailHtml = detailParts.length ? '<div class="event-detail">' + escapeHtml(detailParts.join(' · ')) + '</div>' : '';
+          return '<div class="vault-event-row">'
+            + '<div class="event-who">' + escapeHtml(email || 'Anonymous visitor')
+            + ' <span class="vault-self-badge ' + who.cls + '">' + who.label + '</span></div>'
+            + '<div class="event-meta">' + escapeHtml(dateStr) + (row.event_type ? ' · ' + escapeHtml(row.event_type) : '') + '</div>'
+            + detailHtml
+            + (vToken ? '<div class="event-token">Token: ' + escapeHtml(vToken) + '</div>' : '')
+            + '</div>';
+        }).join('');
+      }
+
+      function renderProfileRows(rows) {
+        if (!rows || !rows.length) {
+          modalBody.innerHTML = '<div class="vault-modal-empty">No profiles found.</div>';
+          return;
+        }
+        modalBody.innerHTML = rows.map(function (row) {
+          var email = row.email || '';
+          var who = classifyVisitor(email);
+          var dateStr = row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp';
+          var name = row.full_name || row.name || '';
+          var newsletter = row.newsletter_opt_in ? 'Yes' : 'No';
+          var supporter = row.supporter_updates_opt_in ? 'Yes' : 'No';
+          return '<div class="vault-event-row">'
+            + '<div class="event-who">' + escapeHtml(email || 'No email')
+            + ' <span class="vault-self-badge ' + who.cls + '">' + who.label + '</span></div>'
+            + '<div class="event-meta">' + escapeHtml(dateStr) + '</div>'
+            + (name ? '<div class="event-detail">Name: ' + escapeHtml(name) + '</div>' : '')
+            + '<div class="event-detail">Newsletter: ' + newsletter + ' · Supporter emails: ' + supporter + '</div>'
+            + '</div>';
+        }).join('');
+      }
+
+      async function loadEventDetail(config) {
+        if (!sb) { modalBody.innerHTML = '<div class="vault-modal-empty">Not connected to database.</div>'; return; }
+        try {
+          var query = sb.from('site_events').select('created_at,event_type,user_email,visitor_token,page_path,metadata').order('created_at', { ascending: false }).limit(50);
+          if (Array.isArray(config.event)) {
+            query = query.in('event_type', config.event);
+          } else if (config.event) {
+            query = query.eq('event_type', config.event);
+          }
+          if (config.since) {
+            var sinceDate = new Date(Date.now() - config.since * 60 * 60 * 1000).toISOString();
+            query = query.gte('created_at', sinceDate);
+          }
+          var resp = await query;
+          if (resp.error) throw resp.error;
+          renderEventRows(resp.data || []);
+        } catch (err) {
+          modalBody.innerHTML = '<div class="vault-modal-empty">Could not load events: ' + escapeHtml(err.message || err) + '</div>';
+        }
+      }
+
+      async function loadProfileDetail() {
+        if (!sb) { modalBody.innerHTML = '<div class="vault-modal-empty">Not connected to database.</div>'; return; }
+        try {
+          var resp = await sb.from('profiles').select('id,email,full_name,created_at,newsletter_opt_in,supporter_updates_opt_in').order('created_at', { ascending: false }).limit(50);
+          if (resp.error) throw resp.error;
+          renderProfileRows(resp.data || []);
+        } catch (err) {
+          modalBody.innerHTML = '<div class="vault-modal-empty">Could not load profiles: ' + escapeHtml(err.message || err) + '</div>';
+        }
+      }
+
+      function handleStatClick(statKey) {
+        var config = STAT_TO_EVENT[statKey];
+        if (!config) return;
+        openModal(config.label);
+        if (config.table === 'profiles') {
+          loadProfileDetail();
+        } else {
+          loadEventDetail(config);
+        }
+      }
+
+      function handleSnapshotClick(snapshotId) {
+        var config = SNAPSHOT_TO_EVENT[snapshotId];
+        if (!config) return;
+        openModal(config.label);
+        if (config.table === 'profiles') {
+          loadProfileDetail();
+        } else {
+          loadEventDetail(config);
+        }
+      }
+
+      // Wire up all stat counters
+      document.querySelectorAll('[data-admin-stat]').forEach(function (el) {
+        el.parentElement.addEventListener('click', function () {
+          handleStatClick(el.dataset.adminStat);
+        });
+        el.parentElement.style.cursor = 'pointer';
+      });
+
+      // Wire up snapshot counters
+      ['snapshot-profiles','snapshot-visits','snapshot-logins','snapshot-signups'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el && el.parentElement) {
+          el.parentElement.addEventListener('click', function () {
+            handleSnapshotClick(id);
+          });
+        }
       });
 
       if (!sb) {
