@@ -673,6 +673,7 @@
     });
 
     await loadOwnerDashboard();
+    await loadUserInbox(session);
 
     if (signOutButton) {
       signOutButton.addEventListener('click', async function () {
@@ -681,6 +682,92 @@
       });
     }
   }
+  async function loadUserInbox(session) {
+    var inboxSection = document.getElementById('user-inbox-section');
+    var inboxList = document.getElementById('user-inbox-list');
+    if (!inboxSection || !inboxList || !sb) return;
+    try {
+      var userId = session && session.user ? session.user.id : '';
+      if (!userId) return;
+      var resp = await sb.from('owner_messages')
+        .select('*')
+        .eq('recipient_email', userId)
+        .order('created_at', { ascending: false })
+        .limit(50);
+      if (resp.error) throw resp.error;
+      var rows = resp.data || [];
+      if (rows.length === 0) {
+        inboxList.innerHTML = '<div class="empty-state">No messages yet.</div>';
+        inboxSection.classList.remove('hidden');
+        return;
+      }
+      inboxSection.classList.remove('hidden');
+      inboxList.innerHTML = rows.map(function (row) {
+        var dateStr = row.created_at ? new Date(row.created_at).toLocaleString() : '';
+        var s = (row.subject || 'No subject').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        var b = (row.body || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        var sender = (row.sender_email || 'Avery Logic Works').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        var html = '<div class="data-item">'
+          + '<strong>' + s + '</strong>'
+          + '<div class="data-meta">From: ' + sender + ' \u00b7 ' + dateStr + '</div>'
+          + '<p>' + b + '</p>';
+        if (row.reply) {
+          var r = (row.reply).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          html += '<div class="data-meta" style="border-left:2px solid #58a6ff;padding-left:8px;margin-top:8px;"><strong>Your reply:</strong> ' + r + '</div>';
+        } else {
+          html += '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">'
+            + '<textarea placeholder="Type your reply..." style="flex:1;min-height:60px;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:inherit;font-size:.9rem;resize:vertical;" data-user-reply="' + row.id + '"></textarea>'
+            + '<button class="button primary small" data-user-reply-btn="' + row.id + '" style="align-self:flex-start;">Send Reply</button>'
+            + '</div>';
+        }
+        html += '</div>';
+        return html;
+      }).join('');
+
+      inboxList.querySelectorAll('[data-user-reply-btn]').forEach(function (btn) {
+        btn.addEventListener('click', async function () {
+          var id = btn.getAttribute('data-user-reply-btn');
+          var textarea = inboxList.querySelector('[data-user-reply="' + id + '"]');
+          var replyText = textarea ? textarea.value.trim() : '';
+          if (!replyText) { alert('Please type a reply first.'); return; }
+          btn.disabled = true;
+          btn.textContent = 'Sending...';
+          try {
+            var sessionData = await sb.auth.getSession();
+            var sess = sessionData && sessionData.data ? sessionData.data.session : null;
+            var baseUrl = String(supabaseCfg.url || '').replace(/\/+$/, '');
+            var patchResp = await fetch(baseUrl + '/rest/v1/owner_messages?id=eq.' + id, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+                'apikey': supabaseCfg.publishableKey || '',
+                'Authorization': 'Bearer ' + (sess ? sess.access_token : ''),
+                'Prefer': 'return=minimal'
+              },
+              body: JSON.stringify({
+                reply: replyText,
+                replied_at: new Date().toISOString()
+              })
+            });
+            if (!patchResp.ok) throw new Error('Update failed: ' + patchResp.status);
+            btn.textContent = 'Reply Sent!';
+            btn.style.backgroundColor = '#3fb950';
+            setTimeout(function () { loadUserInbox(session); }, 1000);
+          } catch (err) {
+            btn.disabled = false;
+            btn.textContent = 'Send Reply';
+            alert('Failed to send reply: ' + (err.message || err));
+          }
+        });
+      });
+    } catch (err) {
+      if (inboxList) {
+        inboxList.innerHTML = '<div class="empty-state">Inbox is not available yet.</div>';
+        inboxSection.classList.remove('hidden');
+      }
+    }
+  }
+
   hydrateAccountPage();
 
   if (searchParams.has('check-email')) {

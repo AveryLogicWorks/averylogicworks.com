@@ -507,8 +507,207 @@
       text-decoration: none;
     }
 
+    .dossier-section { padding-top: 2rem; }
+
+    .cap-group { margin-top: 2.5rem; }
+
+    .cap-group-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -.01em;
+      margin-bottom: .15rem;
+      color: var(--text);
+    }
+
+    .cap-group-desc {
+      color: var(--soft);
+      font-size: .95rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .cap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .cap-item {
+      padding: 1.1rem 1.2rem;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+      transition: border-color .2s, background .2s;
+    }
+
+    .cap-item:hover {
+      border-color: rgba(125, 211, 252, .35);
+      background: var(--panel-strong);
+    }
+
+    .cap-item h4 {
+      margin: 0 0 .35rem;
+      font-size: 1.02rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .cap-item p {
+      margin: 0;
+      font-size: .9rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .cap-icon { font-size: 1.15rem; flex-shrink: 0; }
+
+    .diff-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1.5rem;
+    }
+
+    .diff-card {
+      padding: 1.5rem 1.6rem;
+      border: 1px solid rgba(125, 211, 252, .22);
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(125, 211, 252, .08), rgba(167, 139, 250, .06));
+    }
+
+    .diff-card h4 {
+      margin: 0 0 .6rem;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .diff-card p {
+      margin: 0;
+      font-size: .93rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .diff-badge {
+      display: inline-block;
+      padding: .25rem .65rem;
+      margin-bottom: .7rem;
+      border-radius: 999px;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      background: rgba(125, 211, 252, .15);
+      color: var(--accent);
+      border: 1px solid rgba(125, 211, 252, .25);
+    }
+
+    .usecase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: .8rem;
+      margin-top: 1.2rem;
+    }
+
+    .usecase-chip {
+      padding: .7rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+      font-size: .88rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .usecase-chip strong {
+      color: var(--text);
+      display: block;
+      font-size: .92rem;
+      margin-bottom: .15rem;
+    }
+
+    .coming-soon {
+      margin-top: 3rem;
+      padding: 2rem;
+      border: 1px dashed rgba(167, 139, 250, .3);
+      border-radius: 24px;
+      background: rgba(167, 139, 250, .05);
+      text-align: center;
+    }
+
+    .coming-soon h3 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: .5rem;
+    }
+
+    .coming-soon p {
+      color: var(--muted);
+      max-width: 640px;
+      margin: 0 auto;
+      font-size: .95rem;
+    }
+
+    .coming-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .5rem;
+      margin-top: 1.2rem;
+    }
+
+    .coming-tag {
+      padding: .4rem .9rem;
+      border-radius: 999px;
+      font-size: .82rem;
+      font-weight: 600;
+      background: rgba(167, 139, 250, .12);
+      color: var(--accent-2);
+      border: 1px solid rgba(167, 139, 250, .2);
+    }
+
+    .price-simple {
+      text-align: center;
+    }
+
+    .price-simple-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      max-width: 820px;
+      margin: 1.5rem auto;
+    }
+
+    .price-simple-card {
+      padding: 1.2rem;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel);
+      text-align: center;
+    }
+
+    .price-simple-card .ps-name {
+      font-weight: 800;
+      font-size: 1rem;
+      margin-bottom: .3rem;
+    }
+
+    .price-simple-card .ps-price {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--accent);
+    }
+
+    .price-simple-card .ps-note {
+      font-size: .8rem;
+      color: var(--soft);
+      margin-top: .3rem;
+    }
+
     @media (max-width: 860px) {
-      .feature-grid, .tier-grid { grid-template-columns: 1fr; }
+      .feature-grid, .tier-grid, .cap-grid, .diff-grid, .usecase-grid, .price-simple-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 760px) {
@@ -610,12 +809,401 @@
       </div>
     </section>
 
-    <section id="pricing" aria-labelledby="cn-pricing-title">
+    <!-- ===== CAPABILITIES DOSSIER ===== -->
+    <section class="dossier-section" aria-labelledby="cn-dossier-title">
+      <div class="section-head">
+        <div class="section-label">Full Capability Dossier</div>
+        <h2 id="cn-dossier-title">Everything Command Nexus can do &mdash; right now.</h2>
+        <p class="lead">Command Nexus ships with a deep capability set across every AI agent you create or use. These aren't prompts &mdash; they're purpose-built engine methods that route your task to the right intelligence, execute it, and return structured results. No coding. No API keys to manage. Just type what you want.</p>
+      </div>
+
+      <!-- Core Intelligence -->
+      <div class="cap-group">
+        <div class="cap-group-title">Core Intelligence</div>
+        <div class="cap-group-desc">The foundational capabilities every agent has access to.</div>
+        <div class="cap-grid">
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128172;</span> Chat &amp; Reasoning</h4>
+            <p>Natural conversation with context awareness. Your AI remembers preferences, past tasks, and learned patterns to provide continuity across sessions.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128269;</span> Research</h4>
+            <p>Web search with source citations. Your AI hunts down current information, verifies claims, and returns findings with traceable sources.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128187;</span> Coder</h4>
+            <p>Write, debug, and patch code in Python, JavaScript, HTML, CSS, and more. Fix tracebacks, generate functions, and review patches.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#9999;</span> Creative Writing</h4>
+            <p>Draft stories, scripts, articles, posts, marketing copy, and any creative content. Rewrite, refine, and iterate with your AI.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128203;</span> Planner</h4>
+            <p>Break complex tasks into actionable steps. Generate roadmaps, milestones, schedules, and workflows for any project.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128193;</span> Tool User</h4>
+            <p>Read and write files, list directories, move and rename items, run shell commands, install software, and interact with your system &mdash; all with approval-gated safety.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Knowledge & Memory -->
+      <div class="cap-group">
+        <div class="cap-group-title">Knowledge &amp; Memory</div>
+        <div class="cap-group-desc">Your AI doesn't just answer &mdash; it remembers, learns, and grows with you.</div>
+        <div class="cap-grid">
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128218;</span> AI-Assisted Knowledge Infuser</h4>
+            <p>Describe what you want your AI to know in plain language. The Intelligence system builds an encrypted knowledge profile your agent draws from on every task.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#129504;</span> Memory Bridge</h4>
+            <p>Persistent memory across sessions. Your AI learns your preferences, tracks your decisions, and builds on past conversations &mdash; no re-explaining required.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128221;</span> Notebook</h4>
+            <p>Take notes, save observations, and log information directly through your AI. Everything is searchable and recallable later.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128230;</span> Archive</h4>
+            <p>Save task results, store outputs, and retrieve archived work. Your AI keeps a running library of everything you've produced together.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128190;</span> Memory Recorder</h4>
+            <p>Automatic session recording with smart recall. Search past tasks, restore context, track decisions, maintain a progress journal, and generate audit trails. Never lose where you left off.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Documents & Analysis -->
+      <div class="cap-group">
+        <div class="cap-group-title">Documents &amp; Analysis</div>
+        <div class="cap-group-desc">Process, understand, and extract value from your files and data.</div>
+        <div class="cap-grid">
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128196;</span> Document Processor</h4>
+            <p>Summarize, extract key points, and compare documents. Feed PDFs, text files, or pasted content &mdash; your AI handles the rest.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128202;</span> Data Analyst Pro</h4>
+            <p>Analyze datasets, generate statistics, identify trends, and produce visual summaries. Turn raw data into actionable insight.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128209;</span> Code Reviewer</h4>
+            <p>Automated code review with best-practice checks, linting, and quality scoring. Catch issues before they ship.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128737;</span> Security Auditor</h4>
+            <p>Scan code and configurations for vulnerabilities, check access controls, review data protection, and assess compliance posture.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Learning & Productivity -->
+      <div class="cap-group">
+        <div class="cap-group-title">Learning &amp; Productivity</div>
+        <div class="cap-group-desc">Grow your skills and work smarter with AI that watches, teaches, and improves.</div>
+        <div class="cap-grid">
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#127979;</span> Tutor</h4>
+            <p>Personalized lessons, quizzes, and explanations tailored to your level. Learn anything &mdash; your AI adapts to how you learn best.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128065;</span> Activity Watcher</h4>
+            <p>Your AI observes your work patterns, identifies bottlenecks, detects automation candidates, and suggests specific ways to work faster. The more you use it, the smarter the suggestions get.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128197;</span> Meeting Facilitator</h4>
+            <p>Generate agendas, capture action items, run standups, and facilitate retrospectives. Keep meetings structured and productive.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#127918;</span> Game Companion</h4>
+            <p>Strategy coach for chess, poker, card games, board games, puzzles, and video games. Learn rules, study tactics, and improve your play.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Business & Growth -->
+      <div class="cap-group">
+        <div class="cap-group-title">Business &amp; Growth</div>
+        <div class="cap-group-desc">Capabilities designed for business workflows, customer support, and financial strategy.</div>
+        <div class="cap-grid">
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#127970;</span> Business Workflow</h4>
+            <p>Generate SOPs, sales scripts, marketing copy, HR documents, and support replies. Streamline your operations with AI-built templates.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128104;&#8205;&#128188;</span> Customer Support AI</h4>
+            <p>Handle support tickets, manage escalations, and draft help-desk responses. Your AI learns your support patterns and improves over time.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128176;</span> Financial Gainer</h4>
+            <p>Income strategy analysis with risk assessment. Evaluate freelance opportunities, digital products, SaaS ideas, cost optimization, and pricing strategy. Planning tool &mdash; not financial advice.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128295;</span> Hephaestus Relay</h4>
+            <p>Generate design briefs, prototype specs, and material specifications. Bridge the gap between idea and fabrication with structured handoff documents.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Use Cases -->
+      <div class="cap-group">
+        <div class="cap-group-title">Built-In Use Cases</div>
+        <div class="cap-group-desc">When you create an AI, pick from these pre-configured use cases &mdash; or define your own.</div>
+        <div class="usecase-grid">
+          <div class="usecase-chip"><strong>Individual</strong>Personal productivity &amp; daily tasks</div>
+          <div class="usecase-chip"><strong>Educational</strong>Teaching, tutoring &amp; study assistance</div>
+          <div class="usecase-chip"><strong>Task-Ready</strong>Specialized single-purpose agents</div>
+          <div class="usecase-chip"><strong>Business</strong>Sales, marketing, HR &amp; operations</div>
+          <div class="usecase-chip"><strong>Customer Support</strong>Ticket handling &amp; help desk</div>
+          <div class="usecase-chip"><strong>Research</strong>Web research &amp; source verification</div>
+          <div class="usecase-chip"><strong>Creative</strong>Writing, storytelling &amp; content</div>
+          <div class="usecase-chip"><strong>Development</strong>Coding, debugging &amp; code review</div>
+          <div class="usecase-chip"><strong>Data Analysis</strong>Statistics, trends &amp; visualization</div>
+          <div class="usecase-chip"><strong>Security</strong>Auditing, compliance &amp; vulnerability scanning</div>
+          <div class="usecase-chip"><strong>Financial</strong>Income strategy &amp; cost optimization</div>
+          <div class="usecase-chip"><strong>Gaming</strong>Strategy coaching &amp; rules learning</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== REAL-WORLD USE CASES ===== -->
+    <section aria-labelledby="cn-usecases-title">
+      <div class="section-head">
+        <div class="section-label">Real-World Use Cases</div>
+        <h2 id="cn-usecases-title">What can you actually do with this?</h2>
+        <p class="lead">Here's how people are putting Command Nexus to work &mdash; right now, today.</p>
+      </div>
+
+      <div class="cap-group">
+        <div class="cap-group-title">For Individuals</div>
+        <div class="cap-grid">
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128172;</span> Daily Assistant</h4>
+            <p>&ldquo;Plan my week, remind me what I was working on, and help me draft emails.&rdquo; Your AI remembers your preferences and picks up where you left off every session.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#127979;</span> Learn Anything</h4>
+            <p>&ldquo;Teach me Python basics and quiz me.&rdquo; Get personalized lessons that adapt to your skill level, with practice questions and plain-language explanations.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128190;</span> Never Lose Context</h4>
+            <p>&ldquo;What was I working on last Tuesday?&rdquo; Memory Recorder tracks your sessions, decisions, and progress automatically. Search your history and jump right back in.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#127918;</span> Game Smarter</h4>
+            <p>&ldquo;Help me improve my chess opening.&rdquo; Get strategy coaching for chess, poker, board games, puzzles, and video games &mdash; rules, tactics, and practice drills.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cap-group">
+        <div class="cap-group-title">For Freelancers &amp; Creators</div>
+        <div class="cap-grid">
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128176;</span> Find Income Opportunities</h4>
+            <p>&ldquo;What freelance skills are in demand right now?&rdquo; Financial Gainer analyzes opportunity types, suggests pricing strategies, and helps you evaluate which gigs fit your skills.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#9999;</span> Content Creation</h4>
+            <p>&ldquo;Draft a blog post about AI tools and rewrite it for LinkedIn.&rdquo; Generate articles, scripts, social posts, and marketing copy &mdash; then refine and repurpose across platforms.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128203;</span> Project Planning</h4>
+            <p>&ldquo;Break this client project into milestones and deadlines.&rdquo; Planner turns complex projects into clear, actionable step-by-step roadmaps.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128065;</span> Work Faster</h4>
+            <p>&ldquo;How can I speed up my workflow?&rdquo; Activity Watcher observes your patterns, spots repetition, and suggests what you can automate or streamline.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cap-group">
+        <div class="cap-group-title">For Small Business</div>
+        <div class="cap-grid">
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#127970;</span> Build SOPs &amp; Templates</h4>
+            <p>&ldquo;Create an onboarding SOP for new hires.&rdquo; Business Workflow generates standard operating procedures, sales scripts, HR documents, and support reply templates.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128104;&#8205;&#128188;</span> Customer Support</h4>
+            <p>&ldquo;Help me draft a response to this support ticket.&rdquo; Your AI learns your support style and helps you handle tickets, escalations, and help-desk replies faster.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128202;</span> Make Sense of Data</h4>
+            <p>&ldquo;Analyze last quarter's sales data and find trends.&rdquo; Data Analyst Pro turns raw spreadsheets into statistics, trend analysis, and visual summaries.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128197;</span> Run Better Meetings</h4>
+            <p>&ldquo;Generate an agenda for our team standup and capture action items.&rdquo; Meeting Facilitator keeps meetings structured, productive, and accountable.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cap-group">
+        <div class="cap-group-title">For Developers &amp; Technical Users</div>
+        <div class="cap-grid">
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128187;</span> Code &amp; Debug</h4>
+            <p>&ldquo;Fix this Python traceback and explain what went wrong.&rdquo; Coder writes, patches, and debugs code across multiple languages with error explanations.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128209;</span> Review Code</h4>
+            <p>&ldquo;Review this function for best practices and security issues.&rdquo; Code Reviewer catches bugs, lint issues, and security vulnerabilities before they ship.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128737;</span> Audit Security</h4>
+            <p>&ldquo;Scan my project for vulnerabilities and check access controls.&rdquo; Security Auditor identifies weaknesses, checks compliance posture, and flags risks.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128193;</span> Automate File Operations</h4>
+            <p>&ldquo;Organize my downloads folder by file type.&rdquo; Tool User reads, writes, moves, and manages files on your system &mdash; all with your approval on risky actions.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cap-group">
+        <div class="cap-group-title">For Students &amp; Educators</div>
+        <div class="cap-grid">
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#127979;</span> Personalized Tutoring</h4>
+            <p>&ldquo;Explain calculus derivatives like I'm 15.&rdquo; Tutor adapts to your level, provides quizzes, and explains concepts in plain language until it clicks.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128196;</span> Process Reading</h4>
+            <p>&ldquo;Summarize this 40-page PDF and extract the key points.&rdquo; Document Processor digests long documents, pulls out what matters, and compares sources.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128269;</span> Research with Sources</h4>
+            <p>&ldquo;Find current sources on climate policy and cite them.&rdquo; Research hunts down verifiable information with traceable citations &mdash; not hallucinated facts.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128221;</span> Study Notes</h4>
+            <p>&ldquo;Take notes on this lecture and save them for exam prep.&rdquo; Notebook captures and organizes your notes, searchable and recallable anytime.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cap-group">
+        <div class="cap-group-title">For Enterprise &amp; Compliance</div>
+        <div class="cap-grid">
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128737;</span> Compliance Scanning</h4>
+            <p>&ldquo;Check our configs against security best practices.&rdquo; Security Auditor reviews access controls, data protection, and compliance posture with detailed reports.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128190;</span> Full Audit Trails</h4>
+            <p>&ldquo;Show me everything this AI did last week.&rdquo; Three-tier audit logging means every action is traceable &mdash; what was done, why, and which intelligence source was used.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128295;</span> Design &amp; Fabrication Briefs</h4>
+            <p>&ldquo;Generate a design brief and material spec for this prototype.&rdquo; Hephaestus Relay bridges ideas and fabrication with structured, professional handoff documents.</p>
+          </div>
+          <div class="cap-item">
+            <h4><span class="cap-icon">&#128218;</span> Institutional Knowledge</h4>
+            <p>&ldquo;Build an AI that knows our company policies and can answer team questions.&rdquo; Knowledge Infuser turns your documentation into an encrypted intelligence profile your AI draws from.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section aria-labelledby="cn-diff-title">
+      <div class="section-head">
+        <div class="section-label">Why Command Nexus is different</div>
+        <h2 id="cn-diff-title">This isn't another chatbot wrapper. It's a complete AI operating environment.</h2>
+      </div>
+      <div class="diff-grid">
+        <div class="diff-card">
+          <span class="diff-badge">Intelligence Model</span>
+          <h4>Encrypted Knowledge Profiles</h4>
+          <p>Each AI agent carries its own encrypted Intelligence profile &mdash; a curated knowledge base that informs every response. You describe what your AI should know in plain language, and the system builds, encrypts, and manages it automatically. Your AI's knowledge stays local, stays yours, and stays secure.</p>
+        </div>
+        <div class="diff-card">
+          <span class="diff-badge">Auditability</span>
+          <h4>Three-Tier Audit System</h4>
+          <p>Every action your AI takes is logged through a three-tier audit system &mdash; capability-level, model-level, and local-response-level. You can trace exactly what your AI did, why it did it, and what intelligence source it used. Full transparency, always reviewable, built in from day one.</p>
+        </div>
+        <div class="diff-card">
+          <span class="diff-badge">Governance</span>
+          <h4>Safe &amp; Ethical by Design</h4>
+          <p>A built-in governance system enforces safety at every level. Outward actions require your approval. Risky operations are classified and gated. Parental controls, audit trails, and compliance reporting are all native &mdash; not bolted on after the fact.</p>
+        </div>
+        <div class="diff-card">
+          <span class="diff-badge">Visibility</span>
+          <h4>Full Visibility Window</h4>
+          <p>See exactly what your AI is doing, the moment it does it. Every thought, every action, every result &mdash; visible in real time. When an agent operates outside the Nexus, it works inside a governed environment with guardrails in place.</p>
+        </div>
+        <div class="diff-card">
+          <span class="diff-badge">Local-First</span>
+          <h4>Runs on Your Machine</h4>
+          <p>Command Nexus is a desktop application, not a web service. Your data, your AI profiles, your memory &mdash; all stored locally. No cloud dependency. No third-party data harvesting. Connect a model backend of your choosing, or use the built-in local intelligence.</p>
+        </div>
+        <div class="diff-card">
+          <span class="diff-badge">No Coding</span>
+          <h4>Built for Almost Everyone</h4>
+          <p>Use AI and make AI without writing a single line of code. Pick a use case, slide capability toggles, dial in personality traits. Building a custom agent is as easy as making choices. The power is yours whether you code or not.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== WHAT'S COMING ===== -->
+    <section aria-labelledby="cn-coming-title">
+      <div class="coming-soon">
+        <div class="section-label">On the Horizon</div>
+        <h3 id="cn-coming-title">What we're building next</h3>
+        <p>Command Nexus is in active development. Here's what's in the pipeline &mdash; capabilities and features designed to expand what your AI agents can do for you.</p>
+        <div class="coming-tags">
+          <span class="coming-tag">Voice Output</span>
+          <span class="coming-tag">Scheduled Tasks</span>
+          <span class="coming-tag">Email Integration</span>
+          <span class="coming-tag">Browser Automation</span>
+          <span class="coming-tag">AI Agent Marketplace</span>
+          <span class="coming-tag">Linux Version</span>
+          <span class="coming-tag">Workflow Automator</span>
+          <span class="coming-tag">API Integrator</span>
+          <span class="coming-tag">Team Orchestrator</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SIMPLE PRICING ===== -->
+    <section id="pricing" aria-labelledby="cn-pricing-title" class="price-simple">
       <div class="section-head">
         <div class="section-label">Pricing</div>
         <h2 id="cn-pricing-title">Choose your plan.</h2>
-        <p class="price-note">Every plan requires a free website account. Command Nexus grows in stages &mdash; Early Access Alpha, then Beta, then Full Release &mdash; and pricing rises as it matures. See how that works for anything you buy in the <a href="terms.html#pricing-evolution">pricing &amp; price-change terms</a>.</p>
+        <p class="price-note">Every plan requires a free website account. Start with a free trial, then pick a membership. Unlock additional capabilities anytime through in-program purchases.</p>
       </div>
+
+      <!-- Quick price summary -->
+      <div class="price-simple-grid">
+        <div class="price-simple-card">
+          <div class="ps-name">Free Trial</div>
+          <div class="ps-price">$0</div>
+          <div class="ps-note">7 days, full access</div>
+        </div>
+        <div class="price-simple-card">
+          <div class="ps-name">Pro</div>
+          <div class="ps-price">$10/mo</div>
+          <div class="ps-note">Alpha pricing</div>
+        </div>
+        <div class="price-simple-card">
+          <div class="ps-name">Business</div>
+          <div class="ps-price">$30/mo</div>
+          <div class="ps-note">Alpha pricing</div>
+        </div>
+        <div class="price-simple-card">
+          <div class="ps-name">Unlimited</div>
+          <div class="ps-price">$50/mo</div>
+          <div class="ps-note">Alpha pricing</div>
+        </div>
+      </div>
+      <p class="sub-note" style="text-align:center; max-width:680px; margin:0 auto 1.5rem;">Additional capabilities &mdash; like Voice Interface, Visual Canvas, Memory Bridge, Email Automation, Financial Gainer, and more &mdash; are available as one-time in-program purchases. Buy only what you need.</p>
+
+      <!-- Detailed pricing stages below -->
+      <p class="sub-note" style="margin-bottom:1.5rem;">Command Nexus grows in stages &mdash; Early Access Alpha, then Beta, then Full Release &mdash; and pricing rises as it matures. See the <a href="terms.html#pricing-evolution">pricing &amp; price-change terms</a>.</p>
 
       <!-- ALPHA stage (visible by default). Switch stages with commandNexusStage in assets/site-config.js. -->
       <div data-cn-stage="alpha">

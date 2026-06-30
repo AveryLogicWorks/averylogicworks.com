@@ -56,6 +56,37 @@
     .vault-self-badge.you { background: rgba(88,166,255,0.15); color: #58a6ff; border: 1px solid rgba(88,166,255,0.25); }
     .vault-self-badge.customer { background: rgba(210,153,34,0.15); color: #d29922; border: 1px solid rgba(210,153,34,0.25); }
     .vault-self-badge.unknown { background: rgba(139,148,158,0.1); color: #8b949e; border: 1px solid rgba(139,148,158,0.2); }
+    .msg-center { display: grid; gap: 16px; }
+    .msg-compose { display: grid; gap: 12px; }
+    .msg-audience-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .msg-audience-row select, .msg-audience-row input {
+      padding: 8px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04); color: var(--text, #c9d1d9); font-size: .9rem;
+    }
+    .msg-audience-row select { min-width: 200px; }
+    .msg-subject-input {
+      padding: 8px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04); color: var(--text, #c9d1d9); font-size: .9rem; width: 100%; box-sizing: border-box;
+    }
+    .msg-body-input {
+      padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04); color: var(--text, #c9d1d9); font-size: .9rem;
+      width: 100%; box-sizing: border-box; min-height: 100px; resize: vertical; font-family: inherit;
+    }
+    .msg-send-btn { align-self: flex-start; }
+    .msg-inbox-item {
+      padding: 14px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.03);
+    }
+    .msg-inbox-item .msg-from { font-weight: 600; margin-bottom: 4px; }
+    .msg-inbox-item .msg-preview { font-size: .9rem; color: var(--muted, #8b949e); margin-top: 6px; }
+    .msg-inbox-item .msg-reply { border-left: 2px solid #58a6ff; padding-left: 10px; margin-top: 8px; font-size: .88rem; }
+    .notif-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 20px; height: 20px; border-radius: 999px; padding: 0 6px;
+      background: #d29922; color: #fff; font-size: .72rem; font-weight: 700; margin-left: 6px;
+    }
+    .notif-badge.zero { background: rgba(139,148,158,0.2); color: var(--muted, #8b949e); }
   </style>
 </head>
 <body>
@@ -172,6 +203,40 @@
             <div class="data-list" id="enterprise-inquiry-list">
               <div class="empty-state">Loading enterprise inquiries…</div>
             </div>
+          </div>
+        </div>
+
+        <div class="form-shell">
+          <span class="tag">Message Center</span>
+          <h3>Compose and send messages to your users<span class="notif-badge zero" id="notif-feedback-badge">0</span> <span class="notif-badge zero" id="notif-inquiry-badge">0</span> <span class="notif-badge zero" id="notif-security-badge">0</span></h3>
+          <p class="small-note">Send messages to individuals, newsletter subscribers, or all signed-up users. Users see your messages in their account inbox and can reply back. Notifications appear on your desktop when new feedback, inquiries, or security events arrive — even if this tab is in the background.</p>
+          <div class="msg-center">
+            <div class="msg-compose">
+              <div class="msg-audience-row">
+                <select id="msg-audience-select">
+                  <option value="individual">Message an individual…</option>
+                  <option value="newsletter">All newsletter subscribers</option>
+                  <option value="all_users">All signed-up users</option>
+                </select>
+                <select id="msg-recipient-select" style="display:none;min-width:280px;">
+                  <option value="">Select a user…</option>
+                </select>
+              </div>
+              <input type="text" class="msg-subject-input" id="msg-subject-input" placeholder="Subject line…">
+              <textarea class="msg-body-input" id="msg-body-input" placeholder="Type your message here…"></textarea>
+              <div class="form-actions msg-send-btn">
+                <button class="button primary" id="msg-send-btn" type="button">Send message</button>
+                <span class="small-note" id="msg-send-status"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-shell">
+          <span class="tag alt">Inbox — Replies from users</span>
+          <h3>Messages and replies from your audience</h3>
+          <div class="data-list" id="msg-inbox-list">
+            <div class="empty-state">Loading inbox…</div>
           </div>
         </div>
 
@@ -781,7 +846,21 @@
         });
       }
 
-      // ----- Desktop persistent notifications for new enterprise inquiries -----
+      // ----- Desktop persistent notifications + Message Center -----
+      var notifState = { feedback: 0, inquiries: 0, security: 0, messages: 0 };
+      var notifBadges = {
+        feedback: document.getElementById('notif-feedback-badge'),
+        inquiries: document.getElementById('notif-inquiry-badge'),
+        security: document.getElementById('notif-security-badge')
+      };
+
+      function updateNotifBadge(type, count) {
+        var badge = notifBadges[type];
+        if (!badge) return;
+        badge.textContent = count;
+        badge.classList.toggle('zero', count === 0);
+      }
+
       async function requestNotificationPermission() {
         if (!('Notification' in window)) return false;
         if (Notification.permission === 'granted') return true;
@@ -792,30 +871,106 @@
         return false;
       }
 
-      async function pollForNewInquiries() {
+      function showDesktopNotification(title, body, tag) {
+        if ('Notification' in window && Notification.permission === 'granted') {
+          var n = new Notification(title, {
+            body: body,
+            tag: tag || 'vault-notif',
+            requireInteraction: true
+          });
+          n.onclick = function () { window.focus(); n.close(); };
+        }
+      }
+
+      async function pollForNewActivity() {
         if (!sb) return;
         try {
-          var { count, error } = await sb
-            .from('enterprise_inquiries')
-            .select('*', { count: 'exact', head: true })
-            .eq('status', 'new');
-          if (error) return;
-          var newCount = count || 0;
-          if (newCount > lastInquiryCount && lastInquiryCount >= 0) {
-            var diff = newCount - lastInquiryCount;
-            if (Notification.permission === 'granted') {
-              var notification = new Notification('Command Nexus — New Enterprise Inquiry', {
-                body: diff + ' new enterprise ' + (diff === 1 ? 'inquiry' : 'inquiries') + ' received. Click to open the vault.',
-                tag: 'enterprise-inquiry',
-                requireInteraction: true
-              });
-              notification.onclick = function () {
-                window.focus();
-                notification.close();
-              };
-            }
+          var sessionData = await sb.auth.getSession();
+          var session = sessionData?.data?.session;
+          var headers = {
+            'Content-Type': 'application/json',
+            'apikey': supabaseCfg.publishableKey || ''
+          };
+          if (session && session.access_token) {
+            headers['Authorization'] = 'Bearer ' + session.access_token;
           }
-          lastInquiryCount = newCount;
+
+          // Poll enterprise inquiries
+          try {
+            var { count: inquiryCount, error: ieErr } = await sb
+              .from('enterprise_inquiries')
+              .select('*', { count: 'exact', head: true })
+              .eq('status', 'new');
+            if (!ieErr) {
+              var iCount = inquiryCount || 0;
+              if (iCount > notifState.inquiries && notifState.inquiries >= 0) {
+                showDesktopNotification(
+                  'Avery Logic Works — New Enterprise Inquiry',
+                  (iCount - notifState.inquiries) + ' new enterprise inquir' + ((iCount - notifState.inquiries) === 1 ? 'y' : 'ies') + ' received.',
+                  'enterprise-inquiry'
+                );
+              }
+              notifState.inquiries = iCount;
+              updateNotifBadge('inquiries', iCount);
+            }
+          } catch (e) { /* silent */ }
+
+          // Poll feedback events
+          try {
+            var fbResp = await sb.from('site_events')
+              .select('*', { count: 'exact', head: true })
+              .eq('event_type', 'public_feedback_submitted');
+            if (!fbResp.error) {
+              var fCount = fbResp.count || 0;
+              if (fCount > notifState.feedback && notifState.feedback >= 0) {
+                showDesktopNotification(
+                  'Avery Logic Works — New Feedback',
+                  (fCount - notifState.feedback) + ' new feedback ' + ((fCount - notifState.feedback) === 1 ? 'submission' : 'submissions') + ' received.',
+                  'feedback-notif'
+                );
+              }
+              notifState.feedback = fCount;
+              updateNotifBadge('feedback', fCount);
+            }
+          } catch (e) { /* silent */ }
+
+          // Poll security events
+          try {
+            var secTypes = ['admin_access_denied', 'admin_hidden_path_hit', 'service_intake_save_failed'];
+            var secResp = await sb.from('site_events')
+              .select('*', { count: 'exact', head: true })
+              .in('event_type', secTypes);
+            if (!secResp.error) {
+              var sCount = secResp.count || 0;
+              if (sCount > notifState.security && notifState.security >= 0) {
+                showDesktopNotification(
+                  'Avery Logic Works — Security Event',
+                  (sCount - notifState.security) + ' new security ' + ((sCount - notifState.security) === 1 ? 'event' : 'events') + ' logged.',
+                  'security-notif'
+                );
+              }
+              notifState.security = sCount;
+              updateNotifBadge('security', sCount);
+            }
+          } catch (e) { /* silent */ }
+
+          // Poll for new user replies in owner_messages
+          try {
+            var msgResp = await sb.from('owner_messages')
+              .select('*', { count: 'exact', head: true })
+              .not('reply', 'is', null);
+            if (!msgResp.error) {
+              var mCount = msgResp.count || 0;
+              if (mCount > notifState.messages && notifState.messages >= 0) {
+                showDesktopNotification(
+                  'Avery Logic Works — New User Reply',
+                  (mCount - notifState.messages) + ' new repl' + ((mCount - notifState.messages) === 1 ? 'y' : 'ies') + ' from users.',
+                  'user-reply'
+                );
+              }
+              notifState.messages = mCount;
+            }
+          } catch (e) { /* table may not exist yet */ }
         } catch (err) {
           // Silent fail
         }
@@ -823,10 +978,186 @@
 
       function startNotificationPolling() {
         requestNotificationPermission().then(function (granted) {
-          if (granted) {
-            notificationPollTimer = setInterval(pollForNewInquiries, 60000);
-          }
+          pollForNewActivity();
+          notificationPollTimer = setInterval(pollForNewActivity, 30000);
         });
+      }
+
+      // ----- Message Center: Compose & Send -----
+      var msgAudienceSelect = document.getElementById('msg-audience-select');
+      var msgRecipientSelect = document.getElementById('msg-recipient-select');
+      var msgSubjectInput = document.getElementById('msg-subject-input');
+      var msgBodyInput = document.getElementById('msg-body-input');
+      var msgSendBtn = document.getElementById('msg-send-btn');
+      var msgSendStatus = document.getElementById('msg-send-status');
+      var msgInboxList = document.getElementById('msg-inbox-list');
+
+      async function loadRecipientOptions() {
+        if (!sb) return;
+        try {
+          var sessionData = await sb.auth.getSession();
+          var session = sessionData?.data?.session;
+          var baseUrl = String(supabaseCfg.url || '').replace(/\/+$/, '');
+          var resp = await fetch(baseUrl + '/rest/v1/rpc/get_owner_dashboard_counts', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': supabaseCfg.publishableKey || '',
+              'Authorization': 'Bearer ' + (session ? session.access_token : '')
+            },
+            body: '{}'
+          });
+          // We don't actually need the counts here — we need the profiles list
+          // Use direct query for profiles
+          var profResp = await sb.from('profiles')
+            .select('user_id,display_name,newsletter_opt_in,supporter_updates_opt_in,created_at')
+            .order('created_at', { ascending: false })
+            .limit(500);
+          if (profResp.error) throw profResp.error;
+          var users = profResp.data || [];
+          msgRecipientSelect.innerHTML = '<option value="">Select a user…</option>' +
+            users.map(function (u) {
+              var name = u.display_name || 'Unknown';
+              var id = u.user_id || '';
+              var nl = u.newsletter_opt_in ? ' (Newsletter)' : '';
+              return '<option value="' + escapeHtml(id) + '" data-name="' + escapeHtml(name) + '">' + escapeHtml(name) + nl + '</option>';
+            }).join('');
+        } catch (err) {
+          msgRecipientSelect.innerHTML = '<option value="">Could not load users</option>';
+        }
+      }
+
+      msgAudienceSelect.addEventListener('change', function () {
+        if (msgAudienceSelect.value === 'individual') {
+          msgRecipientSelect.style.display = '';
+          loadRecipientOptions();
+        } else {
+          msgRecipientSelect.style.display = 'none';
+        }
+      });
+
+      msgSendBtn.addEventListener('click', async function () {
+        var audience = msgAudienceSelect.value;
+        var subject = msgSubjectInput.value.trim();
+        var body = msgBodyInput.value.trim();
+        if (!subject || !body) {
+          msgSendStatus.textContent = 'Subject and message are required.';
+          msgSendStatus.style.color = '#d29922';
+          return;
+        }
+
+        var recipientEmail = null;
+        var recipientName = '';
+        if (audience === 'individual') {
+          var selectedOpt = msgRecipientSelect.options[msgRecipientSelect.selectedIndex];
+          if (!selectedOpt || !selectedOpt.value) {
+            msgSendStatus.textContent = 'Select a user to message.';
+            msgSendStatus.style.color = '#d29922';
+            return;
+          }
+          recipientName = selectedOpt.getAttribute('data-name') || '';
+          // We need the email — fetch from auth.users via the profile's user_id
+          // Since we can't directly query auth.users, we'll store recipient as user_id
+          // and the account page will match by auth.uid()
+          recipientEmail = selectedOpt.value; // user_id for now
+        }
+
+        msgSendBtn.disabled = true;
+        msgSendBtn.textContent = 'Sending…';
+        msgSendStatus.textContent = '';
+
+        try {
+          var sessionData = await sb.auth.getSession();
+          var session = sessionData?.data?.session;
+          var insertData = {
+            sender_email: session?.user?.email || 'owner',
+            recipient_email: recipientEmail,
+            audience: audience,
+            subject: subject,
+            body: body
+          };
+
+          if (audience === 'newsletter' || audience === 'all_users') {
+            // For bulk audiences, we need to create a message per user
+            var profResp = await sb.from('profiles')
+              .select('user_id,newsletter_opt_in')
+              .limit(1000);
+            if (profResp.error) throw profResp.error;
+            var targets = (profResp.data || []).filter(function (u) {
+              return audience === 'all_users' || (audience === 'newsletter' && u.newsletter_opt_in);
+            });
+
+            if (targets.length === 0) {
+              msgSendStatus.textContent = 'No users match this audience.';
+              msgSendStatus.style.color = '#d29922';
+              msgSendBtn.disabled = false;
+              msgSendBtn.textContent = 'Send message';
+              return;
+            }
+
+            // Insert one row per recipient
+            var rows = targets.map(function (u) {
+              return {
+                sender_email: session?.user?.email || 'owner',
+                recipient_email: u.user_id,
+                audience: 'individual',
+                subject: subject,
+                body: body
+              };
+            });
+
+            var insertResp = await sb.from('owner_messages').insert(rows);
+            if (insertResp.error) throw insertResp.error;
+
+            msgSendStatus.textContent = 'Message sent to ' + targets.length + ' user' + (targets.length === 1 ? '' : 's') + '.';
+            msgSendStatus.style.color = '#3fb950';
+          } else {
+            var resp = await sb.from('owner_messages').insert([insertData]);
+            if (resp.error) throw resp.error;
+            msgSendStatus.textContent = 'Message sent to ' + (recipientName || 'user') + '.';
+            msgSendStatus.style.color = '#3fb950';
+          }
+
+          msgSubjectInput.value = '';
+          msgBodyInput.value = '';
+        } catch (err) {
+          msgSendStatus.textContent = 'Failed: ' + (err.message || err);
+          msgSendStatus.style.color = '#f85149';
+        } finally {
+          msgSendBtn.disabled = false;
+          msgSendBtn.textContent = 'Send message';
+        }
+      });
+
+      // ----- Message Center: Inbox -----
+      async function loadOwnerInbox() {
+        if (!sb || !msgInboxList) return;
+        try {
+          var { data, error } = await sb.from('owner_messages')
+            .select('*')
+            .not('reply', 'is', null)
+            .order('replied_at', { ascending: false })
+            .limit(30);
+          if (error) throw error;
+          var rows = data || [];
+          if (rows.length === 0) {
+            msgInboxList.innerHTML = '<div class="empty-state">No replies from users yet.</div>';
+            return;
+          }
+          msgInboxList.innerHTML = rows.map(function (row) {
+            var dateStr = row.replied_at ? new Date(row.replied_at).toLocaleString() : 'No timestamp';
+            return '<div class="msg-inbox-item">'
+              + '<div class="msg-from">Re: ' + escapeHtml(row.subject || 'No subject') + '</div>'
+              + '<div class="data-meta">From: ' + escapeHtml(row.recipient_email || 'Unknown') + ' · ' + escapeHtml(dateStr) + '</div>'
+              + '<div class="msg-preview">' + escapeHtml(row.body || '') + '</div>'
+              + '<div class="msg-reply"><strong>User replied:</strong> ' + escapeHtml(row.reply || '') + '</div>'
+              + '</div>';
+          }).join('');
+        } catch (err) {
+          if (msgInboxList) {
+            msgInboxList.innerHTML = '<div class="empty-state">Inbox requires the owner_messages table. Run owner_messages_setup.sql in Supabase SQL Editor.</div>';
+          }
+        }
       }
 
       async function loadConsole(session) {
@@ -842,6 +1173,7 @@
           applyVaultSummary(payload);
           settleAdminLists();
           loadEnterpriseInquiries();
+          loadOwnerInbox();
           startNotificationPolling();
           setMessage(adminStatus, 'Owner session confirmed. Snapshot: profiles ' + snapshotProfiles.textContent + ', visits ' + snapshotVisits.textContent + ', logins ' + snapshotLogins.textContent + ', signups ' + snapshotSignups.textContent + '. Loaded through the owner vault service.', 'info');
           return;
@@ -864,7 +1196,8 @@
           withTimeout(loadServiceRequests(), 4000),
           withTimeout(loadFeedback(), 4000),
           withTimeout(loadSecurityEvents(), 4000),
-          withTimeout(loadEnterpriseInquiries(), 4000)
+          withTimeout(loadEnterpriseInquiries(), 4000),
+          withTimeout(loadOwnerInbox(), 4000)
         ]);
         settleAdminLists();
         startNotificationPolling();
