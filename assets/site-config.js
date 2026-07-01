@@ -27,6 +27,9 @@ window.AVERY_CONFIG = {
   // Command Nexus pricing stage shown on command-nexus.html: 'alpha' (live now), 'beta', or 'full'.
   // Flip this to roll prices forward once the matching Stripe links below are filled in.
   commandNexusStage: 'full',
+  commandNexus: {
+    downloadUrl: 'CommandNexus.exe'
+  },
   paths: {
     home: 'index.html',
     login: 'login.html',
