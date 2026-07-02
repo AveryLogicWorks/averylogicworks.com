@@ -706,6 +706,87 @@
       margin-top: .3rem;
     }
 
+    /* ===== Free Trial Section ===== */
+    .free-trial-panel {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 0;
+    }
+
+    .free-trial-box {
+      background: var(--panel-strong);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .ft-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    .ft-state h3 {
+      font-size: 1.4rem;
+      margin: 0;
+    }
+
+    .ft-icon {
+      font-size: 2.5rem;
+      margin: 0 0 .5rem 0;
+    }
+
+    .ft-key-display {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .ft-key-display code {
+      font-family: 'Courier New', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: rgba(125, 211, 252, .12);
+      border: 1px solid rgba(125, 211, 252, .3);
+      color: #7dd3fc;
+      padding: .75rem 1.25rem;
+      border-radius: 12px;
+      word-break: break-all;
+      user-select: all;
+    }
+
+    .ft-instructions {
+      text-align: left;
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      background: rgba(255, 255, 255, .03);
+      border-radius: 16px;
+      border: 1px solid var(--line);
+    }
+
+    .ft-instructions h4 {
+      margin: 0 0 .75rem 0;
+      font-size: 1rem;
+    }
+
+    .ft-instructions ol {
+      margin: 0;
+      padding-left: 1.25rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .button.small {
+      padding: .5rem 1rem;
+      font-size: .9rem;
+    }
+
     @media (max-width: 860px) {
       .feature-grid, .tier-grid, .cap-grid, .diff-grid, .usecase-grid, .price-simple-grid { grid-template-columns: 1fr; }
     }
@@ -756,7 +837,7 @@
           It's for <em>using</em> and <em>making</em> AI.
         </p>
         <div class="cta-row">
-          <a class="button primary" href="signup.html" data-auth-cta="account.html" data-auth-cta-text="Go to your account">Start your 15-day trial</a>
+          <a class="button primary" href="#free-trial">Start 3-day free trial</a>
           <a class="button" href="#pricing">See plans &amp; pricing</a>
         </div>
       </div>
@@ -1169,6 +1250,89 @@
       </div>
     </section>
 
+    <!-- ===== 3-DAY FREE TRIAL ===== -->
+    <section id="free-trial" aria-labelledby="cn-free-trial-title">
+      <div class="free-trial-panel">
+        <div class="section-head">
+          <div class="section-label">Free Trial</div>
+          <h2 id="cn-free-trial-title">Try Command Nexus free for 3 days.</h2>
+          <p class="muted">No payment required. Sign up, claim your free trial key, download Command Nexus, and activate it. Full access to every feature for 3 days &mdash; no credit card, no catch.</p>
+        </div>
+
+        <div class="free-trial-box" id="free-trial-box">
+          <!-- Step 1: Not signed in -->
+          <div class="ft-state" id="ft-state-anon">
+            <p class="ft-icon">&#128274;</p>
+            <h3>Sign up to get your free trial key</h3>
+            <p class="muted">You need a free Avery Logic Works account to claim your trial key. It only takes a minute.</p>
+            <div class="cta-row">
+              <a class="button primary" href="signup.html">Sign up free</a>
+              <a class="button" href="login.html">Sign in</a>
+            </div>
+          </div>
+
+          <!-- Step 2: Signed in, not yet claimed -->
+          <div class="ft-state" id="ft-state-ready" hidden>
+            <p class="ft-icon">&#127881;</p>
+            <h3>You're ready to claim your free trial!</h3>
+            <p class="muted">Click below to generate your 3-day trial license key. You'll use it to activate Command Nexus on your computer.</p>
+            <button class="button primary" id="ft-claim-btn" style="font-size:1.1rem;padding:1rem 2rem;">Claim my free trial key</button>
+            <p class="soft" style="font-size:.85rem;margin-top:.75rem;">One trial per account. The key expires 3 days from now.</p>
+          </div>
+
+          <!-- Step 3: Loading -->
+          <div class="ft-state" id="ft-state-loading" hidden>
+            <p class="ft-icon">&#9203;</p>
+            <h3>Generating your trial key...</h3>
+            <p class="muted">Please wait a moment.</p>
+          </div>
+
+          <!-- Step 4: Key displayed -->
+          <div class="ft-state" id="ft-state-done" hidden>
+            <p class="ft-icon">&#9989;</p>
+            <h3>Your trial key is ready!</h3>
+            <p class="muted">Copy this key, download Command Nexus, and paste it into the license activation dialog when you first open the program.</p>
+            <div class="ft-key-display">
+              <code id="ft-license-key"></code>
+              <button class="button small" id="ft-copy-btn">Copy</button>
+            </div>
+            <p class="soft" style="font-size:.85rem;margin-top:.5rem;">Expires: <span id="ft-expires"></span></p>
+            <div class="cta-row" style="margin-top:1.25rem;">
+              <a class="button primary" href="CommandNexus.exe" download>Download CommandNexus.exe</a>
+              <a class="button" href="download.html">Go to download page</a>
+            </div>
+            <div class="ft-instructions">
+              <h4>How to activate:</h4>
+              <ol>
+                <li>Download and run <strong>CommandNexus.exe</strong></li>
+                <li>When the License Activation dialog appears, paste your key</li>
+                <li>Click <strong>Activate</strong></li>
+                <li>Restart Command Nexus &mdash; you're in!</li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Step 5: Already claimed (expired) -->
+          <div class="ft-state" id="ft-state-expired" hidden>
+            <p class="ft-icon">&#9203;</p>
+            <h3>Your free trial has ended</h3>
+            <p class="muted">You've already used your 3-day free trial. To keep using Command Nexus, choose a membership plan.</p>
+            <div class="cta-row">
+              <a class="button primary" href="#pricing">View pricing</a>
+            </div>
+          </div>
+
+          <!-- Error state -->
+          <div class="ft-state" id="ft-state-error" hidden>
+            <p class="ft-icon">&#9888;</p>
+            <h3>Something went wrong</h3>
+            <p class="muted" id="ft-error-msg">Could not generate your trial key. Please try again.</p>
+            <button class="button primary" id="ft-retry-btn">Try again</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ===== SIMPLE PRICING ===== -->
     <section id="pricing" aria-labelledby="cn-pricing-title" class="price-simple">
       <div class="section-head">
@@ -1398,7 +1562,7 @@
         <div class="section-label">Take command</div>
         <h2 id="cn-closing-title">Come and take command of the Nexus &mdash; and see what your agents can do for you.</h2>
         <div class="cta-row">
-          <a class="button primary" href="signup.html" data-auth-cta="account.html" data-auth-cta-text="Go to your account">Start your 15-day trial</a>
+          <a class="button primary" href="#free-trial">Start 3-day free trial</a>
           <a class="button" href="index.html">Back to Avery Logic Works</a>
         </div>
       </div>
@@ -1479,6 +1643,152 @@
           el.title = 'Checkout link coming soon - contact to purchase';
         }
       });
+    })();
+
+    // ===== 3-Day Free Trial Claim Flow =====
+    (function () {
+      var cfg = window.AVERY_CONFIG || {};
+      var sbCfg = cfg.supabase || {};
+      var trialUrl = sbCfg.trialKeyEdgeFunction;
+      var sb = window._averySupabase || null;
+
+      // Try to get the Supabase client from site.js (it initializes one)
+      if (!sb && window.supabase && sbCfg.url && sbCfg.publishableKey) {
+        try {
+          sb = window.supabase.createClient(sbCfg.url, sbCfg.publishableKey, {
+            auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+          });
+        } catch (e) { console.error('Trial: Supabase init failed', e); }
+      }
+
+      var states = {
+        anon: document.getElementById('ft-state-anon'),
+        ready: document.getElementById('ft-state-ready'),
+        loading: document.getElementById('ft-state-loading'),
+        done: document.getElementById('ft-state-done'),
+        expired: document.getElementById('ft-state-expired'),
+        error: document.getElementById('ft-state-error')
+      };
+
+      function showState(name) {
+        Object.keys(states).forEach(function (k) {
+          if (states[k]) states[k].hidden = (k !== name);
+        });
+      }
+
+      function formatDate(iso) {
+        try {
+          var d = new Date(iso);
+          return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) +
+            ' at ' + d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+        } catch (e) { return iso; }
+      }
+
+      async function checkAuthAndInit() {
+        if (!sb) {
+          showState('error');
+          var errMsg = document.getElementById('ft-error-msg');
+          if (errMsg) errMsg.textContent = 'Could not connect to the server. Please refresh the page.';
+          return;
+        }
+
+        try {
+          var result = await sb.auth.getSession();
+          var session = result && result.data ? result.data.session : null;
+          if (!session) {
+            showState('anon');
+            return;
+          }
+          // User is signed in — check if they already have a trial
+          // We'll try calling the edge function which handles this logic
+          showState('ready');
+        } catch (e) {
+          showState('anon');
+        }
+      }
+
+      async function claimTrial() {
+        if (!sb) { showState('error'); return; }
+
+        showState('loading');
+
+        try {
+          var result = await sb.auth.getSession();
+          var session = result && result.data ? result.data.session : null;
+          if (!session) {
+            showState('anon');
+            return;
+          }
+
+          var response = await fetch(trialUrl, {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + session.access_token,
+              'apikey': sbCfg.publishableKey,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+          });
+
+          var data = await response.json();
+
+          if (!response.ok) {
+            if (data.expired) {
+              showState('expired');
+            } else {
+              showState('error');
+              var errMsg = document.getElementById('ft-error-msg');
+              if (errMsg) errMsg.textContent = data.error || 'Could not generate your trial key.';
+            }
+            return;
+          }
+
+          // Success — display the key
+          var keyEl = document.getElementById('ft-license-key');
+          var expiresEl = document.getElementById('ft-expires');
+          if (keyEl) keyEl.textContent = data.key;
+          if (expiresEl) expiresEl.textContent = formatDate(data.expires_at);
+          showState('done');
+        } catch (err) {
+          showState('error');
+          var errMsg2 = document.getElementById('ft-error-msg');
+          if (errMsg2) errMsg2.textContent = 'Network error: ' + (err.message || 'Could not reach the server.');
+        }
+      }
+
+      // Wire up buttons
+      var claimBtn = document.getElementById('ft-claim-btn');
+      if (claimBtn) claimBtn.addEventListener('click', claimTrial);
+
+      var retryBtn = document.getElementById('ft-retry-btn');
+      if (retryBtn) retryBtn.addEventListener('click', claimTrial);
+
+      var copyBtn = document.getElementById('ft-copy-btn');
+      if (copyBtn) copyBtn.addEventListener('click', function () {
+        var keyText = document.getElementById('ft-license-key');
+        if (keyText) {
+          navigator.clipboard.writeText(keyText.textContent).then(function () {
+            copyBtn.textContent = 'Copied!';
+            setTimeout(function () { copyBtn.textContent = 'Copy'; }, 2000);
+          }).catch(function () {
+            // Fallback: select the text
+            var range = document.createRange();
+            range.selectNode(keyText);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+          });
+        }
+      });
+
+      // Listen for auth state changes
+      if (sb) {
+        sb.auth.onAuthStateChange(function () {
+          checkAuthAndInit();
+        });
+      }
+
+      // Initial check
+      checkAuthAndInit();
     })();
   </script>
 </body>

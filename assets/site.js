@@ -86,6 +86,7 @@
           storage: authStorage
         }
       });
+      window._averySupabase = sb;
     } catch (err) {
       console.error('Supabase init failed', err);
     }
