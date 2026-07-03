@@ -39,10 +39,11 @@
       <p class="muted">Your Avery Logic Works account is set up. If email confirmation is required for this account, check your inbox and confirm it before signing in.</p>
       <div class="form-message info show">When you are ready, you can head back to the main page and continue from there.</div>
       <div class="stack-actions signup-success-actions">
-        <a class="button primary" href="index.html">Back to main page</a>
+        <a class="button primary" href="login.html" id="success-signin-btn">Sign in</a>
+        <a class="button" href="index.html">Back to main page</a>
         <a class="button" href="download.html" id="download-cta" style="display:none;">Download Command Nexus</a>
       </div>
-      <p class="small-note" style="margin-top:18px;">After confirmation, sign in from the account link whenever you want to return.</p>
+      <p class="small-note" style="margin-top:18px;">After confirmation, sign in using the button above or from the account link whenever you want to return.</p>
     </section>
   </main>
   <script>
@@ -51,6 +52,11 @@
       if (params.get('product') === 'command-nexus' || params.get('trial') === '1') {
         var cta = document.getElementById('download-cta');
         if (cta) cta.style.display = '';
+      }
+      var next = params.get('next');
+      if (next) {
+        var signinBtn = document.getElementById('success-signin-btn');
+        if (signinBtn) signinBtn.href = 'login.html?next=' + encodeURIComponent(next);
       }
     })();
   </script>

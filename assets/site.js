@@ -276,7 +276,12 @@
       const href = (el.getAttribute('href') || '').toLowerCase();
       if (!href || href === '#') return;
       const normalized = href.split('/').pop();
-      // Hide the link if it points to the current page
+      // Never hide the Home link — always keep it visible
+      if (normalized === 'index.html' && current === 'index.html') {
+        el.classList.add('active');
+        return;
+      }
+      // For non-home pages, hide the link if it points to the current page
       if (normalized === current || normalized === currentWithHash) {
         el.classList.add('nav-hidden');
       } else {
@@ -402,11 +407,14 @@
 
       setBusy(signupForm, true);
       try {
+        var signupNext = searchParams.get('next');
+        var emailRedirect = absoluteUrl(paths.login);
+        if (signupNext) emailRedirect += '?next=' + encodeURIComponent(signupNext);
         const { error } = await sb.auth.signUp({
           email: email,
           password: password,
           options: {
-            emailRedirectTo: absoluteUrl(paths.login),
+            emailRedirectTo: emailRedirect,
             data: {
               display_name: nameCheck.value,
               newsletter_opt_in: newsletter,
@@ -448,7 +456,10 @@
         });
         signupForm.reset();
         hydrateRememberToggles();
-        window.location.href = paths.signupSuccess;
+        var signupNextUrl = paths.signupSuccess;
+        var signupNextParam = searchParams.get('next');
+        if (signupNextParam) signupNextUrl += '?next=' + encodeURIComponent(signupNextParam);
+        window.location.href = signupNextUrl;
       } catch (err) {
         setMessage(messageBox, err.message || 'Unable to create your account right now.', 'error');
       } finally {

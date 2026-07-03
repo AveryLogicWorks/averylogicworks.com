@@ -65,6 +65,7 @@
             </div>
           </form>
           <div class="form-message" id="login-message"></div>
+          <p class="small-note" style="margin-top:16px;">Don't have an account? <a href="signup.html" class="text-link" id="login-to-signup-link">Sign up</a></p>
         </div>
 
         <div class="form-shell">
@@ -135,6 +136,9 @@
           var pageName = decoded.split('#')[0].replace('.html', '').replace(/-/g, ' ');
           target.textContent = pageName.charAt(0).toUpperCase() + pageName.slice(1);
         }
+        // Pass next param to signup link so it survives page switch
+        var signupLink = document.getElementById('login-to-signup-link');
+        if (signupLink) signupLink.href = 'signup.html?next=' + encodeURIComponent(next);
       }
     })();
   </script>

@@ -86,6 +86,7 @@
             </div>
           </form>
           <div class="form-message" id="signup-message"></div>
+          <p class="small-note" style="margin-top:16px;">Already have an account? <a href="login.html" class="text-link" id="signup-to-login-link">Sign in</a></p>
         </div>
 
         <div class="policy-shell">
@@ -116,6 +117,16 @@
     </div>
   </footer>
   <script src="assets/site-config.js"></script>
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var next = params.get('next');
+      if (next) {
+        var loginLink = document.getElementById('signup-to-login-link');
+        if (loginLink) loginLink.href = 'login.html?next=' + encodeURIComponent(next);
+      }
+    })();
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/site.js"></script>
 </body>
