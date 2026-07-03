@@ -135,7 +135,7 @@
         custom: {
           label: 'Custom Software',
           price: '$100',
-          checkout: (cfg.stripeLinks || {}).serviceExpanded100,
+          checkout: (cfg.paypalLinks || {}).serviceExpanded100,
           summary: 'Tell the founder what you need built \u2014 a custom script, a utility program, an automation, a tool, or a focused fix. The request is reviewed and the build is scoped to match.',
           guidance: 'Describe what you want built, fixed, or automated. Include what success looks like when it is done, and any links, files, or references that help explain the request.',
           subject: 'Custom Software Build request',
@@ -144,7 +144,7 @@
         starter: {
           label: 'Starter Build',
           price: '$20',
-          checkout: (cfg.stripeLinks || {}).serviceStarter20,
+          checkout: (cfg.paypalLinks || {}).serviceStarter20,
           summary: 'Best for a tiny script, one focused automation step, a simple code edit, or a narrow bug fix.',
           guidance: 'Ask for a tiny script, one focused automation step, one simple code edit, or one narrow bug fix. Keep the request contained and concrete.',
           subject: 'Starter Build request',
@@ -153,7 +153,7 @@
         standard: {
           label: 'Standard Build',
           price: '$50',
-          checkout: (cfg.stripeLinks || {}).serviceStandard50,
+          checkout: (cfg.paypalLinks || {}).serviceStandard50,
           summary: 'Best for a small custom script, a simple automation, a lightweight utility program, or a more involved bug fix.',
           guidance: 'Use this when the request needs more than a one-step fix but is still clearly scoped: a small script, a simple automation, a lightweight utility, or a deeper contained bug fix.',
           subject: 'Standard Build request',
@@ -162,7 +162,7 @@
         expanded: {
           label: 'Expanded Build',
           price: '$100',
-          checkout: (cfg.stripeLinks || {}).serviceExpanded100,
+          checkout: (cfg.paypalLinks || {}).serviceExpanded100,
           summary: 'Best for a larger small-program request, a multi-part script, a deeper fix, or a compact custom tool with more complexity.',
           guidance: 'Use this when the request has multiple connected parts, a deeper fix, or a compact custom tool that needs more depth than the smaller tiers.',
           subject: 'Expanded Build request',

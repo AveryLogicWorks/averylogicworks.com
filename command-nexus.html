@@ -1544,7 +1544,7 @@
           </article>
         </div>
 
-        <p class="sub-note">Monthly and yearly plans are billed through secure Stripe checkout. Enterprise pricing is negotiable &mdash; contact us for a custom quote.</p>
+        <p class="sub-note">Monthly and yearly plans are billed through secure PayPal checkout. Enterprise pricing is negotiable &mdash; contact us for a custom quote.</p>
       </div>
 
       <p class="sub-note">Prices may change as Command Nexus moves from Alpha to Beta to Full Release. If you&rsquo;re already subscribed, your current price stays in place until your paid period ends; when it ends under new pricing, you&rsquo;ll be asked whether to continue at the new price before anything renews. See the <a href="terms.html#pricing-evolution">pricing &amp; price-change terms</a>.</p>
@@ -1586,7 +1586,7 @@
   <script>
     (function () {
       var cfg = window.AVERY_CONFIG || {};
-      var links = (cfg.stripeLinks || {});
+      var links = (cfg.paypalLinks || {});
       var billing = cfg.billingEmail || cfg.supportEmail || '';
 
       // Pricing stage: 'alpha' (default), 'beta', or 'full'. Set commandNexusStage in site-config.js to flip.
@@ -1636,11 +1636,11 @@
           el.rel = 'noopener noreferrer';
           el.removeAttribute('aria-disabled');
         } else if (billing) {
-          // No Stripe link yet: fall back to a contact-to-purchase email.
+          // No PayPal link yet: fall back to a contact-to-purchase email.
           var subject = encodeURIComponent('Command Nexus - ' + key + ' purchase');
           el.href = 'mailto:' + billing + '?subject=' + subject;
           el.setAttribute('aria-disabled', 'true');
-          el.title = 'Checkout link coming soon - contact to purchase';
+          el.title = 'PayPal checkout link coming soon - contact to purchase';
         }
       });
     })();

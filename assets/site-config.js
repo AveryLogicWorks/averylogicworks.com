@@ -26,7 +26,7 @@ window.AVERY_CONFIG = {
     edgeFunctionUrl: 'https://esoiezxddkqlmvsgscqw.supabase.co/functions/v1/emailoctopus-subscribe'
   },
   // Command Nexus pricing stage shown on command-nexus.html: 'alpha' (live now), 'beta', or 'full'.
-  // Flip this to roll prices forward once the matching Stripe links below are filled in.
+  // Flip this to roll prices forward once the matching PayPal links below are filled in.
   commandNexusStage: 'full',
   commandNexus: {
     downloadUrl: 'CommandNexus.exe'
@@ -40,39 +40,37 @@ window.AVERY_CONFIG = {
     confirmNotice: 'login.html?check-email=1',
     resetRedirect: 'login.html?reset=1'
   },
-  stripeLinks: {
+  paypalLinks: {
     oneTime: 'index.html#donation-options',
     monthly: 'index.html#donation-options',
-    oneTime10: 'https://buy.stripe.com/8x25kwe3F5LX840d951RC06',
-    oneTime25: 'https://buy.stripe.com/dRm3cobVx6Q14RO3yv1RC07',
-    oneTime50: 'https://buy.stripe.com/5kQ3co1gTb6hckgfhd1RC08',
-    oneTime100: 'https://buy.stripe.com/cNidR2gbN7U5bgc8SP1RC09',
-    monthly10: 'https://buy.stripe.com/8x28wIgbN2zL2JG5GD1RC0a',
-    monthly25: 'https://buy.stripe.com/fZu3co0cPb6h3NK2ur1RC0b',
-    monthly50: 'https://buy.stripe.com/00waEQ4t5fmxdokc511RC0c',
-    monthly100: 'https://buy.stripe.com/fZu28kbVx3DP5VS7OL1RC0d',
-    serviceStarter20: 'https://buy.stripe.com/dRm4gs4t52zLckgb0X1RC03',
-    serviceStandard50: 'https://buy.stripe.com/dRm8wIe3F2zL4ROd951RC04',
-    serviceExpanded100: 'https://buy.stripe.com/3cIfZaf7J2zLac8glh1RC05',
-    commandNexusTrial: 'https://buy.stripe.com/5kQ00c3p1fmxbgc0mj1RC0e',
-    commandNexusProMonthly: 'https://buy.stripe.com/9B6cMYgbNgqB0By8SP1RC0f',
-    commandNexusProYearly: 'https://buy.stripe.com/4gM7sEf7Jfmxdoked91RC0g',
-    commandNexusBusinessMonthly: 'https://buy.stripe.com/fZu3co1gT5LX9842ur1RC0h',
-    commandNexusBusinessYearly: 'https://buy.stripe.com/dRm7sE9Np8Y9gAwed91RC0i',
-    commandNexusUnlimitedMonthly: 'https://buy.stripe.com/7sYdR28Jl7U5fws2ur1RC0j',
-    commandNexusUnlimitedYearly: 'https://buy.stripe.com/cNi5kw8Jl0rD2JG6KH1RC0k',
-    // Alpha stage (live now). Monthly only. Fill with the $10/$30/$50 Stripe Payment Links.
-    commandNexusProAlpha: '#',
-    commandNexusBusinessAlpha: '#',
-    commandNexusUnlimitedAlpha: '#',
+    oneTime10: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=10&item_name=Avery+Logic+Works+Donation&currency_code=USD',
+    oneTime25: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=25&item_name=Avery+Logic+Works+Donation&currency_code=USD',
+    oneTime50: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=50&item_name=Avery+Logic+Works+Donation&currency_code=USD',
+    oneTime100: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=100&item_name=Avery+Logic+Works+Donation&currency_code=USD',
+    monthly10: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=10&p3=1&t3=M&item_name=Avery+Logic+Works+Monthly+Support&currency_code=USD',
+    monthly25: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=25&p3=1&t3=M&item_name=Avery+Logic+Works+Monthly+Support&currency_code=USD',
+    monthly50: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=50&p3=1&t3=M&item_name=Avery+Logic+Works+Monthly+Support&currency_code=USD',
+    monthly100: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=100&p3=1&t3=M&item_name=Avery+Logic+Works+Monthly+Support&currency_code=USD',
+    serviceStarter20: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=20&item_name=Starter+Build&currency_code=USD',
+    serviceStandard50: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=50&item_name=Standard+Build&currency_code=USD',
+    serviceExpanded100: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=100&item_name=Expanded+Build&currency_code=USD',
+    commandNexusTrial: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=10&item_name=Command+Nexus+15-Day+Trial&currency_code=USD',
+    commandNexusProMonthly: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=30&p3=1&t3=M&item_name=Command+Nexus+Pro+Monthly&currency_code=USD',
+    commandNexusProYearly: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=324&p3=1&t3=Y&item_name=Command+Nexus+Pro+Yearly&currency_code=USD',
+    commandNexusBusinessMonthly: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=50&p3=1&t3=M&item_name=Command+Nexus+Business+Monthly&currency_code=USD',
+    commandNexusBusinessYearly: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=552&p3=1&t3=Y&item_name=Command+Nexus+Business+Yearly&currency_code=USD',
+    commandNexusUnlimitedMonthly: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=80&p3=1&t3=M&item_name=Command+Nexus+Unlimited+Monthly&currency_code=USD',
+    commandNexusUnlimitedYearly: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=900&p3=1&t3=Y&item_name=Command+Nexus+Unlimited+Yearly&currency_code=USD',
+    // Alpha stage (live now). Monthly only.
+    commandNexusProAlpha: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=10&p3=1&t3=M&item_name=Command+Nexus+Pro+Alpha&currency_code=USD',
+    commandNexusBusinessAlpha: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=30&p3=1&t3=M&item_name=Command+Nexus+Business+Alpha&currency_code=USD',
+    commandNexusUnlimitedAlpha: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=50&p3=1&t3=M&item_name=Command+Nexus+Unlimited+Alpha&currency_code=USD',
     // Beta stage (built for the future, hidden until commandNexusStage = 'beta').
-    // Fill with the $5 trial / $20 / $40 / $60 Stripe Payment Links when ready.
-    commandNexusTrialBeta: '#',
-    commandNexusProBeta: '#',
-    commandNexusBusinessBeta: '#',
-    commandNexusUnlimitedBeta: '#',
-    // Full Release stage reuses the existing commandNexus* monthly/yearly links above
-    // ($10 trial, $30/$50/$80 + yearly $324/$552/$900). No new links needed for that stage.
+    commandNexusTrialBeta: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=5&item_name=Command+Nexus+Beta+Trial&currency_code=USD',
+    commandNexusProBeta: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=20&p3=1&t3=M&item_name=Command+Nexus+Pro+Beta&currency_code=USD',
+    commandNexusBusinessBeta: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=40&p3=1&t3=M&item_name=Command+Nexus+Business+Beta&currency_code=USD',
+    commandNexusUnlimitedBeta: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=60&p3=1&t3=M&item_name=Command+Nexus+Unlimited+Beta&currency_code=USD',
+    // Full Release stage reuses the existing commandNexus* monthly/yearly links above.
     shop: '#',
     portal: '#'
   },
