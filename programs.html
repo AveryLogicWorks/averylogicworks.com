@@ -579,6 +579,9 @@
     </div>
   </footer>
 
+  <script src="assets/site-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/site.js"></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
     (function () {
@@ -589,6 +592,24 @@
         if (normalized === current) {
           el.classList.add('nav-hidden');
         }
+      });
+
+      // Track Speakeasy buy button clicks
+      var buyBtn = document.getElementById('speakeasy-paypal-btn');
+      if (buyBtn) buyBtn.addEventListener('click', function () {
+        var sb = window._averySupabase;
+        if (!sb) return;
+        try {
+          var key = 'avery-visitor-token';
+          var token = localStorage.getItem(key);
+          if (!token) { token = 'v_' + Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem(key, token); }
+          sb.from('site_events').insert({
+            event_type: 'speakeasy_purchase_click',
+            page_path: window.location.pathname || '/programs.html',
+            visitor_token: token,
+            metadata: { product: 'speakeasy', price: 10, source: 'programs-page' }
+          }).then(function(){}).catch(function(e){ console.debug('speakeasy event skipped', e); });
+        } catch (e) { console.debug('speakeasy event failed', e); }
       });
     })();
   </script>

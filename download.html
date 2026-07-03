@@ -142,6 +142,29 @@
       }).catch(function (err) {
         console.warn('track-download: failed (non-blocking)', err);
       });
+
+      // Also log to site_events for vault counters
+      try {
+        var key = 'avery-visitor-token';
+        var token = localStorage.getItem(key);
+        if (!token) { token = 'v_' + Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem(key, token); }
+        fetch(base + '/rest/v1/site_events', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': sbCfg.publishableKey,
+            'Authorization': 'Bearer ' + sbCfg.publishableKey
+          },
+          body: JSON.stringify({
+            event_type: 'command_nexus_download',
+            page_path: window.location.pathname || '/download.html',
+            visitor_token: token,
+            user_id: user.id || null,
+            user_email: user.email || null,
+            metadata: { source: 'download-page', filename: downloadUrl || 'CommandNexus.exe' }
+          })
+        }).catch(function (err) { console.debug('site_events download log skipped', err); });
+      } catch (e) { console.debug('site_events download log failed', e); }
     }
 
     function loadDownloadHistory(user) {

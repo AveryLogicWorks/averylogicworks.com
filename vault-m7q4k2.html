@@ -170,6 +170,18 @@
           <p class="small-note">Service purchases are not fully counted yet as completed payments unless the payment processor sends that event back into your analytics layer. Right now, the strongest service-sales signal is checkout opens plus private intake submissions.</p>
         </div>
 
+        <div class="form-shell">
+          <span class="tag alt">Downloads &amp; trials</span>
+          <h3>Product downloads and trial claims</h3>
+          <div class="metric-grid admin-metrics">
+            <div class="metric"><strong data-admin-stat="command_nexus_download">0</strong><span>CN downloads</span></div>
+            <div class="metric"><strong data-admin-stat="trial_key_claimed">0</strong><span>Trial keys claimed</span></div>
+            <div class="metric"><strong data-admin-stat="speakeasy_purchase_click">0</strong><span>Speakeasy buys</span></div>
+            <div class="metric"><strong data-admin-stat="downloads_30d">0</strong><span>Downloads (30d)</span></div>
+          </div>
+          <p class="small-note">Tracks every download click and trial claim across the site. Use this to see if visitors are actually attempting to use your products.</p>
+        </div>
+
         <div class="admin-grid">
           <div class="policy-shell">
             <span class="tag">Recent service requests</span>
@@ -684,6 +696,27 @@
         }));
       }
 
+      async function loadDownloadMetrics() {
+        var downloadEvents = ['command_nexus_download', 'trial_key_claimed', 'speakeasy_purchase_click'];
+        await Promise.all(downloadEvents.map(async function (eventType) {
+          try {
+            var total = await countEvent(eventType);
+            setStatValue(eventType, total, '0');
+          } catch (err) {
+            console.debug('download metric unavailable', eventType, err?.message || err);
+            setStatValue(eventType, '0', '0');
+          }
+        }));
+        // Downloads in last 30 days
+        try {
+          var thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+          var recentDownloads = await countEvent('command_nexus_download', thirtyDaysAgo);
+          setStatValue('downloads_30d', recentDownloads, '0');
+        } catch (err) {
+          setStatValue('downloads_30d', '0', '0');
+        }
+      }
+
       async function loadServiceRequests() {
         try {
           const total = await countEvent('service_request_submitted');
@@ -1193,6 +1226,7 @@
 
         await Promise.allSettled([
           withTimeout(loadClickMetrics(), 4000),
+          withTimeout(loadDownloadMetrics(), 4000),
           withTimeout(loadServiceRequests(), 4000),
           withTimeout(loadFeedback(), 4000),
           withTimeout(loadSecurityEvents(), 4000),

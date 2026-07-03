@@ -1298,7 +1298,7 @@
             </div>
             <p class="soft" style="font-size:.85rem;margin-top:.5rem;">Expires: <span id="ft-expires"></span></p>
             <div class="cta-row" style="margin-top:1.25rem;">
-              <a class="button primary" href="CommandNexus.exe" download>Download CommandNexus.exe</a>
+              <a class="button primary" href="CommandNexus.exe" download id="cn-trial-download-btn">Download CommandNexus.exe</a>
               <a class="button" href="download.html">Go to download page</a>
             </div>
             <div class="ft-instructions">
@@ -1553,7 +1553,7 @@
     <section aria-labelledby="cn-download-title" style="text-align:center; margin: 3rem 0;">
       <h2 id="cn-download-title">Download Command Nexus</h2>
       <p>Windows executable. No installer required. Local-first AI that works right out of the box.</p>
-      <a class="button primary" href="CommandNexus.exe" download>Download CommandNexus.exe</a>
+      <a class="button primary" href="CommandNexus.exe" download id="cn-download-btn">Download CommandNexus.exe</a>
       <p class="sub-note" style="margin-top:1rem;">Command Nexus&trade; &mdash; Avery Logic Works&trade;</p>
     </section>
 
@@ -1643,6 +1643,32 @@
           el.title = 'PayPal checkout link coming soon - contact to purchase';
         }
       });
+    })();
+
+    // ===== Download Tracking =====
+    (function () {
+      function getVisitorToken() {
+        var key = 'avery-visitor-token';
+        var token = localStorage.getItem(key);
+        if (!token) { token = 'v_' + Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem(key, token); }
+        return token;
+      }
+      function logDownload(eventType, source) {
+        var sb = window._averySupabase;
+        if (!sb) return;
+        try {
+          sb.from('site_events').insert({
+            event_type: eventType,
+            page_path: window.location.pathname || '/command-nexus.html',
+            visitor_token: getVisitorToken(),
+            metadata: { source: source, filename: 'CommandNexus.exe' }
+          }).then(function(){}).catch(function(e){ console.debug('download event skipped', e); });
+        } catch (e) { console.debug('download event failed', e); }
+      }
+      var dlBtn = document.getElementById('cn-download-btn');
+      if (dlBtn) dlBtn.addEventListener('click', function() { logDownload('command_nexus_download', 'main-download-section'); });
+      var trialDlBtn = document.getElementById('cn-trial-download-btn');
+      if (trialDlBtn) trialDlBtn.addEventListener('click', function() { logDownload('command_nexus_download', 'trial-success'); });
     })();
 
     // ===== 3-Day Free Trial Claim Flow =====
@@ -1749,6 +1775,22 @@
           if (keyEl) keyEl.textContent = data.key;
           if (expiresEl) expiresEl.textContent = formatDate(data.expires_at);
           showState('done');
+
+          // Log trial claim event
+          if (window._averySupabase) {
+            try {
+              var sbCfg2 = (window.AVERY_CONFIG || {}).supabase || {};
+              var s = window._averySupabase;
+              s.from('site_events').insert({
+                event_type: 'trial_key_claimed',
+                page_path: window.location.pathname || '/command-nexus.html',
+                visitor_token: (function(){var k='avery-visitor-token';var t=localStorage.getItem(k);if(!t){t='v_'+Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem(k,t);}return t;})(),
+                user_id: session.user.id || null,
+                user_email: session.user.email || null,
+                metadata: { key: data.key, expires_at: data.expires_at }
+              }).then(function(){}).catch(function(e){ console.debug('trial event log skipped', e); });
+            } catch (e) { console.debug('trial event log failed', e); }
+          }
         } catch (err) {
           showState('error');
           var errMsg2 = document.getElementById('ft-error-msg');

@@ -1,6 +1,6 @@
 (function () {
   const cfg = window.AVERY_CONFIG || {};
-  const stripe = (cfg.stripeLinks || {});
+  const stripe = (cfg.paypalLinks || {});
   const founderImages = (cfg.founderImages || {});
   const supabaseCfg = cfg.supabase || {};
   const emailOctopusCfg = cfg.emailOctopus || {};
@@ -221,6 +221,7 @@
     '[data-stripe-monthly]': stripe.monthly,
     '[data-stripe-portal]': stripe.portal
   };
+  // Legacy selectors kept for backward compat — now powered by paypalLinks
   Object.entries(stripeTargets).forEach(([selector, url]) => {
     document.querySelectorAll(selector).forEach((el) => {
       if (url && url !== '#') {
