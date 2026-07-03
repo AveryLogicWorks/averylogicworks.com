@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -19,7 +19,7 @@
         <a href="index.html">Home</a>
         <a href="founder.html">Founder</a>
         <a href="themis.html">Themis</a>
-        <a href="command-nexus.html">Command Nexus</a>
+        <a href="command-nexus.html#free-trial">Command Nexus</a>
         <a href="programs.html">Buyable Programs</a>
         <a href="feedback.html">Feedback</a>
         <a href="support.html">Support</a>
@@ -176,7 +176,7 @@
 
       titleNode.textContent = 'Describe the ' + selectedService.label + ' before checkout.';
       summaryNode.textContent = 'Use this page to explain exactly what you want. The request is saved privately first, and only then does the matching checkout page open.';
-      tierHeading.textContent = selectedService.label + ' · ' + selectedService.price;
+      tierHeading.textContent = selectedService.label + ' � ' + selectedService.price;
       tierDescription.textContent = selectedService.summary;
       tierGuidance.innerHTML = '<strong>What to ask for here</strong><p class="muted">' + selectedService.guidance + '</p>';
       subjectField.value = selectedService.subject;

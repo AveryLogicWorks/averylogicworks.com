@@ -1,11 +1,11 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/site.css">
-  <meta name="description" content="Download Command Nexus â€” sign in to access your download.">
+  <meta name="description" content="Download Command Nexus — sign in to access your download.">
   <title>Download Command Nexus | Avery Logic Works</title>
 </head>
 <body>
@@ -19,7 +19,7 @@
         <a href="index.html">Home</a>
         <a href="founder.html">Founder</a>
         <a href="themis.html">Themis</a>
-        <a href="command-nexus.html">Command Nexus</a>
+        <a href="command-nexus.html#free-trial">Command Nexus</a>
         <a href="programs.html">Buyable Programs</a>
         <a href="feedback.html">Feedback</a>
         <a href="support.html">Support</a>
@@ -199,7 +199,7 @@
         rows.forEach(function (row) {
           var li = document.createElement('li');
           var d = row.downloaded_at ? new Date(row.downloaded_at).toLocaleString() : 'Unknown date';
-          li.textContent = d + ' â€” ' + esc(row.product || 'command-nexus') + ' (' + esc(row.filename || 'CommandNexus.exe') + ')';
+          li.textContent = d + ' — ' + esc(row.product || 'command-nexus') + ' (' + esc(row.filename || 'CommandNexus.exe') + ')';
           ul.appendChild(li);
         });
         historyEl.appendChild(ul);

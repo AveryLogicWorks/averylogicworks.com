@@ -1745,9 +1745,33 @@
             showState('anon');
             return;
           }
-          // User is signed in — check if they already have a trial
-          // We'll try calling the edge function which handles this logic
-          showState('ready');
+          // User is signed in — auto-check if they already have a trial key
+          showState('loading');
+          try {
+            var response = await fetch(trialUrl, {
+              method: 'POST',
+              headers: {
+                'Authorization': 'Bearer ' + session.access_token,
+                'apikey': sbCfg.publishableKey,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            });
+            var data = await response.json();
+            if (response.ok && data.key) {
+              var keyEl = document.getElementById('ft-license-key');
+              var expiresEl = document.getElementById('ft-expires');
+              if (keyEl) keyEl.textContent = data.key;
+              if (expiresEl) expiresEl.textContent = formatDate(data.expires_at);
+              showState('done');
+            } else if (data.expired) {
+              showState('expired');
+            } else {
+              showState('ready');
+            }
+          } catch (e) {
+            showState('ready');
+          }
         } catch (e) {
           showState('anon');
         }
