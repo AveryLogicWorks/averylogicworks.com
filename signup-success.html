@@ -41,6 +41,7 @@
       <div class="stack-actions signup-success-actions">
         <a class="button primary" href="login.html" id="success-signin-btn">Sign in</a>
         <a class="button" href="index.html">Back to main page</a>
+        <a class="button" id="success-back-btn" href="#" style="display:none;">&larr; Go back to <span id="success-back-name">Command Nexus</span></a>
         <a class="button" href="download.html" id="download-cta" style="display:none;">Download Command Nexus</a>
       </div>
       <p class="small-note" style="margin-top:18px;">After confirmation, sign in using the button above or from the account link whenever you want to return.</p>
@@ -55,8 +56,15 @@
       }
       var next = params.get('next');
       if (next) {
+        var decoded = decodeURIComponent(next);
+        var pageName = decoded.split('#')[0].replace('.html', '').replace(/-/g, ' ');
+        pageName = pageName.charAt(0).toUpperCase() + pageName.slice(1);
         var signinBtn = document.getElementById('success-signin-btn');
         if (signinBtn) signinBtn.href = 'login.html?next=' + encodeURIComponent(next);
+        var backBtn = document.getElementById('success-back-btn');
+        var backName = document.getElementById('success-back-name');
+        if (backBtn) { backBtn.href = decoded; backBtn.style.display = ''; }
+        if (backName) backName.textContent = pageName;
       }
     })();
   </script>

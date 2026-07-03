@@ -36,6 +36,9 @@
         <h1>Sign in to your Avery Logic Works account.</h1>
         <p class="muted">Use your email and password to sign in, choose whether this device should remember you, or request a reset link if you need to set a new password.</p>
         <p class="small-note" id="login-redirect-hint" style="display:none;">After signing in, you&rsquo;ll be taken back to <strong id="login-redirect-target">Command Nexus</strong>.</p>
+        <div id="login-back-btn-wrap" style="display:none;margin-top:1rem;">
+          <a class="button" id="login-back-btn" href="#">&larr; Go back to <span id="login-back-name">Command Nexus</span></a>
+        </div>
       </div>
     </section>
 
@@ -128,15 +131,19 @@
       var params = new URLSearchParams(window.location.search);
       var next = params.get('next');
       if (next) {
+        var decoded = decodeURIComponent(next);
+        var pageName = decoded.split('#')[0].replace('.html', '').replace(/-/g, ' ');
+        pageName = pageName.charAt(0).toUpperCase() + pageName.slice(1);
         var hint = document.getElementById('login-redirect-hint');
         var target = document.getElementById('login-redirect-target');
         if (hint) hint.style.display = 'block';
-        if (target) {
-          var decoded = decodeURIComponent(next);
-          var pageName = decoded.split('#')[0].replace('.html', '').replace(/-/g, ' ');
-          target.textContent = pageName.charAt(0).toUpperCase() + pageName.slice(1);
-        }
-        // Pass next param to signup link so it survives page switch
+        if (target) target.textContent = pageName;
+        var backWrap = document.getElementById('login-back-btn-wrap');
+        var backBtn = document.getElementById('login-back-btn');
+        var backName = document.getElementById('login-back-name');
+        if (backWrap) backWrap.style.display = 'block';
+        if (backBtn) backBtn.href = decoded;
+        if (backName) backName.textContent = pageName;
         var signupLink = document.getElementById('login-to-signup-link');
         if (signupLink) signupLink.href = 'signup.html?next=' + encodeURIComponent(next);
       }

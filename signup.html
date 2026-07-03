@@ -35,6 +35,9 @@
         <span class="eyebrow">Updates &amp; account access</span>
         <h1>Create your account or join updates.</h1>
         <p class="muted">Create an account to manage your email preferences, follow future releases, and keep a cleaner path into member features as Avery Logic Works grows.</p>
+        <div id="signup-back-btn-wrap" style="display:none;margin-top:1rem;">
+          <a class="button" id="signup-back-btn" href="#">&larr; Go back to <span id="signup-back-name">Command Nexus</span></a>
+        </div>
       </div>
     </section>
 
@@ -122,6 +125,15 @@
       var params = new URLSearchParams(window.location.search);
       var next = params.get('next');
       if (next) {
+        var decoded = decodeURIComponent(next);
+        var pageName = decoded.split('#')[0].replace('.html', '').replace(/-/g, ' ');
+        pageName = pageName.charAt(0).toUpperCase() + pageName.slice(1);
+        var backWrap = document.getElementById('signup-back-btn-wrap');
+        var backBtn = document.getElementById('signup-back-btn');
+        var backName = document.getElementById('signup-back-name');
+        if (backWrap) backWrap.style.display = 'block';
+        if (backBtn) backBtn.href = decoded;
+        if (backName) backName.textContent = pageName;
         var loginLink = document.getElementById('signup-to-login-link');
         if (loginLink) loginLink.href = 'login.html?next=' + encodeURIComponent(next);
       }
