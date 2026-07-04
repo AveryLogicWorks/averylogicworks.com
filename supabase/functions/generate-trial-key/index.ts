@@ -2,7 +2,20 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SECRET_KEY = "AVERY_LOGIC_WORKS_COMMAND_NEXUS_2026";
 const TIER_CODE = "TR";
-const TRIAL_DAYS = 3;
+const TRIAL_DAYS = 7;
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "authorization, content-type, apikey",
+};
+
+function json(data: Record<string, unknown>, status: number): Response {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { "Content-Type": "application/json", ...corsHeaders },
+  });
+}
 
 async function computeHmac(payload: string): Promise<string> {
   const keyData = new TextEncoder().encode(SECRET_KEY);
@@ -17,37 +30,42 @@ function formatKey(raw: string): string {
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST, OPTIONS", "Access-Control-Allow-Headers": "authorization, content-type, apikey" } });
+    return new Response("ok", { headers: corsHeaders });
   }
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: { "Content-Type": "application/json" } });
+    return json({ error: "Method not allowed" }, 405);
   }
 
   try {
     const authHeader = req.headers.get("Authorization") || "";
     const apiKey = req.headers.get("apikey") || Deno.env.get("SUPABASE_ANON_KEY") || "";
     if (!authHeader) {
-      return new Response(JSON.stringify({ error: "Not authenticated. Please sign in to claim a free trial." }), { status: 401, headers: { "Content-Type": "application/json" } });
+      return json({ error: "Not authenticated. Please sign in to claim a free trial." }, 401);
     }
 
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
+    if (!supabaseUrl) {
+      console.error("generate-trial-key: SUPABASE_URL env var not set");
+      return json({ error: "Server not configured. Please contact support." }, 500);
+    }
     const supabase = createClient(supabaseUrl, apiKey, { global: { headers: { Authorization: authHeader } } });
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) {
-      return new Response(JSON.stringify({ error: "Not authenticated. Please sign in to claim a free trial." }), { status: 401, headers: { "Content-Type": "application/json" } });
+      return json({ error: "Not authenticated. Please sign in to claim a free trial." }, 401);
     }
 
     // Check if user already claimed
     const { data: existing, error: checkError } = await supabase.from("trial_keys").select("id, license_key, expires_at, claimed_at").eq("user_id", user.id).maybeSingle();
     if (checkError) {
-      return new Response(JSON.stringify({ error: "Could not verify trial eligibility." }), { status: 500, headers: { "Content-Type": "application/json" } });
+      console.error("generate-trial-key: check error:", checkError.message);
+      return json({ error: "Could not verify trial eligibility. Please try again." }, 500);
     }
     if (existing) {
       const expiresAt = new Date(existing.expires_at);
       if (new Date() < expiresAt) {
-        return new Response(JSON.stringify({ key: existing.license_key, expires_at: existing.expires_at, already_claimed: true, message: "You already claimed a free trial key." }), { status: 200, headers: { "Content-Type": "application/json" } });
+        return json({ key: existing.license_key, expires_at: existing.expires_at, already_claimed: true, message: "You already claimed a free trial key." }, 200);
       } else {
-        return new Response(JSON.stringify({ error: "You have already used your free trial. Please purchase a subscription to continue.", expired: true }), { status: 409, headers: { "Content-Type": "application/json" } });
+        return json({ error: "You have already used your free trial. Please purchase a subscription to continue.", expired: true }, 409);
       }
     }
 
@@ -73,13 +91,13 @@ Deno.serve(async (req: Request) => {
       expires_at: expiresAtISO,
     });
     if (insertError) {
-      console.error("Insert error:", insertError);
-      return new Response(JSON.stringify({ error: "Could not save trial key. Please try again." }), { status: 500, headers: { "Content-Type": "application/json" } });
+      console.error("generate-trial-key: insert error:", insertError.message);
+      return json({ error: "Could not save trial key. Please try again." }, 500);
     }
 
-    return new Response(JSON.stringify({ key: formattedKey, expires_at: expiresAtISO, days: TRIAL_DAYS, message: "Your 3-day free trial key is ready!" }), { status: 200, headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" } });
+    return json({ key: formattedKey, expires_at: expiresAtISO, days: TRIAL_DAYS, message: `Your ${TRIAL_DAYS}-day free trial key is ready!` }, 200);
   } catch (err) {
-    console.error("Trial key generation error:", err);
-    return new Response(JSON.stringify({ error: "An unexpected error occurred." }), { status: 500, headers: { "Content-Type": "application/json" } });
+    console.error("generate-trial-key: unexpected error:", err);
+    return json({ error: "An unexpected error occurred. Please try again." }, 500);
   }
 });
