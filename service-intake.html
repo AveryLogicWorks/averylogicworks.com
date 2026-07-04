@@ -5,32 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/site.css">
+    <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('alw-theme')||'dark')</script>
   <meta name="description" content="Describe your build request privately before checkout.">
   <title>Service Intake | Avery Logic Works</title>
+  <meta property="og:title" content="Service Intake | Avery Logic Works">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.averylogicworks.com/service-intake.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Service Intake | Avery Logic Works">
 </head>
 <body>
-  <nav class="site-nav">
-    <div class="container nav-inner">
-      <a class="brand" href="index.html">
-        <span class="brand-mark" aria-hidden="true"></span>
-        <span>Avery Logic Works</span>
-      </a>
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="founder.html">Founder</a>
-        <a href="themis.html">Themis</a>
-        <a href="command-nexus.html#free-trial">Command Nexus</a>
-        <a href="programs.html">Buyable Programs</a>
-        <a href="feedback.html">Feedback</a>
-        <a href="support.html">Support</a>
-        <a href="login.html">Sign in</a>
-        <a href="signup.html">Sign up</a>
-        <a href="index.html#donation-options" class="button secondary small">Donate</a>
-      </div>
-    </div>
-  </nav>
 
-  <main>
+  <main class="main-content">
     <section class="page-hero">
       <div class="container section-intro">
         <span class="eyebrow">Private service intake</span>
@@ -94,11 +80,12 @@
 
   <footer class="footer">
     <div class="container footer-inner">
-      <div>&copy; <span data-current-year></span> Avery Logic Works. All rights reserved.</div>
+      <div>&copy; <span data-current-year></span> Avery Logic Works&trade;. All rights reserved.</div>
       <div class="footer-links">
         <a href="support.html">Support</a>
         <a href="terms.html">Terms</a>
         <a href="privacy.html">Privacy</a>
+        <a href="https://www.youtube.com/watch?v=IakQBx4rgks" target="_blank" rel="noopener noreferrer">YouTube</a>
       </div>
     </div>
   </footer>
@@ -176,7 +163,7 @@
 
       titleNode.textContent = 'Describe the ' + selectedService.label + ' before checkout.';
       summaryNode.textContent = 'Use this page to explain exactly what you want. The request is saved privately first, and only then does the matching checkout page open.';
-      tierHeading.textContent = selectedService.label + ' · ' + selectedService.price;
+      tierHeading.textContent = selectedService.label + ' ï¿½ ' + selectedService.price;
       tierDescription.textContent = selectedService.summary;
       tierGuidance.innerHTML = '<strong>What to ask for here</strong><p class="muted">' + selectedService.guidance + '</p>';
       subjectField.value = selectedService.subject;
@@ -274,5 +261,6 @@
       });
     }());
   </script>
+  <script src="assets/site-shell.js"></script>
 </body>
 </html>

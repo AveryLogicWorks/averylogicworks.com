@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/site.css">
+  <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('alw-theme')||'dark')</script>
   <meta name="description" content="Account created confirmation for Avery Logic Works.">
   <title>Account Created | Avery Logic Works</title>
   <style>
@@ -30,9 +31,14 @@
       justify-content: center;
     }
   </style>
+  <meta property="og:title" content="Account Created | Avery Logic Works">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.averylogicworks.com/signup-success.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Account Created | Avery Logic Works">
 </head>
 <body>
-  <main class="signup-success-shell">
+  <main class="signup-success-shell main-content">
     <section class="signup-success-card form-shell">
       <span class="tag alt">Account created</span>
       <h1>Thank you for creating your account.</h1>
@@ -47,6 +53,17 @@
       <p class="small-note" style="margin-top:18px;">After confirmation, sign in using the button above or from the account link whenever you want to return.</p>
     </section>
   </main>
+<footer class="footer">
+    <div class="container footer-inner">
+      <div>&copy; <span data-current-year></span> Avery Logic Works&trade;. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="support.html">Support</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="https://www.youtube.com/watch?v=IakQBx4rgks" target="_blank" rel="noopener noreferrer">YouTube</a>
+      </div>
+    </div>
+  </footer>
   <script>
     (function () {
       var params = new URLSearchParams(window.location.search);
@@ -68,5 +85,6 @@
       }
     })();
   </script>
+  <script src="assets/site-shell.js"></script>
 </body>
 </html>

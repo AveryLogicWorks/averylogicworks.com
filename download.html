@@ -5,31 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/site.css">
-  <meta name="description" content="Download Command Nexus — sign in to access your download.">
+  <meta property="og:title" content="Download Command Nexus | Avery Logic Works">
+  <meta property="og:description" content="Download Command Nexus - sign in to access your download.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.averylogicworks.com/download.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Download Command Nexus | Avery Logic Works">
+  <meta name="twitter:description" content="Download Command Nexus - sign in to access your download.">
+  <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('alw-theme')||'dark')</script>
+  <meta name="description" content="Download Command Nexus ï¿½ sign in to access your download.">
   <title>Download Command Nexus | Avery Logic Works</title>
 </head>
 <body>
-  <nav class="site-nav">
-    <div class="container nav-inner">
-      <a class="brand" href="index.html">
-        <span class="brand-mark" aria-hidden="true"></span>
-        <span>Avery Logic Works</span>
-      </a>
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="founder.html">Founder</a>
-        <a href="themis.html">Themis</a>
-        <a href="command-nexus.html#free-trial">Command Nexus</a>
-        <a href="programs.html">Buyable Programs</a>
-        <a href="feedback.html">Feedback</a>
-        <a href="support.html">Support</a>
-        <a href="login.html">Sign in</a>
-        <a href="signup.html">Sign up</a>
-        <a href="index.html#donation-options" class="button secondary small">Donate</a>
-      </div>
-    </div>
-  </nav>
-  <main>
+  <main class="main-content">
     <section class="page-hero">
       <div class="container section-intro">
         <span class="eyebrow">Command Nexus</span>
@@ -90,6 +78,7 @@
           <p class="muted">Command Nexus requires a license key to activate. Purchase a trial or membership to get your key, then come back here to download.</p>
           <div class="cta-row" style="margin-top:12px;">
             <a class="button" href="command-nexus.html#pricing">View pricing &amp; purchase</a>
+          <a class="button" href="command-nexus-info.html">Learn more about Command Nexus</a>
             <a class="button" href="command-nexus.html#pricing">Activate a key</a>
           </div>
 
@@ -105,16 +94,18 @@
   </main>
   <footer class="footer">
     <div class="container footer-inner">
-      <div>&copy; <span data-current-year></span> Avery Logic Works. All rights reserved.</div>
+      <div>&copy; <span data-current-year></span> Avery Logic Works&trade;. All rights reserved.</div>
       <div class="footer-links">
-        <a href="support.html">Your Support</a>
+        <a href="support.html">Support</a>
         <a href="terms.html">Terms</a>
         <a href="privacy.html">Privacy</a>
+        <a href="https://www.youtube.com/watch?v=IakQBx4rgks" target="_blank" rel="noopener noreferrer">YouTube</a>
       </div>
     </div>
   </footer>
   <script src="assets/site-config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/site-shell.js"></script>
   <script src="assets/site.js"></script>
   <script>
   (function () {
@@ -199,7 +190,7 @@
         rows.forEach(function (row) {
           var li = document.createElement('li');
           var d = row.downloaded_at ? new Date(row.downloaded_at).toLocaleString() : 'Unknown date';
-          li.textContent = d + ' — ' + esc(row.product || 'command-nexus') + ' (' + esc(row.filename || 'CommandNexus.exe') + ')';
+          li.textContent = d + ' ï¿½ ' + esc(row.product || 'command-nexus') + ' (' + esc(row.filename || 'CommandNexus.exe') + ')';
           ul.appendChild(li);
         });
         historyEl.appendChild(ul);
