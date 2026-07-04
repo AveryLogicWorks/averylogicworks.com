@@ -2,7 +2,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SECRET_KEY = "AVERY_LOGIC_WORKS_COMMAND_NEXUS_2026";
 const TIER_CODE = "TR";
-const TRIAL_DAYS = 7;
+const TRIAL_DAYS = 3;
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
