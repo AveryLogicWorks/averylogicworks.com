@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="assets/site.css">
   <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('alw-theme')||'dark')</script>
   <meta name="description" content="This page is unavailable.">
-  <title>Page unavailable | Avery Logic Works</title>
+  <title>Operator Vault | Avery Logic Works</title>
   <style>
     .admin-grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:24px; }
     .admin-grid-full { display:grid; gap:24px; }
@@ -88,12 +88,76 @@
       background: #d29922; color: #fff; font-size: .72rem; font-weight: 700; margin-left: 6px;
     }
     .notif-badge.zero { background: rgba(139,148,158,0.2); color: var(--muted, #8b949e); }
+    /* Vault tabs */
+    .vault-tabs { display:flex; gap:4px; flex-wrap:wrap; padding:8px 0 16px; border-bottom:1px solid var(--line); margin-bottom:24px; }
+    .vault-tab {
+      padding:10px 18px; border-radius:12px 12px 0 0; cursor:pointer; font-weight:600; font-size:.92rem;
+      border:1px solid transparent; border-bottom:none; background:transparent; color:var(--muted);
+      transition: all .15s; display:inline-flex; align-items:center; gap:8px;
+    }
+    .vault-tab:hover { background:var(--surface); color:var(--text); }
+    .vault-tab.active { background:var(--surface-2); color:var(--text); border-color:var(--line); }
+    .vault-tab .tab-badge {
+      min-width:18px; height:18px; border-radius:999px; padding:0 5px; font-size:.7rem; font-weight:700;
+      display:inline-flex; align-items:center; justify-content:center; background:var(--primary); color:#fff;
+    }
+    .vault-tab .tab-badge.zero { background:var(--surface-3); color:var(--muted); }
+    .vault-section { display:none; }
+    .vault-section.active { display:block; }
+    /* Security Center */
+    .threat-level { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:999px; font-weight:700; font-size:.85rem; }
+    .threat-level.low { background:rgba(35,134,54,0.15); color:#3fb950; border:1px solid rgba(35,134,54,0.3); }
+    .threat-level.medium { background:rgba(210,153,34,0.15); color:#d29922; border:1px solid rgba(210,153,34,0.3); }
+    .threat-level.high { background:rgba(248,81,73,0.15); color:#f85149; border:1px solid rgba(248,81,73,0.3); }
+    .security-stat { display:flex; flex-direction:column; gap:4px; padding:16px; border-radius:16px; border:1px solid var(--line); background:var(--surface); }
+    .security-stat strong { font-size:1.5rem; }
+    .security-stat span { font-size:.85rem; color:var(--muted); }
+    .ip-badge { font-family:ui-monospace,monospace; font-size:.8rem; padding:2px 8px; border-radius:6px; background:var(--surface-2); }
+    .vault-self-badge.threat { background: rgba(248,81,73,0.15); color: #f85149; border: 1px solid rgba(248,81,73,0.3); }
+    /* License cards */
+    .license-card { padding:16px 18px; border-radius:var(--radius-sm); border:1px solid var(--line); background:var(--surface); display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    .license-card .license-key { font-family:ui-monospace,monospace; font-size:.9rem; color:var(--secondary); }
+    .license-status { padding:3px 10px; border-radius:999px; font-size:.75rem; font-weight:700; }
+    .license-status.active { background:rgba(35,134,54,0.15); color:#3fb950; }
+    .license-status.trial { background:rgba(93,201,209,0.15); color:var(--secondary); }
+    .license-status.expired { background:rgba(248,81,73,0.15); color:#f85149; }
+    .license-status.revoked { background:rgba(139,148,158,0.1); color:var(--muted); }
+    /* Audit log table */
+    .audit-table { width:100%; border-collapse:collapse; font-size:.88rem; }
+    .audit-table th { text-align:left; padding:10px 12px; border-bottom:2px solid var(--line); color:var(--muted); font-weight:600; font-size:.8rem; text-transform:uppercase; letter-spacing:.05em; }
+    .audit-table td { padding:10px 12px; border-bottom:1px solid var(--line); }
+    .audit-table tr:hover { background:var(--surface); }
+    .audit-filter-bar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; align-items:center; }
+    .audit-filter-bar select, .audit-filter-bar input {
+      padding:8px 12px; border-radius:10px; border:1px solid var(--input-border);
+      background:var(--input-bg); color:var(--input-text); font-size:.88rem;
+    }
+    /* System health */
+    .health-card { padding:18px; border-radius:var(--radius-sm); border:1px solid var(--line); background:var(--surface); display:grid; gap:10px; }
+    .health-indicator { display:flex; align-items:center; gap:8px; }
+    .health-dot { width:10px; height:10px; border-radius:999px; flex-shrink:0; }
+    .health-dot.ok { background:#3fb950; box-shadow:0 0 8px rgba(35,134,54,0.4); }
+    .health-dot.warn { background:#d29922; box-shadow:0 0 8px rgba(210,153,34,0.4); }
+    .health-dot.down { background:#f85149; box-shadow:0 0 8px rgba(248,81,73,0.4); }
+    .health-dot.unknown { background:var(--muted); }
+    /* Revenue */
+    .revenue-card { padding:20px; border-radius:var(--radius-sm); border:1px solid var(--line); background:var(--surface); }
+    .revenue-total { font-size:2rem; font-weight:800; color:var(--secondary); }
+    .revenue-breakdown { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:16px; }
+    .revenue-breakdown-item { text-align:center; }
+    .revenue-breakdown-item strong { display:block; font-size:1.4rem; }
+    .revenue-breakdown-item span { font-size:.82rem; color:var(--muted); }
+    @media (max-width:768px) { .revenue-breakdown { grid-template-columns:1fr; } }
+    /* Quick action bar */
+    .quick-action-bar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+    .quick-action { padding:8px 16px; border-radius:999px; border:1px solid var(--line); background:var(--surface); cursor:pointer; font-size:.88rem; font-weight:600; transition:all .15s; }
+    .quick-action:hover { background:var(--surface-2); border-color:var(--primary); }
   </style>
-  <meta property="og:title" content="Page unavailable | Avery Logic Works">
+  <meta property="og:title" content="Operator Vault | Avery Logic Works">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.averylogicworks.com/vault-m7q4k2.html">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Page unavailable | Avery Logic Works">
+  <meta name="twitter:title" content="Operator Vault | Avery Logic Works">
 </head>
 <body>
   <main class="main-content">
@@ -111,13 +175,13 @@
       <div class="container admin-grid-full">
         <div class="form-shell">
           <span class="tag">Owner session</span>
-          <h3>Operator vault</h3>
+          <h3>Operator Vault &mdash; Avery Logic Works&trade;</h3>
           <div class="auth-inline-row">
-            <p class="small-note">Signed in as <strong id="admin-owner-email">—</strong></p>
+            <p class="small-note">Signed in as <strong id="admin-owner-email">&mdash;</strong></p>
             <span class="status-pill">Owner-only session confirmed</span>
             <button class="button ghost" id="admin-signout-button" type="button">Sign out</button>
           </div>
-          <div class="form-message info show" id="admin-console-status">Loading owner counters and private queues…</div>
+          <div class="form-message info show" id="admin-console-status">Loading owner counters and private queues&hellip;</div>
           <p class="small-note">This hidden page is no longer published in the public site config. It only opens when an owner account is already signed in.</p>
           <div class="snapshot-grid" id="owner-snapshot">
             <div class="snapshot-item"><strong id="snapshot-profiles">0</strong><span>Total profiles</span></div>
@@ -125,140 +189,338 @@
             <div class="snapshot-item"><strong id="snapshot-logins">0</strong><span>Total logins</span></div>
             <div class="snapshot-item"><strong id="snapshot-signups">0</strong><span>Total signups</span></div>
           </div>
-          <p class="small-note">Vault build: <strong id="vault-build-id">2026-05-16-4</strong></p>
+          <p class="small-note">Vault build: <strong id="vault-build-id">2026-07-04-1</strong></p>
         </div>
 
-        <div class="form-shell">
-          <span class="tag alt">Core counters</span>
-          <h3>Visitors, accounts, donations, and subscriptions</h3>
-          <div class="metric-grid admin-metrics">
-            <div class="metric"><strong data-admin-stat="visits_24h">0</strong><span>Visits (24h)</span></div>
-            <div class="metric"><strong data-admin-stat="visits_30d">0</strong><span>Visits (30d)</span></div>
-            <div class="metric"><strong data-admin-stat="visits_all_time">0</strong><span>Visits (all time)</span></div>
-            <div class="metric"><strong data-admin-stat="accounts_total">0</strong><span>Total accounts</span></div>
-            <div class="metric"><strong data-admin-stat="signups_30d">0</strong><span>Signups (30d)</span></div>
-            <div class="metric"><strong data-admin-stat="logins_30d">0</strong><span>Logins (30d)</span></div>
-            <div class="metric"><strong data-admin-stat="newsletter_opt_ins">0</strong><span>Mailing list</span></div>
-            <div class="metric"><strong data-admin-stat="supporter_updates_opt_ins">0</strong><span>Supporter emails</span></div>
-            <div class="metric"><strong data-admin-stat="donation_events">0</strong><span>Donation events</span></div>
-            <div class="metric"><strong data-admin-stat="subscription_events">0</strong><span>Subscription events</span></div>
-            <div class="metric"><strong data-admin-stat="donation_total">$0.00</strong><span>Donation total</span></div>
-            <div class="metric"><strong data-admin-stat="subscription_total">$0.00</strong><span>Subscription total</span></div>
-          </div>
+        <div class="vault-tabs" id="vault-tab-bar">
+          <button class="vault-tab active" data-tab="dashboard">Dashboard</button>
+          <button class="vault-tab" data-tab="security">Security <span class="tab-badge zero" id="tab-badge-security">0</span></button>
+          <button class="vault-tab" data-tab="users">Users</button>
+          <button class="vault-tab" data-tab="revenue">Revenue</button>
+          <button class="vault-tab" data-tab="licenses">Licenses</button>
+          <button class="vault-tab" data-tab="messages">Messages <span class="tab-badge zero" id="tab-badge-messages">0</span></button>
+          <button class="vault-tab" data-tab="inquiries">Inquiries <span class="tab-badge zero" id="tab-badge-inquiries">0</span></button>
+          <button class="vault-tab" data-tab="audit">Audit Log</button>
+          <button class="vault-tab" data-tab="health">System Health</button>
+          <button class="vault-tab" data-tab="edit">Edit Desk</button>
+          <button class="vault-tab" data-tab="settings">Settings</button>
         </div>
 
-        <div class="form-shell">
-          <span class="tag warm">Click counters</span>
-          <h3>Homepage CTA activity</h3>
-          <div class="metric-grid admin-metrics">
-            <div class="metric"><strong data-admin-stat="homepage_visit">0</strong><span>Homepage visits</span></div>
-            <div class="metric"><strong data-admin-stat="homepage_service_cta_click">0</strong><span>Reserve build clicks</span></div>
-            <div class="metric"><strong data-admin-stat="homepage_donation_click">0</strong><span>Donation clicks</span></div>
-            <div class="metric"><strong data-admin-stat="homepage_signup_click">0</strong><span>Sign-up clicks</span></div>
-            <div class="metric"><strong data-admin-stat="homepage_signin_click">0</strong><span>Sign-in clicks</span></div>
-            <div class="metric"><strong data-admin-stat="homepage_founder_cta_click">0</strong><span>Founder clicks</span></div>
-            <div class="metric"><strong data-admin-stat="homepage_support_cta_click">0</strong><span>Support CTA clicks</span></div>
-            <div class="metric"><strong data-admin-stat="homepage_fit_cta_click">0</strong><span>Good-fit clicks</span></div>
-          </div>
-        </div>
-
-        <div class="form-shell">
-          <span class="tag">Queues and funnel</span>
-          <h3>Requests, checkout opens, and reviews</h3>
-          <div class="metric-grid admin-metrics">
-            <div class="metric"><strong data-admin-stat="service_requests">0</strong><span>Service requests</span></div>
-            <div class="metric"><strong data-admin-stat="checkout_opens">0</strong><span>Checkout opens</span></div>
-            <div class="metric"><strong data-admin-stat="feedback_count">0</strong><span>Reviews / suggestions</span></div>
-            <div class="metric"><strong data-admin-stat="average_rating">0.0</strong><span>Average rating</span></div>
-            <div class="metric"><strong data-admin-stat="security_events">0</strong><span>Security events</span></div>
-            <div class="metric"><strong data-admin-stat="admin_denied">0</strong><span>Denied admin tries</span></div>
-          </div>
-          <p class="small-note">Service purchases are not fully counted yet as completed payments unless the payment processor sends that event back into your analytics layer. Right now, the strongest service-sales signal is checkout opens plus private intake submissions.</p>
-        </div>
-
-        <div class="form-shell">
-          <span class="tag alt">Downloads &amp; trials</span>
-          <h3>Product downloads and trial claims</h3>
-          <div class="metric-grid admin-metrics">
-            <div class="metric"><strong data-admin-stat="command_nexus_download">0</strong><span>CN downloads</span></div>
-            <div class="metric"><strong data-admin-stat="trial_key_claimed">0</strong><span>Trial keys claimed</span></div>
-            <div class="metric"><strong data-admin-stat="speakeasy_purchase_click">0</strong><span>Speakeasy buys</span></div>
-            <div class="metric"><strong data-admin-stat="downloads_30d">0</strong><span>Downloads (30d)</span></div>
-          </div>
-          <p class="small-note">Tracks every download click and trial claim across the site. Use this to see if visitors are actually attempting to use your products.</p>
-        </div>
-
-        <div class="admin-grid">
-          <div class="policy-shell">
-            <span class="tag">Recent service requests</span>
-            <h3>Private intake queue</h3>
-            <div class="data-list" id="service-request-list">
-              <div class="empty-state">Loading recent service requests…</div>
+        <div class="vault-section active" id="section-dashboard">
+          <div class="form-shell">
+            <span class="tag alt">Core counters</span>
+            <h3>Visitors, accounts, donations, and subscriptions</h3>
+            <div class="metric-grid admin-metrics">
+              <div class="metric"><strong data-admin-stat="visits_24h">0</strong><span>Visits (24h)</span></div>
+              <div class="metric"><strong data-admin-stat="visits_30d">0</strong><span>Visits (30d)</span></div>
+              <div class="metric"><strong data-admin-stat="visits_all_time">0</strong><span>Visits (all time)</span></div>
+              <div class="metric"><strong data-admin-stat="accounts_total">0</strong><span>Total accounts</span></div>
+              <div class="metric"><strong data-admin-stat="signups_30d">0</strong><span>Signups (30d)</span></div>
+              <div class="metric"><strong data-admin-stat="logins_30d">0</strong><span>Logins (30d)</span></div>
+              <div class="metric"><strong data-admin-stat="newsletter_opt_ins">0</strong><span>Mailing list</span></div>
+              <div class="metric"><strong data-admin-stat="supporter_updates_opt_ins">0</strong><span>Supporter emails</span></div>
+              <div class="metric"><strong data-admin-stat="donation_events">0</strong><span>Donation events</span></div>
+              <div class="metric"><strong data-admin-stat="subscription_events">0</strong><span>Subscription events</span></div>
+              <div class="metric"><strong data-admin-stat="donation_total">$0.00</strong><span>Donation total</span></div>
+              <div class="metric"><strong data-admin-stat="subscription_total">$0.00</strong><span>Subscription total</span></div>
             </div>
           </div>
 
-          <div class="policy-shell">
-            <span class="tag alt">Latest feedback</span>
-            <h3>Reviews, comments, and suggestions</h3>
-            <div class="data-list" id="feedback-list">
-              <div class="empty-state">Loading recent feedback…</div>
+          <div class="form-shell">
+            <span class="tag warm">Click counters</span>
+            <h3>Homepage CTA activity</h3>
+            <div class="metric-grid admin-metrics">
+              <div class="metric"><strong data-admin-stat="homepage_visit">0</strong><span>Homepage visits</span></div>
+              <div class="metric"><strong data-admin-stat="homepage_service_cta_click">0</strong><span>Reserve build clicks</span></div>
+              <div class="metric"><strong data-admin-stat="homepage_donation_click">0</strong><span>Donation clicks</span></div>
+              <div class="metric"><strong data-admin-stat="homepage_signup_click">0</strong><span>Sign-up clicks</span></div>
+              <div class="metric"><strong data-admin-stat="homepage_signin_click">0</strong><span>Sign-in clicks</span></div>
+              <div class="metric"><strong data-admin-stat="homepage_founder_cta_click">0</strong><span>Founder clicks</span></div>
+              <div class="metric"><strong data-admin-stat="homepage_support_cta_click">0</strong><span>Support CTA clicks</span></div>
+              <div class="metric"><strong data-admin-stat="homepage_fit_cta_click">0</strong><span>Good-fit clicks</span></div>
+            </div>
+          </div>
+
+          <div class="form-shell">
+            <span class="tag">Queues and funnel</span>
+            <h3>Requests, checkout opens, and reviews</h3>
+            <div class="metric-grid admin-metrics">
+              <div class="metric"><strong data-admin-stat="service_requests">0</strong><span>Service requests</span></div>
+              <div class="metric"><strong data-admin-stat="checkout_opens">0</strong><span>Checkout opens</span></div>
+              <div class="metric"><strong data-admin-stat="feedback_count">0</strong><span>Reviews / suggestions</span></div>
+              <div class="metric"><strong data-admin-stat="average_rating">0.0</strong><span>Average rating</span></div>
+              <div class="metric"><strong data-admin-stat="security_events">0</strong><span>Security events</span></div>
+              <div class="metric"><strong data-admin-stat="admin_denied">0</strong><span>Denied admin tries</span></div>
+            </div>
+            <p class="small-note">Service purchases are not fully counted yet as completed payments unless the payment processor sends that event back into your analytics layer. Right now, the strongest service-sales signal is checkout opens plus private intake submissions.</p>
+          </div>
+
+          <div class="form-shell">
+            <span class="tag alt">Downloads &amp; trials</span>
+            <h3>Product downloads and trial claims</h3>
+            <div class="metric-grid admin-metrics">
+              <div class="metric"><strong data-admin-stat="command_nexus_download">0</strong><span>CN downloads</span></div>
+              <div class="metric"><strong data-admin-stat="trial_key_claimed">0</strong><span>Trial keys claimed</span></div>
+              <div class="metric"><strong data-admin-stat="speakeasy_purchase_click">0</strong><span>Speakeasy buys</span></div>
+              <div class="metric"><strong data-admin-stat="downloads_30d">0</strong><span>Downloads (30d)</span></div>
+            </div>
+            <p class="small-note">Tracks every download click and trial claim across the site. Use this to see if visitors are actually attempting to use your products.</p>
+          </div>
+
+          <div class="admin-grid">
+            <div class="policy-shell">
+              <span class="tag">Recent service requests</span>
+              <h3>Private intake queue</h3>
+              <div class="data-list" id="service-request-list">
+                <div class="empty-state">Loading recent service requests&hellip;</div>
+              </div>
+            </div>
+            <div class="policy-shell">
+              <span class="tag alt">Latest feedback</span>
+              <h3>Reviews, comments, and suggestions</h3>
+              <div class="data-list" id="feedback-list">
+                <div class="empty-state">Loading recent feedback&hellip;</div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="admin-grid">
-          <div class="policy-shell">
-            <span class="tag warm">Security watch</span>
-            <h3>Blocked or suspicious access</h3>
+        <div class="vault-section" id="section-security">
+          <div class="form-shell">
+            <span class="tag warm">Security Center</span>
+            <h3>Threat assessment and access control</h3>
+            <div class="quick-action-bar">
+              <span class="threat-level low" id="threat-level-badge">Threat Level: Low</span>
+              <button class="quick-action" id="btn-refresh-security">Refresh security data</button>
+              <button class="quick-action" id="btn-export-security">Export security report</button>
+            </div>
+            <div class="metric-grid admin-metrics" style="margin-bottom:24px;">
+              <div class="security-stat"><strong id="sec-stat-blocked">0</strong><span>Blocked admin attempts</span></div>
+              <div class="security-stat"><strong id="sec-stat-hidden">0</strong><span>Hidden path hits</span></div>
+              <div class="security-stat"><strong id="sec-stat-failed-logins">0</strong><span>Failed logins (30d)</span></div>
+              <div class="security-stat"><strong id="sec-stat-unique-ips">0</strong><span>Unique visitor IPs</span></div>
+            </div>
+          </div>
+
+          <div class="form-shell">
+            <span class="tag">Security event log</span>
+            <h3>Blocked, suspicious, and admin access events</h3>
             <div class="data-list" id="security-event-list">
-              <div class="empty-state">Loading security events…</div>
+              <div class="empty-state">Loading security events&hellip;</div>
             </div>
           </div>
 
+          <div class="form-shell">
+            <span class="tag alt">IP watchlist</span>
+            <h3>Visitor IPs and access patterns</h3>
+            <p class="small-note">Tracks unique IP addresses from site events. Repeated denied admin attempts from the same IP are flagged for review.</p>
+            <div class="data-list" id="ip-watchlist">
+              <div class="empty-state">Loading IP data&hellip;</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vault-section" id="section-users">
+          <div class="form-shell">
+            <span class="tag">User directory</span>
+            <h3>All registered profiles</h3>
+            <div class="audit-filter-bar">
+              <input type="text" id="user-search-input" placeholder="Search by name or email&hellip;" style="flex:1;min-width:200px;">
+              <select id="user-filter-select">
+                <option value="">All users</option>
+                <option value="newsletter">Newsletter subscribers</option>
+                <option value="supporter">Supporter email opt-ins</option>
+                <option value="recent">Recent signups (30d)</option>
+              </select>
+              <button class="quick-action" id="btn-refresh-users">Refresh</button>
+            </div>
+            <div class="data-list" id="user-directory-list">
+              <div class="empty-state">Loading user directory&hellip;</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vault-section" id="section-revenue">
+          <div class="form-shell">
+            <span class="tag alt">Revenue overview</span>
+            <h3>Donations, subscriptions, and product sales</h3>
+            <div class="revenue-card">
+              <div class="revenue-total" id="revenue-total-display">$0.00</div>
+              <p class="small-note">Total tracked revenue (donations + subscriptions + product sales)</p>
+              <div class="revenue-breakdown">
+                <div class="revenue-breakdown-item">
+                  <strong id="revenue-donations">$0.00</strong>
+                  <span>Donations</span>
+                </div>
+                <div class="revenue-breakdown-item">
+                  <strong id="revenue-subscriptions">$0.00</strong>
+                  <span>Subscriptions</span>
+                </div>
+                <div class="revenue-breakdown-item">
+                  <strong id="revenue-products">$0.00</strong>
+                  <span>Product sales</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-shell">
+            <span class="tag warm">Recent transactions</span>
+            <h3>Latest donation and subscription events</h3>
+            <div class="data-list" id="revenue-transaction-list">
+              <div class="empty-state">Loading transactions&hellip;</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vault-section" id="section-licenses">
+          <div class="form-shell">
+            <span class="tag">Command Nexus licenses</span>
+            <h3>Active, trial, and expired license keys</h3>
+            <div class="quick-action-bar">
+              <button class="quick-action" id="btn-refresh-licenses">Refresh licenses</button>
+              <button class="quick-action" id="btn-generate-key">Generate trial key</button>
+            </div>
+            <div class="data-list" id="license-list">
+              <div class="empty-state">Loading license data&hellip;</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vault-section" id="section-messages">
+          <div class="form-shell">
+            <span class="tag">Message Center</span>
+            <h3>Compose and send messages to your users<span class="notif-badge zero" id="notif-feedback-badge">0</span> <span class="notif-badge zero" id="notif-inquiry-badge">0</span> <span class="notif-badge zero" id="notif-security-badge">0</span></h3>
+            <p class="small-note">Send messages to individuals, newsletter subscribers, or all signed-up users. Users see your messages in their account inbox and can reply back. Notifications appear on your desktop when new feedback, inquiries, or security events arrive &mdash; even if this tab is in the background.</p>
+            <div class="msg-center">
+              <div class="msg-compose">
+                <div class="msg-audience-row">
+                  <select id="msg-audience-select">
+                    <option value="individual">Message an individual&hellip;</option>
+                    <option value="newsletter">All newsletter subscribers</option>
+                    <option value="all_users">All signed-up users</option>
+                  </select>
+                  <select id="msg-recipient-select" style="display:none;min-width:280px;">
+                    <option value="">Select a user&hellip;</option>
+                  </select>
+                </div>
+                <input type="text" class="msg-subject-input" id="msg-subject-input" placeholder="Subject line&hellip;">
+                <textarea class="msg-body-input" id="msg-body-input" placeholder="Type your message here&hellip;"></textarea>
+                <div class="form-actions msg-send-btn">
+                  <button class="button primary" id="msg-send-btn" type="button">Send message</button>
+                  <span class="small-note" id="msg-send-status"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-shell">
+            <span class="tag alt">Inbox &mdash; Replies from users</span>
+            <h3>Messages and replies from your audience</h3>
+            <div class="data-list" id="msg-inbox-list">
+              <div class="empty-state">Loading inbox&hellip;</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vault-section" id="section-inquiries">
           <div class="policy-shell">
             <span class="tag">Enterprise inquiries</span>
-            <h3>Message center — enterprise leads</h3>
+            <h3>Message center &mdash; enterprise leads</h3>
             <div class="data-list" id="enterprise-inquiry-list">
-              <div class="empty-state">Loading enterprise inquiries…</div>
+              <div class="empty-state">Loading enterprise inquiries&hellip;</div>
             </div>
           </div>
         </div>
 
-        <div class="form-shell">
-          <span class="tag">Message Center</span>
-          <h3>Compose and send messages to your users<span class="notif-badge zero" id="notif-feedback-badge">0</span> <span class="notif-badge zero" id="notif-inquiry-badge">0</span> <span class="notif-badge zero" id="notif-security-badge">0</span></h3>
-          <p class="small-note">Send messages to individuals, newsletter subscribers, or all signed-up users. Users see your messages in their account inbox and can reply back. Notifications appear on your desktop when new feedback, inquiries, or security events arrive — even if this tab is in the background.</p>
-          <div class="msg-center">
-            <div class="msg-compose">
-              <div class="msg-audience-row">
-                <select id="msg-audience-select">
-                  <option value="individual">Message an individual…</option>
-                  <option value="newsletter">All newsletter subscribers</option>
-                  <option value="all_users">All signed-up users</option>
-                </select>
-                <select id="msg-recipient-select" style="display:none;min-width:280px;">
-                  <option value="">Select a user…</option>
-                </select>
+        <div class="vault-section" id="section-audit">
+          <div class="form-shell">
+            <span class="tag warm">Audit log</span>
+            <h3>Full event history with filtering</h3>
+            <div class="audit-filter-bar">
+              <select id="audit-event-filter">
+                <option value="">All event types</option>
+                <option value="page_visit">Page visits</option>
+                <option value="login_success">Logins</option>
+                <option value="login_failed">Failed logins</option>
+                <option value="signup_submitted">Signups</option>
+                <option value="admin_access_denied">Admin denied</option>
+                <option value="admin_hidden_path_hit">Hidden path hit</option>
+                <option value="owner_vault_opened">Vault opened</option>
+                <option value="donation_completed">Donations</option>
+                <option value="subscription_completed">Subscriptions</option>
+                <option value="command_nexus_download">CN downloads</option>
+                <option value="trial_key_claimed">Trial keys</option>
+                <option value="service_request_submitted">Service requests</option>
+                <option value="public_feedback_submitted">Feedback</option>
+              </select>
+              <input type="text" id="audit-search-input" placeholder="Search by email or detail&hellip;" style="flex:1;min-width:200px;">
+              <select id="audit-limit-select">
+                <option value="50">Last 50</option>
+                <option value="100">Last 100</option>
+                <option value="200">Last 200</option>
+                <option value="500">Last 500</option>
+              </select>
+              <button class="quick-action" id="btn-refresh-audit">Refresh</button>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="audit-table" id="audit-table">
+                <thead>
+                  <tr><th>Timestamp</th><th>Event type</th><th>Email</th><th>Page</th><th>Details</th></tr>
+                </thead>
+                <tbody id="audit-table-body">
+                  <tr><td colspan="5" class="empty-state">Click Refresh to load audit log&hellip;</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="vault-section" id="section-health">
+          <div class="form-shell">
+            <span class="tag alt">System health</span>
+            <h3>Service status and uptime monitoring</h3>
+            <div class="admin-grid">
+              <div class="health-card">
+                <strong>Supabase</strong>
+                <div class="health-indicator"><span class="health-dot unknown" id="health-dot-supabase"></span><span id="health-label-supabase">Checking&hellip;</span></div>
+                <p class="small-note">Database connectivity, auth service, and edge functions.</p>
               </div>
-              <input type="text" class="msg-subject-input" id="msg-subject-input" placeholder="Subject line…">
-              <textarea class="msg-body-input" id="msg-body-input" placeholder="Type your message here…"></textarea>
-              <div class="form-actions msg-send-btn">
-                <button class="button primary" id="msg-send-btn" type="button">Send message</button>
-                <span class="small-note" id="msg-send-status"></span>
+              <div class="health-card">
+                <strong>Website</strong>
+                <div class="health-indicator"><span class="health-dot unknown" id="health-dot-website"></span><span id="health-label-website">Checking&hellip;</span></div>
+                <p class="small-note">Frontend page load and asset availability.</p>
+              </div>
+              <div class="health-card">
+                <strong>Edge functions</strong>
+                <div class="health-indicator"><span class="health-dot unknown" id="health-dot-edge"></span><span id="health-label-edge">Checking&hellip;</span></div>
+                <p class="small-note">generate-trial-key, emailoctopus-subscribe, validate-key.</p>
+              </div>
+              <div class="health-card">
+                <strong>PayPal</strong>
+                <div class="health-indicator"><span class="health-dot unknown" id="health-dot-paypal"></span><span id="health-label-paypal">Not checked</span></div>
+                <p class="small-note">Payment processor connectivity (checked on demand).</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-shell">
+            <span class="tag">Build information</span>
+            <h3>Vault version and deployment details</h3>
+            <div class="admin-grid">
+              <div class="health-card">
+                <strong>Vault build</strong>
+                <span id="health-build-id">2026-07-04-1</span>
+              </div>
+              <div class="health-card">
+                <strong>Site config version</strong>
+                <span id="health-config-version">Checking&hellip;</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="form-shell">
-          <span class="tag alt">Inbox — Replies from users</span>
-          <h3>Messages and replies from your audience</h3>
-          <div class="data-list" id="msg-inbox-list">
-            <div class="empty-state">Loading inbox…</div>
-          </div>
-        </div>
-
-        <div class="admin-grid">
+        <div class="vault-section" id="section-edit">
           <div class="policy-shell">
             <span class="tag alt">Website edit desk</span>
             <h3>Fast browser-based page editing</h3>
@@ -308,6 +570,37 @@
             <p class="small-note">This is the fastest safe no-terminal editing setup now. A fuller no-code CMS can be added later, but this vault is now organized so you can edit the main website surfaces from the browser without hunting through files.</p>
           </div>
         </div>
+
+        <div class="vault-section" id="section-settings">
+          <div class="form-shell">
+            <span class="tag">Owner settings</span>
+            <h3>Notification and security preferences</h3>
+            <div class="admin-grid">
+              <div class="health-card">
+                <strong>Desktop notifications</strong>
+                <p class="small-note">Get notified when new feedback, inquiries, or security events arrive.</p>
+                <button class="button secondary small" id="btn-enable-notifications">Enable notifications</button>
+                <span class="small-note" id="notif-status-text">Not enabled</span>
+              </div>
+              <div class="health-card">
+                <strong>Security alerts</strong>
+                <p class="small-note">Email alerts for tampering, lattice violations, and license terminations are sent to adminaverylogicworks@gmail.com.</p>
+                <span class="status-pill" id="security-email-status">Alerts active</span>
+              </div>
+              <div class="health-card">
+                <strong>Owner allowlist</strong>
+                <p class="small-note">Emails that can access this vault. Edit in site-config.js.</p>
+                <div id="owner-allowlist-display" class="mono-block" style="font-size:.85rem;"></div>
+              </div>
+              <div class="health-card">
+                <strong>Session info</strong>
+                <p class="small-note">Current session details and auth state.</p>
+                <div id="session-info-display" class="mono-block" style="font-size:.85rem;">Loading&hellip;</div>
+                <button class="button ghost small" id="btn-force-signout">Force sign out everywhere</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </main>
@@ -323,14 +616,14 @@
     </div>
   </footer>
 
-  <div class="vault-modal-overlay"> id="vault-detail-modal">
+  <div class="vault-modal-overlay" id="vault-detail-modal">
     <div class="vault-modal">
       <div class="vault-modal-header">
         <h3 id="vault-modal-title">Event details</h3>
         <button class="vault-modal-close" id="vault-modal-close" type="button">Close</button>
       </div>
       <div class="vault-modal-body" id="vault-modal-body">
-        <div class="vault-modal-loading">Loading…</div>
+        <div class="vault-modal-loading">Loading&hellip;</div>
       </div>
     </div>
   </div>
@@ -360,6 +653,25 @@
       const snapshotLogins = document.getElementById('snapshot-logins');
       const snapshotSignups = document.getElementById('snapshot-signups');
       const vaultBuildId = document.getElementById('vault-build-id');
+      let allUserData = [];
+      let allAuditData = [];
+
+      // ─── Tab switching ───────────────────────────────────────────────
+      document.querySelectorAll('.vault-tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          document.querySelectorAll('.vault-tab').forEach(function (t) { t.classList.remove('active'); });
+          document.querySelectorAll('.vault-section').forEach(function (s) { s.classList.remove('active'); });
+          tab.classList.add('active');
+          var section = document.getElementById('section-' + tab.dataset.tab);
+          if (section) section.classList.add('active');
+          if (tab.dataset.tab === 'audit') loadAuditLog();
+          if (tab.dataset.tab === 'users') loadUserDirectory();
+          if (tab.dataset.tab === 'health') checkSystemHealth();
+          if (tab.dataset.tab === 'settings') loadSettings();
+          if (tab.dataset.tab === 'licenses') loadLicenses();
+          if (tab.dataset.tab === 'revenue') loadRevenue();
+        });
+      });
 
       function getRememberKey() {
         return 'avery-remember-me';
@@ -765,20 +1077,43 @@
 
       async function loadSecurityEvents() {
         try {
-          const securityTypes = ['admin_access_denied', 'admin_hidden_path_hit', 'service_intake_save_failed', 'owner_vault_opened'];
+          const securityTypes = ['admin_access_denied', 'admin_hidden_path_hit', 'service_intake_save_failed', 'owner_vault_opened', 'login_failed'];
           const total = await sb.from('site_events').select('*', { count: 'exact', head: true }).in('event_type', securityTypes);
           if (total.error) throw total.error;
           setStatValue('security_events', total.count || 0, '0');
           const denied = await countEvent('admin_access_denied');
           setStatValue('admin_denied', denied, '0');
-          const { data, error } = await sb.from('site_events').select('created_at,event_type,user_email,metadata').in('event_type', securityTypes).order('created_at', { ascending: false }).limit(20);
+
+          // Populate Security Center stats
+          var secBlocked = document.getElementById('sec-stat-blocked');
+          var secHidden = document.getElementById('sec-stat-hidden');
+          var secFailed = document.getElementById('sec-stat-failed-logins');
+          var secIps = document.getElementById('sec-stat-unique-ips');
+          if (secBlocked) secBlocked.textContent = denied;
+          if (secHidden) { try { secHidden.textContent = await countEvent('admin_hidden_path_hit'); } catch(e) { secHidden.textContent = '0'; } }
+          if (secFailed) { try { var thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(); secFailed.textContent = await countEvent('login_failed', thirtyDaysAgo); } catch(e) { secFailed.textContent = '0'; } }
+
+          // Update threat level
+          var threatBadge = document.getElementById('threat-level-badge');
+          var tabSecBadge = document.getElementById('tab-badge-security');
+          if (threatBadge) {
+            var level = 'low', label = 'Low';
+            if (denied >= 10) { level = 'high'; label = 'High'; }
+            else if (denied >= 3) { level = 'medium'; label = 'Medium'; }
+            threatBadge.className = 'threat-level ' + level;
+            threatBadge.textContent = 'Threat Level: ' + label;
+          }
+          if (tabSecBadge) { tabSecBadge.textContent = denied; tabSecBadge.classList.toggle('zero', denied === 0); }
+
+          const { data, error } = await sb.from('site_events').select('created_at,event_type,user_email,metadata,visitor_token').in('event_type', securityTypes).order('created_at', { ascending: false }).limit(20);
           if (error) throw error;
-          renderSecurityRows((data || []).map(function (row) {
+          var mappedRows = (data || []).map(function (row) {
             let label = 'Security event logged';
             if (row.event_type === 'admin_access_denied') label = 'Blocked admin attempt';
             if (row.event_type === 'admin_hidden_path_hit') label = 'Hidden vault hit without access';
             if (row.event_type === 'service_intake_save_failed') label = 'Service intake save failure';
             if (row.event_type === 'owner_vault_opened') label = 'Owner vault opened';
+            if (row.event_type === 'login_failed') label = 'Failed login attempt';
             return {
               created_at: row.created_at,
               event_type: row.event_type,
@@ -786,7 +1121,36 @@
               user_email: row.user_email,
               metadata: row.metadata || {}
             };
-          }));
+          });
+          renderSecurityRows(mappedRows);
+
+          // Build IP watchlist from security events
+          var ipList = document.getElementById('ip-watchlist');
+          if (ipList) {
+            var ipMap = {};
+            (data || []).forEach(function (row) {
+              var meta = row.metadata || {};
+              var ip = meta.ip || meta.ip_address || '';
+              if (!ip) return;
+              if (!ipMap[ip]) ipMap[ip] = { ip: ip, count: 0, events: [], emails: {} };
+              ipMap[ip].count++;
+              ipMap[ip].events.push(row.event_type);
+              if (row.user_email) ipMap[ip].emails[row.user_email] = true;
+            });
+            var ips = Object.values(ipMap).sort(function (a, b) { return b.count - a.count; });
+            if (secIps) secIps.textContent = ips.length;
+            if (!ips.length) {
+              ipList.innerHTML = '<div class="empty-state">No IP data available from security events.</div>';
+            } else {
+              ipList.innerHTML = ips.map(function (entry) {
+                var isThreat = entry.count >= 3;
+                var threatBadgeHtml = isThreat ? '<span class="vault-self-badge threat">REPEAT</span>' : '';
+                return '<div class="data-item"><strong><span class="ip-badge">' + escapeHtml(entry.ip) + '</span></strong> ' + threatBadgeHtml
+                  + '<div class="data-meta">' + entry.count + ' event' + (entry.count === 1 ? '' : 's') + ': ' + escapeHtml([...new Set(entry.events)].join(', ')) + '</div>'
+                  + '<div class="data-meta">Emails: ' + escapeHtml(Object.keys(entry.emails).join(', ') || 'Unknown') + '</div></div>';
+              }).join('');
+            }
+          }
         } catch (err) {
           renderList(securityEventList, [], null, 'Security events are not readable from this owner session yet.');
         }
@@ -803,6 +1167,8 @@
           if (error) throw error;
           renderEnterpriseInquiries(data || []);
           lastInquiryCount = (data || []).filter(function (r) { return r.status === 'new'; }).length;
+          var inqBadge = document.getElementById('tab-badge-inquiries');
+          if (inqBadge) { inqBadge.textContent = lastInquiryCount; inqBadge.classList.toggle('zero', lastInquiryCount === 0); }
         } catch (err) {
           if (enterpriseInquiryList) {
             enterpriseInquiryList.innerHTML = '<div class="empty-state">Enterprise inquiries are not readable from this owner session yet. Run the enterprise_inquiries.sql setup script.</div>';
@@ -1210,6 +1576,261 @@
         }
       }
 
+      // ─── User Directory ──────────────────────────────────────────────
+      async function loadUserDirectory() {
+        if (!sb) return;
+        try {
+          var profResp = await sb.from('profiles')
+            .select('user_id,display_name,created_at,newsletter_opt_in,supporter_updates_opt_in')
+            .order('created_at', { ascending: false }).limit(500);
+          if (profResp.error) throw profResp.error;
+          allUserData = profResp.data || [];
+          renderUserDirectory();
+        } catch (err) {
+          var list = document.getElementById('user-directory-list');
+          if (list) list.innerHTML = '<div class="empty-state">Could not load user directory.</div>';
+        }
+      }
+      function renderUserDirectory() {
+        var search = (document.getElementById('user-search-input')?.value || '').toLowerCase();
+        var filter = document.getElementById('user-filter-select')?.value || '';
+        var users = allUserData.filter(function (u) {
+          if (search) {
+            var name = (u.display_name || '').toLowerCase();
+            var email = (u.email || u.user_id || '').toLowerCase();
+            if (!name.includes(search) && !email.includes(search)) return false;
+          }
+          if (filter === 'newsletter' && !u.newsletter_opt_in) return false;
+          if (filter === 'supporter' && !u.supporter_updates_opt_in) return false;
+          if (filter === 'recent') {
+            var thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+            if (!u.created_at || new Date(u.created_at).getTime() < thirtyDaysAgo) return false;
+          }
+          return true;
+        });
+        var list = document.getElementById('user-directory-list');
+        if (!list) return;
+        if (!users.length) { list.innerHTML = '<div class="empty-state">No users match this filter.</div>'; return; }
+        list.innerHTML = users.map(function (u) {
+          var who = classifyVisitor(u.email || '');
+          var dateStr = u.created_at ? new Date(u.created_at).toLocaleString() : 'No timestamp';
+          var nl = u.newsletter_opt_in ? '<span class="tag alt" style="font-size:.7rem;padding:2px 8px;">Newsletter</span>' : '';
+          var sup = u.supporter_updates_opt_in ? '<span class="tag warm" style="font-size:.7rem;padding:2px 8px;">Supporter</span>' : '';
+          return '<div class="data-item"><strong>' + escapeHtml(u.display_name || 'Unknown') + ' <span class="vault-self-badge ' + who.cls + '">' + who.label + '</span></strong>'
+            + '<div class="data-meta">' + escapeHtml(u.email || u.user_id || 'No email') + ' &middot; ' + escapeHtml(dateStr) + '</div>'
+            + '<div class="data-meta">' + nl + ' ' + sup + '</div></div>';
+        }).join('');
+      }
+      var userSearchInput = document.getElementById('user-search-input');
+      var userFilterSelect = document.getElementById('user-filter-select');
+      if (userSearchInput) userSearchInput.addEventListener('input', renderUserDirectory);
+      if (userFilterSelect) userFilterSelect.addEventListener('change', renderUserDirectory);
+      var btnRefreshUsers = document.getElementById('btn-refresh-users');
+      if (btnRefreshUsers) btnRefreshUsers.addEventListener('click', loadUserDirectory);
+
+      // ─── Revenue ─────────────────────────────────────────────────────
+      async function loadRevenue() {
+        if (!sb) return;
+        var list = document.getElementById('revenue-transaction-list');
+        try {
+          var donationsResp = await sb.from('site_events').select('created_at,user_email,metadata').eq('event_type', 'donation_completed').order('created_at', { ascending: false }).limit(20);
+          var subscriptionsResp = await sb.from('site_events').select('created_at,user_email,metadata').eq('event_type', 'subscription_completed').order('created_at', { ascending: false }).limit(20);
+          var productsResp = await sb.from('site_events').select('created_at,user_email,metadata').eq('event_type', 'command_nexus_purchase').order('created_at', { ascending: false }).limit(20);
+          var donations = donationsResp.data || [];
+          var subscriptions = subscriptionsResp.data || [];
+          var products = productsResp.data || [];
+          var allTxns = [].concat(donations, subscriptions, products);
+          if (!allTxns.length) {
+            if (list) list.innerHTML = '<div class="empty-state">No transactions recorded yet.</div>';
+          } else if (list) {
+            list.innerHTML = allTxns.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at); }).map(function (row) {
+              var meta = row.metadata || {};
+              var amount = meta.amount || '$0.00';
+              var type = meta.type || (row.event_type === 'donation_completed' ? 'Donation' : row.event_type === 'subscription_completed' ? 'Subscription' : 'Product sale');
+              return '<div class="data-item"><strong>' + escapeHtml(type) + ' &mdash; ' + escapeHtml(amount) + '</strong>'
+                + '<div class="data-meta">' + escapeHtml(row.user_email || 'Unknown') + ' &middot; ' + escapeHtml(row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div></div>';
+            }).join('');
+          }
+          var donationTotal = donations.reduce(function (sum, row) { return sum + parseFloat((row.metadata || {}).amount || '0'); }, 0);
+          var subTotal = subscriptions.reduce(function (sum, row) { return sum + parseFloat((row.metadata || {}).amount || '0'); }, 0);
+          var productTotal = products.reduce(function (sum, row) { return sum + parseFloat((row.metadata || {}).amount || '0'); }, 0);
+          var elDon = document.getElementById('revenue-donations');
+          var elSub = document.getElementById('revenue-subscriptions');
+          var elProd = document.getElementById('revenue-products');
+          var elTotal = document.getElementById('revenue-total-display');
+          if (elDon) elDon.textContent = '$' + donationTotal.toFixed(2);
+          if (elSub) elSub.textContent = '$' + subTotal.toFixed(2);
+          if (elProd) elProd.textContent = '$' + productTotal.toFixed(2);
+          if (elTotal) elTotal.textContent = '$' + (donationTotal + subTotal + productTotal).toFixed(2);
+        } catch (err) {
+          if (list) list.innerHTML = '<div class="empty-state">Revenue data not available yet.</div>';
+        }
+      }
+
+      // ─── Licenses ────────────────────────────────────────────────────
+      async function loadLicenses() {
+        var list = document.getElementById('license-list');
+        if (!sb || !list) return;
+        try {
+          var resp = await sb.from('site_events').select('created_at,user_email,metadata,event_type')
+            .in('event_type', ['trial_key_claimed', 'license_activated', 'license_expired', 'license_revoked'])
+            .order('created_at', { ascending: false }).limit(30);
+          if (resp.error) throw resp.error;
+          var rows = resp.data || [];
+          if (!rows.length) { list.innerHTML = '<div class="empty-state">No license events recorded yet.</div>'; return; }
+          list.innerHTML = rows.map(function (row) {
+            var meta = row.metadata || {};
+            var status = 'active', statusClass = 'active';
+            if (row.event_type === 'trial_key_claimed') { status = 'trial'; statusClass = 'trial'; }
+            if (row.event_type === 'license_expired') { status = 'expired'; statusClass = 'expired'; }
+            if (row.event_type === 'license_revoked') { status = 'revoked'; statusClass = 'revoked'; }
+            var key = meta.license_key || meta.key || 'Unknown key';
+            return '<div class="license-card"><div><div class="license-key">' + escapeHtml(key) + '</div>'
+              + '<div class="data-meta">' + escapeHtml(row.user_email || 'Unknown') + ' &middot; ' + escapeHtml(row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div></div>'
+              + '<span class="license-status ' + statusClass + '">' + status.toUpperCase() + '</span></div>';
+          }).join('');
+        } catch (err) { list.innerHTML = '<div class="empty-state">License data not available yet.</div>'; }
+      }
+      var btnRefreshLic = document.getElementById('btn-refresh-licenses');
+      if (btnRefreshLic) btnRefreshLic.addEventListener('click', loadLicenses);
+      var btnGenKey = document.getElementById('btn-generate-key');
+      if (btnGenKey) btnGenKey.addEventListener('click', async function () {
+        if (!sb) return;
+        try {
+          var baseUrl = String(supabaseCfg.url || '').replace(/\/+$/, '');
+          var resp = await fetch(baseUrl + '/functions/v1/generate-trial-key', {
+            method: 'POST', headers: { 'Content-Type': 'application/json', 'apikey': supabaseCfg.publishableKey || '' },
+            body: JSON.stringify({})
+          });
+          if (!resp.ok) throw new Error('Failed: ' + resp.status);
+          var result = await resp.json();
+          alert('Trial key generated: ' + (result.key || result.license_key || 'Unknown'));
+        } catch (err) { alert('Could not generate trial key: ' + (err.message || err)); }
+      });
+
+      // ─── Audit Log ───────────────────────────────────────────────────
+      async function loadAuditLog() {
+        if (!sb) return;
+        var filter = document.getElementById('audit-event-filter')?.value || '';
+        var limit = parseInt(document.getElementById('audit-limit-select')?.value || '50', 10);
+        var body = document.getElementById('audit-table-body');
+        if (body) body.innerHTML = '<tr><td colspan="5" class="empty-state">Loading&hellip;</td></tr>';
+        try {
+          var query = sb.from('site_events').select('created_at,event_type,user_email,page_path,metadata,visitor_token').order('created_at', { ascending: false }).limit(limit);
+          if (filter) query = query.eq('event_type', filter);
+          var resp = await query;
+          if (resp.error) throw resp.error;
+          allAuditData = resp.data || [];
+          renderAuditTable();
+        } catch (err) {
+          if (body) body.innerHTML = '<tr><td colspan="5" class="empty-state">Could not load audit log: ' + escapeHtml(err.message || err) + '</td></tr>';
+        }
+      }
+      function renderAuditTable() {
+        var search = (document.getElementById('audit-search-input')?.value || '').toLowerCase();
+        var body = document.getElementById('audit-table-body');
+        if (!body) return;
+        var rows = allAuditData;
+        if (search) {
+          rows = rows.filter(function (row) {
+            var email = (row.user_email || '').toLowerCase();
+            var meta = JSON.stringify(row.metadata || {}).toLowerCase();
+            return email.includes(search) || meta.includes(search);
+          });
+        }
+        if (!rows.length) { body.innerHTML = '<tr><td colspan="5" class="empty-state">No events found.</td></tr>'; return; }
+        body.innerHTML = rows.map(function (row) {
+          var meta = row.metadata || {};
+          var details = [];
+          if (meta.subject) details.push('Subject: ' + meta.subject);
+          if (meta.rating) details.push('Rating: ' + meta.rating + '/5');
+          if (meta.amount) details.push('Amount: ' + meta.amount);
+          if (meta.reason) details.push('Reason: ' + meta.reason);
+          if (meta.plan) details.push('Plan: ' + meta.plan);
+          return '<tr><td>' + escapeHtml(row.created_at ? new Date(row.created_at).toLocaleString() : '&mdash;') + '</td>'
+            + '<td>' + escapeHtml(row.event_type || '&mdash;') + '</td>'
+            + '<td>' + escapeHtml(row.user_email || '&mdash;') + '</td>'
+            + '<td>' + escapeHtml(row.page_path || '&mdash;') + '</td>'
+            + '<td>' + escapeHtml(details.join(' &middot; ') || '&mdash;') + '</td></tr>';
+        }).join('');
+      }
+      var auditSearchInput = document.getElementById('audit-search-input');
+      var auditEventFilter = document.getElementById('audit-event-filter');
+      var auditLimitSelect = document.getElementById('audit-limit-select');
+      var btnRefreshAudit = document.getElementById('btn-refresh-audit');
+      if (auditSearchInput) auditSearchInput.addEventListener('input', renderAuditTable);
+      if (auditEventFilter) auditEventFilter.addEventListener('change', loadAuditLog);
+      if (auditLimitSelect) auditLimitSelect.addEventListener('change', loadAuditLog);
+      if (btnRefreshAudit) btnRefreshAudit.addEventListener('click', loadAuditLog);
+
+      // ─── System Health ───────────────────────────────────────────────
+      async function checkSystemHealth() {
+        var dotSb = document.getElementById('health-dot-supabase');
+        var labelSb = document.getElementById('health-label-supabase');
+        var dotWeb = document.getElementById('health-dot-website');
+        var labelWeb = document.getElementById('health-label-website');
+        var dotEdge = document.getElementById('health-dot-edge');
+        var labelEdge = document.getElementById('health-label-edge');
+        if (sb) {
+          if (dotSb) { dotSb.className = 'health-dot ok'; labelSb.textContent = 'Connected'; }
+          try {
+            var sessionData = await sb.auth.getSession();
+            if (sessionData?.data?.session && dotSb) { dotSb.className = 'health-dot ok'; labelSb.textContent = 'Connected (authenticated)'; }
+          } catch (e) { if (dotSb) { dotSb.className = 'health-dot warn'; labelSb.textContent = 'Connected (auth issue)'; } }
+        } else { if (dotSb) { dotSb.className = 'health-dot down'; labelSb.textContent = 'Not connected'; } }
+        if (dotWeb) { dotWeb.className = 'health-dot ok'; labelWeb.textContent = 'Online (page loaded)'; }
+        if (dotEdge) {
+          try {
+            var baseUrl = String(supabaseCfg.url || '').replace(/\/+$/, '');
+            var resp = await fetch(baseUrl + '/functions/v1/generate-trial-key', { method: 'OPTIONS' });
+            dotEdge.className = resp.ok ? 'health-dot ok' : 'health-dot warn';
+            labelEdge.textContent = resp.ok ? 'Responsive' : 'Degraded';
+          } catch (e) { dotEdge.className = 'health-dot down'; labelEdge.textContent = 'Unreachable'; }
+        }
+        var configVersion = document.getElementById('health-config-version');
+        if (configVersion) configVersion.textContent = cfg.commandNexusStage ? 'Stage: ' + cfg.commandNexusStage : 'Unknown';
+      }
+
+      // ─── Settings ────────────────────────────────────────────────────
+      function loadSettings() {
+        var allowlist = document.getElementById('owner-allowlist-display');
+        if (allowlist) allowlist.textContent = ownerEmails.join(', ') || 'No owner emails configured';
+        var sessionInfo = document.getElementById('session-info-display');
+        if (sb && sessionInfo) {
+          sb.auth.getSession().then(function (sessionData) {
+            var session = sessionData?.data?.session;
+            if (session) {
+              sessionInfo.textContent = 'User: ' + (session.user?.email || 'Unknown') + '\nExpires: ' + (session.expires_at ? new Date(session.expires_at * 1000).toLocaleString() : 'Unknown');
+            } else { sessionInfo.textContent = 'No active session'; }
+          });
+        }
+      }
+      var btnEnableNotif = document.getElementById('btn-enable-notifications');
+      if (btnEnableNotif) btnEnableNotif.addEventListener('click', async function () {
+        if (!('Notification' in window)) { document.getElementById('notif-status-text').textContent = 'Not supported'; return; }
+        var result = await Notification.requestPermission();
+        var statusEl = document.getElementById('notif-status-text');
+        if (statusEl) statusEl.textContent = result === 'granted' ? 'Enabled' : 'Denied';
+      });
+      var btnForceSignout = document.getElementById('btn-force-signout');
+      if (btnForceSignout) btnForceSignout.addEventListener('click', async function () {
+        if (!sb) return;
+        await sb.auth.signOut({ scope: 'global' });
+        var si = document.getElementById('session-info-display');
+        if (si) si.textContent = 'Signed out everywhere';
+      });
+
+      // ─── Security button wiring ──────────────────────────────────────
+      var btnRefreshSec = document.getElementById('btn-refresh-security');
+      if (btnRefreshSec) btnRefreshSec.addEventListener('click', loadSecurityEvents);
+      var btnExportSec = document.getElementById('btn-export-security');
+      if (btnExportSec) btnExportSec.addEventListener('click', function () {
+        var content = securityEventList ? securityEventList.textContent : 'No security events';
+        var blob = new Blob([content], { type: 'text/plain' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob); a.download = 'security-report-' + Date.now() + '.txt'; a.click();
+      });
+
       async function loadConsole(session) {
         document.title = 'Operator Vault | Avery Logic Works';
         ownerEmailNode.textContent = session.user.email || 'owner';
@@ -1224,6 +1845,7 @@
           settleAdminLists();
           loadEnterpriseInquiries();
           loadOwnerInbox();
+          loadSecurityEvents();
           startNotificationPolling();
           setMessage(adminStatus, 'Owner session confirmed. Snapshot: profiles ' + snapshotProfiles.textContent + ', visits ' + snapshotVisits.textContent + ', logins ' + snapshotLogins.textContent + ', signups ' + snapshotSignups.textContent + '. Loaded through the owner vault service.', 'info');
           return;
@@ -1284,7 +1906,7 @@
       signOutButton.addEventListener('click', async function () {
         if (!sb) return;
         await sb.auth.signOut();
-        document.title = 'Page unavailable | Avery Logic Works';
+        document.title = 'Operator Vault | Avery Logic Works';
         adminShell.classList.add('hidden');
         publicShell.classList.remove('hidden');
       });
