@@ -164,9 +164,13 @@
     <section class="page-hero" id="public-shell">
       <div class="container unavailable-shell">
         <div class="form-shell">
-          <span class="tag alt">Unavailable</span>
-          <h1>This page is unavailable.</h1>
-          <p class="muted">The page you requested is not available from this session.</p>
+          <span class="tag alt">Owner access required</span>
+          <h1>Operator Vault</h1>
+          <p class="muted">This is a private owner-only page. You must be signed in as an authorized owner account to access the vault.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="login.html">Sign in</a>
+            <a class="button ghost" href="index.html">Back to home</a>
+          </div>
         </div>
       </div>
     </section>
@@ -2120,6 +2124,142 @@
       });
     }());
   </script>
-  <script src="assets/site-shell.js"></script>
+  <script>
+    // Vault-specific sidebar — replaces site-shell.js for this page
+    (function () {
+      var existing = document.getElementById('alw-sidebar');
+      if (existing) return;
+
+      var vaultNavItems = [
+        { label: 'Dashboard', tab: 'dashboard', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>' },
+        { label: 'Security Center', tab: 'security', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/></svg>' },
+        { label: 'User Directory', tab: 'users', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>' },
+        { label: 'Revenue', tab: 'revenue', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>' },
+        { label: 'Licenses', tab: 'licenses', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h4"/></svg>' },
+        { label: 'Messages', tab: 'messages', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>' },
+        { label: 'Inquiries', tab: 'inquiries', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 113 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>' },
+        { label: 'Audit Log', tab: 'audit', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>' },
+        { label: 'System Health', tab: 'health', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>' },
+        { label: 'Edit Desk', tab: 'edit', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 113 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' },
+        { label: 'Settings', tab: 'settings', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>' }
+      ];
+
+      var html = '<div class="sidebar" id="alw-sidebar">';
+      html += '<button class="sidebar-toggle" id="alw-sidebar-toggle" aria-label="Toggle sidebar">&#x2039;</button>';
+      html += '<div class="sidebar-header">';
+      html += '<a class="sidebar-brand" href="index.html">';
+      html += '<img src="assets/favicon.svg" alt="Avery Logic Works" />';
+      html += '<span>Operator Vault</span>';
+      html += '</a>';
+      html += '</div>';
+      html += '<nav class="sidebar-nav">';
+      html += '<div class="sidebar-section-label">Vault Panels</div>';
+      vaultNavItems.forEach(function (item) {
+        html += '<a class="sidebar-item vault-nav-item" data-tab="' + item.tab + '" href="#' + item.tab + '">';
+        html += '<span class="sidebar-icon">' + item.icon + '</span>';
+        html += '<span>' + item.label + '</span>';
+        html += '</a>';
+      });
+      html += '</nav>';
+      html += '<div class="sidebar-footer">';
+      html += '<a class="sidebar-item" href="index.html" style="text-decoration:none;">';
+      html += '<span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg></span>';
+      html += '<span>Back to Website</span>';
+      html += '</a>';
+      html += '</div>';
+      html += '</div>';
+      html += '<div class="sidebar-overlay" id="alw-sidebar-overlay"></div>';
+
+      var wrapper = document.createElement('div');
+      wrapper.innerHTML = html;
+      var sidebar = wrapper.querySelector('.sidebar');
+      var overlay = wrapper.querySelector('.sidebar-overlay');
+      var body = document.body;
+      body.insertBefore(sidebar, body.firstChild);
+      body.insertBefore(overlay, sidebar.nextSibling);
+
+      // Theme
+      var theme = localStorage.getItem('alw-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+
+      function toggleSidebar() {
+        var sb = document.getElementById('alw-sidebar');
+        var main = document.querySelector('.main-content');
+        if (!sb) return;
+        var isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+          var isOpen = sb.classList.toggle('open');
+          document.body.classList.toggle('sidebar-open', isOpen);
+        } else {
+          var collapsed = sb.classList.toggle('collapsed');
+          if (main) main.classList.toggle('sidebar-collapsed', collapsed);
+          localStorage.setItem('alw-sidebar-collapsed', collapsed ? '1' : '0');
+          var toggleBtn = document.getElementById('alw-sidebar-toggle');
+          if (toggleBtn) toggleBtn.textContent = collapsed ? '\u203A' : '\u2039';
+        }
+      }
+      function closeMobileSidebar() {
+        var sb = document.getElementById('alw-sidebar');
+        if (sb) sb.classList.remove('open');
+        document.body.classList.remove('sidebar-open');
+      }
+
+      var toggleBtn = document.getElementById('alw-sidebar-toggle');
+      if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+      var overlayEl = document.getElementById('alw-sidebar-overlay');
+      if (overlayEl) overlayEl.addEventListener('click', closeMobileSidebar);
+
+      // Mobile toggle
+      var mobileToggle = document.createElement('button');
+      mobileToggle.className = 'mobile-nav-toggle';
+      mobileToggle.id = 'alw-mobile-toggle';
+      mobileToggle.setAttribute('aria-label', 'Open vault menu');
+      mobileToggle.innerHTML = '&#9776;';
+      mobileToggle.addEventListener('click', function () {
+        var sb = document.getElementById('alw-sidebar');
+        if (sb) {
+          var isOpen = sb.classList.toggle('open');
+          document.body.classList.toggle('sidebar-open', isOpen);
+        }
+      });
+      body.insertBefore(mobileToggle, sidebar);
+
+      // Restore collapsed state
+      var collapsed = localStorage.getItem('alw-sidebar-collapsed') === '1';
+      if (collapsed && window.innerWidth > 768) {
+        sidebar.classList.add('collapsed');
+        var main = document.querySelector('.main-content');
+        if (main) main.classList.add('sidebar-collapsed');
+        if (toggleBtn) toggleBtn.textContent = '\u203A';
+      }
+
+      // Wire vault sidebar items to switch tabs
+      document.querySelectorAll('.vault-nav-item').forEach(function (item) {
+        item.addEventListener('click', function (e) {
+          e.preventDefault();
+          var tab = item.getAttribute('data-tab');
+          var tabBtn = document.querySelector('.vault-tab[data-tab="' + tab + '"]');
+          if (tabBtn) tabBtn.click();
+          // Close mobile sidebar after click
+          if (window.innerWidth <= 768) closeMobileSidebar();
+        });
+      });
+
+      // Update active sidebar item when tab changes
+      function updateActiveSidebarItem(tabName) {
+        document.querySelectorAll('.vault-nav-item').forEach(function (item) {
+          item.classList.toggle('active', item.getAttribute('data-tab') === tabName);
+        });
+      }
+      // Watch for tab changes
+      document.querySelectorAll('.vault-tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          updateActiveSidebarItem(tab.dataset.tab);
+        });
+      });
+      // Set initial active
+      updateActiveSidebarItem('dashboard');
+    })();
+  </script>
 </body>
 </html>
