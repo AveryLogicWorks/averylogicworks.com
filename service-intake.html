@@ -8,21 +8,15 @@
   <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('alw-theme')||'dark')</script>
   <meta name="description" content="Describe your build request privately before checkout.">
   <title>Service Intake | Avery Logic Works</title>
-  <meta property="og:title" content="Service Intake | Avery Logic Works">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.averylogicworks.com/service-intake.html">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Service Intake | Avery Logic Works">
 </head>
 <body>
-
   <main class="main-content">
     <section class="page-hero">
       <div class="container section-intro">
         <span class="eyebrow">Private service intake</span>
         <h1 id="service-title">Describe the build before checkout.</h1>
         <p class="muted" id="service-summary">Use this page to describe exactly what you want. The request is saved privately first, and only then does the matching checkout page open.</p>
-        <p class="small-note">The founder will contact you within 24 hours about the build and confirm that your request has been received after the intake is saved and the purchase is completed.</p>
+        <p class="small-note">New customers can enter <strong>BACK25</strong> below for 25% off one purchase of any one product.</p>
       </div>
     </section>
 
@@ -32,38 +26,27 @@
           <span class="tag">Selected build slot</span>
           <h3 id="tier-heading">Starter Build</h3>
           <p class="muted" id="tier-description">Best for a tiny script, one focused automation step, a simple code edit, or a narrow bug fix.</p>
-          <div class="notice ok" id="promo-notice">
-            <strong>BACK25 customer recovery offer</strong>
-            <p class="muted" id="promo-description">New customers can use BACK25 for 25% off one purchase of any one product. Limited-time offer after the early checkout issues.</p>
-          </div>
           <div class="notice ok" id="tier-guidance">
             <strong>What to ask for here</strong>
             <p class="muted">Keep it specific. Say what you want built, fixed, or automated, and what success should look like when it is done.</p>
           </div>
 
           <form id="service-intake-form">
-            <div class="field">
-              <label for="customerName">Your name</label>
-              <input id="customerName" type="text" placeholder="How should the founder address you?" autocomplete="name" required>
+            <div class="field"><label for="customerName">Your name</label><input id="customerName" type="text" autocomplete="name" required></div>
+            <div class="field"><label for="customerEmail">Your email</label><input id="customerEmail" type="email" autocomplete="email" required></div>
+            <div class="field"><label for="serviceSubject">Subject</label><input id="serviceSubject" type="text" required></div>
+            <div class="field"><label for="serviceDetails">Project details</label><textarea id="serviceDetails" required></textarea><p class="small-note">This is where the buyer explains exactly what they want from the service they selected.</p></div>
+            <div class="field" style="padding:1rem;border:1px solid rgba(125,211,252,.28);border-radius:16px;background:rgba(125,211,252,.08);">
+              <label for="promoCode"><strong>Promo code</strong></label>
+              <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;">
+                <input id="promoCode" type="text" placeholder="Enter promo code" autocomplete="off" style="flex:1;text-transform:uppercase;">
+                <button class="button" id="applyPromoButton" type="button">Apply code</button>
+              </div>
+              <p class="small-note" style="margin-top:.5rem;">New customers can use BACK25 for 25% off one purchase of any one product.</p>
+              <p id="promoMessage" class="small-note" style="font-weight:800;margin-top:.35rem;"></p>
             </div>
-            <div class="field">
-              <label for="customerEmail">Your email</label>
-              <input id="customerEmail" type="email" placeholder="you@example.com" autocomplete="email" required>
-            </div>
-            <div class="field">
-              <label for="serviceSubject">Subject</label>
-              <input id="serviceSubject" type="text" placeholder="Short summary of the build you want" required>
-            </div>
-            <div class="field">
-              <label for="serviceDetails">Project details</label>
-              <textarea id="serviceDetails" required></textarea>
-              <p class="small-note">This is where the buyer explains exactly what they want from the service they selected.</p>
-            </div>
-            <p class="small-note">Disclaimer: purchases are reviewed against the selected build slot before work begins. BACK25 is a limited-time new-customer offer for 25% off one purchase of any one product. If the request needs broader scope than the slot you chose, the founder will contact you about the next step before starting the build.</p>
-            <div class="form-actions">
-              <button class="button primary" id="service-submit-button" type="submit">Send request and open discounted checkout</button>
-              <a class="button secondary" href="index.html#custom-software">Back to services</a>
-            </div>
+            <p class="small-note">Disclaimer: purchases are reviewed against the selected build slot before work begins. If the request needs broader scope than the slot you chose, the founder will contact you about the next step before starting the build.</p>
+            <div class="form-actions"><button class="button primary" id="service-submit-button" type="submit">Send request and open checkout</button><a class="button secondary" href="index.html#custom-software">Back to services</a></div>
           </form>
           <div class="form-message" id="service-message"></div>
         </div>
@@ -71,37 +54,18 @@
         <div class="policy-shell">
           <span class="tag alt">What happens next</span>
           <h3>A cleaner handoff before the build starts.</h3>
-          <ul class="list-clean">
-            <li>Your request is saved privately before any payment page opens.</li>
-            <li>The selected discounted checkout page opens only after the intake is received.</li>
-            <li>BACK25 is for new customers and applies to one purchase of any one product.</li>
-            <li>The founder follows up within 24 hours after the request and purchase are both in place.</li>
-            <li>If the intake cannot be saved, checkout should not be treated as ready yet.</li>
-          </ul>
+          <ul class="list-clean"><li>Your request is saved privately before any payment page opens.</li><li>Enter BACK25 before submitting if you are a new customer using the promo.</li><li>The founder follows up within 24 hours after the request and purchase are both in place.</li><li>If the intake cannot be saved, checkout should not be treated as ready yet.</li></ul>
         </div>
       </div>
     </section>
   </main>
-
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div>&copy; <span data-current-year></span> Avery Logic Works&trade;. All rights reserved.</div>
-      <div class="footer-links">
-        <a href="support.html">Support</a>
-        <a href="terms.html">Terms</a>
-        <a href="privacy.html">Privacy</a>
-        <a href="https://www.youtube.com/watch?v=IakQBx4rgks" target="_blank" rel="noopener noreferrer">YouTube</a>
-      </div>
-    </div>
-  </footer>
-
+  <footer class="footer"><div class="container footer-inner"><div>&copy; <span data-current-year></span> Avery Logic Works&trade;. All rights reserved.</div><div class="footer-links"><a href="support.html">Support</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a></div></div></footer>
   <script src="assets/site-config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     (function () {
       const cfg = window.AVERY_CONFIG || {};
       const supabaseCfg = cfg.supabase || {};
-      const promo = cfg.promo || {};
       const form = document.getElementById('service-intake-form');
       const submitButton = document.getElementById('service-submit-button');
       const messageBox = document.getElementById('service-message');
@@ -112,173 +76,86 @@
       const tierGuidance = document.getElementById('tier-guidance');
       const subjectField = document.getElementById('serviceSubject');
       const detailsField = document.getElementById('serviceDetails');
+      const promoField = document.getElementById('promoCode');
+      const promoMessage = document.getElementById('promoMessage');
+      const applyPromoButton = document.getElementById('applyPromoButton');
       let sb = null;
+      let promoApplied = false;
 
-      document.querySelectorAll('[data-current-year]').forEach((el) => {
-        el.textContent = new Date().getFullYear();
-      });
-
+      document.querySelectorAll('[data-current-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
       if (window.supabase && supabaseCfg.url && supabaseCfg.publishableKey) {
-        sb = window.supabase.createClient(supabaseCfg.url, supabaseCfg.publishableKey, {
-          auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
-        });
+        sb = window.supabase.createClient(supabaseCfg.url, supabaseCfg.publishableKey, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
       }
 
-      const serviceCatalog = {
-        custom: {
-          label: 'Custom Software',
-          price: '$100',
-          promoPrice: '$75 with BACK25',
-          checkout: (cfg.paypalLinks || {}).serviceExpanded100,
-          summary: 'Tell the founder what you need built — a custom script, a utility program, an automation, a tool, or a focused fix. The request is reviewed and the build is scoped to match.',
-          guidance: 'Describe what you want built, fixed, or automated. Include what success looks like when it is done, and any links, files, or references that help explain the request.',
-          subject: 'Custom Software Build request',
-          prompt: 'What you want built, fixed, or automated:\n\nWhat success should look like when it is done:\n\nAny links, files, code references, or screenshots:\n\nAny timing or deadline notes:'
-        },
-        starter: {
-          label: 'Starter Build',
-          price: '$20',
-          promoPrice: '$15 with BACK25',
-          checkout: (cfg.paypalLinks || {}).serviceStarter20,
-          summary: 'Best for a tiny script, one focused automation step, a simple code edit, or a narrow bug fix.',
-          guidance: 'Ask for a tiny script, one focused automation step, one simple code edit, or one narrow bug fix. Keep the request contained and concrete.',
-          subject: 'Starter Build request',
-          prompt: 'What you want built, fixed, or automated:\n\nWhat success should look like when it is done:\n\nAny links, files, code references, or screenshots:\n\nAny timing or deadline notes:'
-        },
-        standard: {
-          label: 'Standard Build',
-          price: '$50',
-          promoPrice: '$37.50 with BACK25',
-          checkout: (cfg.paypalLinks || {}).serviceStandard50,
-          summary: 'Best for a small custom script, a simple automation, a lightweight utility program, or a more involved bug fix.',
-          guidance: 'Use this when the request needs more than a one-step fix but is still clearly scoped: a small script, a simple automation, a lightweight utility, or a deeper contained bug fix.',
-          subject: 'Standard Build request',
-          prompt: 'What you want built, fixed, or automated:\n\nWhat the tool, script, or fix needs to do:\n\nAny links, files, code references, or screenshots:\n\nAnything that must be included before the build is considered complete:'
-        },
-        expanded: {
-          label: 'Expanded Build',
-          price: '$100',
-          promoPrice: '$75 with BACK25',
-          checkout: (cfg.paypalLinks || {}).serviceExpanded100,
-          summary: 'Best for a larger small-program request, a multi-part script, a deeper fix, or a compact custom tool with more complexity.',
-          guidance: 'Use this when the request has multiple connected parts, a deeper fix, or a compact custom tool that needs more depth than the smaller tiers.',
-          subject: 'Expanded Build request',
-          prompt: 'What you want built, fixed, or automated:\n\nWhat parts or features need to be included:\n\nAny links, files, code references, or screenshots:\n\nWhat outcome you want at the end of this build:'
-        }
+      const normalLinks = {
+        starter: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=20&item_name=Starter+Build&currency_code=USD',
+        standard: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=50&item_name=Standard+Build&currency_code=USD',
+        expanded: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=100&item_name=Expanded+Build&currency_code=USD',
+        custom: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=100&item_name=Custom+Software+Build&currency_code=USD'
       };
-
+      const promoLinks = {
+        starter: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=15&item_name=Starter+Build+BACK25+New+Customer+Promo&currency_code=USD',
+        standard: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=37.50&item_name=Standard+Build+BACK25+New+Customer+Promo&currency_code=USD',
+        expanded: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=75&item_name=Expanded+Build+BACK25+New+Customer+Promo&currency_code=USD',
+        custom: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=75&item_name=Custom+Software+Build+BACK25+New+Customer+Promo&currency_code=USD'
+      };
+      const serviceCatalog = {
+        custom: { label: 'Custom Software', price: '$100', promoPrice: '$75', summary: 'Tell the founder what you need built — a custom script, a utility program, an automation, a tool, or a focused fix.', guidance: 'Describe what you want built, fixed, or automated. Include what success looks like when it is done.', subject: 'Custom Software Build request', prompt: 'What you want built, fixed, or automated:\n\nWhat success should look like when it is done:\n\nAny links, files, code references, or screenshots:\n\nAny timing or deadline notes:' },
+        starter: { label: 'Starter Build', price: '$20', promoPrice: '$15', summary: 'Best for a tiny script, one focused automation step, a simple code edit, or a narrow bug fix.', guidance: 'Ask for a tiny script, one focused automation step, one simple code edit, or one narrow bug fix.', subject: 'Starter Build request', prompt: 'What you want built, fixed, or automated:\n\nWhat success should look like when it is done:\n\nAny links, files, code references, or screenshots:\n\nAny timing or deadline notes:' },
+        standard: { label: 'Standard Build', price: '$50', promoPrice: '$37.50', summary: 'Best for a small custom script, a simple automation, a lightweight utility program, or a more involved bug fix.', guidance: 'Use this when the request needs more than a one-step fix but is still clearly scoped.', subject: 'Standard Build request', prompt: 'What you want built, fixed, or automated:\n\nWhat the tool, script, or fix needs to do:\n\nAny links, files, code references, or screenshots:\n\nAnything that must be included before the build is considered complete:' },
+        expanded: { label: 'Expanded Build', price: '$100', promoPrice: '$75', summary: 'Best for a larger small-program request, a multi-part script, a deeper fix, or a compact custom tool with more complexity.', guidance: 'Use this when the request has multiple connected parts, a deeper fix, or a compact custom tool that needs more depth.', subject: 'Expanded Build request', prompt: 'What you want built, fixed, or automated:\n\nWhat parts or features need to be included:\n\nAny links, files, code references, or screenshots:\n\nWhat outcome you want at the end of this build:' }
+      };
       const params = new URLSearchParams(window.location.search);
       const selectedKey = serviceCatalog[params.get('tier')] ? params.get('tier') : 'custom';
       const selectedService = serviceCatalog[selectedKey];
-      const promoActive = promo.enabled !== false;
-
       titleNode.textContent = 'Describe the ' + selectedService.label + ' before checkout.';
-      summaryNode.textContent = 'Use this page to explain exactly what you want. The request is saved privately first, and only then does the matching checkout page open.';
-      tierHeading.textContent = selectedService.label + ' — ' + (promoActive ? selectedService.promoPrice : selectedService.price);
+      tierHeading.textContent = selectedService.label + ' — ' + selectedService.price;
       tierDescription.textContent = selectedService.summary;
       tierGuidance.innerHTML = '<strong>What to ask for here</strong><p class="muted">' + selectedService.guidance + '</p>';
       subjectField.value = selectedService.subject;
       detailsField.value = selectedService.prompt;
 
-      function getVisitorToken() {
-        const key = 'avery-visitor-token';
-        let token = localStorage.getItem(key);
-        if (!token) {
-          token = 'v_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-          localStorage.setItem(key, token);
+      applyPromoButton.addEventListener('click', function () {
+        const code = String(promoField.value || '').trim().toUpperCase();
+        promoField.value = code;
+        if (code === 'BACK25') {
+          promoApplied = true;
+          tierHeading.textContent = selectedService.label + ' — ' + selectedService.promoPrice + ' with BACK25';
+          promoMessage.textContent = 'BACK25 applied: 25% off for new customers.';
+          promoMessage.style.color = 'var(--accent)';
+        } else {
+          promoApplied = false;
+          tierHeading.textContent = selectedService.label + ' — ' + selectedService.price;
+          promoMessage.textContent = code ? 'That promo code is not valid.' : 'Enter BACK25 to apply the new-customer discount.';
+          promoMessage.style.color = '#facc15';
         }
-        return token;
-      }
+      });
 
-      function setMessage(text, tone) {
-        messageBox.textContent = text;
-        messageBox.className = 'form-message show' + (tone ? ' ' + tone : '');
-      }
+      function getVisitorToken() { const key = 'avery-visitor-token'; let token = localStorage.getItem(key); if (!token) { token = 'v_' + Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem(key, token); } return token; }
+      function setMessage(text, tone) { messageBox.textContent = text; messageBox.className = 'form-message show' + (tone ? ' ' + tone : ''); }
 
       form.addEventListener('submit', async function (event) {
         event.preventDefault();
         if (!form.reportValidity()) return;
-        if (!sb) {
-          setMessage('Private intake is temporarily unavailable. Please do not complete checkout until this is fixed.', 'error');
-          return;
-        }
-
+        if (!sb) { setMessage('Private intake is temporarily unavailable. Please do not complete checkout until this is fixed.', 'error'); return; }
         submitButton.disabled = true;
         const customerName = document.getElementById('customerName').value.trim();
         const customerEmail = document.getElementById('customerEmail').value.trim();
         const subject = subjectField.value.trim() || selectedService.subject;
         const details = detailsField.value.trim();
         const requestId = 'svc_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
-        const promoMeta = promoActive ? {
-          code: promo.code || 'BACK25',
-          percent_off: promo.percentOff || 25,
-          new_customers_only: true,
-          applies_to: 'one purchase of any one product',
-          expires_on: promo.expiresOn || null
-        } : null;
+        const checkoutUrl = promoApplied ? promoLinks[selectedKey] : normalLinks[selectedKey];
+        const promoMeta = promoApplied ? { code: 'BACK25', percent_off: 25, new_customers_only: true, applies_to: 'one purchase of any one product' } : null;
         try {
-          const { error } = await sb.from('site_events').insert({
-            event_type: 'service_request_submitted',
-            page_path: window.location.pathname || '/service-intake.html',
-            visitor_token: getVisitorToken(),
-            user_email: customerEmail,
-            metadata: {
-              request_id: requestId,
-              tier_key: selectedKey,
-              tier_label: selectedService.label,
-              tier_price: selectedService.price,
-              promo_price: promoActive ? selectedService.promoPrice : null,
-              checkout_url: selectedService.checkout,
-              promo: promoMeta,
-              customer_name: customerName,
-              customer_email: customerEmail,
-              subject: subject,
-              details: details,
-              submitted_at: new Date().toISOString(),
-              source: 'service-intake.html'
-            }
-          });
+          const { error } = await sb.from('site_events').insert({ event_type: 'service_request_submitted', page_path: window.location.pathname || '/service-intake.html', visitor_token: getVisitorToken(), user_email: customerEmail, metadata: { request_id: requestId, tier_key: selectedKey, tier_label: selectedService.label, tier_price: selectedService.price, promo_price: promoApplied ? selectedService.promoPrice : null, checkout_url: checkoutUrl, promo: promoMeta, customer_name: customerName, customer_email: customerEmail, subject: subject, details: details, submitted_at: new Date().toISOString(), source: 'service-intake.html' } });
           if (error) throw error;
-
-          await sb.from('site_events').insert({
-            event_type: 'service_checkout_opened',
-            page_path: window.location.pathname || '/service-intake.html',
-            visitor_token: getVisitorToken(),
-            user_email: customerEmail,
-            metadata: {
-              request_id: requestId,
-              tier_key: selectedKey,
-              tier_label: selectedService.label,
-              checkout_url: selectedService.checkout,
-              promo: promoMeta,
-              source: 'service-intake.html'
-            }
-          });
-
-          form.reset();
-          subjectField.value = selectedService.subject;
-          detailsField.value = selectedService.prompt;
-          setMessage('Your request has been received privately as ' + requestId + '. The discounted payment page should now be opening. After the purchase is completed, the founder will contact you within 24 hours about the build and confirm that it has been received.', 'info');
-          window.open(selectedService.checkout, '_blank', 'noopener,noreferrer');
+          await sb.from('site_events').insert({ event_type: 'service_checkout_opened', page_path: window.location.pathname || '/service-intake.html', visitor_token: getVisitorToken(), user_email: customerEmail, metadata: { request_id: requestId, tier_key: selectedKey, tier_label: selectedService.label, checkout_url: checkoutUrl, promo: promoMeta, source: 'service-intake.html' } });
+          form.reset(); subjectField.value = selectedService.subject; detailsField.value = selectedService.prompt; promoApplied = false;
+          setMessage('Your request has been received privately as ' + requestId + '. The payment page should now be opening.', 'info');
+          window.open(checkoutUrl, '_blank', 'noopener,noreferrer');
         } catch (err) {
-          try {
-            await sb.from('site_events').insert({
-              event_type: 'service_intake_save_failed',
-              page_path: window.location.pathname || '/service-intake.html',
-              visitor_token: getVisitorToken(),
-              user_email: customerEmail,
-              metadata: {
-                tier_key: selectedKey,
-                customer_email: customerEmail,
-                reason: err.message || 'service intake save failed',
-                source: 'service-intake.html'
-              }
-            });
-          } catch (_ignored) {}
           setMessage('Your request could not be saved privately right now, so please do not treat checkout as complete yet. Try again before paying so the founder actually receives the build details.', 'error');
-        } finally {
-          submitButton.disabled = false;
-        }
+        } finally { submitButton.disabled = false; }
       });
     }());
   </script>
