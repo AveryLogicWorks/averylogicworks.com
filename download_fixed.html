@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/site.css">
+  <meta property="og:title" content="Download Command Nexus | Avery Logic Works">
+  <meta property="og:description" content="Download Command Nexus - sign in to access your download.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.averylogicworks.com/download.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Download Command Nexus | Avery Logic Works">
+  <meta name="twitter:description" content="Download Command Nexus - sign in to access your download.">
+  <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('alw-theme')||'dark')</script>
+  <meta name="description" content="Download Command Nexus � sign in to access your download.">
+  <title>Download Command Nexus | Avery Logic Works</title>
+</head>
+<body>
+  <main class="main-content">
+    <section class="page-hero">
+      <div class="container section-intro">
+        <span class="eyebrow">Command Nexus</span>
+        <h1>Download Command Nexus.</h1>
+        <p class="muted">You need a free Avery Logic Works account to download Command Nexus. If you don't have an account yet, you can create one in under a minute.</p>
+      </div>
+    </section>
+
+    <section class="section-tight">
+      <div class="container">
+        <!-- Not signed in state -->
+        <div id="download-auth-required" class="form-shell" style="max-width:560px;margin:0 auto;">
+          <span class="tag">Account required</span>
+          <h3>Sign in to download Command Nexus</h3>
+          <p class="muted">Command Nexus requires a license key to activate. You'll need an account to purchase a key and download the program. Don't have an account?</p>
+          <div class="cta-row" style="margin-top:20px;">
+            <a class="button primary" href="login.html?next=download.html">Sign in</a>
+            <a class="button" href="signup.html?next=download.html%3Ftrial%3D1">Create account</a>
+          </div>
+        </div>
+
+        <!-- Signed in state -->
+        <div id="download-ready" class="form-shell" style="max-width:560px;margin:0 auto;display:none;">
+          <span class="tag">Ready to download</span>
+          <h3>Command Nexus Download</h3>
+          <div class="auth-inline-row" style="margin-bottom:16px;">
+            <p class="small-note">Signed in as <strong id="download-user-email">&mdash;</strong></p>
+            <button class="button ghost" id="download-signout" type="button">Sign out</button>
+          </div>
+
+          <div id="download-link-area" style="margin-top:24px;">
+            <p id="download-status-message" class="muted">Checking your access...</p>
+            <div id="download-button-wrap" style="display:none;margin-top:16px;">
+              <a class="button primary" id="download-button" href="#" style="font-size:16px;padding:14px 32px;">Download Command Nexus</a>
+              <p class="small-note" style="margin-top:8px;">Your download is linked to your account for tracking and support purposes.</p>
+            </div>
+
+            <div class="windows-notice" style="background:rgba(255,196,0,.08);border:1px solid rgba(255,196,0,.3);border-radius:10px;padding:1.25rem 1.5rem;margin-top:24px;text-align:left;">
+              <h4 style="margin:0 0 .5rem 0;font-size:1rem;color:#facc15;">Important Windows notice</h4>
+              <p style="font-size:.9rem;margin:.5rem 0;">Command Nexus is a new early-access Windows app. Because it is newly released and not yet recognized as a signed publisher, Windows Defender SmartScreen may show an &ldquo;Unknown publisher&rdquo; warning.</p>
+              <p style="font-size:.9rem;margin:.5rem 0;">This warning does <strong>not</strong> mean Windows found a virus. It means Windows does not yet recognize the app publisher.</p>
+              <p style="font-size:.9rem;margin:.5rem 0;">Only download Command Nexus directly from averylogicworks.com.</p>
+              <p style="font-size:.9rem;margin:.5rem 0;">I am working on publisher signing and trust improvements as the release grows.</p>
+              <div style="border-top:1px solid rgba(255,196,0,.2);margin-top:.75rem;padding-top:.75rem;">
+                <p style="font-size:.9rem;margin:.25rem 0;"><strong>If Windows shows &ldquo;Windows protected your PC&rdquo;:</strong></p>
+                <ol style="font-size:.9rem;margin:.25rem 0 .25rem 1.25rem;padding:0;">
+                  <li>Click <strong>More info</strong></li>
+                  <li>Click <strong>Run anyway</strong></li>
+                </ol>
+                <p style="font-size:.85rem;margin:.5rem 0 0 0;color:var(--muted);">Only do this if the file came directly from averylogicworks.com.</p>
+              </div>
+            </div>
+          </div>
+
+          <hr style="border:none;border-top:1px solid var(--line);margin:32px 0;">
+
+          <h4 style="margin-bottom:8px;">Need a license key?</h4>
+          <p class="muted">Command Nexus requires a license key to activate. Purchase a trial or membership to get your key, then come back here to download.</p>
+          <div class="cta-row" style="margin-top:12px;">
+            <a class="button" href="command-nexus.html#pricing">View pricing &amp; purchase</a>
+          <a class="button" href="command-nexus-info.html">Learn more about Command Nexus</a>
+            <a class="button" href="command-nexus.html#pricing">Activate a key</a>
+          </div>
+
+          <hr style="border:none;border-top:1px solid var(--line);margin:32px 0;">
+
+          <h4 style="margin-bottom:8px;">Download history</h4>
+          <div id="download-history" style="margin-top:8px;">
+            <p class="small-note" id="download-history-empty">No downloads yet.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>&copy; <span data-current-year></span> Avery Logic Works&trade;. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="support.html">Support</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="https://www.youtube.com/watch?v=IakQBx4rgks" target="_blank" rel="noopener noreferrer">YouTube</a>
+      </div>
+    </div>
+  </footer>
+  <script src="assets/site-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/site-shell.js"></script>
+  <script src="assets/site.js"></script>
+  <script>
+  (function () {
+    var cfg = window.AVERY_CONFIG || {};
+    var cn = cfg.commandNexus || {};
+    var sbCfg = cfg.supabase || {};
+    var downloadUrl = cn.downloadUrl || '';
+    var authRequired = document.getElementById('download-auth-required');
+    var downloadReady = document.getElementById('download-ready');
+    var userEmail = document.getElementById('download-user-email');
+    var statusMsg = document.getElementById('download-status-message');
+    var btnWrap = document.getElementById('download-button-wrap');
+    var dlBtn = document.getElementById('download-button');
+    var signoutBtn = document.getElementById('download-signout');
+    var historyEl = document.getElementById('download-history');
+    var historyEmpty = document.getElementById('download-history-empty');
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    function trackDownload(user) {
+      if (!sbCfg.url || !sbCfg.publishableKey) return;
+      var base = sbCfg.url.replace(/\/$/, '');
+      fetch(base + '/rest/v1/downloads', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': sbCfg.publishableKey,
+          'Authorization': 'Bearer ' + sbCfg.publishableKey
+        },
+        body: JSON.stringify({
+          user_id: user.id,
+          email: user.email,
+          product: 'command-nexus',
+          filename: downloadUrl,
+          downloaded_at: new Date().toISOString()
+        })
+      }).catch(function (err) {
+        console.warn('track-download: failed (non-blocking)', err);
+      });
+
+      // Also log to site_events for vault counters
+      try {
+        var key = 'avery-visitor-token';
+        var token = localStorage.getItem(key);
+        if (!token) { token = 'v_' + Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem(key, token); }
+        fetch(base + '/rest/v1/site_events', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': sbCfg.publishableKey,
+            'Authorization': 'Bearer ' + sbCfg.publishableKey
+          },
+          body: JSON.stringify({
+            event_type: 'command_nexus_download',
+            page_path: window.location.pathname || '/download.html',
+            visitor_token: token,
+            user_id: user.id || null,
+            user_email: user.email || null,
+            metadata: { source: 'download-page', filename: downloadUrl || 'CommandNexus.exe' }
+          })
+        }).catch(function (err) { console.debug('site_events download log skipped', err); });
+      } catch (e) { console.debug('site_events download log failed', e); }
+    }
+
+    function loadDownloadHistory(user) {
+      if (!sbCfg.url || !sbCfg.publishableKey) return;
+      var base = sbCfg.url.replace(/\/$/, '');
+      fetch(base + '/rest/v1/downloads?user_id=eq.' + encodeURIComponent(user.id) + '&order=downloaded_at.desc&limit=10', {
+        headers: {
+          'apikey': sbCfg.publishableKey,
+          'Authorization': 'Bearer ' + sbCfg.publishableKey
+        }
+      }).then(function (r) { return r.json(); }).then(function (rows) {
+        if (!rows || !rows.length) return;
+        if (historyEmpty) historyEmpty.style.display = 'none';
+        var ul = document.createElement('ul');
+        ul.className = 'tier-list';
+        rows.forEach(function (row) {
+          var li = document.createElement('li');
+          var d = row.downloaded_at ? new Date(row.downloaded_at).toLocaleString() : 'Unknown date';
+          li.textContent = d + ' � ' + esc(row.product || 'command-nexus') + ' (' + esc(row.filename || 'CommandNexus.exe') + ')';
+          ul.appendChild(li);
+        });
+        historyEl.appendChild(ul);
+      }).catch(function (err) {
+        console.warn('download-history: failed to load', err);
+      });
+    }
+
+    function showDownloadReady(user) {
+      authRequired.style.display = 'none';
+      downloadReady.style.display = 'block';
+      if (userEmail) userEmail.textContent = user.email || 'Unknown';
+
+      if (downloadUrl) {
+        statusMsg.textContent = 'Your download is ready.';
+        btnWrap.style.display = 'block';
+        dlBtn.href = downloadUrl;
+        dlBtn.addEventListener('click', function () {
+          trackDownload(user);
+        });
+      } else {
+        statusMsg.textContent = 'Access confirmed. Your Command Nexus download link will appear here as soon as the build is published.';
+        btnWrap.style.display = 'none';
+      }
+
+      loadDownloadHistory(user);
+    }
+
+    function showAuthRequired() {
+      authRequired.style.display = 'block';
+      downloadReady.style.display = 'none';
+    }
+
+    // Check auth state
+    if (window.supabase && sbCfg.url && sbCfg.publishableKey) {
+      var sb = window.supabase.createClient(sbCfg.url, sbCfg.publishableKey, {
+        auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+      });
+      sb.auth.getSession().then(function (result) {
+        var session = result.data && result.data.session;
+        if (session && session.user) {
+          showDownloadReady(session.user);
+        } else {
+          showAuthRequired();
+        }
+      }).catch(function () {
+        showAuthRequired();
+      });
+
+      if (signoutBtn) {
+        signoutBtn.addEventListener('click', async function () {
+          await sb.auth.signOut();
+          window.location.href = 'login.html?next=download.html';
+        });
+      }
+    } else {
+      showAuthRequired();
+    }
+  })();
+  </script>
+</body>
+</html>
