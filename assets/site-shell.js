@@ -24,41 +24,23 @@
 
   function buildSidebarHTML() {
     var current = getCurrentPage();
-
     var html = '<div class="sidebar" id="alw-sidebar">';
     html += '<button class="sidebar-toggle" id="alw-sidebar-toggle" aria-label="Toggle sidebar">&#x2039;</button>';
-    html += '<div class="sidebar-header">';
-    html += '<a class="sidebar-brand" href="index.html">';
-    html += '<img src="assets/favicon.svg" alt="Avery Logic Works" />';
-    html += '<span>Avery Logic Works&trade;</span>';
-    html += '</a>';
-    html += '</div>';
-    html += '<nav class="sidebar-nav">';
-    html += '<div class="sidebar-section-label">Navigation</div>';
+    html += '<div class="sidebar-header"><a class="sidebar-brand" href="index.html"><img src="assets/favicon.svg" alt="Avery Logic Works" /><span>Avery Logic Works&trade;</span></a></div>';
+    html += '<nav class="sidebar-nav"><div class="sidebar-section-label">Navigation</div>';
     NAV_ITEMS.forEach(function (item) {
       var active = isActive(item.href, current);
-      html += '<a class="sidebar-item' + (active ? ' active' : '') + '" href="' + item.href + '">';
-      html += '<span class="sidebar-icon">' + item.icon + '</span>';
-      html += '<span>' + item.label + '</span>';
-      html += '</a>';
+      html += '<a class="sidebar-item' + (active ? ' active' : '') + '" href="' + item.href + '"><span class="sidebar-icon">' + item.icon + '</span><span>' + item.label + '</span></a>';
     });
-    html += '<div class="sidebar-divider"></div>';
-    html += '<div class="sidebar-section-label">Account</div>';
-    html += '<div id="alw-auth-items">';
+    html += '<div class="sidebar-divider"></div><div class="sidebar-section-label">Account</div><div id="alw-auth-items">';
     AUTH_ITEMS.forEach(function (item) {
       var active = isActive(item.href, current);
-      html += '<a class="sidebar-item' + (active ? ' active' : '') + '" href="' + item.href + '" data-auth-nav="' + item.label.toLowerCase().replace(/\s/g, '-') + '">';
-      html += '<span class="sidebar-icon">' + item.icon + '</span>';
-      html += '<span>' + item.label + '</span>';
-      html += '</a>';
+      html += '<a class="sidebar-item' + (active ? ' active' : '') + '" href="' + item.href + '" data-auth-nav="' + item.label.toLowerCase().replace(/\s/g, '-') + '"><span class="sidebar-icon">' + item.icon + '</span><span>' + item.label + '</span></a>';
     });
     html += '</div>';
-    html += '<div class="sidebar-divider"></div>';
-    html += '<a class="sidebar-item sidebar-donate" href="index.html#donation-options"><span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></span><span>Donate</span></a>';
-    html += '<div class="sidebar-divider"></div>';
-    html += '<a class="sidebar-item" href="' + YOUTUBE_URL + '" target="_blank" rel="noopener noreferrer"><span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg></span><span>YouTube</span></a>';
-    html += '</nav>';
-    html += '<div class="sidebar-footer"><button class="theme-toggle" id="alw-theme-toggle" aria-label="Toggle theme"><span class="theme-icon" id="alw-theme-icon">&#9790;</span><span id="alw-theme-label">Dark mode</span></button></div>';
+    html += '<div class="sidebar-divider"></div><a class="sidebar-item sidebar-donate" href="index.html#donation-options"><span>Donate</span></a>';
+    html += '<div class="sidebar-divider"></div><a class="sidebar-item" href="' + YOUTUBE_URL + '" target="_blank" rel="noopener noreferrer"><span>YouTube</span></a>';
+    html += '</nav><div class="sidebar-footer"><button class="theme-toggle" id="alw-theme-toggle" aria-label="Toggle theme"><span class="theme-icon" id="alw-theme-icon">&#9790;</span><span id="alw-theme-label">Dark mode</span></button></div>';
     html += '</div><div class="sidebar-overlay" id="alw-sidebar-overlay"></div>';
     return html;
   }
@@ -85,18 +67,32 @@
     }
   }
 
-  function toggleTheme() { applyTheme((document.documentElement.getAttribute('data-theme') || 'dark') === 'dark' ? 'light' : 'dark'); }
+  function toggleTheme() {
+    applyTheme((document.documentElement.getAttribute('data-theme') || 'dark') === 'dark' ? 'light' : 'dark');
+  }
 
   function toggleSidebar() {
     var sidebar = document.getElementById('alw-sidebar');
     var main = document.querySelector('.main-content');
     if (!sidebar) return;
     var isMobile = window.innerWidth <= 768;
-    if (isMobile) { var isOpen = sidebar.classList.toggle('open'); document.body.classList.toggle('sidebar-open', isOpen); }
-    else { var collapsed = sidebar.classList.toggle('collapsed'); if (main) main.classList.toggle('sidebar-collapsed', collapsed); localStorage.setItem('alw-sidebar-collapsed', collapsed ? '1' : '0'); var toggleBtn = document.getElementById('alw-sidebar-toggle'); if (toggleBtn) toggleBtn.textContent = collapsed ? '\u203A' : '\u2039'; }
+    if (isMobile) {
+      var isOpen = sidebar.classList.toggle('open');
+      document.body.classList.toggle('sidebar-open', isOpen);
+    } else {
+      var collapsed = sidebar.classList.toggle('collapsed');
+      if (main) main.classList.toggle('sidebar-collapsed', collapsed);
+      localStorage.setItem('alw-sidebar-collapsed', collapsed ? '1' : '0');
+      var toggleBtn = document.getElementById('alw-sidebar-toggle');
+      if (toggleBtn) toggleBtn.textContent = collapsed ? '\u203A' : '\u2039';
+    }
   }
 
-  function closeMobileSidebar() { var sidebar = document.getElementById('alw-sidebar'); if (sidebar) sidebar.classList.remove('open'); document.body.classList.remove('sidebar-open'); }
+  function closeMobileSidebar() {
+    var sidebar = document.getElementById('alw-sidebar');
+    if (sidebar) sidebar.classList.remove('open');
+    document.body.classList.remove('sidebar-open');
+  }
 
   function injectShell() {
     if (document.getElementById('alw-sidebar')) return;
@@ -109,14 +105,31 @@
     var main = document.querySelector('main');
     if (main && !main.classList.contains('main-content')) main.classList.add('main-content');
     var collapsed = localStorage.getItem('alw-sidebar-collapsed') === '1';
-    if (collapsed && window.innerWidth > 768) { sidebar.classList.add('collapsed'); if (main) main.classList.add('sidebar-collapsed'); var tb = document.getElementById('alw-sidebar-toggle'); if (tb) tb.textContent = '\u203A'; }
+    if (collapsed && window.innerWidth > 768) {
+      sidebar.classList.add('collapsed');
+      if (main) main.classList.add('sidebar-collapsed');
+      var tb = document.getElementById('alw-sidebar-toggle');
+      if (tb) tb.textContent = '\u203A';
+    }
     var mobileToggle = document.createElement('button');
-    mobileToggle.className = 'mobile-nav-toggle'; mobileToggle.id = 'alw-mobile-toggle'; mobileToggle.setAttribute('aria-label', 'Open menu'); mobileToggle.innerHTML = '&#9776;';
-    mobileToggle.addEventListener('click', function () { var sb = document.getElementById('alw-sidebar'); if (sb) { var isOpen = sb.classList.toggle('open'); document.body.classList.toggle('sidebar-open', isOpen); } });
+    mobileToggle.className = 'mobile-nav-toggle';
+    mobileToggle.id = 'alw-mobile-toggle';
+    mobileToggle.setAttribute('aria-label', 'Open menu');
+    mobileToggle.innerHTML = '&#9776;';
+    mobileToggle.addEventListener('click', function () {
+      var sb = document.getElementById('alw-sidebar');
+      if (sb) {
+        var isOpen = sb.classList.toggle('open');
+        document.body.classList.toggle('sidebar-open', isOpen);
+      }
+    });
     document.body.insertBefore(mobileToggle, sidebar);
-    var toggleBtn = document.getElementById('alw-sidebar-toggle'); if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
-    var overlayEl = document.getElementById('alw-sidebar-overlay'); if (overlayEl) overlayEl.addEventListener('click', closeMobileSidebar);
-    var themeToggleBtn = document.getElementById('alw-theme-toggle'); if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
+    var toggleBtn = document.getElementById('alw-sidebar-toggle');
+    if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+    var overlayEl = document.getElementById('alw-sidebar-overlay');
+    if (overlayEl) overlayEl.addEventListener('click', closeMobileSidebar);
+    var themeToggleBtn = document.getElementById('alw-theme-toggle');
+    if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
     applyTheme(localStorage.getItem('alw-theme') || 'dark');
     removeOldNav();
   }
@@ -133,7 +146,9 @@
     var cfg = window.AVERY_CONFIG || {};
     var supabaseCfg = cfg.supabase || {};
     var sb = null;
-    if (supabaseCfg.url && supabaseCfg.publishableKey && window.supabase) { try { sb = window.supabase.createClient(supabaseCfg.url, supabaseCfg.publishableKey); } catch (e) { sb = null; } }
+    if (supabaseCfg.url && supabaseCfg.publishableKey && window.supabase) {
+      try { sb = window.supabase.createClient(supabaseCfg.url, supabaseCfg.publishableKey); } catch (e) { sb = null; }
+    }
     var authContainer = document.getElementById('alw-auth-items');
     if (!authContainer) return;
     var session = sb ? (await sb.auth.getSession())?.data?.session : null;
@@ -142,15 +157,45 @@
       var paths = (cfg.paths || {});
       var accountHref = paths.account || 'account.html';
       var accountItem = document.createElement('a');
-      accountItem.className = 'sidebar-item'; accountItem.href = accountHref;
-      accountItem.innerHTML = '<span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span><span>Account</span>';
+      accountItem.className = 'sidebar-item';
+      accountItem.href = accountHref;
+      accountItem.innerHTML = '<span>Account</span>';
       if (isActive(accountHref, getCurrentPage())) accountItem.classList.add('active');
       authContainer.appendChild(accountItem);
       var signOutItem = document.createElement('button');
-      signOutItem.className = 'sidebar-item'; signOutItem.style.cssText = 'background:none;border:none;width:100%;cursor:pointer;font:inherit;text-align:left;';
-      signOutItem.innerHTML = '<span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg></span><span>Log out</span>';
-      signOutItem.addEventListener('click', async function () { if (sb) await sb.auth.signOut(); window.location.href = paths.login || 'login.html'; });
+      signOutItem.className = 'sidebar-item';
+      signOutItem.style.cssText = 'background:none;border:none;width:100%;cursor:pointer;font:inherit;text-align:left;';
+      signOutItem.innerHTML = '<span>Log out</span>';
+      signOutItem.addEventListener('click', async function () {
+        if (sb) await sb.auth.signOut();
+        window.location.href = paths.login || 'login.html';
+      });
       authContainer.appendChild(signOutItem);
+    }
+  }
+
+  function getNormalCommandNexusUrl(key, currentHref) {
+    var normalAmount = {
+      trialBeta: '5', proBeta: '20', businessBeta: '40', unlimitedBeta: '60',
+      trialFull: '10', proMonthly: '30', proYearly: '324', businessMonthly: '50', businessYearly: '552', unlimitedMonthly: '80', unlimitedYearly: '900',
+      proAlpha: '10', businessAlpha: '30', unlimitedAlpha: '50'
+    }[key];
+    if (!normalAmount || !currentHref || currentHref === '#') return currentHref;
+    try {
+      var url = new URL(currentHref, window.location.href);
+      var params = url.searchParams;
+      params.delete('a1');
+      params.delete('p1');
+      params.delete('t1');
+      if (params.get('cmd') === '_xclick-subscriptions') params.set('a3', normalAmount);
+      else params.set('amount', normalAmount);
+      var item = params.get('item_name') || '';
+      item = item.replace(/\+?BACK25\+?(New\+Customer\+Promo|First\+Month\+Promo|First\+Year\+Promo|First\+Purchase\+Promo)?/ig, '');
+      item = item.replace(/\+{2,}/g, '+').replace(/^\+|\+$/g, '');
+      if (item) params.set('item_name', item);
+      return url.toString();
+    } catch (e) {
+      return currentHref;
     }
   }
 
@@ -158,7 +203,14 @@
     if (getCurrentPage() !== 'command-nexus.html') return;
     document.querySelectorAll('[data-cn-link]').forEach(function (link) {
       if (link.getAttribute('data-promo-ui-added') === '1') return;
+      var key = link.getAttribute('data-cn-link') || '';
+      var promoHref = link.href;
+      var normalHref = getNormalCommandNexusUrl(key, promoHref);
+      link.href = normalHref;
+      link.setAttribute('data-normal-href', normalHref);
+      link.setAttribute('data-promo-href', promoHref);
       link.setAttribute('data-promo-ui-added', '1');
+
       var box = document.createElement('div');
       box.style.cssText = 'margin:.75rem 0 1rem;padding:1rem;border:1px solid rgba(125,211,252,.28);border-radius:16px;background:rgba(125,211,252,.08);display:grid;gap:.65rem;';
       box.innerHTML = '<label style="font-weight:800;display:block;">Promo code</label><div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;"><input type="text" placeholder="Enter promo code" autocomplete="off" style="flex:1;min-width:160px;padding:.78rem 1rem;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(0,0,0,.18);color:inherit;font:inherit;text-transform:uppercase;"><button type="button" class="button">Apply code</button></div><p class="soft" style="margin:0;font-size:.86rem;">New customers can use BACK25 for 25% off one purchase of any one product.</p><p data-msg style="margin:0;font-size:.88rem;font-weight:800;"></p>';
@@ -168,8 +220,24 @@
       btn.addEventListener('click', function () {
         var code = String(input.value || '').trim().toUpperCase();
         input.value = code;
-        if (code === 'BACK25') { msg.textContent = 'BACK25 applied: 25% off for new customers.'; msg.style.color = 'var(--accent)'; link.setAttribute('data-promo-applied', 'BACK25'); }
-        else { msg.textContent = code ? 'That promo code is not valid.' : 'Enter BACK25 to apply the new-customer discount.'; msg.style.color = '#facc15'; link.removeAttribute('data-promo-applied'); }
+        if (code === 'BACK25') {
+          link.href = link.getAttribute('data-promo-href');
+          link.setAttribute('data-promo-applied', 'BACK25');
+          msg.textContent = 'BACK25 applied: 25% off for new customers.';
+          msg.style.color = 'var(--accent)';
+        } else {
+          link.href = link.getAttribute('data-normal-href');
+          link.removeAttribute('data-promo-applied');
+          msg.textContent = code ? 'That promo code is not valid.' : 'Enter BACK25 to apply the new-customer discount.';
+          msg.style.color = '#facc15';
+        }
+      });
+      input.addEventListener('input', function () {
+        input.value = input.value.toUpperCase();
+        if (input.value.trim().toUpperCase() !== 'BACK25') {
+          link.href = link.getAttribute('data-normal-href');
+          link.removeAttribute('data-promo-applied');
+        }
       });
       link.parentNode.insertBefore(box, link);
     });
