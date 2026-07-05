@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/site.css">
-    <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('alw-theme')||'dark')</script>
+  <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('alw-theme')||'dark')</script>
   <meta name="description" content="Describe your build request privately before checkout.">
   <title>Service Intake | Avery Logic Works</title>
   <meta property="og:title" content="Service Intake | Avery Logic Works">
@@ -32,6 +32,10 @@
           <span class="tag">Selected build slot</span>
           <h3 id="tier-heading">Starter Build</h3>
           <p class="muted" id="tier-description">Best for a tiny script, one focused automation step, a simple code edit, or a narrow bug fix.</p>
+          <div class="notice ok" id="promo-notice">
+            <strong>BACK25 customer recovery offer</strong>
+            <p class="muted" id="promo-description">New customers can use BACK25 for 25% off one purchase of any one product. Limited-time offer after the early checkout issues.</p>
+          </div>
           <div class="notice ok" id="tier-guidance">
             <strong>What to ask for here</strong>
             <p class="muted">Keep it specific. Say what you want built, fixed, or automated, and what success should look like when it is done.</p>
@@ -55,10 +59,10 @@
               <textarea id="serviceDetails" required></textarea>
               <p class="small-note">This is where the buyer explains exactly what they want from the service they selected.</p>
             </div>
-            <p class="small-note">Disclaimer: purchases are reviewed against the selected build slot before work begins. If the request needs broader scope than the slot you chose, the founder will contact you about the next step before starting the build.</p>
+            <p class="small-note">Disclaimer: purchases are reviewed against the selected build slot before work begins. BACK25 is a limited-time new-customer offer for 25% off one purchase of any one product. If the request needs broader scope than the slot you chose, the founder will contact you about the next step before starting the build.</p>
             <div class="form-actions">
-              <button class="button primary" id="service-submit-button" type="submit">Send request and open checkout</button>
-              <a class="button secondary" href="index.html#services">Back to services</a>
+              <button class="button primary" id="service-submit-button" type="submit">Send request and open discounted checkout</button>
+              <a class="button secondary" href="index.html#custom-software">Back to services</a>
             </div>
           </form>
           <div class="form-message" id="service-message"></div>
@@ -69,7 +73,8 @@
           <h3>A cleaner handoff before the build starts.</h3>
           <ul class="list-clean">
             <li>Your request is saved privately before any payment page opens.</li>
-            <li>The selected checkout page opens only after the intake is received.</li>
+            <li>The selected discounted checkout page opens only after the intake is received.</li>
+            <li>BACK25 is for new customers and applies to one purchase of any one product.</li>
             <li>The founder follows up within 24 hours after the request and purchase are both in place.</li>
             <li>If the intake cannot be saved, checkout should not be treated as ready yet.</li>
           </ul>
@@ -96,6 +101,7 @@
     (function () {
       const cfg = window.AVERY_CONFIG || {};
       const supabaseCfg = cfg.supabase || {};
+      const promo = cfg.promo || {};
       const form = document.getElementById('service-intake-form');
       const submitButton = document.getElementById('service-submit-button');
       const messageBox = document.getElementById('service-message');
@@ -122,8 +128,9 @@
         custom: {
           label: 'Custom Software',
           price: '$100',
+          promoPrice: '$75 with BACK25',
           checkout: (cfg.paypalLinks || {}).serviceExpanded100,
-          summary: 'Tell the founder what you need built \u2014 a custom script, a utility program, an automation, a tool, or a focused fix. The request is reviewed and the build is scoped to match.',
+          summary: 'Tell the founder what you need built — a custom script, a utility program, an automation, a tool, or a focused fix. The request is reviewed and the build is scoped to match.',
           guidance: 'Describe what you want built, fixed, or automated. Include what success looks like when it is done, and any links, files, or references that help explain the request.',
           subject: 'Custom Software Build request',
           prompt: 'What you want built, fixed, or automated:\n\nWhat success should look like when it is done:\n\nAny links, files, code references, or screenshots:\n\nAny timing or deadline notes:'
@@ -131,6 +138,7 @@
         starter: {
           label: 'Starter Build',
           price: '$20',
+          promoPrice: '$15 with BACK25',
           checkout: (cfg.paypalLinks || {}).serviceStarter20,
           summary: 'Best for a tiny script, one focused automation step, a simple code edit, or a narrow bug fix.',
           guidance: 'Ask for a tiny script, one focused automation step, one simple code edit, or one narrow bug fix. Keep the request contained and concrete.',
@@ -140,6 +148,7 @@
         standard: {
           label: 'Standard Build',
           price: '$50',
+          promoPrice: '$37.50 with BACK25',
           checkout: (cfg.paypalLinks || {}).serviceStandard50,
           summary: 'Best for a small custom script, a simple automation, a lightweight utility program, or a more involved bug fix.',
           guidance: 'Use this when the request needs more than a one-step fix but is still clearly scoped: a small script, a simple automation, a lightweight utility, or a deeper contained bug fix.',
@@ -149,6 +158,7 @@
         expanded: {
           label: 'Expanded Build',
           price: '$100',
+          promoPrice: '$75 with BACK25',
           checkout: (cfg.paypalLinks || {}).serviceExpanded100,
           summary: 'Best for a larger small-program request, a multi-part script, a deeper fix, or a compact custom tool with more complexity.',
           guidance: 'Use this when the request has multiple connected parts, a deeper fix, or a compact custom tool that needs more depth than the smaller tiers.',
@@ -160,10 +170,11 @@
       const params = new URLSearchParams(window.location.search);
       const selectedKey = serviceCatalog[params.get('tier')] ? params.get('tier') : 'custom';
       const selectedService = serviceCatalog[selectedKey];
+      const promoActive = promo.enabled !== false;
 
       titleNode.textContent = 'Describe the ' + selectedService.label + ' before checkout.';
       summaryNode.textContent = 'Use this page to explain exactly what you want. The request is saved privately first, and only then does the matching checkout page open.';
-      tierHeading.textContent = selectedService.label + ' � ' + selectedService.price;
+      tierHeading.textContent = selectedService.label + ' — ' + (promoActive ? selectedService.promoPrice : selectedService.price);
       tierDescription.textContent = selectedService.summary;
       tierGuidance.innerHTML = '<strong>What to ask for here</strong><p class="muted">' + selectedService.guidance + '</p>';
       subjectField.value = selectedService.subject;
@@ -198,6 +209,13 @@
         const subject = subjectField.value.trim() || selectedService.subject;
         const details = detailsField.value.trim();
         const requestId = 'svc_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+        const promoMeta = promoActive ? {
+          code: promo.code || 'BACK25',
+          percent_off: promo.percentOff || 25,
+          new_customers_only: true,
+          applies_to: 'one purchase of any one product',
+          expires_on: promo.expiresOn || null
+        } : null;
         try {
           const { error } = await sb.from('site_events').insert({
             event_type: 'service_request_submitted',
@@ -209,7 +227,9 @@
               tier_key: selectedKey,
               tier_label: selectedService.label,
               tier_price: selectedService.price,
+              promo_price: promoActive ? selectedService.promoPrice : null,
               checkout_url: selectedService.checkout,
+              promo: promoMeta,
               customer_name: customerName,
               customer_email: customerEmail,
               subject: subject,
@@ -230,6 +250,7 @@
               tier_key: selectedKey,
               tier_label: selectedService.label,
               checkout_url: selectedService.checkout,
+              promo: promoMeta,
               source: 'service-intake.html'
             }
           });
@@ -237,7 +258,7 @@
           form.reset();
           subjectField.value = selectedService.subject;
           detailsField.value = selectedService.prompt;
-          setMessage('Your request has been received privately as ' + requestId + '. The payment page should now be opening. After the purchase is completed, the founder will contact you within 24 hours about the build and confirm that it has been received.', 'info');
+          setMessage('Your request has been received privately as ' + requestId + '. The discounted payment page should now be opening. After the purchase is completed, the founder will contact you within 24 hours about the build and confirm that it has been received.', 'info');
           window.open(selectedService.checkout, '_blank', 'noopener,noreferrer');
         } catch (err) {
           try {
