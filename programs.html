@@ -70,12 +70,38 @@
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;"><div><strong style="font-size:1.3rem;">Speakeasy</strong><p class="soft" style="font-size:.9rem;margin:.25rem 0 0;">Text-to-speech tray reader</p></div><span class="program-price" id="speakeasy-price-pill">$10</span></div>
         <ul class="program-features" style="margin-bottom:1.25rem;"><li>Full program download (Windows EXE)</li><li>Free Piper voice downloads included</li><li>Offline operation</li></ul>
         <div class="promo-box"><label for="speakeasyPromo"><strong>Promo code</strong></label><div class="promo-row"><input id="speakeasyPromo" type="text" placeholder="Enter promo code" autocomplete="off"><button class="button" id="speakeasyApplyPromo" type="button">Apply code</button></div><p class="soft" style="margin:0;font-size:.86rem;">New customers can use BACK25 for 25% off one purchase of any one product.</p><p id="speakeasyPromoMessage" style="margin:0;font-size:.88rem;font-weight:800;"></p></div>
+        <div class="windows-publisher-warning" role="alert" aria-label="Important Windows download notice">
+          <div class="wpw-stripe"></div>
+          <div class="wpw-body">
+            <div class="wpw-badge">Read Before Downloading</div>
+            <div class="wpw-title">Windows may show a large warning when you open this app.</div>
+            <div class="wpw-text">
+              Avery Logic Works is a newly launched independent software platform. Until our Windows publisher verification and reputation are fully established, Microsoft SmartScreen may show warnings such as
+              <strong>"Unknown Publisher"</strong>, <strong>"Windows protected your PC"</strong>, or a message saying the app could be unsafe.
+            </div>
+            <div class="wpw-text">
+              If you downloaded the file directly from this official Avery Logic Works page and you trust the source, click
+              <strong>"More info"</strong>, then choose <strong>"Run anyway"</strong> to continue.
+            </div>
+            <div class="wpw-steps">
+              <ol>
+                <li>Click <strong>More info</strong></li>
+                <li>Click <strong>Run anyway</strong></li>
+              </ol>
+            </div>
+            <div class="wpw-disclaimer">
+              <strong>Security warning:</strong> Only download Avery Logic Works software directly from averylogicworks.com. If you obtained this software from any other source or website, do not install or run it. Software downloaded from third-party sources may contain viruses, malware, or unauthorized modifications. Avery Logic Works is not responsible for damages caused by software obtained from unofficial sources.
+            </div>
+            <div class="wpw-note">Publisher verification is being completed and this notice will be updated once Windows recognizes the download normally.</div>
+          </div>
+          <div class="wpw-stripe"></div>
+        </div>
         <a class="button primary" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=10&item_name=Speakeasy+Text-to-Speech+Reader&currency_code=USD" target="_blank" rel="noopener noreferrer" style="font-size:1.05rem;padding:1rem 2rem;" id="speakeasy-paypal-btn">Buy Speakeasy &mdash; $10 via PayPal</a>
         <p class="soft" style="font-size:.85rem;text-align:center;margin-top:.75rem;">Secure checkout via PayPal. After payment, you&rsquo;ll receive a download link by email.</p>
       </div></div>
     </section>
   </main>
-  <footer class="site-footer"><div class="footer-inner"><p>&copy; <span id="year"></span> Avery Logic Works&trade;. All rights reserved.</p><div class="footer-links"><a href="support.html">Support</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a></div></div></footer>
+  <footer class="site-footer"><div class="footer-inner"><p>&copy; <span id="year"></span> Avery Logic Works&trade;. All rights reserved.</p><div class="footer-links"><a href="support.html">Support</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="https://www.youtube.com/watch?v=IakQBx4rgks" target="_blank" rel="noopener noreferrer">YouTube</a></div></div></footer>
   <script src="assets/site-config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/site-shell.js"></script><script src="assets/site.js"></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();

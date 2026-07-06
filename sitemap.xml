@@ -7,11 +7,14 @@
   <url><loc>https://www.averylogicworks.com/founder.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.averylogicworks.com/themis.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.averylogicworks.com/programs.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.averylogicworks.com/service-intake.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://www.averylogicworks.com/feedback.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://www.averylogicworks.com/support.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.averylogicworks.com/login.html</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
   <url><loc>https://www.averylogicworks.com/signup.html</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://www.averylogicworks.com/signup-success.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://www.averylogicworks.com/login.html</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
   <url><loc>https://www.averylogicworks.com/account.html</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://www.averylogicworks.com/thank-you.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://www.averylogicworks.com/terms.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://www.averylogicworks.com/privacy.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
 </urlset>

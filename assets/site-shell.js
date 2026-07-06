@@ -1,255 +1,72 @@
 (function () {
   'use strict';
 
-  var YOUTUBE_URL = 'https://www.youtube.com/watch?v=IakQBx4rgks';
+  var MENU_ID = 'alw-emergency-dropdown-nav';
+  var STYLE_ID = 'alw-emergency-dropdown-style';
 
   var NAV_ITEMS = [
-    { label: 'Home', href: 'index.html', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>' },
-    { label: 'Command Nexus', href: 'command-nexus.html', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 9h6v6H9z"/></svg>' },
-    { label: 'Founder', href: 'founder.html', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>' },
-    { label: 'Themis', href: 'themis.html', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M5 8l7-5 7 5M4 12h16M6 16l6 4 6-4"/></svg>' },
-    { label: 'Buyable Programs', href: 'programs.html', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg>' },
-    { label: 'Feedback', href: 'feedback.html', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>' },
-    { label: 'Support', href: 'support.html', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.5 9a2.5 2.5 0 015 0c0 2-2.5 2-2.5 4M12 17h.01"/></svg>' },
+    ['Home', 'index.html'],
+    ['Command Nexus', 'command-nexus.html'],
+    ['Free trial', 'command-nexus.html#free-trial'],
+    ['Pricing', 'command-nexus.html#pricing'],
+    ['Command Nexus info', 'command-nexus-info.html'],
+    ['Buyable Programs', 'programs.html'],
+    ['Founder', 'founder.html'],
+    ['Themis', 'themis.html'],
+    ['Feedback', 'feedback.html'],
+    ['Support', 'support.html'],
+    ['Sign in', 'login.html'],
+    ['Sign up', 'signup.html']
   ];
 
-  var AUTH_ITEMS = [
-    { label: 'Sign in', href: 'login.html', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>', authOnly: false },
-    { label: 'Sign up', href: 'signup.html', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M8 11a4 4 0 100-8 4 4 0 000 8zM20 8v6M23 11h-6"/></svg>', authOnly: false },
-  ];
-
-  function getCurrentPage() {
-    return (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  function addStyle() {
+    if (document.getElementById(STYLE_ID)) return;
+    var style = document.createElement('style');
+    style.id = STYLE_ID;
+    style.textContent = `
+      .alw-emergency-menu{position:fixed;top:14px;left:14px;z-index:2147483647;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+      .alw-emergency-menu summary{list-style:none;width:50px;height:50px;display:grid;place-items:center;border-radius:14px;border:1px solid rgba(255,255,255,.24);background:rgba(5,7,13,.96);color:#f7f9ff;box-shadow:0 10px 34px rgba(0,0,0,.38);cursor:pointer;font-size:1.65rem;font-weight:900;line-height:1;}
+      .alw-emergency-menu summary::-webkit-details-marker{display:none;}
+      .alw-emergency-menu-panel{width:min(280px,calc(100vw - 28px));max-height:calc(100vh - 86px);overflow:auto;margin-top:.6rem;padding:.75rem;border:1px solid rgba(255,255,255,.18);border-radius:18px;background:rgba(5,7,13,.98);box-shadow:0 18px 60px rgba(0,0,0,.45);display:grid;gap:.35rem;}
+      .alw-emergency-menu-panel a{display:block;padding:.72rem .85rem;border-radius:12px;color:#f7f9ff;text-decoration:none;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);font-weight:750;}
+      .alw-emergency-menu-panel a:hover,.alw-emergency-menu-panel a:focus-visible{background:rgba(125,211,252,.14);outline:none;}
+      .mobile-nav-toggle{display:grid!important;position:fixed!important;top:14px!important;left:14px!important;z-index:2147483646!important;}
+      .sidebar-toggle{display:block!important;visibility:visible!important;opacity:1!important;}
+    `;
+    document.head.appendChild(style);
   }
 
-  function buildSidebarHTML() {
-    var current = getCurrentPage();
-    var html = '<div class="sidebar" id="alw-sidebar">';
-    html += '<button class="sidebar-toggle" id="alw-sidebar-toggle" aria-label="Toggle sidebar">&#x2039;</button>';
-    html += '<div class="sidebar-header"><a class="sidebar-brand" href="index.html"><img src="assets/favicon.svg" alt="Avery Logic Works" /><span>Avery Logic Works&trade;</span></a></div>';
-    html += '<nav class="sidebar-nav"><div class="sidebar-section-label">Navigation</div>';
+  function injectDropdown() {
+    if (document.getElementById(MENU_ID)) return;
+    addStyle();
+    var details = document.createElement('details');
+    details.id = MENU_ID;
+    details.className = 'alw-emergency-menu';
+    var summary = document.createElement('summary');
+    summary.setAttribute('aria-label', 'Open site menu');
+    summary.title = 'Menu';
+    summary.innerHTML = '&#9776;';
+    var nav = document.createElement('nav');
+    nav.className = 'alw-emergency-menu-panel';
+    nav.setAttribute('aria-label', 'Site navigation');
     NAV_ITEMS.forEach(function (item) {
-      var active = isActive(item.href, current);
-      html += '<a class="sidebar-item' + (active ? ' active' : '') + '" href="' + item.href + '"><span class="sidebar-icon">' + item.icon + '</span><span>' + item.label + '</span></a>';
+      var a = document.createElement('a');
+      a.href = item[1];
+      a.textContent = item[0];
+      nav.appendChild(a);
     });
-    html += '<div class="sidebar-divider"></div><div class="sidebar-section-label">Account</div><div id="alw-auth-items">';
-    AUTH_ITEMS.forEach(function (item) {
-      var active = isActive(item.href, current);
-      html += '<a class="sidebar-item' + (active ? ' active' : '') + '" href="' + item.href + '" data-auth-nav="' + item.label.toLowerCase().replace(/\s/g, '-') + '"><span class="sidebar-icon">' + item.icon + '</span><span>' + item.label + '</span></a>';
-    });
-    html += '</div>';
-    html += '<div class="sidebar-divider"></div><a class="sidebar-item sidebar-donate" href="index.html#donation-options"><span>Donate</span></a>';
-    html += '<div class="sidebar-divider"></div><a class="sidebar-item" href="' + YOUTUBE_URL + '" target="_blank" rel="noopener noreferrer"><span>YouTube</span></a>';
-    html += '</nav><div class="sidebar-footer"><button class="theme-toggle" id="alw-theme-toggle" aria-label="Toggle theme"><span class="theme-icon" id="alw-theme-icon">&#9790;</span><span id="alw-theme-label">Dark mode</span></button></div>';
-    html += '</div><div class="sidebar-overlay" id="alw-sidebar-overlay"></div>';
-    return html;
+    details.appendChild(summary);
+    details.appendChild(nav);
+    document.body.insertBefore(details, document.body.firstChild);
   }
 
-  function isActive(href, current) {
-    var normalized = href.split('/').pop().toLowerCase();
-    if (normalized === current) return true;
-    if (current === 'index.html' && href === 'index.html') return true;
-    if (href.indexOf('#') !== -1) {
-      var parts = href.split('#');
-      if (parts[0] === current || (parts[0] === '' && current === 'index.html')) return false;
-    }
-    return false;
+  function safeRun() {
+    try { injectDropdown(); } catch (e) { console.error('Emergency menu failed', e); }
   }
 
-  function applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('alw-theme', theme);
-    var icon = document.getElementById('alw-theme-icon');
-    var label = document.getElementById('alw-theme-label');
-    if (icon && label) {
-      if (theme === 'light') { icon.textContent = '\u2600'; label.textContent = 'Light mode'; }
-      else { icon.textContent = '\u263E'; label.textContent = 'Dark mode'; }
-    }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', safeRun);
+  } else {
+    safeRun();
   }
-
-  function toggleTheme() {
-    applyTheme((document.documentElement.getAttribute('data-theme') || 'dark') === 'dark' ? 'light' : 'dark');
-  }
-
-  function toggleSidebar() {
-    var sidebar = document.getElementById('alw-sidebar');
-    var main = document.querySelector('.main-content');
-    if (!sidebar) return;
-    var isMobile = window.innerWidth <= 768;
-    if (isMobile) {
-      var isOpen = sidebar.classList.toggle('open');
-      document.body.classList.toggle('sidebar-open', isOpen);
-    } else {
-      var collapsed = sidebar.classList.toggle('collapsed');
-      if (main) main.classList.toggle('sidebar-collapsed', collapsed);
-      localStorage.setItem('alw-sidebar-collapsed', collapsed ? '1' : '0');
-      var toggleBtn = document.getElementById('alw-sidebar-toggle');
-      if (toggleBtn) toggleBtn.textContent = collapsed ? '\u203A' : '\u2039';
-    }
-  }
-
-  function closeMobileSidebar() {
-    var sidebar = document.getElementById('alw-sidebar');
-    if (sidebar) sidebar.classList.remove('open');
-    document.body.classList.remove('sidebar-open');
-  }
-
-  function injectShell() {
-    if (document.getElementById('alw-sidebar')) return;
-    var wrapper = document.createElement('div');
-    wrapper.innerHTML = buildSidebarHTML();
-    var sidebar = wrapper.querySelector('.sidebar');
-    var overlay = wrapper.querySelector('.sidebar-overlay');
-    document.body.insertBefore(sidebar, document.body.firstChild);
-    document.body.insertBefore(overlay, sidebar.nextSibling);
-    var main = document.querySelector('main');
-    if (main && !main.classList.contains('main-content')) main.classList.add('main-content');
-    var collapsed = localStorage.getItem('alw-sidebar-collapsed') === '1';
-    if (collapsed && window.innerWidth > 768) {
-      sidebar.classList.add('collapsed');
-      if (main) main.classList.add('sidebar-collapsed');
-      var tb = document.getElementById('alw-sidebar-toggle');
-      if (tb) tb.textContent = '\u203A';
-    }
-    var mobileToggle = document.createElement('button');
-    mobileToggle.className = 'mobile-nav-toggle';
-    mobileToggle.id = 'alw-mobile-toggle';
-    mobileToggle.setAttribute('aria-label', 'Open menu');
-    mobileToggle.innerHTML = '&#9776;';
-    mobileToggle.addEventListener('click', function () {
-      var sb = document.getElementById('alw-sidebar');
-      if (sb) {
-        var isOpen = sb.classList.toggle('open');
-        document.body.classList.toggle('sidebar-open', isOpen);
-      }
-    });
-    document.body.insertBefore(mobileToggle, sidebar);
-    var toggleBtn = document.getElementById('alw-sidebar-toggle');
-    if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
-    var overlayEl = document.getElementById('alw-sidebar-overlay');
-    if (overlayEl) overlayEl.addEventListener('click', closeMobileSidebar);
-    var themeToggleBtn = document.getElementById('alw-theme-toggle');
-    if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
-    applyTheme(localStorage.getItem('alw-theme') || 'dark');
-    removeOldNav();
-  }
-
-  function removeOldNav() {
-    document.querySelectorAll('.site-nav, .site-header, nav.site-nav, nav:not(.sidebar-nav)').forEach(function (nav) {
-      if (nav.id === 'alw-sidebar' || nav.classList.contains('sidebar-nav')) return;
-      if (nav.closest('.sidebar')) return;
-      nav.remove();
-    });
-  }
-
-  async function updateAuthNav() {
-    var cfg = window.AVERY_CONFIG || {};
-    var supabaseCfg = cfg.supabase || {};
-    var sb = null;
-    if (supabaseCfg.url && supabaseCfg.publishableKey && window.supabase) {
-      try { sb = window.supabase.createClient(supabaseCfg.url, supabaseCfg.publishableKey); } catch (e) { sb = null; }
-    }
-    var authContainer = document.getElementById('alw-auth-items');
-    if (!authContainer) return;
-    var session = sb ? (await sb.auth.getSession())?.data?.session : null;
-    if (session) {
-      authContainer.innerHTML = '';
-      var paths = (cfg.paths || {});
-      var accountHref = paths.account || 'account.html';
-      var accountItem = document.createElement('a');
-      accountItem.className = 'sidebar-item';
-      accountItem.href = accountHref;
-      accountItem.innerHTML = '<span>Account</span>';
-      if (isActive(accountHref, getCurrentPage())) accountItem.classList.add('active');
-      authContainer.appendChild(accountItem);
-      var signOutItem = document.createElement('button');
-      signOutItem.className = 'sidebar-item';
-      signOutItem.style.cssText = 'background:none;border:none;width:100%;cursor:pointer;font:inherit;text-align:left;';
-      signOutItem.innerHTML = '<span>Log out</span>';
-      signOutItem.addEventListener('click', async function () {
-        if (sb) await sb.auth.signOut();
-        window.location.href = paths.login || 'login.html';
-      });
-      authContainer.appendChild(signOutItem);
-    }
-  }
-
-  function getNormalCommandNexusUrl(key, currentHref) {
-    var normalAmount = {
-      trialBeta: '5', proBeta: '20', businessBeta: '40', unlimitedBeta: '60',
-      trialFull: '10', proMonthly: '30', proYearly: '324', businessMonthly: '50', businessYearly: '552', unlimitedMonthly: '80', unlimitedYearly: '900',
-      proAlpha: '10', businessAlpha: '30', unlimitedAlpha: '50'
-    }[key];
-    if (!normalAmount || !currentHref || currentHref === '#') return currentHref;
-    try {
-      var url = new URL(currentHref, window.location.href);
-      var params = url.searchParams;
-      params.delete('a1');
-      params.delete('p1');
-      params.delete('t1');
-      if (params.get('cmd') === '_xclick-subscriptions') params.set('a3', normalAmount);
-      else params.set('amount', normalAmount);
-      var item = params.get('item_name') || '';
-      item = item.replace(/\+?BACK25\+?(New\+Customer\+Promo|First\+Month\+Promo|First\+Year\+Promo|First\+Purchase\+Promo)?/ig, '');
-      item = item.replace(/\+{2,}/g, '+').replace(/^\+|\+$/g, '');
-      if (item) params.set('item_name', item);
-      return url.toString();
-    } catch (e) {
-      return currentHref;
-    }
-  }
-
-  function injectCommandNexusPromoBoxes() {
-    if (getCurrentPage() !== 'command-nexus.html') return;
-    document.querySelectorAll('[data-cn-link]').forEach(function (link) {
-      if (link.getAttribute('data-promo-ui-added') === '1') return;
-      var key = link.getAttribute('data-cn-link') || '';
-      var promoHref = link.href;
-      var normalHref = getNormalCommandNexusUrl(key, promoHref);
-      link.href = normalHref;
-      link.setAttribute('data-normal-href', normalHref);
-      link.setAttribute('data-promo-href', promoHref);
-      link.setAttribute('data-promo-ui-added', '1');
-
-      var box = document.createElement('div');
-      box.style.cssText = 'margin:.75rem 0 1rem;padding:1rem;border:1px solid rgba(125,211,252,.28);border-radius:16px;background:rgba(125,211,252,.08);display:grid;gap:.65rem;';
-      box.innerHTML = '<label style="font-weight:800;display:block;">Promo code</label><div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;"><input type="text" placeholder="Enter promo code" autocomplete="off" style="flex:1;min-width:160px;padding:.78rem 1rem;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(0,0,0,.18);color:inherit;font:inherit;text-transform:uppercase;"><button type="button" class="button">Apply code</button></div><p class="soft" style="margin:0;font-size:.86rem;">New customers can use BACK25 for 25% off one purchase of any one product.</p><p data-msg style="margin:0;font-size:.88rem;font-weight:800;"></p>';
-      var input = box.querySelector('input');
-      var btn = box.querySelector('button');
-      var msg = box.querySelector('[data-msg]');
-      btn.addEventListener('click', function () {
-        var code = String(input.value || '').trim().toUpperCase();
-        input.value = code;
-        if (code === 'BACK25') {
-          link.href = link.getAttribute('data-promo-href');
-          link.setAttribute('data-promo-applied', 'BACK25');
-          msg.textContent = 'BACK25 applied: 25% off for new customers.';
-          msg.style.color = 'var(--accent)';
-        } else {
-          link.href = link.getAttribute('data-normal-href');
-          link.removeAttribute('data-promo-applied');
-          msg.textContent = code ? 'That promo code is not valid.' : 'Enter BACK25 to apply the new-customer discount.';
-          msg.style.color = '#facc15';
-        }
-      });
-      input.addEventListener('input', function () {
-        input.value = input.value.toUpperCase();
-        if (input.value.trim().toUpperCase() !== 'BACK25') {
-          link.href = link.getAttribute('data-normal-href');
-          link.removeAttribute('data-promo-applied');
-        }
-      });
-      link.parentNode.insertBefore(box, link);
-    });
-  }
-
-  function init() {
-    injectShell();
-    updateAuthNav();
-    setTimeout(injectCommandNexusPromoBoxes, 100);
-    setTimeout(injectCommandNexusPromoBoxes, 800);
-  }
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
 })();
