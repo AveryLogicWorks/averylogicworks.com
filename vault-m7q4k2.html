@@ -457,6 +457,7 @@
                 <option value="trial_key_claimed">Trial keys</option>
                 <option value="service_request_submitted">Service requests</option>
                 <option value="public_feedback_submitted">Feedback</option>
+                <option value="sales_inquiry">Sales inquiries</option>
               </select>
               <input type="text" id="audit-search-input" placeholder="Search by email or detail&hellip;" style="flex:1;min-width:200px;">
               <select id="audit-limit-select">
@@ -1942,7 +1943,11 @@
         'feedback_count': { event: 'public_feedback_submitted', label: 'Reviews & suggestions' },
         'average_rating': { event: 'public_feedback_submitted', label: 'Reviews & suggestions (detail)' },
         'security_events': { event: ['admin_access_denied','admin_hidden_path_hit','service_intake_save_failed','owner_vault_opened'], label: 'Security events' },
-        'admin_denied': { event: 'admin_access_denied', label: 'Denied admin attempts' }
+        'admin_denied': { event: 'admin_access_denied', label: 'Denied admin attempts' },
+        'command_nexus_download': { event: 'command_nexus_download', label: 'Command Nexus downloads' },
+        'trial_key_claimed': { event: 'trial_key_claimed', label: 'Trial keys claimed' },
+        'speakeasy_purchase_click': { event: 'speakeasy_purchase_click', label: 'Speakeasy purchase clicks' },
+        'downloads_30d': { event: 'command_nexus_download', label: 'Downloads (last 30 days)', since: 720 }
       };
 
       var SNAPSHOT_TO_EVENT = {
@@ -2003,6 +2008,9 @@
           if (meta.comment) detailParts.push('Comment: ' + meta.comment);
           if (meta.reason) detailParts.push('Reason: ' + meta.reason);
           if (meta.source) detailParts.push('Source: ' + meta.source);
+          if (meta.product) detailParts.push('Product: ' + meta.product);
+          if (meta.organization) detailParts.push('Organization: ' + meta.organization);
+          if (meta.seats_needed) detailParts.push('Seats: ' + meta.seats_needed);
           if (meta.amount) detailParts.push('Amount: ' + meta.amount);
           if (meta.plan) detailParts.push('Plan: ' + meta.plan);
           if (pagePath) detailParts.push('Page: ' + pagePath);
