@@ -276,6 +276,8 @@
 
   function hydratePasswordToggles() {
     document.querySelectorAll('[data-password-toggle]').forEach((button) => {
+      if (button.dataset.toggleReady) return;
+      button.dataset.toggleReady = '1';
       button.addEventListener('click', () => {
         const target = document.getElementById(button.getAttribute('data-password-toggle'));
         if (!target) return;
@@ -284,7 +286,7 @@
         const isText = nextType === 'text';
         button.setAttribute('aria-pressed', String(isText));
         button.setAttribute('aria-label', isText ? 'Hide password' : 'Show password');
-        button.textContent = isText ? '\u{1F441} Hide' : '\u{1F441} Show';
+        button.textContent = isText ? 'Hide' : 'Show';
       });
     });
   }

@@ -27,9 +27,9 @@
       --accent: #7dd3fc;
       --accent-2: #a78bfa;
       --accent-3: #22d3ee;
-      --neon: #FFD84A;
-      --neon-warm: #FFBF32;
-      --neon-glow: rgba(255, 216, 74, 0.35);
+      --neon: #F2FF00;
+      --neon-warm: #FFB800;
+      --neon-glow: rgba(242, 255, 0, 0.35);
       --max: 1120px;
     }
 
@@ -40,6 +40,7 @@
     body {
       margin: 0;
       min-height: 100vh;
+      overflow-x: hidden;
       background:
         radial-gradient(circle at 20% 5%, rgba(125, 211, 252, .18), transparent 32rem),
         radial-gradient(circle at 80% 15%, rgba(167, 139, 250, .12), transparent 34rem),
@@ -175,7 +176,7 @@
       font-weight: 800;
     }
 
-    main { overflow: hidden; }
+    main { width: 100%; }
 
     section {
       width: min(var(--max), calc(100% - 2rem));
@@ -208,41 +209,64 @@
       font-size: .95rem;
     }
 
-    .privacy-banner {
-      font-size: clamp(1.15rem, 2.5vw, 1.6rem);
-      font-weight: 800;
-      text-align: center;
-      margin-bottom: .6rem;
-      letter-spacing: .02em;
-      color: var(--neon);
-      text-shadow: 0 0 12px var(--neon-glow), 0 0 24px var(--neon-glow);
-      filter: drop-shadow(0 0 8px rgba(255, 216, 74, 0.2));
+    .neon-privacy {
+      color: #F2FF00;
+      text-shadow:
+        0 0 4px rgba(242, 255, 0, 0.95),
+        0 0 10px rgba(255, 230, 0, 0.85),
+        0 0 20px rgba(255, 184, 0, 0.65),
+        0 0 34px rgba(255, 140, 0, 0.35);
     }
 
     .neon-text {
-      color: var(--neon);
-      text-shadow: 0 0 10px var(--neon-glow), 0 0 22px var(--neon-glow);
-      filter: drop-shadow(0 0 6px rgba(255, 216, 74, 0.15));
+      color: #F2FF00;
+      text-shadow:
+        0 0 4px rgba(242, 255, 0, 0.95),
+        0 0 10px rgba(255, 230, 0, 0.85),
+        0 0 20px rgba(255, 184, 0, 0.65);
     }
 
     .neon-heading {
-      color: var(--neon);
-      text-shadow: 0 0 14px var(--neon-glow), 0 0 28px var(--neon-glow);
-      filter: drop-shadow(0 0 8px rgba(255, 216, 74, 0.18));
+      color: #F2FF00;
+      text-shadow:
+        0 0 4px rgba(242, 255, 0, 0.95),
+        0 0 10px rgba(255, 230, 0, 0.85),
+        0 0 20px rgba(255, 184, 0, 0.65),
+        0 0 34px rgba(255, 140, 0, 0.35);
     }
 
     .neon-accent {
-      color: var(--neon);
+      color: #F2FF00;
       font-weight: 800;
+    }
+
+    .hero-headline-secondary {
+      color: #f7f9ff;
+      font-weight: 900;
+    }
+
+    .privacy-tagline-standalone {
+      font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+      font-weight: 900;
+      color: #F2FF00;
+      text-shadow:
+        0 0 4px rgba(242, 255, 0, 0.95),
+        0 0 10px rgba(255, 230, 0, 0.85),
+        0 0 20px rgba(255, 184, 0, 0.65),
+        0 0 34px rgba(255, 140, 0, 0.35);
+      text-align: center;
+      margin: 2rem auto 1.5rem;
+      letter-spacing: .03em;
+      line-height: 1.1;
     }
 
     h1, h2, h3, p { margin-top: 0; }
 
     h1 {
       margin-bottom: 1.25rem;
-      font-size: clamp(2.6rem, 6vw, 4.9rem);
-      line-height: 1.02;
-      letter-spacing: -.045em;
+      font-size: clamp(2.2rem, 5.5vw, 4.2rem);
+      line-height: 1.05;
+      letter-spacing: -.04em;
       font-weight: 900;
       text-wrap: balance;
       text-align: center;
@@ -459,12 +483,18 @@
     .muted { color: var(--muted); }
 
     .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: stretch;
       gap: 1rem;
       max-width: 1000px;
       margin: 0 auto;
-      justify-content: center;
+    }
+
+    .grid > .card {
+      flex: 1 1 280px;
+      max-width: 340px;
     }
 
     .grid-2-center {
@@ -540,18 +570,20 @@
       font-size: clamp(1.6rem, 3vw, 2.2rem);
       font-weight: 900;
       margin: 1.5rem auto .75rem;
-      color: var(--neon);
-      text-shadow: 0 0 10px var(--neon-glow), 0 0 20px var(--neon-glow);
-      filter: drop-shadow(0 0 6px rgba(255, 216, 74, 0.15));
+      color: #F2FF00;
+      text-shadow:
+        0 0 4px rgba(242, 255, 0, 0.95),
+        0 0 10px rgba(255, 230, 0, 0.85),
+        0 0 20px rgba(255, 184, 0, 0.65);
     }
 
     .privacy-section .privacy-statement {
       max-width: 780px;
       margin: 1.5rem auto;
       padding: 2rem;
-      border: 1px solid rgba(255, 216, 74, 0.15);
+      border: 1px solid rgba(242, 255, 0, 0.15);
       border-radius: 24px;
-      background: rgba(255, 216, 74, 0.03);
+      background: rgba(242, 255, 0, 0.03);
       text-align: left;
     }
 
@@ -563,9 +595,11 @@
     .privacy-section .privacy-tagline {
       font-size: clamp(1.3rem, 2.5vw, 1.8rem);
       font-weight: 900;
-      color: var(--neon);
-      text-shadow: 0 0 12px var(--neon-glow), 0 0 24px var(--neon-glow);
-      filter: drop-shadow(0 0 8px rgba(255, 216, 74, 0.18));
+      color: #F2FF00;
+      text-shadow:
+        0 0 4px rgba(242, 255, 0, 0.95),
+        0 0 10px rgba(255, 230, 0, 0.85),
+        0 0 20px rgba(255, 184, 0, 0.65);
       margin: 1.5rem auto 1rem;
     }
 
@@ -577,9 +611,13 @@
     }
 
     .service-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: stretch;
       gap: 1rem;
+      max-width: 1000px;
+      margin: 0 auto;
     }
 
     .service-card {
@@ -803,7 +841,8 @@
       .nav { align-items: flex-start; flex-direction: column; padding: 1rem 0; }
       .nav-links { justify-content: flex-start; }
       .hero { min-height: auto; padding-top: 5rem; }
-      .grid, .split, .service-grid, .donation-grid, .fit-grid, .trust-strip { grid-template-columns: 1fr; }
+      .grid, .split, .service-grid, .donation-grid, .fit-grid, .trust-strip { flex-direction: column; }
+      .grid > .card { max-width: 100%; }
       h1 { font-size: clamp(2.35rem, 11vw, 3.85rem); }
       .footer-inner { flex-direction: column; text-align: center; gap: .75rem; }
       .footer-links { justify-content: center; }
@@ -876,12 +915,28 @@
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-inner">
         <div class="eyebrow">Independent studio in active development</div>
-        <h1 id="hero-title"><span class="neon-heading">PRIVACY</span> SHOULD BE STANDARD.</h1>
+        <h1 id="hero-title"><span class="neon-privacy">PRIVACY</span><br><span class="hero-headline-secondary">SHOULD BE STANDARD.</span></h1>
         <p class="hero-welcome">Welcome to Avery Logic Works.</p>
-        <p class="hero-subhead">A founder-led software, AI, and digital systems studio built with a clear point of view: <span class="neon-accent">your data. Your choice.</span> Limited support-backed collaboration may be available, but the larger purpose is building long-term software, AI, and interactive systems that respect the people who use them.</p>
-        <p class="hero-note">If you want to purchase a paid service or look at the current collaboration options, more information is below, and the paid services button is always at the top.</p>
+        <p class="hero-subhead">Avery Logic Works is a founder-led software, AI, and digital systems company built around <span class="neon-accent">privacy</span>, user control, useful technology, and long-term reliability.</p>
+        <p class="privacy-tagline-standalone">YOUR DATA. YOUR CHOICE.</p>
+        <div class="privacy-section">
+          <div class="privacy-statement">
+            <p>Avery Logic Works collects <strong>very little</strong> information.</p>
+            <p>The limited information we collect is used for website continuity, account functionality, usability, user-selected options and features, saved preferences, trusted-device recognition, requested communications, purchases, licensing, customer support, and security.</p>
+            <p>For example, an email address may be required to create and identify an account, send a requested newsletter, connect a purchase with the correct customer, issue a license key, provide support, or restore access to an account.</p>
+            <p>We do <strong>not</strong> sell personal information to third parties.</p>
+            <p>We do <strong>not</strong> use personal information to build advertising profiles for outside companies.</p>
+            <p>We do <strong>not</strong> collect information for monetization.</p>
+            <p>We collect limited information for continuity, functionality, user choice, licensing, support, and security.</p>
+            <p>Whenever a choice can reasonably be provided, that choice belongs to the user.</p>
+            <p>Certain limited security information must be processed to protect users, accounts, purchases, transactions, license keys, and Avery Logic Works systems. Essential security processing cannot be disabled while using services that depend on it. However, security-related collection must remain limited to what is reasonably necessary for protection, fraud prevention, system integrity, and reliable operation.</p>
+            <p>Any information collected must be handled carefully, used only for its clearly stated purpose, and retained only for as long as reasonably necessary for that purpose, account operation, licensing, legal obligations, or security.</p>
+            <p>We do not state or imply that Avery Logic Works collects absolutely no information. The website must honestly explain the limited information required for accounts, purchases, licensing, selected features, continuity, support, and security.</p>
+            <p>We do not store or transmit a customer&rsquo;s raw password merely because the customer selects <strong>Remember This Device</strong>. We use a secure, expiring, revocable authentication token. The customer&rsquo;s browser or password manager may separately save credentials when the customer chooses to allow it.</p>
+          </div>
+        </div>
         <div class="cta-row" aria-label="Homepage actions">
-          <a class="button primary" href="#privacy-promise">Read our privacy promise</a>
+          <a class="button primary" href="privacy.html">Read full <span class="neon-accent">privacy</span> policy</a>
           <a class="button" href="#custom-software">View paid services</a>
           <a class="button" href="founder.html">Meet the founder</a>
         </div>
@@ -898,30 +953,6 @@
             <strong>Built for usefulness, not fluff</strong>
             The goal is a working result that solves something real, not a pile of vague promises.
           </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="privacy-promise" aria-labelledby="privacy-promise-title">
-      <div class="privacy-section">
-        <div class="section-label"><span class="neon-accent">Privacy</span> Promise</div>
-        <h2 id="privacy-promise-title" class="privacy-heading">Your Privacy Matters</h2>
-        <div class="privacy-statement">
-          <p>Avery Logic Works collects <strong>very little</strong> personal information.</p>
-          <p>The limited information we collect is used only for website continuity, account operation, usability, user-selected options and features, saved preferences, trusted-device recognition, requested communications, purchases, licensing, customer support, and security.</p>
-          <p>For example, an email address may be required to create and identify an account, send a requested newsletter, connect a purchase with the correct customer, issue a license key, provide support, or restore access to an account.</p>
-          <p>We do <strong>not</strong> sell your personal information to third parties, and we do <strong>not</strong> use it to build advertising profiles for outside companies.</p>
-          <p>We do <strong>not</strong> collect information for monetization. We collect limited information for continuity, functionality, user choice, and security.</p>
-          <p>Whenever a choice can reasonably be provided, that choice belongs to the user.</p>
-          <p class="privacy-tagline">Your data. Your choice.</p>
-          <p>Certain limited security information must be processed to protect users, accounts, purchases, transactions, license keys, and Avery Logic Works systems. Essential security processing cannot be disabled while using services that depend on it. However, security-related collection must remain limited to what is reasonably necessary for protection, fraud prevention, system integrity, and reliable operation.</p>
-          <p>Any information collected must be handled carefully, used only for its clearly stated purpose, and retained only for as long as reasonably necessary for that purpose, account operation, licensing, legal obligations, or security.</p>
-          <p>We do not state or imply that Avery Logic Works collects absolutely no information. The wording here is honest about the limited information required for accounts, purchases, licensing, selected features, continuity, and security.</p>
-          <p>We do not store or transmit a customer&rsquo;s raw password merely because the customer selects <strong>Remember This Device</strong>. We use a secure, expiring, revocable authentication token. The customer&rsquo;s browser or password manager may separately save credentials when the customer chooses to allow it.</p>
-        </div>
-        <div class="cta-row" style="margin-top:1.5rem;">
-          <a class="button" href="privacy.html">Full privacy policy</a>
-          <a class="button primary" href="#custom-software">View paid services</a>
         </div>
       </div>
     </section>
@@ -1134,7 +1165,7 @@
       <p class="sub-note" style="text-align:center;margin-top:1rem;">Monthly support can be <strong>cancelled any time</strong> through PayPal&rsquo;s subscription management page.</p>
       <div class="cta-row">
         <a class="button" href="support.html">Support, refund & dispute policy</a>
-        <a class="button" href="privacy.html">Email preferences & privacy</a>
+        <a class="button" href="privacy.html">Email preferences & <span class="neon-accent">privacy</span></a>
         <a class="button primary" href="signup.html">Sign up / join updates</a>
         <a class="button" href="login.html">Sign in</a>
       </div>
@@ -1147,7 +1178,7 @@
       <div class="footer-links">
         <a href="support.html">Support</a>
         <a href="terms.html">Terms</a>
-        <a href="privacy.html">Privacy</a>
+        <a href="privacy.html"><span class="neon-accent">Privacy</span></a>
         <a href="https://www.youtube.com/watch?v=IakQBx4rgks" target="_blank" rel="noopener noreferrer">YouTube</a>
       </div>
     </div>
