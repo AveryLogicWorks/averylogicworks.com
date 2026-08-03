@@ -442,6 +442,8 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
+      max-width: 1000px;
+      margin: 0 auto;
     }
 
     .card {
@@ -457,7 +459,9 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
-      align-items: start;
+      align-items: center;
+      max-width: 1000px;
+      margin: 0 auto;
     }
 
     .list {
@@ -466,6 +470,8 @@
       padding: 0;
       list-style: none;
       margin: 0;
+      max-width: 840px;
+      margin: 0 auto;
     }
 
     .list li {
@@ -529,6 +535,8 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1rem;
+      max-width: 840px;
+      margin: 0 auto;
     }
 
     .fit-card {
@@ -558,7 +566,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
       margin: 1.5rem auto 0;
-      text-align: left;
+      text-align: center;
       width: 100%;
       max-width: 900px;
       justify-content: center;
@@ -572,6 +580,7 @@
       border: 1px solid var(--line);
       border-radius: 22px;
       background: rgba(0,0,0,.16);
+      text-align: center;
     }
 
     .amounts {
@@ -701,6 +710,10 @@
       .hero { min-height: auto; padding-top: 5rem; }
       .grid, .split, .service-grid, .donation-grid, .fit-grid, .trust-strip { grid-template-columns: 1fr; }
       h1 { font-size: clamp(2.35rem, 11vw, 3.85rem); }
+      .footer-inner { flex-direction: column; text-align: center; gap: .75rem; }
+      .footer-links { justify-content: center; }
+      .donation-grid { text-align: center; }
+      .donation-group { text-align: center; }
     }
   </style>
 <style id="command-nexus-early-access-style">
