@@ -938,28 +938,18 @@
             <h3>Your trial key is ready!</h3>
             <p class="soft" style="font-size:.85rem;margin-top:.25rem;">Expires: <span id="ft-expires"></span></p>
             <div class="cta-row" style="margin-top:1rem;">
-              <a class="button primary" href="CommandNexus.exe" download id="cn-trial-download-btn">Download CommandNexus.exe</a>
+              <a class="button primary" href="CommandNexus.exe" download id="cn-trial-download-btn">Download CommandNexus.exe for Windows</a>
               <a class="button" href="download.html">Go to download page</a>
             </div>
-            <div class="windows-publisher-warning" role="alert" aria-label="Important Windows download notice">
-              <div class="wpw-stripe"></div>
-              <div class="wpw-body">
-                <div class="wpw-badge">Read Before Downloading</div>
-                <div class="wpw-title">Windows may show a large warning when you open this app.</div>
-                <div class="wpw-text">
-                  Command Nexus is a new early-access Windows app. Windows Defender SmartScreen may show an &ldquo;Unknown publisher&rdquo; warning. This is not a virus warning.
-                </div>
-                <div class="wpw-steps">
-                  <ol>
-                    <li>Click <strong>More info</strong></li>
-                    <li>Click <strong>Run anyway</strong></li>
-                  </ol>
-                </div>
-                <div class="wpw-disclaimer">
-                  <strong>Security warning:</strong> Only download Avery Logic Works software directly from averylogicworks.com. If you obtained this software from any other source or website, do not install or run it. Software downloaded from third-party sources may contain viruses, malware, or unauthorized modifications. Avery Logic Works is not responsible for damages caused by software obtained from unofficial sources.
-                </div>
-              </div>
-              <div class="wpw-stripe"></div>
+            <div style="background:rgba(255,196,0,.08);border:1px solid rgba(255,196,0,.3);border-radius:8px;padding:.75rem 1rem;margin-top:1rem;text-align:left;">
+              <strong style="font-size:.85rem;color:#facc15;">Windows notice</strong>
+              <p style="font-size:.8rem;margin:.4rem 0;">Windows may show &ldquo;Unknown publisher&rdquo; because Command Nexus is a new early-access app. This is not a virus warning.</p>
+              <p style="font-size:.8rem;margin:.4rem 0;"><strong>If Windows shows &ldquo;Windows protected your PC&rdquo;:</strong></p>
+              <ol style="font-size:.8rem;margin:.25rem 0 .25rem 1.25rem;padding:0;">
+                <li>Click <strong>More info</strong></li>
+                <li>Click <strong>Run anyway</strong></li>
+              </ol>
+              <p style="font-size:.75rem;margin:.4rem 0 0 0;color:var(--muted);">Only do this if the file came directly from averylogicworks.com.</p>
             </div>
             <div class="ft-instructions" style="margin-top:1rem;">
               <h4>How to activate:</h4>
@@ -1216,34 +1206,25 @@
 
     <section aria-labelledby="cn-download-title" style="text-align:center; margin: 3rem 0;">
       <h2 id="cn-download-title">Download Command Nexus</h2>
-      <p>Windows executable. No installer required. Local-first AI that works right out of the box.</p>
+      <p><strong style="color:var(--accent);">Windows only.</strong> No installer required. Local-first AI that works right out of the box. Not available for Linux or Mac at this time.</p>
 
-      <div class="windows-publisher-warning" role="alert" aria-label="Important Windows download notice">
-        <div class="wpw-stripe"></div>
-        <div class="wpw-body">
-          <div class="wpw-badge">Read Before Downloading</div>
-          <div class="wpw-title">Windows may show a large warning when you open this app.</div>
-          <div class="wpw-text">
-            Command Nexus is a new early-access Windows app. Because it is newly released and not yet recognized as a signed publisher, Windows Defender SmartScreen may show an &ldquo;Unknown publisher&rdquo; warning.
-          </div>
-          <div class="wpw-text">
-            This warning does <strong>not</strong> mean Windows found a virus. It means Windows does not yet recognize the app publisher.
-          </div>
-          <div class="wpw-steps">
-            <ol>
-              <li>Click <strong>More info</strong></li>
-              <li>Click <strong>Run anyway</strong></li>
-            </ol>
-          </div>
-          <div class="wpw-disclaimer">
-            <strong>Security warning:</strong> Only download Avery Logic Works software directly from averylogicworks.com. If you obtained this software from any other source or website, do not install or run it. Software downloaded from third-party sources may contain viruses, malware, or unauthorized modifications. Avery Logic Works is not responsible for damages caused by software obtained from unofficial sources.
-          </div>
-          <div class="wpw-note">Publisher verification is being completed and this notice will be updated once Windows recognizes the download normally.</div>
+      <div class="windows-notice" style="background:rgba(255,196,0,.08);border:1px solid rgba(255,196,0,.3);border-radius:10px;padding:1.25rem 1.5rem;margin:1.5rem auto;max-width:640px;text-align:left;">
+        <h4 style="margin:0 0 .5rem 0;font-size:1rem;color:#facc15;">Important Windows notice</h4>
+        <p style="font-size:.9rem;margin:.5rem 0;">Command Nexus is a new early-access Windows app. Because it is newly released and not yet recognized as a signed publisher, Windows Defender SmartScreen may show an &ldquo;Unknown publisher&rdquo; warning.</p>
+        <p style="font-size:.9rem;margin:.5rem 0;">This warning does <strong>not</strong> mean Windows found a virus. It means Windows does not yet recognize the app publisher.</p>
+        <p style="font-size:.9rem;margin:.5rem 0;">Only download Command Nexus directly from averylogicworks.com.</p>
+        <p style="font-size:.9rem;margin:.5rem 0;">I am working on publisher signing and trust improvements as the release grows.</p>
+        <div style="border-top:1px solid rgba(255,196,0,.2);margin-top:.75rem;padding-top:.75rem;">
+          <p style="font-size:.9rem;margin:.25rem 0;"><strong>If Windows shows &ldquo;Windows protected your PC&rdquo;:</strong></p>
+          <ol style="font-size:.9rem;margin:.25rem 0 .25rem 1.25rem;padding:0;">
+            <li>Click <strong>More info</strong></li>
+            <li>Click <strong>Run anyway</strong></li>
+          </ol>
+          <p style="font-size:.85rem;margin:.5rem 0 0 0;color:var(--muted);">Only do this if the file came directly from averylogicworks.com.</p>
         </div>
-        <div class="wpw-stripe"></div>
       </div>
 
-      <a class="button primary" href="CommandNexus.exe" download id="cn-download-btn">Download CommandNexus.exe</a>
+      <a class="button primary" href="CommandNexus.exe" download id="cn-download-btn">Download CommandNexus.exe for Windows</a>
       <p class="sub-note" style="margin-top:1rem;">Command Nexus&trade; &mdash; Avery Logic Works&trade;</p>
     </section>
 

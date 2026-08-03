@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/site.css">
+  <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('alw-theme')||'dark')</script>
+  <meta name="description" content="Report bugs and share suggestions for any Avery Logic Works product.">
+  <title>Report Bugs & Share Suggestions | Avery Logic Works</title>
+  <meta property="og:title" content="Report Bugs & Share Suggestions | Avery Logic Works">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.averylogicworks.com/bug-report.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Report Bugs & Share Suggestions | Avery Logic Works">
+  <style>
+    .bug-report-success {
+      display: none;
+      text-align: center;
+      padding: 48px 24px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .bug-report-success.show { display: block; }
+    .bug-report-success h2 {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      margin-bottom: 1rem;
+    }
+    .bug-report-success p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .bug-report-success .success-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .bug-report-success .success-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    .severity-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .severity-option {
+      padding: 12px 8px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      text-align: center;
+      cursor: pointer;
+      font-size: .9rem;
+      font-weight: 700;
+      transition: border-color .15s, background .15s;
+    }
+    .severity-option:hover { border-color: rgba(125,211,252,.4); background: rgba(125,211,252,.08); }
+    .severity-option.selected { border-color: var(--accent); background: rgba(125,211,252,.14); color: var(--accent); }
+    .severity-option .sev-dot { display: block; width: 10px; height: 10px; border-radius: 50%; margin: 0 auto 6px; }
+    .severity-option .sev-low .sev-dot { background: #3fb950; }
+    .severity-option .sev-medium .sev-dot { background: #d29922; }
+    .severity-option .sev-high .sev-dot { background: #f85149; }
+    .severity-option .sev-critical .sev-dot { background: #f85149; box-shadow: 0 0 8px #f85149; }
+    @media (max-width: 600px) {
+      .severity-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="main-content">
+    <section class="page-hero">
+      <div class="container section-intro">
+        <span class="eyebrow">Report Bugs & Share Suggestions</span>
+        <h1>Report bugs and share suggestions.</h1>
+        <p class="muted">Found a problem or have an idea to improve a product? Tell us what happened or what you'd like to see. Every report goes directly to the founder for review.</p>
+      </div>
+    </section>
+
+    <section class="section-tight">
+      <div class="container grid-2">
+
+        <!-- Bug report form -->
+        <div class="form-shell" id="bug-form-shell">
+          <span class="tag">Bug report or suggestion</span>
+          <h3>Tell us what went wrong or what to improve</h3>
+          <form id="bug-report-form">
+            <div class="field">
+              <label for="bugName">Your name</label>
+              <input id="bugName" type="text" placeholder="Optional — so we can follow up">
+            </div>
+            <div class="field">
+              <label for="bugEmail">Email</label>
+              <input id="bugEmail" type="email" placeholder="Optional — for follow-up">
+            </div>
+            <div class="field">
+              <label for="bugType">Is this a bug or a suggestion?</label>
+              <select id="bugType" required>
+                <option value="">Select one</option>
+                <option value="bug">Bug — something is broken</option>
+                <option value="suggestion">Suggestion — an idea or improvement</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="bugProduct">Which product?</label>
+              <select id="bugProduct" required>
+                <option value="">Select a product</option>
+                <option value="Command Nexus">Command Nexus</option>
+                <option value="Diagnostic Sentinel">Diagnostic Sentinel</option>
+                <option value="Medusa's Gaze">Medusa's Gaze</option>
+                <option value="QuadraHydra">QuadraHydra</option>
+                <option value="Website">Website (averylogicworks.com)</option>
+                <option value="Other">Other / Not sure</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>How severe is it?</label>
+              <div class="severity-grid" id="severityGrid">
+                <div class="severity-option sev-low" data-value="low">
+                  <span class="sev-dot"></span>
+                  Low
+                  <small style="display:block;font-weight:400;opacity:.7">Minor / cosmetic</small>
+                </div>
+                <div class="severity-option sev-medium" data-value="medium">
+                  <span class="sev-dot"></span>
+                  Medium
+                  <small style="display:block;font-weight:400;opacity:.7">Broken feature</small>
+                </div>
+                <div class="severity-option sev-high" data-value="high">
+                  <span class="sev-dot"></span>
+                  High
+                  <small style="display:block;font-weight:400;opacity:.7">Major failure</small>
+                </div>
+                <div class="severity-option sev-critical" data-value="critical">
+                  <span class="sev-dot"></span>
+                  Critical
+                  <small style="display:block;font-weight:400;opacity:.7">App won't run</small>
+                </div>
+              </div>
+              <input type="hidden" id="bugSeverity" value="">
+            </div>
+            <div class="field">
+              <label for="bugTitle">Brief title</label>
+              <input id="bugTitle" type="text" placeholder="One sentence summary of the issue" required>
+            </div>
+            <div class="field">
+              <label for="bugDescription">What happened?</label>
+              <textarea id="bugDescription" rows="6" placeholder="Describe what you were doing, what you expected to happen, and what actually happened. Include any error messages you saw." required></textarea>
+            </div>
+            <div class="field">
+              <label for="bugSteps">Steps to reproduce (optional)</label>
+              <textarea id="bugSteps" rows="4" placeholder="1. Open the app&#10;2. Click on...&#10;3. Expected: ...&#10;4. Actual: ..."></textarea>
+            </div>
+            <div class="form-actions">
+              <button class="button primary" id="bug-submit-button" type="submit">Submit bug report</button>
+            </div>
+          </form>
+          <div class="form-message" id="bug-message"></div>
+        </div>
+
+        <!-- Thank you / success view -->
+        <div class="bug-report-success" id="bug-success">
+          <div class="success-icon">&#10004;</div>
+          <h2>Thank you for helping support Avery Logic Works.</h2>
+          <p>Avery Logic Works is dedicated to fixing problems that may occur as quickly as possible. Your contribution is appreciated.</p>
+          <p style="font-size:.95rem;opacity:.8">Your bug report has been sent to the founder's vault and will be reviewed directly.</p>
+          <div class="success-actions">
+            <a class="button primary" href="index.html">Back to home</a>
+            <button class="button secondary" id="bug-report-another">Submit another report</button>
+          </div>
+        </div>
+
+        <!-- Side panel -->
+        <div class="policy-shell">
+          <span class="tag alt">How it works</span>
+          <h3>Direct to the founder.</h3>
+          <ul class="list-clean">
+            <li>Every bug report goes directly to the founder's private vault — no ticket queue, no support tier.</li>
+            <li>Include as much detail as you can. Steps to reproduce are especially helpful.</li>
+            <li>Your name and email are optional, but including them means you can get a follow-up when the fix is ready.</li>
+            <li>Critical issues are prioritized immediately.</li>
+          </ul>
+          <p class="small-note">This is for bug reports specifically. For general feedback or ratings, use the <a href="feedback.html" style="color:var(--accent);text-decoration:none;font-weight:700">feedback page</a>. For support policy questions, use the <a href="support.html" style="color:var(--accent);text-decoration:none;font-weight:700">support page</a>.</p>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>&copy; <span data-current-year></span> Avery Logic Works&trade;. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="support.html">Support</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="https://www.youtube.com/watch?v=IakQBx4rgks" target="_blank" rel="noopener noreferrer">YouTube</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/site-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/site-shell.js"></script>
+  <script src="assets/site.js"></script>
+  <script>
+    (function () {
+      const cfg = window.AVERY_CONFIG || {};
+      const supabaseCfg = cfg.supabase || {};
+      const messageBox = document.getElementById('bug-message');
+      const form = document.getElementById('bug-report-form');
+      const submitButton = document.getElementById('bug-submit-button');
+      const formShell = document.getElementById('bug-form-shell');
+      const successView = document.getElementById('bug-success');
+      let sb = null;
+
+      document.querySelectorAll('[data-current-year]').forEach((el) => {
+        el.textContent = new Date().getFullYear();
+      });
+
+      if (window.supabase && supabaseCfg.url && supabaseCfg.publishableKey) {
+        sb = window.supabase.createClient(supabaseCfg.url, supabaseCfg.publishableKey, {
+          auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+        });
+      }
+
+      function getVisitorToken() {
+        const key = 'avery-visitor-token';
+        let token = localStorage.getItem(key);
+        if (!token) {
+          token = 'v_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+          localStorage.setItem(key, token);
+        }
+        return token;
+      }
+
+      function setMessage(text, tone) {
+        messageBox.textContent = text;
+        messageBox.className = 'form-message show' + (tone ? ' ' + tone : '');
+      }
+
+      // Severity selector
+      var selectedSeverity = '';
+      document.querySelectorAll('.severity-option').forEach(function (opt) {
+        opt.addEventListener('click', function () {
+          document.querySelectorAll('.severity-option').forEach(function (o) { o.classList.remove('selected'); });
+          opt.classList.add('selected');
+          selectedSeverity = opt.getAttribute('data-value');
+          document.getElementById('bugSeverity').value = selectedSeverity;
+        });
+      });
+
+      // Submit another report
+      document.getElementById('bug-report-another').addEventListener('click', function () {
+        successView.classList.remove('show');
+        formShell.style.display = '';
+        form.reset();
+        selectedSeverity = '';
+        document.getElementById('bugSeverity').value = '';
+        document.querySelectorAll('.severity-option').forEach(function (o) { o.classList.remove('selected'); });
+      });
+
+      form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        if (!form.reportValidity()) return;
+        if (!sb) {
+          setMessage('Bug reporting is temporarily unavailable right now.', 'error');
+          return;
+        }
+        submitButton.disabled = true;
+        setMessage('Sending your report...', 'info');
+
+        try {
+          var name = document.getElementById('bugName').value.trim();
+          var email = document.getElementById('bugEmail').value.trim();
+          var type = document.getElementById('bugType').value;
+          var product = document.getElementById('bugProduct').value;
+          var title = document.getElementById('bugTitle').value.trim();
+          var description = document.getElementById('bugDescription').value.trim();
+          var steps = document.getElementById('bugSteps').value.trim();
+          var severity = selectedSeverity || 'low';
+
+          var { error } = await sb.from('site_events').insert({
+            event_type: 'bug_report_submitted',
+            page_path: window.location.pathname || '/bug-report.html',
+            visitor_token: getVisitorToken(),
+            user_email: email || null,
+            metadata: {
+              name: name || null,
+              email: email || null,
+              report_type: type,
+              product: product,
+              severity: severity,
+              title: title,
+              description: description,
+              steps_to_reproduce: steps || null,
+              submitted_at: new Date().toISOString(),
+              source: 'bug-report.html'
+            }
+          });
+
+          if (error) throw error;
+
+          // Show success view
+          formShell.style.display = 'none';
+          successView.classList.add('show');
+          setMessage('', '');
+          form.reset();
+          selectedSeverity = '';
+          document.getElementById('bugSeverity').value = '';
+          document.querySelectorAll('.severity-option').forEach(function (o) { o.classList.remove('selected'); });
+        } catch (err) {
+          setMessage('Your bug report could not be saved right now. Please try again shortly.', 'error');
+        } finally {
+          submitButton.disabled = false;
+        }
+      });
+    }());
+  </script>
+</body>
+</html>

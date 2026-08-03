@@ -189,7 +189,7 @@
       padding-bottom: 2.5rem;
     }
 
-    .hero-inner { max-width: 1000px; }
+    .hero-inner { max-width: 1000px; margin: 0 auto; }
 
     .eyebrow {
       display: inline-flex;
@@ -203,6 +203,27 @@
       color: var(--muted);
       background: rgba(255,255,255,.04);
       font-size: .95rem;
+    }
+
+    .privacy-banner {
+      font-size: clamp(1.15rem, 2.5vw, 1.6rem);
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: .6rem;
+      letter-spacing: .02em;
+      background: linear-gradient(90deg, #22d3ee, #7dd3fc, #a78bfa, #22d3ee);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: privacy-shimmer 6s ease-in-out infinite;
+      text-shadow: none;
+      filter: drop-shadow(0 0 18px rgba(34,211,238,.35));
+    }
+
+    @keyframes privacy-shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
     }
 
     h1, h2, h3, p { margin-top: 0; }
@@ -388,7 +409,8 @@
 
     .section-head {
       max-width: 780px;
-      margin-bottom: 2rem;
+      margin: 0 auto 2rem;
+      text-align: center;
     }
 
     .section-label {
@@ -542,6 +564,8 @@
       justify-content: center;
     }
 
+    .donation-grid-wrapper { display: flex; justify-content: center; }
+
     .donation-group {
       min-width: 0;
       padding: 1.2rem;
@@ -601,6 +625,9 @@
     .flagship-section { padding-top: 2rem; padding-bottom: 2rem; }
 
     .flagship-panel {
+      max-width: 880px;
+      margin: 0 auto;
+      text-align: center;
       position: relative;
       overflow: hidden;
       padding: clamp(2rem, 5vw, 3.25rem);
@@ -608,7 +635,6 @@
       border-radius: 32px;
       background: linear-gradient(135deg, rgba(167, 139, 250, .16), rgba(125, 211, 252, .1));
       box-shadow: 0 24px 90px rgba(167, 139, 250, .16);
-      text-align: center;
     }
 
     .flagship-badges {
@@ -740,6 +766,7 @@
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-inner">
         <div class="eyebrow">Independent studio in active development</div>
+        <p class="privacy-banner">We believe privacy should come first.</p>
         <h1 id="hero-title">Avery Logic Works is a founder-led software, AI, and digital systems studio.</h1>
         <p class="hero-subhead">This site exists to introduce the studio first: what Avery Logic Works is, what it is growing into, and why the work matters. Limited support-backed collaboration may be available, but the larger purpose is building long-term software, AI, and interactive systems with a clear point of view.</p>
         <p class="hero-note">If you want to purchase a paid service or look at the current collaboration options, more information is below, and the paid services button is always at the top.</p>
@@ -809,7 +836,7 @@
         <h2 id="services-title">Custom software, built by the founder.</h2>
         <p class="muted">Have a specific problem that needs a custom solution? Describe what you need, and the founder will build it. One scoped build, one price, one conversation.</p>
       </div>
-      <div class="service-grid" style="grid-template-columns:1fr;max-width:480px;">
+      <div class="service-grid" style="grid-template-columns:1fr;max-width:480px;margin:0 auto;">
         <article class="card service-card">
           <div class="service-kicker">Custom software build</div>
           <div class="service-price">$100</div>
