@@ -45,6 +45,9 @@
   --footer-text: rgba(237,244,255,0.7);
   --overlay-bg: rgba(0,0,0,0.5);
   --text-link-color: #c9f6fb;
+  --neon: #FFD84A;
+  --neon-warm: #FFBF32;
+  --neon-glow: rgba(255, 216, 74, 0.35);
 }
 
 [data-theme="light"] {
@@ -89,6 +92,9 @@
   --footer-text: rgba(26,35,50,0.6);
   --overlay-bg: rgba(0,0,0,0.3);
   --text-link-color: #2a9d9f;
+  --neon: #D4A800;
+  --neon-warm: #C99500;
+  --neon-glow: rgba(212, 168, 0, 0.3);
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -106,6 +112,9 @@ body {
 a { color: inherit; }
 img { max-width: 100%; display: block; }
 .container { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+.neon-text { color: var(--neon); text-shadow: 0 0 10px var(--neon-glow), 0 0 22px var(--neon-glow); filter: drop-shadow(0 0 6px rgba(255, 216, 74, 0.15)); }
+.neon-heading { color: var(--neon); text-shadow: 0 0 14px var(--neon-glow), 0 0 28px var(--neon-glow); filter: drop-shadow(0 0 8px rgba(255, 216, 74, 0.18)); }
+.neon-accent { color: var(--neon); font-weight: 800; }
 .site-nav {
   position: sticky; top: 0; z-index: 80;
   background: rgba(6,17,29,0.78);
@@ -157,12 +166,12 @@ img { max-width: 100%; display: block; }
 }
 .section { padding: 74px 0; }
 .section-tight { padding: 52px 0; }
-.section-intro { max-width: 860px; margin-bottom: 28px; }
+.section-intro { max-width: 860px; margin: 0 auto 28px; text-align: center; }
 .section h2, .page-hero h1 { margin: 16px 0 10px; font-size: clamp(2rem, 4vw, 3.15rem); line-height: 1.05; letter-spacing: -.03em; }
 .page-hero { padding: 72px 0 24px; }
 .page-hero p, .muted { color: var(--muted); }
-.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 24px; }
-.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 24px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 24px; max-width: 1000px; margin: 0 auto; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 24px; max-width: 880px; margin: 0 auto; }
 .card, .panel, .hero-card, .form-shell, .policy-shell, .metric, .notice {
   background: var(--card-bg);
   border: 1px solid var(--line); box-shadow: var(--shadow); border-radius: var(--radius);
@@ -227,14 +236,14 @@ input::placeholder, textarea::placeholder { color: var(--placeholder); }
 }
 .form-message.show { display: block; }
 .policy-shell h2, .policy-shell h3 { margin-top: 0; }
-.policy-grid { display: grid; gap: 22px; }
+.policy-grid { display: grid; gap: 22px; max-width: 860px; margin: 0 auto; }
 .kicker { color: var(--warn); font-weight: 700; }
 .footer { padding: 30px 0 40px; border-top: 1px solid var(--footer-border); margin-top: 24px; }
-.footer-inner { display: flex; justify-content: space-between; gap: 20px; align-items: center; color: var(--footer-text); }
+.footer-inner { display: flex; justify-content: space-between; gap: 20px; align-items: center; color: var(--footer-text); max-width: var(--max); margin: 0 auto; }
 .footer-links { display: flex; gap: 16px; flex-wrap: wrap; }
 .notice.warn { border-color: rgba(241,196,125,0.22); background: rgba(241,196,125,0.08); }
 .notice.ok { border-color: rgba(122,208,169,0.22); background: rgba(122,208,169,0.08); }
-.metric-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px; }
+.metric-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px; max-width: 1000px; margin: 0 auto; }
 .metric strong { display: block; font-size: 2rem; line-height: 1; margin-bottom: 8px; }
 .inline-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 24px 0; }
 .hero-photo-shell {
@@ -259,7 +268,9 @@ input::placeholder, textarea::placeholder { color: var(--placeholder); }
   .nav-links { justify-content: center; }
   .hero, .section, .page-hero { padding-top: 58px; padding-bottom: 58px; }
   .cta-band { padding: 24px; }
-  .footer-inner, .table-row { grid-template-columns: 1fr; display: grid; }
+  .footer-inner, .table-row { grid-template-columns: 1fr; display: grid; text-align: center; }
+  .footer-links { justify-content: center; }
+  .grid-3, .grid-2, .metric-grid { grid-template-columns: 1fr; max-width: 100%; }
 }
 
 

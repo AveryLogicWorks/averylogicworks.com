@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Avery Logic Works | Founder-led software, AI, and digital systems studio</title>
-  <meta name="description" content="Avery Logic Works is a founder-led studio building software, AI, and digital systems, with limited support-backed collaboration paths while the larger body of work grows." />
+  <title>Avery Logic Works | Privacy Should Be Standard</title>
+  <meta name="description" content="Avery Logic Works is a founder-led studio building software, AI, and digital systems. Privacy should be standard — your data, your choice." />
   <meta property="og:title" content="Avery Logic Works | Founder-led software, AI, and digital systems studio">
   <meta property="og:description" content="Founder-led studio building software, AI, and digital systems.">
   <meta property="og:type" content="website">
@@ -27,6 +27,9 @@
       --accent: #7dd3fc;
       --accent-2: #a78bfa;
       --accent-3: #22d3ee;
+      --neon: #FFD84A;
+      --neon-warm: #FFBF32;
+      --neon-glow: rgba(255, 216, 74, 0.35);
       --max: 1120px;
     }
 
@@ -211,19 +214,26 @@
       text-align: center;
       margin-bottom: .6rem;
       letter-spacing: .02em;
-      background: linear-gradient(90deg, #22d3ee, #7dd3fc, #a78bfa, #22d3ee);
-      background-size: 300% 100%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: privacy-shimmer 6s ease-in-out infinite;
-      text-shadow: none;
-      filter: drop-shadow(0 0 18px rgba(34,211,238,.35));
+      color: var(--neon);
+      text-shadow: 0 0 12px var(--neon-glow), 0 0 24px var(--neon-glow);
+      filter: drop-shadow(0 0 8px rgba(255, 216, 74, 0.2));
     }
 
-    @keyframes privacy-shimmer {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
+    .neon-text {
+      color: var(--neon);
+      text-shadow: 0 0 10px var(--neon-glow), 0 0 22px var(--neon-glow);
+      filter: drop-shadow(0 0 6px rgba(255, 216, 74, 0.15));
+    }
+
+    .neon-heading {
+      color: var(--neon);
+      text-shadow: 0 0 14px var(--neon-glow), 0 0 28px var(--neon-glow);
+      filter: drop-shadow(0 0 8px rgba(255, 216, 74, 0.18));
+    }
+
+    .neon-accent {
+      color: var(--neon);
+      font-weight: 800;
     }
 
     h1, h2, h3, p { margin-top: 0; }
@@ -235,6 +245,16 @@
       letter-spacing: -.045em;
       font-weight: 900;
       text-wrap: balance;
+      text-align: center;
+    }
+
+    .hero-welcome {
+      font-size: clamp(1.3rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--text);
+      margin: .5rem auto 0;
+      max-width: 820px;
+      text-align: center;
     }
 
     .hero-subhead {
@@ -444,6 +464,16 @@
       gap: 1rem;
       max-width: 1000px;
       margin: 0 auto;
+      justify-content: center;
+    }
+
+    .grid-2-center {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      max-width: 840px;
+      margin: 0 auto;
+      justify-content: center;
     }
 
     .card {
@@ -459,9 +489,30 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
-      align-items: center;
+      align-items: start;
       max-width: 1000px;
       margin: 0 auto;
+    }
+
+    .split-centered {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      max-width: 1000px;
+      margin: 0 auto;
+      gap: 1rem;
+    }
+
+    .split-centered .section-head {
+      text-align: center;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .split-centered .card {
+      max-width: 560px;
+      width: 100%;
     }
 
     .list {
@@ -469,9 +520,53 @@
       gap: .85rem;
       padding: 0;
       list-style: none;
-      margin: 0;
-      max-width: 840px;
       margin: 0 auto;
+      max-width: 840px;
+    }
+
+    .privacy-section {
+      max-width: 860px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .privacy-section p {
+      max-width: 780px;
+      margin: 1rem auto;
+      line-height: 1.7;
+    }
+
+    .privacy-section .privacy-heading {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 900;
+      margin: 1.5rem auto .75rem;
+      color: var(--neon);
+      text-shadow: 0 0 10px var(--neon-glow), 0 0 20px var(--neon-glow);
+      filter: drop-shadow(0 0 6px rgba(255, 216, 74, 0.15));
+    }
+
+    .privacy-section .privacy-statement {
+      max-width: 780px;
+      margin: 1.5rem auto;
+      padding: 2rem;
+      border: 1px solid rgba(255, 216, 74, 0.15);
+      border-radius: 24px;
+      background: rgba(255, 216, 74, 0.03);
+      text-align: left;
+    }
+
+    .privacy-section .privacy-statement p {
+      margin: .85rem auto;
+      text-align: left;
+    }
+
+    .privacy-section .privacy-tagline {
+      font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+      font-weight: 900;
+      color: var(--neon);
+      text-shadow: 0 0 12px var(--neon-glow), 0 0 24px var(--neon-glow);
+      filter: drop-shadow(0 0 8px rgba(255, 216, 74, 0.18));
+      margin: 1.5rem auto 1rem;
     }
 
     .list li {
@@ -714,6 +809,8 @@
       .footer-links { justify-content: center; }
       .donation-grid { text-align: center; }
       .donation-group { text-align: center; }
+      .split-centered { max-width: 100%; }
+      .privacy-section .privacy-statement { padding: 1.25rem; }
     }
   </style>
 <style id="command-nexus-early-access-style">
@@ -779,28 +876,52 @@
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-inner">
         <div class="eyebrow">Independent studio in active development</div>
-        <p class="privacy-banner">We believe privacy should come first.</p>
-        <h1 id="hero-title">Avery Logic Works is a founder-led software, AI, and digital systems studio.</h1>
-        <p class="hero-subhead">This site exists to introduce the studio first: what Avery Logic Works is, what it is growing into, and why the work matters. Limited support-backed collaboration may be available, but the larger purpose is building long-term software, AI, and interactive systems with a clear point of view.</p>
+        <h1 id="hero-title"><span class="neon-heading">PRIVACY</span> SHOULD BE STANDARD.</h1>
+        <p class="hero-welcome">Welcome to Avery Logic Works.</p>
+        <p class="hero-subhead">A founder-led software, AI, and digital systems studio built with a clear point of view: <span class="neon-accent">your data. Your choice.</span> Limited support-backed collaboration may be available, but the larger purpose is building long-term software, AI, and interactive systems that respect the people who use them.</p>
         <p class="hero-note">If you want to purchase a paid service or look at the current collaboration options, more information is below, and the paid services button is always at the top.</p>
         <div class="cta-row" aria-label="Homepage actions">
-          <a class="button primary" href="#custom-software">View paid services</a>
-          <a class="button" href="#good-fit">See what fits</a>
+          <a class="button primary" href="#privacy-promise">Read our privacy promise</a>
+          <a class="button" href="#custom-software">View paid services</a>
           <a class="button" href="founder.html">Meet the founder</a>
         </div>
         <div class="trust-strip" aria-label="Trust signals">
+          <div class="trust-pill">
+            <strong><span class="neon-accent">Privacy</span> by design, not by accident</strong>
+            Limited information collection, clear purpose, and user choice are built into the foundation.
+          </div>
           <div class="trust-pill">
             <strong>Founder-led from start to finish</strong>
             You are working directly with the person building the system, not being handed off into a queue.
           </div>
           <div class="trust-pill">
-            <strong>Scope confirmed before work starts</strong>
-            If a request does not fit the tier you chose, the next step is clarified before any build begins.
-          </div>
-          <div class="trust-pill">
             <strong>Built for usefulness, not fluff</strong>
             The goal is a working result that solves something real, not a pile of vague promises.
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="privacy-promise" aria-labelledby="privacy-promise-title">
+      <div class="privacy-section">
+        <div class="section-label"><span class="neon-accent">Privacy</span> Promise</div>
+        <h2 id="privacy-promise-title" class="privacy-heading">Your Privacy Matters</h2>
+        <div class="privacy-statement">
+          <p>Avery Logic Works collects <strong>very little</strong> personal information.</p>
+          <p>The limited information we collect is used only for website continuity, account operation, usability, user-selected options and features, saved preferences, trusted-device recognition, requested communications, purchases, licensing, customer support, and security.</p>
+          <p>For example, an email address may be required to create and identify an account, send a requested newsletter, connect a purchase with the correct customer, issue a license key, provide support, or restore access to an account.</p>
+          <p>We do <strong>not</strong> sell your personal information to third parties, and we do <strong>not</strong> use it to build advertising profiles for outside companies.</p>
+          <p>We do <strong>not</strong> collect information for monetization. We collect limited information for continuity, functionality, user choice, and security.</p>
+          <p>Whenever a choice can reasonably be provided, that choice belongs to the user.</p>
+          <p class="privacy-tagline">Your data. Your choice.</p>
+          <p>Certain limited security information must be processed to protect users, accounts, purchases, transactions, license keys, and Avery Logic Works systems. Essential security processing cannot be disabled while using services that depend on it. However, security-related collection must remain limited to what is reasonably necessary for protection, fraud prevention, system integrity, and reliable operation.</p>
+          <p>Any information collected must be handled carefully, used only for its clearly stated purpose, and retained only for as long as reasonably necessary for that purpose, account operation, licensing, legal obligations, or security.</p>
+          <p>We do not state or imply that Avery Logic Works collects absolutely no information. The wording here is honest about the limited information required for accounts, purchases, licensing, selected features, continuity, and security.</p>
+          <p>We do not store or transmit a customer&rsquo;s raw password merely because the customer selects <strong>Remember This Device</strong>. We use a secure, expiring, revocable authentication token. The customer&rsquo;s browser or password manager may separately save credentials when the customer chooses to allow it.</p>
+        </div>
+        <div class="cta-row" style="margin-top:1.5rem;">
+          <a class="button" href="privacy.html">Full privacy policy</a>
+          <a class="button primary" href="#custom-software">View paid services</a>
         </div>
       </div>
     </section>
@@ -941,7 +1062,7 @@
     </section>
 
     <section aria-labelledby="founder-title">
-      <div class="split">
+      <div class="split-centered">
         <div class="section-head">
           <div class="section-label">Founder-led</div>
           <h2 id="founder-title">Built independently, carefully, and with a longer horizon in mind.</h2>
@@ -962,9 +1083,9 @@
           <p>The public site communicates mission, visible progress, and working entry points without forcing every internal system into the open too early.</p>
         </article>
         <article class="card">
-          <div class="section-label">Trust & privacy</div>
+          <div class="section-label">Trust & <span class="neon-accent">privacy</span></div>
           <h3 id="privacy-title">Private information should not be treated like a product.</h3>
-          <p>Privacy, account controls, and respectful handling of user information are part of the design philosophy here, not an afterthought added later.</p>
+          <p><span class="neon-accent">Privacy</span>, account controls, and respectful handling of user information are part of the design philosophy here, not an afterthought added later.</p>
         </article>
         <article class="card">
           <div class="section-label">Updates</div>

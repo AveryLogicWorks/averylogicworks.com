@@ -35,6 +35,10 @@
     return 'avery-remember-me';
   }
 
+  function getRememberedEmailKey() {
+    return 'avery-remembered-email';
+  }
+
   function getRememberPreference() {
     const raw = localStorage.getItem(getRememberKey());
     return raw === null ? true : raw === 'true';
@@ -42,6 +46,22 @@
 
   function setRememberPreference(value) {
     localStorage.setItem(getRememberKey(), value ? 'true' : 'false');
+    if (!value) {
+      localStorage.removeItem(getRememberedEmailKey());
+    }
+  }
+
+  function getRememberedEmail() {
+    if (!getRememberPreference()) return '';
+    return localStorage.getItem(getRememberedEmailKey()) || '';
+  }
+
+  function setRememberedEmail(email) {
+    if (getRememberPreference() && email) {
+      localStorage.setItem(getRememberedEmailKey(), email);
+    } else {
+      localStorage.removeItem(getRememberedEmailKey());
+    }
   }
 
   function moveAuthStorage(useLocal) {
@@ -261,8 +281,10 @@
         if (!target) return;
         const nextType = target.type === 'password' ? 'text' : 'password';
         target.type = nextType;
-        button.setAttribute('aria-pressed', nextType === 'text' ? 'true' : 'false');
-        button.textContent = nextType === 'text' ? 'Hide' : 'Show';
+        const isText = nextType === 'text';
+        button.setAttribute('aria-pressed', String(isText));
+        button.setAttribute('aria-label', isText ? 'Hide password' : 'Show password');
+        button.textContent = isText ? '\u{1F441} Hide' : '\u{1F441} Show';
       });
     });
   }
@@ -368,6 +390,12 @@
   hydrateRememberToggles();
   hydratePasswordToggles();
   applyActiveNavState();
+
+  var loginEmailField = document.getElementById('loginEmail');
+  if (loginEmailField) {
+    var rememberedEmail = getRememberedEmail();
+    if (rememberedEmail) loginEmailField.value = rememberedEmail;
+  }
 
   const signupForm = document.getElementById('signup-form');
   if (signupForm) {
@@ -483,6 +511,8 @@
       const remember = !!loginForm.querySelector('[data-remember-me]')?.checked;
       setRememberPreference(remember);
       moveAuthStorage(remember);
+      if (remember) setRememberedEmail(email);
+      else setRememberedEmail('');
       setBusy(loginForm, true);
       try {
         const { error } = await sb.auth.signInWithPassword({ email: email, password: password });
