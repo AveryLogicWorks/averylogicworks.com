@@ -404,9 +404,13 @@ input::placeholder, textarea::placeholder { color: var(--placeholder); }
 .sidebar.collapsed .theme-toggle { justify-content: center; }
 
 .main-content {
-  margin-left: var(--sidebar-w);
+  margin-left: 0;
   flex: 1; min-width: 0;
   transition: margin-left 0.2s ease;
+}
+/* Only apply sidebar margin when a sidebar is actually present */
+body > .sidebar ~ .main-content {
+  margin-left: var(--sidebar-w);
 }
 .main-content.sidebar-collapsed { margin-left: var(--sidebar-collapsed-w); }
 
