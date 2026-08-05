@@ -35,6 +35,7 @@
       .alw-emergency-menu-panel a:hover,.alw-emergency-menu-panel a:focus-visible{background:rgba(125,211,252,.14);outline:none;}
       .mobile-nav-toggle{display:grid!important;position:fixed!important;top:14px!important;right:14px!important;left:auto!important;z-index:2147483646!important;}
       .sidebar-toggle{display:block!important;visibility:visible!important;opacity:1!important;}
+      .hero #hero-title{margin:18px auto 14px!important;text-align:center!important;}
     `;
     document.head.appendChild(style);
   }
