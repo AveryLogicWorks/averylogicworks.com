@@ -1,0 +1,31 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const source = fs.readFileSync('assets/quadrahydra.js', 'utf8');
+function setup(storageFails = false) {
+  const ids = ['qh-agree','qh-download','qh-buy','qh-checkout','qh-feedback','qh-order-agreement'];
+  const elements = Object.fromEntries(ids.map(id => [id, {checked:false,disabled:true,value:'',textContent:'',listeners:{},addEventListener(event, fn) {this.listeners[event]=fn;},focus(){this.focused=true;}}]));
+  const links=[];const saved=[];
+  vm.runInNewContext(source, {Date, JSON, localStorage:{setItem(k,v){if(storageFails)throw Error('disabled');saved.push([k,JSON.parse(v)]);}}, document:{getElementById:id=>elements[id],body:{appendChild(){}},createElement(){const link={click(){this.clicked=true;},remove(){}};links.push(link);return link;}}});
+  return {elements,links,saved};
+}
+let s=setup();let blocked=false;
+s.elements['qh-checkout'].listeners.submit({preventDefault(){blocked=true;}});
+assert.equal(blocked,true);assert.equal(s.saved.length,0);
+s.elements['qh-download'].listeners.click();assert.equal(s.links.length,0);
+s.elements['qh-agree'].checked=true;s.elements['qh-agree'].listeners.change();
+assert.equal(s.elements['qh-buy'].disabled,false);assert.equal(s.elements['qh-download'].disabled,false);
+blocked=false;s.elements['qh-checkout'].listeners.submit({preventDefault(){blocked=true;}});
+assert.equal(blocked,false);
+assert.equal(JSON.parse(s.elements['qh-order-agreement'].value).terms,'QH-TERMS-2026-09-03');
+s.elements['qh-download'].listeners.click();assert.equal(s.links[0].href,'downloads/QuadraHydra-1.0.3-Windows.zip');assert.equal(s.links[0].clicked,true);
+s.elements['qh-agree'].checked=false;s.elements['qh-agree'].listeners.change();assert.equal(s.elements['qh-buy'].disabled,true);
+s=setup(true);s.elements['qh-agree'].checked=true;blocked=false;s.elements['qh-checkout'].listeners.submit({preventDefault(){blocked=true;}});assert.equal(blocked,false);
+const page=fs.readFileSync('programs.html','utf8');
+const form=page.match(/<form id="qh-checkout"[\s\S]*?<\/form>/)[0];
+for(const field of ['name="business" value="AveryLogicWorks@gmail.com"','name="amount" value="15.00"','name="currency_code" value="USD"','name="item_number" value="QH-V1-1PC"','name="quantity" value="1"']) assert.ok(form.includes(field));
+assert.ok(form.includes('https://www.paypal.com/cgi-bin/webscr'));
+assert.ok(form.includes('method="post"'));
+assert.ok(page.includes('Delivery is handled by the founder; it is not instant.'));
+assert.ok(fs.readFileSync('quadrahydra-purchase.html','utf8').includes('Returning to this page alone does not confirm payment'));
+console.log('20 checkout checks passed: consent, storage fallback, trial link, PayPal amount/account/product, and truthful fulfillment.');

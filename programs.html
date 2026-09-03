@@ -7,6 +7,7 @@
   <meta name="description" content="Small programs and simple utilities from Avery Logic Works - built with people in mind." />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="assets/site.css">
+  <link rel="stylesheet" href="assets/quadrahydra.css">
   <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('alw-theme')||'dark')</script>
   <style>
     body{background:#06111d;color:#edf4ff}[data-theme="light"] body{background:#f5f7fa;color:#1a1a2e}
@@ -49,7 +50,7 @@
       <div class="section-head">
         <div class="section-label">Available now</div>
         <h2 id="programs-title">Programs you can get today.</h2>
-        <p class="muted">Each program is a one-time purchase. New customers can enter <strong>BACK25</strong> at purchase for 25% off one purchase of any one product.</p>
+        <p class="muted">Each program is a one-time purchase. Available promotional offers are shown in the individual purchase section.</p>
       </div>
       <div class="program-grid">
         <article class="card program-card">
@@ -60,7 +61,7 @@
           <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;"><span class="program-price">$10</span><span class="soft">one-time purchase</span></div>
           <a class="button primary" href="#speakeasy-purchase">Get Speakeasy &mdash; $10</a>
         </article>
-        <article class="card program-card coming-soon-card"><span class="program-badge">Coming soon</span><h3>Quadra Hydra</h3><p class="muted">A process priority manager for heavy workloads.</p><span class="program-price">$15</span><a class="button" href="signup.html">Get notified at launch</a></article>
+        <article class="card program-card" id="quadrahydra"><span class="program-badge">3-day free trial</span><h3>QuadraHydra</h3><p class="muted">See what is using your PC's resources and manage process priorities for editing, rendering, and other heavy workloads.</p><ul class="program-features"><li>CPU and memory monitoring</li><li>Process priorities and workload profiles</li><li>Windows 10/11, 64-bit</li></ul><span class="program-price">$15 · one PC · one-time</span><a class="button primary" href="#quadrahydra-purchase">Try or buy QuadraHydra</a></article>
         <article class="card program-card coming-soon-card"><span class="program-badge">Coming soon</span><h3>More on the way</h3><p class="muted">Several more small programs and utilities are in active development.</p><a class="button" href="signup.html">Sign up for updates</a></article>
       </div>
     </section>
@@ -101,9 +102,33 @@
         <p class="soft" style="font-size:.85rem;text-align:center;margin-top:.75rem;">Secure checkout via PayPal. After payment, you&rsquo;ll receive a download link by email.</p>
       </div></div>
     </section>
+
+    <section id="quadrahydra-purchase" aria-labelledby="quadrahydra-title">
+      <div class="section-head"><div class="section-label">QuadraHydra Command Center</div><h2 id="quadrahydra-title">Try it on your PC. Keep it for $15.</h2><p class="muted">Three days to try the Windows app. One payment to continue. No subscription.</p></div>
+      <div class="qh-offer">
+        <p class="qh-price">$15 <small>USD · one PC · paid once</small></p>
+        <p>The free trial lasts 72 hours from when you click <strong>Start Trial inside the app</strong>, including time while it is closed. No card or website account is needed for the trial, and it never charges you automatically.</p>
+        <p>Download the complete Windows ZIP, extract all files, then open <strong>QuadraHydra.exe</strong>. No development tools are needed. The same download accepts your purchased activation key.</p>
+        <div class="qh-notice"><strong>Save your work before changing processes.</strong> Changing priorities, suspending, or ending a process can interrupt applications or lose unsaved data. Administrator privileges do not make an action safe. Performance depends on your PC and workload.</div>
+        <label class="qh-consent" for="qh-agree"><input type="checkbox" id="qh-agree"><span>I agree to the <a href="quadrahydra-terms.html" target="_blank" rel="noopener">QuadraHydra Terms and Software License</a> (QH-TERMS-2026-09-03), including the one-PC license and process-control risks. I acknowledge the <a href="support.html" target="_blank" rel="noopener">refund policy</a>. Read the <a href="quadrahydra-privacy.html" target="_blank" rel="noopener">app privacy notice</a>.</span></label>
+        <div class="qh-actions">
+          <button class="button" id="qh-download" type="button" disabled>Download free 3-day trial</button>
+          <form id="qh-checkout" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+            <input type="hidden" name="cmd" value="_xclick"><input type="hidden" name="business" value="AveryLogicWorks@gmail.com"><input type="hidden" name="amount" value="15.00"><input type="hidden" name="currency_code" value="USD"><input type="hidden" name="item_name" value="QuadraHydra - One PC - Perpetual Version 1 License"><input type="hidden" name="item_number" value="QH-V1-1PC"><input type="hidden" name="quantity" value="1"><input type="hidden" name="no_shipping" value="1"><input type="hidden" name="no_note" value="1"><input type="hidden" name="charset" value="utf-8"><input type="hidden" name="return" value="https://averylogicworks.com/quadrahydra-purchase.html"><input type="hidden" name="cancel_return" value="https://averylogicworks.com/programs.html#quadrahydra-purchase"><input type="hidden" name="on0" value="License terms"><input type="hidden" name="os0" value="QH-TERMS-2026-09-03; one PC"><input type="hidden" name="custom" id="qh-order-agreement" value="">
+            <button class="button primary" id="qh-buy" type="submit" disabled>Buy for $15 with PayPal</button>
+          </form>
+        </div>
+        <p id="qh-feedback" role="status">Read the terms and check the agreement box to download or purchase.</p>
+        <p><strong>Activation keys are sent separately after payment is confirmed.</strong> Delivery is handled by the founder; it is not instant. Use the email address on your PayPal receipt when contacting <a href="mailto:Averylogicworks@gmail.com?subject=QuadraHydra%20purchase%20and%20activation">Avery Logic Works support</a>. You can use your trial while your purchase is being fulfilled.</p>
+        <p><small>This Windows executable is not digitally signed. Windows may display a publisher warning. Download only from a source you trust. The one-PC limit is a license condition; the current build does not bind activation to hardware.</small></p>
+        <p><small>Version 1.0.3 · <a href="downloads/QuadraHydra-1.0.3-SHA256.txt">Download checksum</a></small></p>
+        <noscript><p>JavaScript is needed for this page's agreement controls. You can <a href="downloads/QuadraHydra-1.0.3-Windows.zip">download the app here</a>; it presents the same agreement before starting the trial. For a purchase, enable JavaScript or contact support.</p></noscript>
+      </div>
+    </section>
   </main>
   <footer class="site-footer"><div class="footer-inner"><p>&copy; <span id="year"></span> Avery Logic Works&trade;. All rights reserved.</p><div class="footer-links"><a href="support.html">Support</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="https://www.youtube.com/watch?v=IakQBx4rgks" target="_blank" rel="noopener noreferrer">YouTube</a></div></div></footer>
   <script src="assets/site-config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/site-shell.js"></script><script src="assets/site.js"></script>
+  <script src="assets/quadrahydra.js"></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
     (function(){
