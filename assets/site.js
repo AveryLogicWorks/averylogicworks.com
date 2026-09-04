@@ -332,7 +332,7 @@
       console.debug('managed site settings unavailable', error?.message || error);
     }
     await enableOwnerVisualEditor();
-    initializeManagedSite();
+    maybeTrackVisit();
   }
 
   function maybeTrackVisit() {
@@ -552,7 +552,7 @@
     });
   }
 
-  maybeTrackVisit();
+  initializeManagedSite();
 
   document.querySelectorAll('[data-track-event]').forEach((el) => {
     el.addEventListener('click', () => {
