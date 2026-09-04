@@ -397,7 +397,7 @@
     security: { table: 'security_events', columns: 'id,event_type,severity,page_path,user_email,attempted_email,ip_address,user_agent,referrer,metadata,created_at', order: 'created_at' },
     sales: { table: 'purchase_audit_log', columns: 'id,customer_email,customer_name,purchase_kind,purchase_category,payment_status,amount_cents,currency,source_page,visitor_token,summary,created_at', order: 'created_at' },
     licenses: { table: 'trial_keys', columns: 'id,user_id,user_email,license_key,tier,claimed_at,expires_at,created_at', order: 'created_at' },
-    inquiries: { table: 'enterprise_inquiries', columns: 'id,name,email,company,subject,message,status,owner_reply,created_at,updated_at', order: 'created_at' },
+    inquiries: { table: 'enterprise_inquiries', columns: 'id,name,email,company,phone,team_size,use_case,use_case_examples,budget_range,timeline,status,owner_reply,replied_at,created_at', order: 'created_at' },
     requests: { table: 'service_requests', columns: 'request_id,customer_name,customer_email,subject,details,tier_key,tier_label,quoted_price_cents,status,ip_address,created_at,updated_at', order: 'created_at' },
     products: { table: 'product_catalog', columns: '*', order: 'updated_at' },
     content: { table: 'managed_page_content', columns: '*', order: 'updated_at' },
