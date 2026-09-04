@@ -841,7 +841,7 @@
             + '<div class="data-meta">' + escapeHtml(meta.tier_label || 'Unknown tier') + ' · ' + escapeHtml(row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div>'
             + '<p>' + escapeHtml(meta.details || '') + '</p>'
             + '<div class="data-meta">Quote: $' + (Number(meta.quoted_price_cents || 0) / 100).toFixed(2)
-            + ' · Notification: ' + (meta.notification_sent_at ? 'sent' : escapeHtml(meta.notification_error || 'stored in vault')) + '</div>'
+            + ' · Alert: ' + (meta.notification_sent_at ? 'available in vault' : escapeHtml(meta.notification_error || 'stored in vault')) + '</div>'
             + '<div style="display:flex;gap:8px;align-items:center;margin-top:8px;"><select data-request-status="' + escapeHtml(meta.request_id || '') + '">'
             + ['new','reviewing','contacted','accepted','closed'].map(function (status) { return '<option value="' + status + '"' + (row.status === status ? ' selected' : '') + '>' + status + '</option>'; }).join('')
             + '</select><button class="quick-action" data-save-request="' + escapeHtml(meta.request_id || '') + '">Save status</button></div>'

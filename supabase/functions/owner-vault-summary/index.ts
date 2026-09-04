@@ -46,15 +46,19 @@ Deno.serve(async (req: Request) => {
       if ((data.users || []).length < 1000) break;
     }
 
-    const [operatorResult, requestsResult, feedbackResult, securityResult, trafficResult, supporterResult] = await Promise.all([
+    const [operatorResult, requestsResult, requestCountResult, feedbackResult, feedbackCountResult, securityResult, warningCountResult, deniedCountResult, trafficResult, supporterResult] = await Promise.all([
       admin.from("user_operator_profiles").select("*").order("account_created_at", { ascending: false }).limit(1000),
       admin.from("service_requests").select("*").order("created_at", { ascending: false }).limit(50),
+      admin.from("service_requests").select("id", { count: "exact", head: true }),
       admin.from("site_events").select("created_at,user_email,metadata").eq("event_type", "public_feedback_submitted").order("created_at", { ascending: false }).limit(50),
+      admin.from("site_events").select("id", { count: "exact", head: true }).eq("event_type", "public_feedback_submitted"),
       admin.from("security_events").select("created_at,event_type,severity,page_path,user_email,attempted_email,ip_address,ip_hash,user_agent,referrer,metadata").order("created_at", { ascending: false }).limit(250),
+      admin.from("security_events").select("id", { count: "exact", head: true }).in("severity", ["warning", "critical"]),
+      admin.from("security_events").select("id", { count: "exact", head: true }).eq("event_type", "admin_access_denied"),
       admin.from("security_events").select("created_at,page_path,visitor_token,ip_hash,referrer").eq("event_type", "page_visit").gte("created_at", since(30)).order("created_at", { ascending: false }).limit(5000),
       admin.from("supporter_events").select("event_type,amount_cents"),
     ]);
-    for (const result of [operatorResult, requestsResult, feedbackResult, securityResult, trafficResult, supporterResult]) {
+    for (const result of [operatorResult, requestsResult, requestCountResult, feedbackResult, feedbackCountResult, securityResult, warningCountResult, deniedCountResult, trafficResult, supporterResult]) {
       if (result.error) throw result.error;
     }
 
@@ -119,7 +123,7 @@ Deno.serve(async (req: Request) => {
         details: r.details, tier_key: r.tier_key, tier_label: r.tier_label, quoted_price_cents: r.quoted_price_cents,
         promo_code: r.promo_code, notification_sent_at: r.notification_sent_at, notification_error: r.notification_error,
         ip_address: r.ip_address, user_agent: r.user_agent } }));
-    const warningCount = rawSecurity.filter((r: any) => ["warning", "critical"].includes(r.severity)).length;
+    const warningCount = warningCountResult.count || 0;
 
     return json({ build: "2026-09-04-operator-vault", snapshot: { profiles_total: people.length, page_visits_total: visitsAll,
       login_success_total: loginsAll, signup_submitted_total: signupsAll }, core: { visits_24h: visits24h, visits_30d: visits30d,
@@ -128,9 +132,9 @@ Deno.serve(async (req: Request) => {
       supporter_updates_opt_ins: people.filter((p) => p.supporter_updates_opt_in).length, donation_events: donationEvents,
       subscription_events: subscriptionEvents, donation_total_display: `$${(donationCents / 100).toFixed(2)}`,
       subscription_total_display: `$${(subscriptionCents / 100).toFixed(2)}` }, clicks: Object.fromEntries(clickPairs),
-      funnel: { service_requests: serviceRequests.length, checkout_opens: checkoutOpens, feedback_count: feedback.length,
+      funnel: { service_requests: requestCountResult.count || 0, checkout_opens: checkoutOpens, feedback_count: feedbackCountResult.count || 0,
         average_rating: ratings.length ? (ratings.reduce((a: number, b: number) => a + b, 0) / ratings.length).toFixed(1) : "0.0",
-        security_events: warningCount, admin_denied: rawSecurity.filter((r: any) => r.event_type === "admin_access_denied").length },
+        security_events: warningCount, admin_denied: deniedCountResult.count || 0 },
       service_requests: serviceRequests, feedback, security, people, traffic, ip_watchlist });
   } catch (error) { console.error("owner-vault-summary", error); return json({ error: error instanceof Error ? error.message : "Unexpected owner vault error." }, 500); }
 });
