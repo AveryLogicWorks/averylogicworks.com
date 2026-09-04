@@ -141,7 +141,7 @@
     return { ok: true, value: name };
   }
 
-  let analyticsEnabled = true;
+  let analyticsEnabled = false;
 
   async function trackEvent(eventType, payload) {
     if (!analyticsEnabled || !eventType || !supabaseCfg.telemetryEdgeFunction) return;
