@@ -1993,37 +1993,45 @@
         if (!sb) return;
         var list = document.getElementById('revenue-transaction-list');
         try {
-          var donationsResp = await sb.from('site_events').select('created_at,user_email,metadata').eq('event_type', 'donation_completed').order('created_at', { ascending: false }).limit(20);
-          var subscriptionsResp = await sb.from('site_events').select('created_at,user_email,metadata').eq('event_type', 'subscription_completed').order('created_at', { ascending: false }).limit(20);
-          var productsResp = await sb.from('site_events').select('created_at,user_email,metadata').eq('event_type', 'command_nexus_purchase').order('created_at', { ascending: false }).limit(20);
-          var donations = donationsResp.data || [];
-          var subscriptions = subscriptionsResp.data || [];
-          var products = productsResp.data || [];
-          var allTxns = [].concat(donations, subscriptions, products);
-          if (!allTxns.length) {
-            if (list) list.innerHTML = '<div class="empty-state">No transactions recorded yet.</div>';
-          } else if (list) {
-            list.innerHTML = allTxns.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at); }).map(function (row) {
-              var meta = row.metadata || {};
-              var amount = meta.amount || '$0.00';
-              var type = meta.type || (row.event_type === 'donation_completed' ? 'Donation' : row.event_type === 'subscription_completed' ? 'Subscription' : 'Product sale');
-              return '<div class="data-item"><strong>' + escapeHtml(type) + ' &mdash; ' + escapeHtml(amount) + '</strong>'
-                + '<div class="data-meta">' + escapeHtml(row.user_email || 'Unknown') + ' &middot; ' + escapeHtml(row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div></div>';
-            }).join('');
-          }
-          var donationTotal = donations.reduce(function (sum, row) { return sum + parseFloat((row.metadata || {}).amount || '0'); }, 0);
-          var subTotal = subscriptions.reduce(function (sum, row) { return sum + parseFloat((row.metadata || {}).amount || '0'); }, 0);
-          var productTotal = products.reduce(function (sum, row) { return sum + parseFloat((row.metadata || {}).amount || '0'); }, 0);
+          var responses = await Promise.all([
+            sb.from('supporter_events').select('event_type,amount_cents,created_at').order('created_at', { ascending: false }).limit(500),
+            sb.from('purchase_audit_log').select('customer_email,customer_name,purchase_kind,purchase_category,payment_status,amount_cents,currency,source_page,summary,created_at').order('created_at', { ascending: false }).limit(500)
+          ]);
+          if (responses[0].error) throw responses[0].error;
+          if (responses[1].error) throw responses[1].error;
+          var supporterRows = responses[0].data || [];
+          var purchaseRows = responses[1].data || [];
+          var donations = supporterRows.filter(function (row) { return String(row.event_type || '').toLowerCase().startsWith('donation'); });
+          var subscriptions = supporterRows.filter(function (row) { var type = String(row.event_type || '').toLowerCase(); return type.startsWith('subscription') || type.startsWith('monthly'); });
+          var paidStatuses = ['paid','completed','succeeded','active'];
+          var productSales = purchaseRows.filter(function (row) { return paidStatuses.includes(String(row.payment_status || '').toLowerCase()); });
+          var refunds = purchaseRows.filter(function (row) { return ['refunded','partially_refunded','disputed'].includes(String(row.payment_status || '').toLowerCase()); });
+          var donationTotal = donations.reduce(function (sum, row) { return sum + Number(row.amount_cents || 0); }, 0);
+          var subscriptionTotal = subscriptions.reduce(function (sum, row) { return sum + Number(row.amount_cents || 0); }, 0);
+          var productTotal = productSales.reduce(function (sum, row) { return sum + Number(row.amount_cents || 0); }, 0)
+            - refunds.reduce(function (sum, row) { return sum + Number(row.amount_cents || 0); }, 0);
+
+          var normalized = supporterRows.map(function (row) {
+            return { created_at: row.created_at, label: String(row.event_type || 'Supporter payment').replace(/_/g, ' '), amount_cents: row.amount_cents, currency: 'USD', who: 'Supporter' };
+          }).concat(purchaseRows.map(function (row) {
+            return { created_at: row.created_at, label: row.summary || row.purchase_kind || row.purchase_category || 'Product payment', amount_cents: row.amount_cents, currency: row.currency || 'USD', who: row.customer_email || row.customer_name || 'Unknown customer', status: row.payment_status };
+          })).sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at); }).slice(0, 60);
+
+          if (list) list.innerHTML = normalized.length ? normalized.map(function (row) {
+            return '<div class="data-item"><strong>' + escapeHtml(row.label) + ' &mdash; ' + escapeHtml('$' + (Number(row.amount_cents || 0) / 100).toFixed(2)) + '</strong>'
+              + '<div class="data-meta">' + escapeHtml(row.who) + (row.status ? ' · ' + escapeHtml(row.status) : '') + ' · ' + escapeHtml(row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div></div>';
+          }).join('') : '<div class="empty-state">No transactions recorded yet.</div>';
+
           var elDon = document.getElementById('revenue-donations');
           var elSub = document.getElementById('revenue-subscriptions');
           var elProd = document.getElementById('revenue-products');
           var elTotal = document.getElementById('revenue-total-display');
-          if (elDon) elDon.textContent = '$' + donationTotal.toFixed(2);
-          if (elSub) elSub.textContent = '$' + subTotal.toFixed(2);
-          if (elProd) elProd.textContent = '$' + productTotal.toFixed(2);
-          if (elTotal) elTotal.textContent = '$' + (donationTotal + subTotal + productTotal).toFixed(2);
+          if (elDon) elDon.textContent = '$' + (donationTotal / 100).toFixed(2);
+          if (elSub) elSub.textContent = '$' + (subscriptionTotal / 100).toFixed(2);
+          if (elProd) elProd.textContent = '$' + (productTotal / 100).toFixed(2);
+          if (elTotal) elTotal.textContent = '$' + ((donationTotal + subscriptionTotal + productTotal) / 100).toFixed(2);
         } catch (err) {
-          if (list) list.innerHTML = '<div class="empty-state">Revenue data not available yet.</div>';
+          if (list) list.innerHTML = '<div class="empty-state">Revenue data could not be loaded: ' + escapeHtml(err.message || err) + '</div>';
         }
       }
 
