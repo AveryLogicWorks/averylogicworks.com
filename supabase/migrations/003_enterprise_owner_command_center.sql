@@ -442,6 +442,22 @@ with check (
   ])
 );
 
+
+-- Give the owner a complete license view while keeping customer and public access restricted.
+drop policy if exists "Owner reads all trial keys" on public.trial_keys;
+create policy "Owner reads all trial keys" on public.trial_keys for select
+to authenticated
+using ((select public.is_site_admin()));
+
+grant select on public.trial_keys to authenticated;
+
+drop policy if exists "Owner reads activated license hashes" on public.used_license_keys;
+create policy "Owner reads activated license hashes" on public.used_license_keys for select
+to authenticated
+using ((select public.is_site_admin()));
+
+grant select on public.used_license_keys to authenticated;
+
 comment on table public.managed_page_content is 'Safe no-code page overrides. Public pages apply text, link, image, and visibility changes only.';
 comment on table public.product_catalog is 'Owner-managed product catalog including Command Nexus, Speakeasy, and QuadraHydra.';
 comment on table public.owner_action_log is 'Owner-only tamper-evident operational history for command-center changes.';
