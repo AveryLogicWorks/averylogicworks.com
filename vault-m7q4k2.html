@@ -282,7 +282,10 @@
             <div class="metric-grid admin-metrics">
               <div class="metric"><strong data-admin-stat="command_nexus_download">0</strong><span>CN downloads</span></div>
               <div class="metric"><strong data-admin-stat="trial_key_claimed">0</strong><span>Trial keys claimed</span></div>
-              <div class="metric"><strong data-admin-stat="speakeasy_purchase_click">0</strong><span>Speakeasy buys</span></div>
+              <div class="metric"><strong data-admin-stat="speakeasy_section_view">0</strong><span>Speakeasy views</span></div>
+              <div class="metric"><strong data-admin-stat="speakeasy_info_click">0</strong><span>More-info clicks</span></div>
+              <div class="metric"><strong data-admin-stat="speakeasy_trial_download">0</strong><span>Trial downloads</span></div>
+              <div class="metric"><strong data-admin-stat="speakeasy_purchase_click">0</strong><span>Purchase clicks</span></div>
               <div class="metric"><strong data-admin-stat="downloads_30d">0</strong><span>Downloads (30d)</span></div>
             </div>
             <p class="small-note">Tracks every download click and trial claim across the site. Use this to see if visitors are actually attempting to use your products.</p>
@@ -1098,7 +1101,7 @@
       }
 
       async function loadDownloadMetrics() {
-        var downloadEvents = ['command_nexus_download', 'trial_key_claimed', 'speakeasy_purchase_click'];
+        var downloadEvents = ['command_nexus_download', 'trial_key_claimed', 'speakeasy_section_view', 'speakeasy_info_click', 'speakeasy_trial_download', 'speakeasy_purchase_click'];
         await Promise.all(downloadEvents.map(async function (eventType) {
           try {
             var total = await countEvent(eventType);
@@ -2076,6 +2079,9 @@
         'admin_denied': { event: 'admin_access_denied', label: 'Denied admin attempts' },
         'command_nexus_download': { event: 'command_nexus_download', label: 'Command Nexus downloads' },
         'trial_key_claimed': { event: 'trial_key_claimed', label: 'Trial keys claimed' },
+        'speakeasy_section_view': { event: 'speakeasy_section_view', label: 'Speakeasy area views' },
+        'speakeasy_info_click': { event: 'speakeasy_info_click', label: 'Speakeasy more-info clicks' },
+        'speakeasy_trial_download': { event: 'speakeasy_trial_download', label: 'Speakeasy trial downloads' },
         'speakeasy_purchase_click': { event: 'speakeasy_purchase_click', label: 'Speakeasy purchase clicks' },
         'downloads_30d': { event: 'command_nexus_download', label: 'Downloads (last 30 days)', since: 720 }
       };

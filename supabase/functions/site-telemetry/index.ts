@@ -12,7 +12,8 @@ const allowedEvents = new Set([
   "page_visit", "homepage_visit", "homepage_service_cta_click",
   "homepage_donation_click", "homepage_signup_click", "homepage_signin_click",
   "homepage_founder_cta_click", "homepage_support_cta_click", "homepage_fit_cta_click",
-  "command_nexus_download", "trial_key_claimed", "speakeasy_purchase_click",
+  "command_nexus_download", "trial_key_claimed", "speakeasy_section_view",
+  "speakeasy_info_click", "speakeasy_trial_download", "speakeasy_purchase_click",
   "public_feedback_submitted", "signup_submitted", "login_success", "login_failed",
   "password_reset_requested", "service_checkout_opened",
 ]);

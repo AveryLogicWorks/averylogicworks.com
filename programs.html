@@ -56,14 +56,14 @@
         <p class="muted">Each program is a one-time purchase. Available promotional offers are shown in the individual purchase section.</p>
       </div>
       <div class="program-grid">
-        <article class="card program-card">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;"><span class="program-badge">Available now</span><span class="program-status ready">Ready</span></div>
+        <article class="card program-card" data-track-view="speakeasy_section_view">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;"><span class="program-badge">Free 3-day trial</span><span class="program-status ready">Ready</span></div>
           <h3>Speakeasy</h3>
-          <p class="muted">A lightweight text-to-speech reader that lives in your system tray. Select any text, hit a hotkey, and Speakeasy reads it aloud using your operating system's built-in voices.</p>
-          <ul class="program-features"><li>System tray icon</li><li>Ctrl+Shift+Space reads selected text</li><li>Reads clipboard text from anywhere</li><li>Works offline &mdash; no internet required</li></ul>
-          <a class="program-more-info" href="speakeasy-info.html" aria-label="More information about Speakeasy">More info</a>
+          <p class="muted">A lightweight text-to-speech reader that lives in your system tray. Select any text, hit a hotkey, and Speakeasy reads it aloud with a voice already installed in Windows.</p>
+          <ul class="program-features"><li>Full access for 72 hours</li><li>Ctrl+Shift+Space reads selected text</li><li>Reads clipboard text from anywhere</li><li>Uses local Windows voices &mdash; no paid speech service</li></ul>
+          <a class="program-more-info" href="speakeasy-info.html" aria-label="More information about Speakeasy" data-track-event="speakeasy_info_click">More info</a>
           <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;"><span class="program-price">$10</span><span class="soft">one-time purchase</span></div>
-          <a class="button primary" href="#speakeasy-purchase">Get Speakeasy &mdash; $10</a>
+          <a class="button primary" href="#speakeasy-purchase">Try or buy Speakeasy</a>
         </article>
         <article class="card program-card" id="quadrahydra"><span class="program-badge">3-day free trial</span><h3>QuadraHydra</h3><p class="muted">See what is using your PC's resources and manage process priorities for editing, rendering, and other heavy workloads.</p><ul class="program-features"><li>CPU and memory monitoring</li><li>Process priorities and workload profiles</li><li>Windows 10/11, 64-bit</li></ul><a class="program-more-info" href="quadrahydra-info.html" aria-label="More information about QuadraHydra">More info</a><span class="program-price">$15 · one PC · one-time</span><a class="button primary" href="#quadrahydra-purchase">Try or buy QuadraHydra</a></article>
         <article class="card program-card coming-soon-card"><span class="program-badge">Coming soon</span><h3>More on the way</h3><p class="muted">Several more small programs and utilities are in active development.</p><a class="button" href="signup.html">Sign up for updates</a></article>
@@ -71,10 +71,17 @@
     </section>
 
     <section id="speakeasy-purchase" aria-labelledby="speakeasy-purchase-title">
-      <div class="section-head"><div class="section-label">Get Speakeasy</div><h2 id="speakeasy-purchase-title">Speakeasy &mdash; <span id="speakeasy-price-label">$10 one-time</span>.</h2><p class="muted">Pay once, download, and run. No subscriptions, no license keys, no recurring charges.</p></div>
+      <div class="section-head"><div class="section-label">Try or buy Speakeasy</div><h2 id="speakeasy-purchase-title">Three days free. Then <span id="speakeasy-price-label">$10 one-time</span>.</h2><p class="muted">The free trial needs no card and never charges automatically. Buy the separate unrestricted copy only if Speakeasy works for you.</p></div>
       <div style="max-width:560px;margin:0 auto;"><div style="padding:1.5rem;border:1px solid var(--line);border-radius:24px;background:var(--panel);">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;"><div><strong style="font-size:1.3rem;">Speakeasy</strong><p class="soft" style="font-size:.9rem;margin:.25rem 0 0;">Text-to-speech tray reader</p></div><span class="program-price" id="speakeasy-price-pill">$10</span></div>
-        <ul class="program-features" style="margin-bottom:1.25rem;"><li>Full program download (Windows EXE)</li><li>Uses your OS built-in voices &mdash; no downloads needed</li><li>Offline operation</li></ul>
+        <ul class="program-features" style="margin-bottom:1.25rem;"><li>Free trial with the full Speakeasy features for 72 consecutive hours</li><li>Windows Python launcher with guided first-run package setup</li><li>Uses only SAPI voices already installed in Windows</li></ul>
+        <div class="qh-offer" style="margin-bottom:1.25rem;">
+          <p><strong>Try it before you buy it.</strong> The clock starts only when you approve <em>Start Trial</em> inside Speakeasy. Closing the program does not pause the 72-hour period.</p>
+          <div class="qh-actions">
+            <a class="button" href="downloads/Speakeasy-3-Day-Trial.zip" download data-track-event="speakeasy_trial_download">Download free 3-day trial</a>
+          </div>
+          <p class="soft" style="font-size:.85rem;margin-bottom:0;">Windows 10 or newer and Python 3 are required. Extract the ZIP and read README-TRIAL.txt before launching. <a href="downloads/Speakeasy-3-Day-Trial-SHA256.txt">Verify the checksum</a>.</p>
+        </div>
         <div class="promo-box"><label for="speakeasyPromo"><strong>Promo code</strong></label><div class="promo-row"><input id="speakeasyPromo" type="text" placeholder="Enter promo code" autocomplete="off"><button class="button" id="speakeasyApplyPromo" type="button">Apply code</button></div><p class="soft" style="margin:0;font-size:.86rem;">New customers can use BACK25 for 25% off one purchase of any one product.</p><p id="speakeasyPromoMessage" style="margin:0;font-size:.88rem;font-weight:800;"></p></div>
         <div class="windows-publisher-warning" role="alert" aria-label="Important Windows download notice">
           <div class="wpw-stripe"></div>
@@ -102,7 +109,7 @@
           </div>
           <div class="wpw-stripe"></div>
         </div>
-        <a class="button primary" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=10&item_name=Speakeasy+Text-to-Speech+Reader&currency_code=USD" target="_blank" rel="noopener noreferrer" style="font-size:1.05rem;padding:1rem 2rem;" id="speakeasy-paypal-btn">Buy Speakeasy &mdash; $10 via PayPal</a>
+        <a class="button primary" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=10&item_name=Speakeasy+Text-to-Speech+Reader&currency_code=USD" target="_blank" rel="noopener noreferrer" style="font-size:1.05rem;padding:1rem 2rem;" id="speakeasy-paypal-btn" data-track-event="speakeasy_purchase_click">Buy Speakeasy &mdash; $10 via PayPal</a>
         <p class="soft" style="font-size:.85rem;text-align:center;margin-top:.75rem;">Secure checkout via PayPal. After payment, you&rsquo;ll receive a download link by email.</p>
       </div></div>
     </section>
