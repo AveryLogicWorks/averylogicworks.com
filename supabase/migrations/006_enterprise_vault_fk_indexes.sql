@@ -1,0 +1,11 @@
+-- Cover enterprise Vault foreign keys used during account deletion and ownership lookups.
+create index if not exists idx_managed_pages_updated_by on public.managed_pages(updated_by) where updated_by is not null;
+create index if not exists idx_managed_page_content_updated_by on public.managed_page_content(updated_by) where updated_by is not null;
+create index if not exists idx_content_revisions_changed_by on public.content_revisions(changed_by) where changed_by is not null;
+create index if not exists idx_product_catalog_updated_by on public.product_catalog(updated_by) where updated_by is not null;
+create index if not exists idx_platform_settings_updated_by on public.platform_settings(updated_by) where updated_by is not null;
+create index if not exists idx_site_incidents_created_by on public.site_incidents(created_by) where created_by is not null;
+create index if not exists idx_site_incidents_updated_by on public.site_incidents(updated_by) where updated_by is not null;
+create index if not exists idx_owner_action_log_actor on public.owner_action_log(actor_user_id) where actor_user_id is not null;
+create index if not exists idx_software_licenses_customer_user on public.software_licenses(customer_user_id) where customer_user_id is not null;
+create index if not exists idx_software_licenses_updated_by on public.software_licenses(updated_by) where updated_by is not null;
