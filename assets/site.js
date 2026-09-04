@@ -142,17 +142,27 @@
   }
 
   async function trackEvent(eventType, payload) {
-    if (!sb || !eventType) return;
+    if (!eventType || !supabaseCfg.telemetryEdgeFunction) return;
     try {
-      const sessionData = await sb.auth.getSession();
+      const sessionData = sb ? await sb.auth.getSession() : null;
       const session = sessionData?.data?.session || null;
-      await sb.from('site_events').insert({
+      const headers = {
+        'Content-Type': 'application/json',
+        'apikey': supabaseCfg.publishableKey || ''
+      };
+      if (session?.access_token) headers.Authorization = 'Bearer ' + session.access_token;
+      await fetch(supabaseCfg.telemetryEdgeFunction, {
+        method: 'POST',
+        headers: headers,
+        keepalive: true,
+        body: JSON.stringify({
         event_type: eventType,
         page_path: window.location.pathname || '/',
         visitor_token: getVisitorToken(),
-        user_id: session?.user?.id || null,
-        user_email: payload?.email || session?.user?.email || null,
+        attempted_email: eventType === 'login_failed' ? payload?.email : null,
+        referrer: document.referrer || '',
         metadata: payload || {}
+        })
       });
     } catch (err) {
       console.debug('site event skipped', eventType, err?.message || err);
@@ -387,6 +397,15 @@
   }
 
   maybeTrackVisit();
+
+  document.querySelectorAll('[data-track-event]').forEach((el) => {
+    el.addEventListener('click', () => {
+      trackEvent(el.getAttribute('data-track-event'), {
+        label: (el.textContent || '').trim().slice(0, 160),
+        href: el.getAttribute('href') || ''
+      });
+    });
+  });
   hydrateRememberToggles();
   hydratePasswordToggles();
   applyActiveNavState();
@@ -525,6 +544,7 @@
           window.location.href = paths.account;
         }
       } catch (err) {
+        trackEvent('login_failed', { email: email, reason: err.message || 'Sign-in failed' });
         setMessage(messageBox, err.message || 'Sign-in failed.', 'error');
       } finally {
         setBusy(loginForm, false);
@@ -549,6 +569,7 @@
           redirectTo: absoluteUrl(paths.resetRedirect)
         });
         if (error) throw error;
+        trackEvent('password_reset_requested', {});
         setMessage(messageBox, 'Reset email sent. Open the link in that email to choose a new password.', 'info');
         resetForm.reset();
       } catch (err) {
@@ -734,7 +755,7 @@
       if (!userId) return;
       var resp = await sb.from('owner_messages')
         .select('*')
-        .eq('recipient_email', userId)
+        .eq('recipient_user_id', userId)
         .order('created_at', { ascending: false })
         .limit(50);
       if (resp.error) throw resp.error;
