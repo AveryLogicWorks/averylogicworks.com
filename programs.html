@@ -56,21 +56,21 @@
         <p class="muted">Each program is a one-time purchase. Available promotional offers are shown in the individual purchase section.</p>
       </div>
       <div class="program-grid">
-        <article class="card program-card" data-track-view="speakeasy_section_view">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;"><span class="program-badge">Free 3-day trial</span><span class="program-status ready">Ready</span></div>
-          <h3>Speakeasy</h3>
-          <p class="muted">A lightweight text-to-speech reader that lives in your system tray. Select any text, hit a hotkey, and Speakeasy reads it aloud with a voice already installed in Windows.</p>
+        <article class="card program-card" data-managed-product="speakeasy" data-track-view="speakeasy_section_view">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;"><span class="program-badge" data-product-trial>Free 3-day trial</span><span class="program-status ready">Ready</span></div>
+          <h3 data-product-name>Speakeasy</h3>
+          <p class="muted" data-product-summary>A lightweight text-to-speech reader that lives in your system tray. Select any text, hit a hotkey, and Speakeasy reads it aloud with a voice already installed in Windows.</p>
           <ul class="program-features"><li>Full access for 72 hours</li><li>Ctrl+Shift+Space reads selected text</li><li>Reads clipboard text from anywhere</li><li>Uses local Windows voices &mdash; no paid speech service</li></ul>
-          <a class="program-more-info" href="speakeasy-info.html" aria-label="More information about Speakeasy" data-track-event="speakeasy_info_click">More info</a>
-          <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;"><span class="program-price">$10</span><span class="soft">one-time purchase</span></div>
-          <a class="button primary" href="#speakeasy-purchase">Try or buy Speakeasy</a>
+          <a class="program-more-info" href="speakeasy-info.html" aria-label="More information about Speakeasy" data-track-event="speakeasy_info_click" data-product-info-url>More info</a>
+          <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;"><span class="program-price" data-product-price>$10</span><span class="soft">one-time purchase</span></div>
+          <a class="button primary" href="#speakeasy-purchase" data-product-purchase-url>Try or buy Speakeasy</a>
         </article>
-        <article class="card program-card" id="quadrahydra" data-track-view="quadrahydra_section_view"><span class="program-badge">3-day free trial</span><h3>QuadraHydra</h3><p class="muted">See what is using your PC's resources and manage process priorities for editing, rendering, and other heavy workloads.</p><ul class="program-features"><li>CPU and memory monitoring</li><li>Process priorities and workload profiles</li><li>Windows 10/11, 64-bit</li></ul><a class="program-more-info" href="quadrahydra-info.html" aria-label="More information about QuadraHydra" data-track-event="quadrahydra_info_click">More info</a><span class="program-price">$15 · one PC · one-time</span><a class="button primary" href="#quadrahydra-purchase">Try or buy QuadraHydra</a></article>
+        <article class="card program-card" id="quadrahydra" data-managed-product="quadrahydra" data-track-view="quadrahydra_section_view"><span class="program-badge" data-product-trial>3-day free trial</span><h3 data-product-name>QuadraHydra</h3><p class="muted" data-product-summary>See what is using your PC's resources and manage process priorities for editing, rendering, and other heavy workloads.</p><ul class="program-features"><li>CPU and memory monitoring</li><li>Process priorities and workload profiles</li><li>Windows 10/11, 64-bit</li></ul><a class="program-more-info" href="quadrahydra-info.html" aria-label="More information about QuadraHydra" data-track-event="quadrahydra_info_click" data-product-info-url>More info</a><span class="program-price" data-product-price>$15 · one PC · one-time</span><a class="button primary" href="#quadrahydra-purchase" data-product-purchase-url>Try or buy QuadraHydra</a></article>
         <article class="card program-card coming-soon-card"><span class="program-badge">Coming soon</span><h3>More on the way</h3><p class="muted">Several more small programs and utilities are in active development.</p><a class="button" href="signup.html">Sign up for updates</a></article>
       </div>
     </section>
 
-    <section id="speakeasy-purchase" aria-labelledby="speakeasy-purchase-title">
+    <section id="speakeasy-purchase" data-managed-product="speakeasy" aria-labelledby="speakeasy-purchase-title">
       <div class="section-head"><div class="section-label">Try or buy Speakeasy</div><h2 id="speakeasy-purchase-title">Three days free. Then <span id="speakeasy-price-label">$10 one-time</span>.</h2><p class="muted">The free trial needs no card and never charges automatically. Buy the separate unrestricted copy only if Speakeasy works for you.</p></div>
       <div style="max-width:560px;margin:0 auto;"><div style="padding:1.5rem;border:1px solid var(--line);border-radius:24px;background:var(--panel);">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;"><div><strong style="font-size:1.3rem;">Speakeasy</strong><p class="soft" style="font-size:.9rem;margin:.25rem 0 0;">Text-to-speech tray reader</p></div><span class="program-price" id="speakeasy-price-pill">$10</span></div>
@@ -114,7 +114,7 @@
       </div></div>
     </section>
 
-    <section id="quadrahydra-purchase" aria-labelledby="quadrahydra-title">
+    <section id="quadrahydra-purchase" data-managed-product="quadrahydra" aria-labelledby="quadrahydra-title">
       <div class="section-head"><div class="section-label">QuadraHydra Command Center</div><h2 id="quadrahydra-title">Try it on your PC. Keep it for $15.</h2><p class="muted">Three days to try the Windows app. One payment to continue. No subscription.</p></div>
       <div class="qh-offer">
         <p class="qh-price">$15 <small>USD · one PC · paid once</small></p>
