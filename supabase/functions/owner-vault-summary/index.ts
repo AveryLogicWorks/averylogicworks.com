@@ -69,12 +69,18 @@ Deno.serve(async (req: Request) => {
     };
     const clickNames = ["homepage_visit", "homepage_service_cta_click", "homepage_donation_click", "homepage_signup_click",
       "homepage_signin_click", "homepage_founder_cta_click", "homepage_support_cta_click", "homepage_fit_cta_click",
-      "speakeasy_section_view", "speakeasy_info_click", "speakeasy_trial_download", "speakeasy_purchase_click"];
+      "command_nexus_download", "trial_key_claimed", "speakeasy_section_view", "speakeasy_info_click", "speakeasy_trial_download", "speakeasy_purchase_click",
+      "quadrahydra_section_view", "quadrahydra_info_click", "quadrahydra_trial_download", "quadrahydra_purchase_click"];
     const [visits24h, visits30d, visitsAll, logins30d, loginsAll, signups30d, signupsAll, clickPairs, checkoutOpens] = await Promise.all([
       eventCount("page_visit", since(1)), eventCount("page_visit", since(30)), eventCount("page_visit"),
       eventCount("login_success", since(30)), eventCount("login_success"), eventCount("signup_submitted", since(30)), eventCount("signup_submitted"),
       Promise.all(clickNames.map(async (name) => [name, await eventCount(name)])), eventCount("service_checkout_opened"),
     ]);
+
+    const downloads30d = await Promise.all(["command_nexus_download", "speakeasy_trial_download", "quadrahydra_trial_download"]
+      .map((name) => eventCount(name, since(30))));
+    const clickObject = Object.fromEntries(clickPairs);
+    clickObject.downloads_30d = downloads30d.reduce((sum, count) => sum + count, 0);
 
     const operators = new Map((operatorResult.data || []).map((row: any) => [row.user_id, row]));
     const people = allUsers.filter((u) => !u.deleted_at).map((u) => {
@@ -126,13 +132,13 @@ Deno.serve(async (req: Request) => {
         ip_address: r.ip_address, user_agent: r.user_agent } }));
     const warningCount = warningCountResult.count || 0;
 
-    return json({ build: "2026-09-04-operator-vault", snapshot: { profiles_total: people.length, page_visits_total: visitsAll,
+    return json({ build: "2026-09-04-enterprise-command-center", snapshot: { profiles_total: people.length, page_visits_total: visitsAll,
       login_success_total: loginsAll, signup_submitted_total: signupsAll }, core: { visits_24h: visits24h, visits_30d: visits30d,
       visits_all_time: visitsAll, logins_30d: logins30d, logins_all_time: loginsAll, signups_30d: signups30d,
       signups_all_time: signupsAll, accounts_total: people.length, newsletter_opt_ins: people.filter((p) => p.newsletter_opt_in).length,
       supporter_updates_opt_ins: people.filter((p) => p.supporter_updates_opt_in).length, donation_events: donationEvents,
       subscription_events: subscriptionEvents, donation_total_display: `$${(donationCents / 100).toFixed(2)}`,
-      subscription_total_display: `$${(subscriptionCents / 100).toFixed(2)}` }, clicks: Object.fromEntries(clickPairs),
+      subscription_total_display: `$${(subscriptionCents / 100).toFixed(2)}` }, clicks: clickObject,
       funnel: { service_requests: requestCountResult.count || 0, checkout_opens: checkoutOpens, feedback_count: feedbackCountResult.count || 0,
         average_rating: ratings.length ? (ratings.reduce((a: number, b: number) => a + b, 0) / ratings.length).toFixed(1) : "0.0",
         security_events: warningCount, admin_denied: deniedCountResult.count || 0 },

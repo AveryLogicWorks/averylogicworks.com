@@ -26,7 +26,7 @@
   download.addEventListener('click', function () {
     if (!accepted()) return;
     var link = document.createElement('a');
-    link.href = 'downloads/QuadraHydra-1.0.3-Windows.zip';
+    link.href = download.getAttribute('data-managed-download-url') || 'downloads/QuadraHydra-1.0.3-Windows.zip';
     link.download = 'QuadraHydra-1.0.3-Windows.zip';
     document.body.appendChild(link); link.click(); link.remove();
     feedback.textContent = 'Download started. Extract all files and open QuadraHydra.exe. The 72-hour trial starts when you click Start Trial inside the app.';

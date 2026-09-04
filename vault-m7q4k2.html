@@ -6,6 +6,7 @@
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/site.css">
+  <link rel="stylesheet" href="assets/vault-command-center.css">
   <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('alw-theme')||'dark')</script>
   <meta name="description" content="This page is unavailable.">
   <title>Operator Vault | Avery Logic Works</title>
@@ -194,11 +195,12 @@
             <div class="snapshot-item"><strong id="snapshot-logins">0</strong><span>Total logins</span></div>
             <div class="snapshot-item"><strong id="snapshot-signups">0</strong><span>Total signups</span></div>
           </div>
-          <p class="small-note">Vault build: <strong id="vault-build-id">2026-07-04-1</strong></p>
+          <p class="small-note">Vault build: <strong id="vault-build-id">2026-09-04-enterprise-command-center</strong></p>
         </div>
 
         <div class="vault-tabs" id="vault-tab-bar">
           <button class="vault-tab active" data-tab="dashboard">Dashboard</button>
+          <button class="vault-tab" data-tab="command">Command Center</button>
           <button class="vault-tab" data-tab="security">Security <span class="tab-badge zero" id="tab-badge-security">0</span></button>
           <button class="vault-tab" data-tab="users">Users</button>
           <button class="vault-tab" data-tab="revenue">Revenue</button>
@@ -285,7 +287,11 @@
               <div class="metric"><strong data-admin-stat="speakeasy_section_view">0</strong><span>Speakeasy views</span></div>
               <div class="metric"><strong data-admin-stat="speakeasy_info_click">0</strong><span>More-info clicks</span></div>
               <div class="metric"><strong data-admin-stat="speakeasy_trial_download">0</strong><span>Trial downloads</span></div>
-              <div class="metric"><strong data-admin-stat="speakeasy_purchase_click">0</strong><span>Purchase clicks</span></div>
+              <div class="metric"><strong data-admin-stat="speakeasy_purchase_click">0</strong><span>Speakeasy purchase clicks</span></div>
+              <div class="metric"><strong data-admin-stat="quadrahydra_section_view">0</strong><span>QuadraHydra views</span></div>
+              <div class="metric"><strong data-admin-stat="quadrahydra_info_click">0</strong><span>QuadraHydra more-info clicks</span></div>
+              <div class="metric"><strong data-admin-stat="quadrahydra_trial_download">0</strong><span>QuadraHydra trial downloads</span></div>
+              <div class="metric"><strong data-admin-stat="quadrahydra_purchase_click">0</strong><span>QuadraHydra purchase clicks</span></div>
               <div class="metric"><strong data-admin-stat="downloads_30d">0</strong><span>Downloads (30d)</span></div>
             </div>
             <p class="small-note">Tracks every download click and trial claim across the site. Use this to see if visitors are actually attempting to use your products.</p>
@@ -305,6 +311,199 @@
               <div class="data-list" id="feedback-list">
                 <div class="empty-state">Loading recent feedback&hellip;</div>
               </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="vault-section" id="section-command">
+          <div class="command-center-shell">
+            <div class="form-shell command-center-hero">
+              <div>
+                <span class="tag warm">No-code owner operating system</span>
+                <h3>Enterprise Command Center</h3>
+                <p class="muted">Change the public website, manage every product, run bulk account operations, control site-wide behavior, investigate records, export data, and recover earlier content without writing code.</p>
+                <div class="command-search-wrap">
+                  <div class="command-center-search">
+                    <input id="command-global-search" type="search" placeholder="Find a page, product, user, or incident…">
+                    <button class="button secondary small" id="command-refresh-all" type="button">Refresh everything</button>
+                  </div>
+                  <div class="search-results" id="command-search-results"></div>
+                </div>
+                <div class="command-status" id="command-center-status">Open this panel to load owner tools.</div>
+              </div>
+              <div class="command-warning"><strong>Protected changes.</strong> Public edits support text, links, images, and visibility—never arbitrary executable code. Every owner change is recorded, and page edits keep revision history.</div>
+            </div>
+
+            <div class="command-kpis">
+              <div class="command-kpi"><strong id="command-kpi-pages">0</strong><span>Managed pages</span></div>
+              <div class="command-kpi"><strong id="command-kpi-products">0</strong><span>Live products</span></div>
+              <div class="command-kpi"><strong id="command-kpi-drafts">0</strong><span>Unpublished drafts</span></div>
+              <div class="command-kpi"><strong id="command-kpi-incidents">0</strong><span>Open incidents</span></div>
+            </div>
+
+            <div class="command-subnav" aria-label="Command center tools">
+              <button class="command-subtab active" data-command-subtab="website" type="button">Website Editor</button>
+              <button class="command-subtab" data-command-subtab="products" type="button">Products</button>
+              <button class="command-subtab" data-command-subtab="people" type="button">Bulk User Tools</button>
+              <button class="command-subtab" data-command-subtab="site" type="button">Site Controls</button>
+              <button class="command-subtab" data-command-subtab="operations" type="button">Operations</button>
+              <button class="command-subtab" data-command-subtab="data" type="button">Data &amp; Exports</button>
+              <button class="command-subtab" data-command-subtab="history" type="button">Change History</button>
+            </div>
+
+            <div class="command-panel active" id="command-panel-website">
+              <div class="form-shell">
+                <span class="tag alt">Visual page editor</span>
+                <h3>Click what you want to change</h3>
+                <p class="small-note">Choose a page, load the preview, start click-to-edit, then click the text, link, image, or section you want. Save it privately as a draft or publish it immediately.</p>
+                <div class="command-actions">
+                  <select id="command-page-select" style="min-width:260px;"></select>
+                  <button class="button secondary small" id="command-load-preview" type="button">Load preview</button>
+                  <button class="button primary small" id="command-start-picker" type="button">Start click-to-edit</button>
+                </div>
+              </div>
+              <div class="editor-workspace">
+                <div class="editor-preview"><iframe id="command-page-frame" title="Website page preview"></iframe></div>
+                <div class="command-card editor-inspector">
+                  <h4>Selected content</h4>
+                  <div class="command-form">
+                    <div class="command-field"><span>Friendly name</span><input id="command-content-label" type="text" placeholder="Example: Homepage headline"></div>
+                    <div class="command-field"><span>Change type</span><select id="command-content-property"><option value="text">Text</option><option value="href">Link destination</option><option value="src">Image source</option><option value="hidden">Show or hide</option></select></div>
+                    <div class="command-field"><span>New value</span><textarea id="command-content-value" rows="7" placeholder="Type the new text or destination here…"></textarea></div>
+                    <input id="command-content-selector" type="hidden">
+                    <div class="command-actions">
+                      <button class="button ghost small" id="command-preview-change" type="button">Preview change</button>
+                      <button class="button secondary small" id="command-save-draft" type="button">Save draft</button>
+                      <button class="button primary small" id="command-publish-change" type="button">Publish now</button>
+                    </div>
+                    <div class="command-status" id="command-editor-status">Load a page to begin.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="command-grid">
+                <div class="command-card"><h4>Changes on this page</h4><div class="command-list" id="command-page-change-list"><div class="editor-empty">Choose a page.</div></div></div>
+                <div class="command-card"><h4>Earlier versions</h4><div class="command-list" id="command-revision-list"><div class="editor-empty">Choose History beside a saved change.</div></div></div>
+              </div>
+            </div>
+
+            <div class="command-panel" id="command-panel-products">
+              <div class="command-grid">
+                <div class="command-card">
+                  <div class="command-row-head"><div><span class="tag">Product catalog</span><h4>Everything you sell or offer</h4></div><button class="button secondary small" id="command-new-product" type="button">Add product</button></div>
+                  <p class="small-note">Command Nexus, Speakeasy, and QuadraHydra are managed here as first-class products.</p>
+                  <div class="command-list" id="command-product-list"><div class="editor-empty">Loading products…</div></div>
+                </div>
+                <div class="command-card">
+                  <h4>Product editor</h4>
+                  <div class="command-form command-form-grid">
+                    <div class="command-field"><span>Product name</span><input id="product-product-name" type="text"></div>
+                    <div class="command-field"><span>Short ID</span><input id="product-slug" type="text" placeholder="product-name"></div>
+                    <div class="command-field full"><span>Short description</span><textarea id="product-short-description" rows="2"></textarea></div>
+                    <div class="command-field full"><span>Full description</span><textarea id="product-full-description" rows="4"></textarea></div>
+                    <div class="command-field"><span>Status</span><select id="product-status"><option value="draft">Draft</option><option value="trial">Trial available</option><option value="live">Live</option><option value="paused">Paused</option><option value="retired">Retired</option></select></div>
+                    <div class="command-field"><span>Price</span><input id="product-price" type="number" min="0" step="0.01"></div>
+                    <div class="command-field"><span>Currency</span><input id="product-currency" value="USD" maxlength="3"></div>
+                    <div class="command-field"><span>Billing</span><select id="product-billing-model"><option value="free">Free</option><option value="one_time">One-time</option><option value="monthly">Monthly</option><option value="yearly">Yearly</option><option value="custom">Custom</option></select></div>
+                    <div class="command-field"><span>Trial days</span><input id="product-trial-days" type="number" min="0"></div>
+                    <div class="command-field"><span>Version</span><input id="product-version" type="text"></div>
+                    <div class="command-field"><span>Release channel</span><select id="product-release-channel"><option value="alpha">Alpha</option><option value="beta">Beta</option><option value="stable">Stable</option><option value="legacy">Legacy</option></select></div>
+                    <div class="command-field full"><span>Information page</span><input id="product-info-url" type="text"></div>
+                    <div class="command-field full"><span>Purchase page or checkout</span><input id="product-purchase-url" type="text"></div>
+                    <div class="command-field full"><span>Download link</span><input id="product-download-url" type="text"></div>
+                    <div class="command-field"><span>Support page</span><input id="product-support-url" type="text" value="support.html"></div>
+                    <div class="command-field"><span>Terms page</span><input id="product-terms-url" type="text" value="terms.html"></div>
+                    <div class="command-field"><span>Privacy page</span><input id="product-privacy-url" type="text" value="privacy.html"></div>
+                    <label class="command-toggle"><input id="product-published" type="checkbox"> Publicly listed</label>
+                    <label class="command-toggle"><input id="product-featured" type="checkbox"> Featured product</label>
+                    <div class="command-actions full"><button class="button primary small" id="command-save-product" type="button">Save product</button><span class="command-status" id="command-product-status">Choose a product or add one.</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="command-panel" id="command-panel-people">
+              <div class="form-shell">
+                <span class="tag warm">Bulk account operations</span>
+                <h3>Update many user records safely</h3>
+                <p class="small-note">Search and select users, then apply only the fields you choose. Blank bulk controls leave that field unchanged.</p>
+                <div class="command-actions"><input id="command-bulk-user-search" type="search" placeholder="Search name or email…" style="flex:1;min-width:220px;"><button class="quick-action" id="command-select-all-users" type="button">Select visible</button><button class="quick-action" id="command-clear-users" type="button">Clear selection</button><span id="command-selected-user-count" class="status-pill">0 selected</span></div>
+                <div class="bulk-controls">
+                  <select id="command-bulk-risk"><option value="">Keep risk level</option><option value="normal">Normal</option><option value="review">Review</option><option value="restricted">Restricted</option></select>
+                  <select id="command-bulk-support"><option value="">Keep support status</option><option value="none">None</option><option value="waiting">Waiting</option><option value="in_progress">In progress</option><option value="resolved">Resolved</option></select>
+                  <select id="command-bulk-attention"><option value="">Keep attention flag</option><option value="true">Needs attention</option><option value="false">Clear attention</option></select>
+                  <button class="button primary small" id="command-apply-bulk-users" type="button">Apply to selected</button>
+                </div>
+                <div class="command-actions"><button class="button secondary small" id="command-export-users" type="button">Export selected users</button><span class="command-status" id="command-bulk-status"></span></div>
+              </div>
+              <div class="command-card"><div class="selection-list" id="command-bulk-user-list"><div class="editor-empty">Loading users…</div></div></div>
+            </div>
+
+            <div class="command-panel" id="command-panel-site">
+              <div class="command-grid">
+                <div class="command-card">
+                  <span class="tag alt">Announcement banner</span><h4>Put one message across the website</h4>
+                  <label class="command-toggle"><input id="setting-banner-enabled" type="checkbox"> Show public banner</label>
+                  <div class="command-field"><span>Message</span><textarea id="setting-banner-message" rows="4"></textarea></div>
+                  <div class="command-field"><span>Tone</span><select id="setting-banner-tone"><option value="info">Information</option><option value="success">Success</option><option value="warning">Warning</option><option value="critical">Critical</option></select></div>
+                </div>
+                <div class="command-card command-danger">
+                  <span class="tag warm">Maintenance mode</span><h4>Temporarily pause the public site</h4>
+                  <label class="command-toggle"><input id="setting-maintenance-enabled" type="checkbox"> Enable maintenance notice</label>
+                  <div class="command-field"><span>Visitor message</span><textarea id="setting-maintenance-message" rows="4"></textarea></div>
+                  <p class="small-note">The owner Vault stays available. Turning this on always requires confirmation.</p>
+                </div>
+                <div class="command-card">
+                  <span class="tag">Privacy control</span><h4>First-party analytics</h4>
+                  <label class="command-toggle"><input id="setting-analytics-enabled" type="checkbox"> Record site visits and approved interaction events</label>
+                  <p class="small-note">Turning this off stops new first-party analytics collection after visitors receive the updated setting.</p>
+                </div>
+                <div class="command-card">
+                  <span class="tag">Apply controls</span><h4>Save site-wide settings</h4>
+                  <button class="button primary" id="command-save-settings" type="button">Save site controls</button>
+                  <div class="command-status" id="command-setting-status"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="command-panel" id="command-panel-operations">
+              <div class="command-grid">
+                <div class="command-card">
+                  <span class="tag warm">Incident desk</span><h4>Record a problem or outage</h4>
+                  <div class="command-field"><span>Title</span><input id="incident-title" type="text"></div>
+                  <div class="command-field"><span>Affected area</span><input id="incident-area" type="text" placeholder="Example: checkout, login, QuadraHydra download"></div>
+                  <div class="command-field"><span>Severity</span><select id="incident-severity"><option value="notice">Notice</option><option value="warning">Warning</option><option value="critical">Critical</option></select></div>
+                  <div class="command-field"><span>What happened</span><textarea id="incident-description" rows="5"></textarea></div>
+                  <button class="button primary small" id="command-create-incident" type="button">Record incident</button><div class="command-status" id="command-incident-status"></div>
+                </div>
+                <div class="command-card"><h4>Operational incidents</h4><div class="command-list" id="command-incident-list"><div class="editor-empty">Loading incidents…</div></div></div>
+              </div>
+            </div>
+
+            <div class="command-panel" id="command-panel-data">
+              <div class="form-shell">
+                <span class="tag alt">Owner data explorer</span><h3>Inspect and export your records</h3>
+                <p class="small-note">Choose a protected dataset. Results are read-only here and limited to 1,000 recent rows per load.</p>
+                <div class="command-actions">
+                  <select id="command-dataset-select">
+                    <option value="users">Users and account operations</option><option value="traffic">Traffic and interaction events</option>
+                    <option value="security">Security events and IPs</option><option value="sales">Payments and purchase audit</option>
+                    <option value="licenses">Software license registry</option><option value="trial_licenses">Command Nexus trial keys</option><option value="inquiries">Enterprise inquiries</option>
+                    <option value="requests">Custom service requests</option><option value="products">Product catalog</option>
+                    <option value="content">Website content changes</option><option value="changes">Owner change history</option>
+                    <option value="incidents">Operational incidents</option>
+                  </select>
+                  <button class="button primary small" id="command-load-dataset" type="button">Load data</button>
+                  <button class="button secondary small" id="command-export-dataset" type="button">Export CSV</button>
+                  <span class="command-status" id="command-dataset-status"></span>
+                </div>
+              </div>
+              <div class="dataset-table-wrap"><table class="dataset-table" id="command-dataset-table"><tbody><tr><td>Choose a dataset and load it.</td></tr></tbody></table></div>
+            </div>
+
+            <div class="command-panel" id="command-panel-history">
+              <div class="form-shell"><span class="tag">Owner audit trail</span><h3>Who changed what and when</h3><p class="small-note">Product, page-content, site-control, incident, and bulk-user actions are recorded here.</p></div>
+              <div class="command-card"><div class="command-list" id="command-action-list"><div class="editor-empty">Loading change history…</div></div></div>
             </div>
           </div>
         </div>
@@ -402,14 +601,36 @@
 
         <div class="vault-section" id="section-licenses">
           <div class="form-shell">
-            <span class="tag">Command Nexus licenses</span>
-            <h3>Active, trial, and expired license keys</h3>
+            <span class="tag">Software licensing</span>
+            <h3>Command Nexus, Speakeasy, and QuadraHydra</h3>
+            <p class="small-note">Track every product's trial terms, fulfillment status, customer, seat or device limit, and activation history. Reusable plaintext activation secrets are not stored in the owner registry.</p>
             <div class="quick-action-bar">
-              <button class="quick-action" id="btn-refresh-licenses">Refresh licenses</button>
-              <button class="quick-action" id="btn-generate-key">Generate trial key</button>
+              <button class="quick-action" id="btn-refresh-licenses" type="button">Refresh licenses</button>
+              <button class="quick-action" id="btn-export-licenses" type="button">Export license report</button>
             </div>
-            <div class="data-list" id="license-list">
-              <div class="empty-state">Loading license data&hellip;</div>
+            <div class="command-grid" id="license-product-list"><div class="empty-state">Loading product licensing…</div></div>
+          </div>
+          <div class="admin-grid">
+            <div class="form-shell">
+              <span class="tag alt">Register fulfillment</span>
+              <h3>Add a customer license record</h3>
+              <div class="command-form command-form-grid">
+                <div class="command-field"><span>Product</span><select id="license-product-select"></select></div>
+                <div class="command-field"><span>Customer email</span><input id="license-customer-email" type="email"></div>
+                <div class="command-field"><span>License label</span><input id="license-label" type="text" placeholder="Example: QuadraHydra one-PC purchase"></div>
+                <div class="command-field"><span>Status</span><select id="license-status-select"><option value="pending">Pending fulfillment</option><option value="trial">Trial</option><option value="active">Active</option><option value="expired">Expired</option><option value="revoked">Revoked</option></select></div>
+                <div class="command-field"><span>Safe key hint</span><input id="license-key-hint" type="text" placeholder="Last four characters or fingerprint"></div>
+                <div class="command-field"><span>Expiration, if any</span><input id="license-expires-at" type="datetime-local"></div>
+                <div class="command-field"><span>Seats</span><input id="license-seats" type="number" min="1" value="1"></div>
+                <div class="command-field"><span>Device limit</span><input id="license-device-limit" type="number" min="1" value="1"></div>
+                <div class="command-field full"><span>Private owner note</span><textarea id="license-owner-note" rows="4"></textarea></div>
+                <div class="command-actions full"><button class="button primary small" id="btn-save-license" type="button">Save license record</button><span class="command-status" id="license-save-status"></span></div>
+              </div>
+            </div>
+            <div class="form-shell">
+              <span class="tag warm">License registry</span>
+              <h3>Manual licenses, trials, and activations</h3>
+              <div class="data-list" id="license-list"><div class="empty-state">Loading license data…</div></div>
             </div>
           </div>
         </div>
@@ -478,6 +699,10 @@
                 <option value="subscription_completed">Subscriptions</option>
                 <option value="command_nexus_download">CN downloads</option>
                 <option value="trial_key_claimed">Trial keys</option>
+                <option value="quadrahydra_section_view">QuadraHydra views</option>
+                <option value="quadrahydra_info_click">QuadraHydra information clicks</option>
+                <option value="quadrahydra_trial_download">QuadraHydra trial downloads</option>
+                <option value="quadrahydra_purchase_click">QuadraHydra purchase clicks</option>
                 <option value="service_request_submitted">Service requests</option>
                 <option value="public_feedback_submitted">Feedback</option>
                 <option value="sales_inquiry">Sales inquiries</option>
@@ -538,7 +763,7 @@
             <div class="admin-grid">
               <div class="health-card">
                 <strong>Vault build</strong>
-                <span id="health-build-id">2026-07-04-1</span>
+                <span id="health-build-id">2026-09-04-enterprise-command-center</span>
               </div>
               <div class="health-card">
                 <strong>Site config version</strong>
@@ -685,6 +910,7 @@
       const vaultBuildId = document.getElementById('vault-build-id');
       let allUserData = [];
       let allAuditData = [];
+      let allLicenseData = [];
 
       // ─── Tab switching ───────────────────────────────────────────────
       document.querySelectorAll('.vault-tab').forEach(function (tab) {
@@ -746,6 +972,7 @@
             storage: authStorage
           }
         });
+        window._averyVaultSupabase = sb;
       }
 
       function getVisitorToken() {
@@ -1101,7 +1328,7 @@
       }
 
       async function loadDownloadMetrics() {
-        var downloadEvents = ['command_nexus_download', 'trial_key_claimed', 'speakeasy_section_view', 'speakeasy_info_click', 'speakeasy_trial_download', 'speakeasy_purchase_click'];
+        var downloadEvents = ['command_nexus_download', 'trial_key_claimed', 'speakeasy_section_view', 'speakeasy_info_click', 'speakeasy_trial_download', 'speakeasy_purchase_click', 'quadrahydra_section_view', 'quadrahydra_info_click', 'quadrahydra_trial_download', 'quadrahydra_purchase_click'];
         await Promise.all(downloadEvents.map(async function (eventType) {
           try {
             var total = await countEvent(eventType);
@@ -1114,8 +1341,8 @@
         // Downloads in last 30 days
         try {
           var thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-          var recentDownloads = await countEvent('command_nexus_download', thirtyDaysAgo);
-          setStatValue('downloads_30d', recentDownloads, '0');
+          var recentDownloads = await Promise.all(['command_nexus_download', 'speakeasy_trial_download', 'quadrahydra_trial_download'].map(function (eventType) { return countEvent(eventType, thirtyDaysAgo); }));
+          setStatValue('downloads_30d', recentDownloads.reduce(function (sum, count) { return sum + Number(count || 0); }, 0), '0');
         } catch (err) {
           setStatValue('downloads_30d', '0', '0');
         }
@@ -1766,79 +1993,174 @@
         if (!sb) return;
         var list = document.getElementById('revenue-transaction-list');
         try {
-          var donationsResp = await sb.from('site_events').select('created_at,user_email,metadata').eq('event_type', 'donation_completed').order('created_at', { ascending: false }).limit(20);
-          var subscriptionsResp = await sb.from('site_events').select('created_at,user_email,metadata').eq('event_type', 'subscription_completed').order('created_at', { ascending: false }).limit(20);
-          var productsResp = await sb.from('site_events').select('created_at,user_email,metadata').eq('event_type', 'command_nexus_purchase').order('created_at', { ascending: false }).limit(20);
-          var donations = donationsResp.data || [];
-          var subscriptions = subscriptionsResp.data || [];
-          var products = productsResp.data || [];
-          var allTxns = [].concat(donations, subscriptions, products);
-          if (!allTxns.length) {
-            if (list) list.innerHTML = '<div class="empty-state">No transactions recorded yet.</div>';
-          } else if (list) {
-            list.innerHTML = allTxns.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at); }).map(function (row) {
-              var meta = row.metadata || {};
-              var amount = meta.amount || '$0.00';
-              var type = meta.type || (row.event_type === 'donation_completed' ? 'Donation' : row.event_type === 'subscription_completed' ? 'Subscription' : 'Product sale');
-              return '<div class="data-item"><strong>' + escapeHtml(type) + ' &mdash; ' + escapeHtml(amount) + '</strong>'
-                + '<div class="data-meta">' + escapeHtml(row.user_email || 'Unknown') + ' &middot; ' + escapeHtml(row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div></div>';
-            }).join('');
-          }
-          var donationTotal = donations.reduce(function (sum, row) { return sum + parseFloat((row.metadata || {}).amount || '0'); }, 0);
-          var subTotal = subscriptions.reduce(function (sum, row) { return sum + parseFloat((row.metadata || {}).amount || '0'); }, 0);
-          var productTotal = products.reduce(function (sum, row) { return sum + parseFloat((row.metadata || {}).amount || '0'); }, 0);
+          var responses = await Promise.all([
+            sb.from('supporter_events').select('event_type,amount_cents,created_at').order('created_at', { ascending: false }).limit(500),
+            sb.from('purchase_audit_log').select('customer_email,customer_name,purchase_kind,purchase_category,payment_status,amount_cents,currency,source_page,summary,created_at').order('created_at', { ascending: false }).limit(500)
+          ]);
+          if (responses[0].error) throw responses[0].error;
+          if (responses[1].error) throw responses[1].error;
+          var supporterRows = responses[0].data || [];
+          var purchaseRows = responses[1].data || [];
+          var donations = supporterRows.filter(function (row) { return String(row.event_type || '').toLowerCase().startsWith('donation'); });
+          var subscriptions = supporterRows.filter(function (row) { var type = String(row.event_type || '').toLowerCase(); return type.startsWith('subscription') || type.startsWith('monthly'); });
+          var paidStatuses = ['paid','completed','succeeded','active'];
+          var productSales = purchaseRows.filter(function (row) { return paidStatuses.includes(String(row.payment_status || '').toLowerCase()); });
+          var refunds = purchaseRows.filter(function (row) { return ['refunded','partially_refunded','disputed'].includes(String(row.payment_status || '').toLowerCase()); });
+          var donationTotal = donations.reduce(function (sum, row) { return sum + Number(row.amount_cents || 0); }, 0);
+          var subscriptionTotal = subscriptions.reduce(function (sum, row) { return sum + Number(row.amount_cents || 0); }, 0);
+          var productTotal = productSales.reduce(function (sum, row) { return sum + Number(row.amount_cents || 0); }, 0)
+            - refunds.reduce(function (sum, row) { return sum + Number(row.amount_cents || 0); }, 0);
+
+          var normalized = supporterRows.map(function (row) {
+            return { created_at: row.created_at, label: String(row.event_type || 'Supporter payment').replace(/_/g, ' '), amount_cents: row.amount_cents, currency: 'USD', who: 'Supporter' };
+          }).concat(purchaseRows.map(function (row) {
+            return { created_at: row.created_at, label: row.summary || row.purchase_kind || row.purchase_category || 'Product payment', amount_cents: row.amount_cents, currency: row.currency || 'USD', who: row.customer_email || row.customer_name || 'Unknown customer', status: row.payment_status };
+          })).sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at); }).slice(0, 60);
+
+          if (list) list.innerHTML = normalized.length ? normalized.map(function (row) {
+            return '<div class="data-item"><strong>' + escapeHtml(row.label) + ' &mdash; ' + escapeHtml('$' + (Number(row.amount_cents || 0) / 100).toFixed(2)) + '</strong>'
+              + '<div class="data-meta">' + escapeHtml(row.who) + (row.status ? ' · ' + escapeHtml(row.status) : '') + ' · ' + escapeHtml(row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div></div>';
+          }).join('') : '<div class="empty-state">No transactions recorded yet.</div>';
+
           var elDon = document.getElementById('revenue-donations');
           var elSub = document.getElementById('revenue-subscriptions');
           var elProd = document.getElementById('revenue-products');
           var elTotal = document.getElementById('revenue-total-display');
-          if (elDon) elDon.textContent = '$' + donationTotal.toFixed(2);
-          if (elSub) elSub.textContent = '$' + subTotal.toFixed(2);
-          if (elProd) elProd.textContent = '$' + productTotal.toFixed(2);
-          if (elTotal) elTotal.textContent = '$' + (donationTotal + subTotal + productTotal).toFixed(2);
+          if (elDon) elDon.textContent = '$' + (donationTotal / 100).toFixed(2);
+          if (elSub) elSub.textContent = '$' + (subscriptionTotal / 100).toFixed(2);
+          if (elProd) elProd.textContent = '$' + (productTotal / 100).toFixed(2);
+          if (elTotal) elTotal.textContent = '$' + ((donationTotal + subscriptionTotal + productTotal) / 100).toFixed(2);
         } catch (err) {
-          if (list) list.innerHTML = '<div class="empty-state">Revenue data not available yet.</div>';
+          if (list) list.innerHTML = '<div class="empty-state">Revenue data could not be loaded: ' + escapeHtml(err.message || err) + '</div>';
         }
       }
 
       // ─── Licenses ────────────────────────────────────────────────────
       async function loadLicenses() {
         var list = document.getElementById('license-list');
+        var productsNode = document.getElementById('license-product-list');
+        var productSelect = document.getElementById('license-product-select');
         if (!sb || !list) return;
         try {
-          var resp = await sb.from('site_events').select('created_at,user_email,metadata,event_type')
-            .in('event_type', ['trial_key_claimed', 'license_activated', 'license_expired', 'license_revoked'])
-            .order('created_at', { ascending: false }).limit(30);
-          if (resp.error) throw resp.error;
-          var rows = resp.data || [];
-          if (!rows.length) { list.innerHTML = '<div class="empty-state">No license events recorded yet.</div>'; return; }
-          list.innerHTML = rows.map(function (row) {
-            var meta = row.metadata || {};
-            var status = 'active', statusClass = 'active';
-            if (row.event_type === 'trial_key_claimed') { status = 'trial'; statusClass = 'trial'; }
-            if (row.event_type === 'license_expired') { status = 'expired'; statusClass = 'expired'; }
-            if (row.event_type === 'license_revoked') { status = 'revoked'; statusClass = 'revoked'; }
-            var key = meta.license_key || meta.key || 'Unknown key';
-            return '<div class="license-card"><div><div class="license-key">' + escapeHtml(key) + '</div>'
-              + '<div class="data-meta">' + escapeHtml(row.user_email || 'Unknown') + ' &middot; ' + escapeHtml(row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div></div>'
-              + '<span class="license-status ' + statusClass + '">' + status.toUpperCase() + '</span></div>';
+          var responses = await Promise.all([
+            sb.from('product_catalog').select('slug,product_name,status,published,price_cents,currency,billing_model,trial_days,version,device_limit:metadata').order('product_name'),
+            sb.from('software_licenses').select('*').order('updated_at', { ascending: false }).limit(500),
+            sb.from('trial_keys').select('id,user_id,user_email,license_key,tier,claimed_at,expires_at,created_at').order('created_at', { ascending: false }).limit(500),
+            sb.from('used_license_keys').select('id,key_hash,tier_code,activated_at,activated_by_email').order('activated_at', { ascending: false }).limit(500)
+          ]);
+          var failed = responses.find(function (response) { return response.error; });
+          if (failed) throw failed.error;
+          var products = responses[0].data || [];
+          var manual = responses[1].data || [];
+          var trials = responses[2].data || [];
+          var activations = responses[3].data || [];
+          allLicenseData = { products: products, manual: manual, trials: trials, activations: activations };
+
+          if (productSelect) productSelect.innerHTML = products.map(function (product) {
+            return '<option value="' + escapeHtml(product.slug) + '">' + escapeHtml(product.product_name) + '</option>';
           }).join('');
-        } catch (err) { list.innerHTML = '<div class="empty-state">License data not available yet.</div>'; }
+
+          if (productsNode) productsNode.innerHTML = products.map(function (product) {
+            var manualCount = manual.filter(function (row) { return row.product_slug === product.slug; }).length;
+            return '<div class="health-card"><div class="command-row-head"><strong>' + escapeHtml(product.product_name) + '</strong><span class="license-status ' + (product.status === 'live' ? 'active' : 'trial') + '">' + escapeHtml(product.status.toUpperCase()) + '</span></div>'
+              + '<div class="data-meta">' + (Number(product.trial_days || 0) ? Number(product.trial_days) + '-day trial' : 'No public trial') + ' · ' + escapeHtml(product.version || 'Version not set') + '</div>'
+              + '<div class="data-meta">' + manualCount + ' owner registry record' + (manualCount === 1 ? '' : 's') + '</div></div>';
+          }).join('');
+
+          var rows = [];
+          manual.forEach(function (row) { rows.push({ kind: 'registry', created_at: row.updated_at, row: row }); });
+          trials.forEach(function (row) { rows.push({ kind: 'trial', created_at: row.claimed_at, row: row }); });
+          activations.forEach(function (row) { rows.push({ kind: 'activation', created_at: row.activated_at, row: row }); });
+          rows.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at); });
+
+          if (!rows.length) { list.innerHTML = '<div class="empty-state">No license records have been captured yet.</div>'; return; }
+          list.innerHTML = rows.map(function (item) {
+            var row = item.row;
+            if (item.kind === 'registry') {
+              return '<div class="license-card" data-license-record="' + escapeHtml(row.id) + '"><div><strong>' + escapeHtml(row.product_slug) + ' · ' + escapeHtml(row.license_label || 'License record') + '</strong>'
+                + '<div class="data-meta">' + escapeHtml(row.customer_email) + ' · ' + Number(row.seats || 1) + ' seat(s) · ' + Number(row.device_limit || 1) + ' device(s)</div>'
+                + '<div class="data-meta">Key hint: ' + escapeHtml(row.key_hint || 'Not recorded') + (row.expires_at ? ' · Expires ' + escapeHtml(new Date(row.expires_at).toLocaleString()) : '') + '</div>'
+                + '<div class="command-actions"><select data-license-status="' + escapeHtml(row.id) + '"><option value="pending"' + (row.status === 'pending' ? ' selected' : '') + '>Pending</option><option value="trial"' + (row.status === 'trial' ? ' selected' : '') + '>Trial</option><option value="active"' + (row.status === 'active' ? ' selected' : '') + '>Active</option><option value="expired"' + (row.status === 'expired' ? ' selected' : '') + '>Expired</option><option value="revoked"' + (row.status === 'revoked' ? ' selected' : '') + '>Revoked</option></select><button class="quick-action" data-save-license-status="' + escapeHtml(row.id) + '">Save status</button></div></div>'
+                + '<span class="license-status ' + escapeHtml(row.status) + '">' + escapeHtml(row.status.toUpperCase()) + '</span></div>';
+            }
+            if (item.kind === 'trial') {
+              var masked = String(row.license_key || '').replace(/.(?=.{4})/g, '•');
+              return '<div class="license-card"><div><strong>Command Nexus trial</strong><div class="license-key" data-trial-mask="' + escapeHtml(row.id) + '">' + escapeHtml(masked || 'Key unavailable') + '</div>'
+                + '<div class="data-meta">' + escapeHtml(row.user_email || 'Unknown customer') + ' · Claimed ' + escapeHtml(new Date(row.claimed_at).toLocaleString()) + ' · Expires ' + escapeHtml(new Date(row.expires_at).toLocaleString()) + '</div>'
+                + '<button class="quick-action" data-reveal-trial="' + escapeHtml(row.id) + '">Reveal key</button></div><span class="license-status trial">TRIAL</span></div>';
+            }
+            return '<div class="license-card"><div><strong>Activated key fingerprint</strong><div class="license-key">' + escapeHtml(String(row.key_hash || '').slice(0, 16)) + '…</div>'
+              + '<div class="data-meta">' + escapeHtml(row.activated_by_email || 'Unknown customer') + ' · Tier ' + escapeHtml(row.tier_code || 'Unknown') + ' · ' + escapeHtml(new Date(row.activated_at).toLocaleString()) + '</div></div><span class="license-status active">ACTIVATED</span></div>';
+          }).join('');
+        } catch (err) {
+          list.innerHTML = '<div class="empty-state">License data could not be loaded: ' + escapeHtml(err.message || err) + '</div>';
+        }
       }
+
       var btnRefreshLic = document.getElementById('btn-refresh-licenses');
       if (btnRefreshLic) btnRefreshLic.addEventListener('click', loadLicenses);
-      var btnGenKey = document.getElementById('btn-generate-key');
-      if (btnGenKey) btnGenKey.addEventListener('click', async function () {
-        if (!sb) return;
-        try {
-          var baseUrl = String(supabaseCfg.url || '').replace(/\/+$/, '');
-          var resp = await fetch(baseUrl + '/functions/v1/generate-trial-key', {
-            method: 'POST', headers: { 'Content-Type': 'application/json', 'apikey': supabaseCfg.publishableKey || '' },
-            body: JSON.stringify({})
-          });
-          if (!resp.ok) throw new Error('Failed: ' + resp.status);
-          var result = await resp.json();
-          alert('Trial key generated: ' + (result.key || result.license_key || 'Unknown'));
-        } catch (err) { alert('Could not generate trial key: ' + (err.message || err)); }
+      var btnSaveLicense = document.getElementById('btn-save-license');
+      if (btnSaveLicense) btnSaveLicense.addEventListener('click', async function () {
+        var statusNode = document.getElementById('license-save-status');
+        var email = document.getElementById('license-customer-email').value.trim().toLowerCase();
+        if (!email || !email.includes('@')) { statusNode.textContent = 'Enter a valid customer email.'; statusNode.className = 'command-status error'; return; }
+        btnSaveLicense.disabled = true; statusNode.textContent = 'Saving…';
+        var expiresRaw = document.getElementById('license-expires-at').value;
+        var statusValue = document.getElementById('license-status-select').value;
+        var payload = {
+          product_slug: document.getElementById('license-product-select').value,
+          customer_email: email,
+          license_label: document.getElementById('license-label').value.trim(),
+          key_hint: document.getElementById('license-key-hint').value.trim(),
+          status: statusValue,
+          seats: Math.max(1, Number(document.getElementById('license-seats').value || 1)),
+          device_limit: Math.max(1, Number(document.getElementById('license-device-limit').value || 1)),
+          expires_at: expiresRaw ? new Date(expiresRaw).toISOString() : null,
+          issued_at: statusValue === 'active' ? new Date().toISOString() : null,
+          owner_note: document.getElementById('license-owner-note').value.trim()
+        };
+        var response = await sb.from('software_licenses').insert(payload);
+        btnSaveLicense.disabled = false;
+        statusNode.textContent = response.error ? response.error.message : 'License record saved.';
+        statusNode.className = 'command-status ' + (response.error ? 'error' : 'ok');
+        if (!response.error) loadLicenses();
+      });
+
+      document.getElementById('license-list')?.addEventListener('click', async function (event) {
+        var reveal = event.target.closest('[data-reveal-trial]');
+        if (reveal && allLicenseData && allLicenseData.trials) {
+          var trial = allLicenseData.trials.find(function (row) { return row.id === reveal.dataset.revealTrial; });
+          if (trial && window.confirm('Reveal this customer trial key on screen?')) {
+            var target = document.querySelector('[data-trial-mask="' + reveal.dataset.revealTrial + '"]');
+            if (target) target.textContent = trial.license_key;
+            reveal.textContent = 'Key revealed';
+          }
+        }
+        var save = event.target.closest('[data-save-license-status]');
+        if (save) {
+          var id = save.dataset.saveLicenseStatus;
+          var select = document.querySelector('[data-license-status="' + id + '"]');
+          if (!select || !window.confirm('Change this license status to ' + select.value + '?')) return;
+          var patch = { status: select.value };
+          if (select.value === 'active') patch.issued_at = new Date().toISOString();
+          var response = await sb.from('software_licenses').update(patch).eq('id', id);
+          save.textContent = response.error ? 'Save failed' : 'Saved';
+          if (!response.error) setTimeout(loadLicenses, 600);
+        }
+      });
+
+      var btnExportLicenses = document.getElementById('btn-export-licenses');
+      if (btnExportLicenses) btnExportLicenses.addEventListener('click', function () {
+        if (!allLicenseData || !allLicenseData.products) return alert('Load license data first.');
+        var safe = {
+          exported_at: new Date().toISOString(),
+          products: allLicenseData.products,
+          registry: allLicenseData.manual,
+          trials: allLicenseData.trials.map(function (row) { return Object.assign({}, row, { license_key: '[redacted]' }); }),
+          activations: allLicenseData.activations
+        };
+        var blob = new Blob([JSON.stringify(safe, null, 2)], { type: 'application/json' });
+        var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'avery-license-report-' + Date.now() + '.json'; a.click();
       });
 
       // ─── Audit Log ───────────────────────────────────────────────────
@@ -2275,6 +2597,7 @@
       if (existing) return;
 
       var vaultNavItems = [
+        { label: 'Command Center', tab: 'command', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>' },
         { label: 'Dashboard', tab: 'dashboard', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>' },
         { label: 'Security Center', tab: 'security', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/></svg>' },
         { label: 'User Directory', tab: 'users', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>' },
