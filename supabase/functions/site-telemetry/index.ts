@@ -64,7 +64,11 @@ Deno.serve(async (req: Request) => {
     const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || Deno.env.get("SUPABASE_PUBLISHABLE_KEY") || "";
     if (!supabaseUrl || !serviceRoleKey || !anonKey) return json(req, { error: "Telemetry is unavailable." }, 503);
 
-    const body = await req.json().catch(() => null);
+    const declaredLength = Number(req.headers.get("content-length") || 0);
+    if (declaredLength > 50_000) return json(req, { error: "Request too large." }, 413);
+    const rawBody = await req.text();
+    if (rawBody.length > 50_000) return json(req, { error: "Request too large." }, 413);
+    const body = (() => { try { return JSON.parse(rawBody); } catch { return null; } })();
     const eventType = trim(body?.event_type, 80);
     if (!body || !allowedEvents.has(eventType)) return json(req, { error: "Unsupported event." }, 400);
 
@@ -90,9 +94,10 @@ Deno.serve(async (req: Request) => {
       user = data.user ? { id: data.user.id, email: data.user.email } : null;
     }
 
-    const metadata = body?.metadata && typeof body.metadata === "object" && !Array.isArray(body.metadata)
+    const metadataCandidate = body?.metadata && typeof body.metadata === "object" && !Array.isArray(body.metadata)
       ? Object.fromEntries(Object.entries(body.metadata).slice(0, 30).map(([key, value]) => [trim(key, 60), typeof value === "string" ? trim(value, 1000) : value]))
       : {};
+    const metadata = JSON.stringify(metadataCandidate).length <= 12_000 ? metadataCandidate : {};
     const attemptedEmail = eventType === "login_failed" ? trim(body?.attempted_email, 320).toLowerCase() : null;
     const pagePath = trim(body?.page_path, 500) || "/";
     const visitorToken = trim(body?.visitor_token, 160) || null;

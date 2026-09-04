@@ -38,7 +38,11 @@ Deno.serve(async (req: Request) => {
   if (origin && !allowedOrigins.has(origin)) return json(req, { error: "Origin not allowed." }, 403);
 
   try {
-    const body = await req.json().catch(() => null);
+    const declaredLength = Number(req.headers.get("content-length") || 0);
+    if (declaredLength > 25_000) return json(req, { error: "Request too large." }, 413);
+    const rawBody = await req.text();
+    if (rawBody.length > 25_000) return json(req, { error: "Request too large." }, 413);
+    const body = (() => { try { return JSON.parse(rawBody); } catch { return null; } })();
     const customerName = text(body?.customer_name, 120);
     const customerEmail = text(body?.customer_email, 320).toLowerCase();
     const subject = text(body?.subject, 200);
@@ -55,6 +59,12 @@ Deno.serve(async (req: Request) => {
     const admin = createClient(supabaseUrl, serviceRoleKey, { auth: { persistSession: false } });
     const ip = clientIp(req);
     const ipHash = ip ? await hash(`avery-telemetry-v1:${ip}`) : null;
+    if (ipHash) {
+      const since = new Date(Date.now() - 10 * 60_000).toISOString();
+      const { count } = await admin.from("service_requests").select("id", { count: "exact", head: true })
+        .eq("ip_hash", ipHash).gte("created_at", since);
+      if ((count || 0) >= 5) return json(req, { error: "Too many requests. Please wait and try again." }, 429);
+    }
     const promoCode = text(body?.promo_code, 40).toUpperCase() === "BACK25" ? "BACK25" : null;
     const quotedPriceCents = promoCode ? Math.round(tiers[tierKey].cents * 0.75) : tiers[tierKey].cents;
     const requestId = crypto.randomUUID();
