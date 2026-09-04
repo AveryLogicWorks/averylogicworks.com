@@ -27,6 +27,9 @@
     .program-features { display:grid; gap:.5rem; padding:0; list-style:none; margin:0; }
     .program-features li { padding:.6rem .8rem; border:1px solid var(--line); border-radius:12px; background:rgba(255,255,255,.03); color:var(--muted); }
     .program-features li::before { content:"✓  "; color:var(--accent-3); font-weight:bold; }
+    .program-more-info { display:inline-flex; align-items:center; gap:.45rem; align-self:flex-start; color:var(--text-link-color); font-weight:900; text-decoration:none; }
+    .program-more-info::after { content:"→"; transition:transform .16s ease; }
+    .program-more-info:hover::after, .program-more-info:focus-visible::after { transform:translateX(4px); }
     .program-card .button { width:100%; margin-top:auto; }
     .promo-box { margin:1rem 0; padding:1rem; border:1px solid rgba(125,211,252,.28); border-radius:16px; background:rgba(125,211,252,.08); display:grid; gap:.65rem; }
     .promo-row { display:flex; gap:.5rem; flex-wrap:wrap; align-items:center; }
@@ -58,10 +61,11 @@
           <h3>Speakeasy</h3>
           <p class="muted">A lightweight text-to-speech reader that lives in your system tray. Select any text, hit a hotkey, and Speakeasy reads it aloud using your operating system's built-in voices.</p>
           <ul class="program-features"><li>System tray icon</li><li>Ctrl+Shift+Space reads selected text</li><li>Reads clipboard text from anywhere</li><li>Works offline &mdash; no internet required</li></ul>
+          <a class="program-more-info" href="speakeasy-info.html" aria-label="More information about Speakeasy">More info</a>
           <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;"><span class="program-price">$10</span><span class="soft">one-time purchase</span></div>
           <a class="button primary" href="#speakeasy-purchase">Get Speakeasy &mdash; $10</a>
         </article>
-        <article class="card program-card" id="quadrahydra"><span class="program-badge">3-day free trial</span><h3>QuadraHydra</h3><p class="muted">See what is using your PC's resources and manage process priorities for editing, rendering, and other heavy workloads.</p><ul class="program-features"><li>CPU and memory monitoring</li><li>Process priorities and workload profiles</li><li>Windows 10/11, 64-bit</li></ul><span class="program-price">$15 · one PC · one-time</span><a class="button primary" href="#quadrahydra-purchase">Try or buy QuadraHydra</a></article>
+        <article class="card program-card" id="quadrahydra"><span class="program-badge">3-day free trial</span><h3>QuadraHydra</h3><p class="muted">See what is using your PC's resources and manage process priorities for editing, rendering, and other heavy workloads.</p><ul class="program-features"><li>CPU and memory monitoring</li><li>Process priorities and workload profiles</li><li>Windows 10/11, 64-bit</li></ul><a class="program-more-info" href="quadrahydra-info.html" aria-label="More information about QuadraHydra">More info</a><span class="program-price">$15 · one PC · one-time</span><a class="button primary" href="#quadrahydra-purchase">Try or buy QuadraHydra</a></article>
         <article class="card program-card coming-soon-card"><span class="program-badge">Coming soon</span><h3>More on the way</h3><p class="muted">Several more small programs and utilities are in active development.</p><a class="button" href="signup.html">Sign up for updates</a></article>
       </div>
     </section>
