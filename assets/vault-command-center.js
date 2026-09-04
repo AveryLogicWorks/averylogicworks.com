@@ -11,7 +11,8 @@
     selectedPage: '', selectedProduct: null, datasetRows: [], loaded: false
   };
 
-  if (window.supabase && supabaseCfg.url && supabaseCfg.publishableKey) {
+  client = window._averyVaultSupabase || null;
+  if (!client && window.supabase && supabaseCfg.url && supabaseCfg.publishableKey) {
     client = window.supabase.createClient(supabaseCfg.url, supabaseCfg.publishableKey, {
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false }
     });
