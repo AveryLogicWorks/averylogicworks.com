@@ -601,14 +601,36 @@
 
         <div class="vault-section" id="section-licenses">
           <div class="form-shell">
-            <span class="tag">Software licenses</span>
-            <h3>Command Nexus, Speakeasy, and QuadraHydra licenses</h3>
+            <span class="tag">Software licensing</span>
+            <h3>Command Nexus, Speakeasy, and QuadraHydra</h3>
+            <p class="small-note">Track every product's trial terms, fulfillment status, customer, seat or device limit, and activation history. Reusable plaintext activation secrets are not stored in the owner registry.</p>
             <div class="quick-action-bar">
-              <button class="quick-action" id="btn-refresh-licenses">Refresh licenses</button>
-              <button class="quick-action" id="btn-generate-key">Generate trial key</button>
+              <button class="quick-action" id="btn-refresh-licenses" type="button">Refresh licenses</button>
+              <button class="quick-action" id="btn-export-licenses" type="button">Export license report</button>
             </div>
-            <div class="data-list" id="license-list">
-              <div class="empty-state">Loading license data&hellip;</div>
+            <div class="command-grid" id="license-product-list"><div class="empty-state">Loading product licensing…</div></div>
+          </div>
+          <div class="admin-grid">
+            <div class="form-shell">
+              <span class="tag alt">Register fulfillment</span>
+              <h3>Add a customer license record</h3>
+              <div class="command-form command-form-grid">
+                <div class="command-field"><span>Product</span><select id="license-product-select"></select></div>
+                <div class="command-field"><span>Customer email</span><input id="license-customer-email" type="email"></div>
+                <div class="command-field"><span>License label</span><input id="license-label" type="text" placeholder="Example: QuadraHydra one-PC purchase"></div>
+                <div class="command-field"><span>Status</span><select id="license-status-select"><option value="pending">Pending fulfillment</option><option value="trial">Trial</option><option value="active">Active</option><option value="expired">Expired</option><option value="revoked">Revoked</option></select></div>
+                <div class="command-field"><span>Safe key hint</span><input id="license-key-hint" type="text" placeholder="Last four characters or fingerprint"></div>
+                <div class="command-field"><span>Expiration, if any</span><input id="license-expires-at" type="datetime-local"></div>
+                <div class="command-field"><span>Seats</span><input id="license-seats" type="number" min="1" value="1"></div>
+                <div class="command-field"><span>Device limit</span><input id="license-device-limit" type="number" min="1" value="1"></div>
+                <div class="command-field full"><span>Private owner note</span><textarea id="license-owner-note" rows="4"></textarea></div>
+                <div class="command-actions full"><button class="button primary small" id="btn-save-license" type="button">Save license record</button><span class="command-status" id="license-save-status"></span></div>
+              </div>
+            </div>
+            <div class="form-shell">
+              <span class="tag warm">License registry</span>
+              <h3>Manual licenses, trials, and activations</h3>
+              <div class="data-list" id="license-list"><div class="empty-state">Loading license data…</div></div>
             </div>
           </div>
         </div>
@@ -888,6 +910,7 @@
       const vaultBuildId = document.getElementById('vault-build-id');
       let allUserData = [];
       let allAuditData = [];
+      let allLicenseData = [];
 
       // ─── Tab switching ───────────────────────────────────────────────
       document.querySelectorAll('.vault-tab').forEach(function (tab) {
@@ -2007,42 +2030,129 @@
       // ─── Licenses ────────────────────────────────────────────────────
       async function loadLicenses() {
         var list = document.getElementById('license-list');
+        var productsNode = document.getElementById('license-product-list');
+        var productSelect = document.getElementById('license-product-select');
         if (!sb || !list) return;
         try {
-          var resp = await sb.from('site_events').select('created_at,user_email,metadata,event_type')
-            .in('event_type', ['trial_key_claimed', 'license_activated', 'license_expired', 'license_revoked'])
-            .order('created_at', { ascending: false }).limit(30);
-          if (resp.error) throw resp.error;
-          var rows = resp.data || [];
-          if (!rows.length) { list.innerHTML = '<div class="empty-state">No license events recorded yet.</div>'; return; }
-          list.innerHTML = rows.map(function (row) {
-            var meta = row.metadata || {};
-            var status = 'active', statusClass = 'active';
-            if (row.event_type === 'trial_key_claimed') { status = 'trial'; statusClass = 'trial'; }
-            if (row.event_type === 'license_expired') { status = 'expired'; statusClass = 'expired'; }
-            if (row.event_type === 'license_revoked') { status = 'revoked'; statusClass = 'revoked'; }
-            var key = meta.license_key || meta.key || 'Unknown key';
-            return '<div class="license-card"><div><div class="license-key">' + escapeHtml(key) + '</div>'
-              + '<div class="data-meta">' + escapeHtml(row.user_email || 'Unknown') + ' &middot; ' + escapeHtml(row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div></div>'
-              + '<span class="license-status ' + statusClass + '">' + status.toUpperCase() + '</span></div>';
+          var responses = await Promise.all([
+            sb.from('product_catalog').select('slug,product_name,status,published,price_cents,currency,billing_model,trial_days,version,device_limit:metadata').order('product_name'),
+            sb.from('software_licenses').select('*').order('updated_at', { ascending: false }).limit(500),
+            sb.from('trial_keys').select('id,user_id,user_email,license_key,tier,claimed_at,expires_at,created_at').order('created_at', { ascending: false }).limit(500),
+            sb.from('used_license_keys').select('id,key_hash,tier_code,activated_at,activated_by_email').order('activated_at', { ascending: false }).limit(500)
+          ]);
+          var failed = responses.find(function (response) { return response.error; });
+          if (failed) throw failed.error;
+          var products = responses[0].data || [];
+          var manual = responses[1].data || [];
+          var trials = responses[2].data || [];
+          var activations = responses[3].data || [];
+          allLicenseData = { products: products, manual: manual, trials: trials, activations: activations };
+
+          if (productSelect) productSelect.innerHTML = products.map(function (product) {
+            return '<option value="' + escapeHtml(product.slug) + '">' + escapeHtml(product.product_name) + '</option>';
           }).join('');
-        } catch (err) { list.innerHTML = '<div class="empty-state">License data not available yet.</div>'; }
+
+          if (productsNode) productsNode.innerHTML = products.map(function (product) {
+            var manualCount = manual.filter(function (row) { return row.product_slug === product.slug; }).length;
+            return '<div class="health-card"><div class="command-row-head"><strong>' + escapeHtml(product.product_name) + '</strong><span class="license-status ' + (product.status === 'live' ? 'active' : 'trial') + '">' + escapeHtml(product.status.toUpperCase()) + '</span></div>'
+              + '<div class="data-meta">' + (Number(product.trial_days || 0) ? Number(product.trial_days) + '-day trial' : 'No public trial') + ' · ' + escapeHtml(product.version || 'Version not set') + '</div>'
+              + '<div class="data-meta">' + manualCount + ' owner registry record' + (manualCount === 1 ? '' : 's') + '</div></div>';
+          }).join('');
+
+          var rows = [];
+          manual.forEach(function (row) { rows.push({ kind: 'registry', created_at: row.updated_at, row: row }); });
+          trials.forEach(function (row) { rows.push({ kind: 'trial', created_at: row.claimed_at, row: row }); });
+          activations.forEach(function (row) { rows.push({ kind: 'activation', created_at: row.activated_at, row: row }); });
+          rows.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at); });
+
+          if (!rows.length) { list.innerHTML = '<div class="empty-state">No license records have been captured yet.</div>'; return; }
+          list.innerHTML = rows.map(function (item) {
+            var row = item.row;
+            if (item.kind === 'registry') {
+              return '<div class="license-card" data-license-record="' + escapeHtml(row.id) + '"><div><strong>' + escapeHtml(row.product_slug) + ' · ' + escapeHtml(row.license_label || 'License record') + '</strong>'
+                + '<div class="data-meta">' + escapeHtml(row.customer_email) + ' · ' + Number(row.seats || 1) + ' seat(s) · ' + Number(row.device_limit || 1) + ' device(s)</div>'
+                + '<div class="data-meta">Key hint: ' + escapeHtml(row.key_hint || 'Not recorded') + (row.expires_at ? ' · Expires ' + escapeHtml(new Date(row.expires_at).toLocaleString()) : '') + '</div>'
+                + '<div class="command-actions"><select data-license-status="' + escapeHtml(row.id) + '"><option value="pending"' + (row.status === 'pending' ? ' selected' : '') + '>Pending</option><option value="trial"' + (row.status === 'trial' ? ' selected' : '') + '>Trial</option><option value="active"' + (row.status === 'active' ? ' selected' : '') + '>Active</option><option value="expired"' + (row.status === 'expired' ? ' selected' : '') + '>Expired</option><option value="revoked"' + (row.status === 'revoked' ? ' selected' : '') + '>Revoked</option></select><button class="quick-action" data-save-license-status="' + escapeHtml(row.id) + '">Save status</button></div></div>'
+                + '<span class="license-status ' + escapeHtml(row.status) + '">' + escapeHtml(row.status.toUpperCase()) + '</span></div>';
+            }
+            if (item.kind === 'trial') {
+              var masked = String(row.license_key || '').replace(/.(?=.{4})/g, '•');
+              return '<div class="license-card"><div><strong>Command Nexus trial</strong><div class="license-key" data-trial-mask="' + escapeHtml(row.id) + '">' + escapeHtml(masked || 'Key unavailable') + '</div>'
+                + '<div class="data-meta">' + escapeHtml(row.user_email || 'Unknown customer') + ' · Claimed ' + escapeHtml(new Date(row.claimed_at).toLocaleString()) + ' · Expires ' + escapeHtml(new Date(row.expires_at).toLocaleString()) + '</div>'
+                + '<button class="quick-action" data-reveal-trial="' + escapeHtml(row.id) + '">Reveal key</button></div><span class="license-status trial">TRIAL</span></div>';
+            }
+            return '<div class="license-card"><div><strong>Activated key fingerprint</strong><div class="license-key">' + escapeHtml(String(row.key_hash || '').slice(0, 16)) + '…</div>'
+              + '<div class="data-meta">' + escapeHtml(row.activated_by_email || 'Unknown customer') + ' · Tier ' + escapeHtml(row.tier_code || 'Unknown') + ' · ' + escapeHtml(new Date(row.activated_at).toLocaleString()) + '</div></div><span class="license-status active">ACTIVATED</span></div>';
+          }).join('');
+        } catch (err) {
+          list.innerHTML = '<div class="empty-state">License data could not be loaded: ' + escapeHtml(err.message || err) + '</div>';
+        }
       }
+
       var btnRefreshLic = document.getElementById('btn-refresh-licenses');
       if (btnRefreshLic) btnRefreshLic.addEventListener('click', loadLicenses);
-      var btnGenKey = document.getElementById('btn-generate-key');
-      if (btnGenKey) btnGenKey.addEventListener('click', async function () {
-        if (!sb) return;
-        try {
-          var baseUrl = String(supabaseCfg.url || '').replace(/\/+$/, '');
-          var resp = await fetch(baseUrl + '/functions/v1/generate-trial-key', {
-            method: 'POST', headers: { 'Content-Type': 'application/json', 'apikey': supabaseCfg.publishableKey || '' },
-            body: JSON.stringify({})
-          });
-          if (!resp.ok) throw new Error('Failed: ' + resp.status);
-          var result = await resp.json();
-          alert('Trial key generated: ' + (result.key || result.license_key || 'Unknown'));
-        } catch (err) { alert('Could not generate trial key: ' + (err.message || err)); }
+      var btnSaveLicense = document.getElementById('btn-save-license');
+      if (btnSaveLicense) btnSaveLicense.addEventListener('click', async function () {
+        var statusNode = document.getElementById('license-save-status');
+        var email = document.getElementById('license-customer-email').value.trim().toLowerCase();
+        if (!email || !email.includes('@')) { statusNode.textContent = 'Enter a valid customer email.'; statusNode.className = 'command-status error'; return; }
+        btnSaveLicense.disabled = true; statusNode.textContent = 'Saving…';
+        var expiresRaw = document.getElementById('license-expires-at').value;
+        var statusValue = document.getElementById('license-status-select').value;
+        var payload = {
+          product_slug: document.getElementById('license-product-select').value,
+          customer_email: email,
+          license_label: document.getElementById('license-label').value.trim(),
+          key_hint: document.getElementById('license-key-hint').value.trim(),
+          status: statusValue,
+          seats: Math.max(1, Number(document.getElementById('license-seats').value || 1)),
+          device_limit: Math.max(1, Number(document.getElementById('license-device-limit').value || 1)),
+          expires_at: expiresRaw ? new Date(expiresRaw).toISOString() : null,
+          issued_at: statusValue === 'active' ? new Date().toISOString() : null,
+          owner_note: document.getElementById('license-owner-note').value.trim()
+        };
+        var response = await sb.from('software_licenses').insert(payload);
+        btnSaveLicense.disabled = false;
+        statusNode.textContent = response.error ? response.error.message : 'License record saved.';
+        statusNode.className = 'command-status ' + (response.error ? 'error' : 'ok');
+        if (!response.error) loadLicenses();
+      });
+
+      document.getElementById('license-list')?.addEventListener('click', async function (event) {
+        var reveal = event.target.closest('[data-reveal-trial]');
+        if (reveal && allLicenseData && allLicenseData.trials) {
+          var trial = allLicenseData.trials.find(function (row) { return row.id === reveal.dataset.revealTrial; });
+          if (trial && window.confirm('Reveal this customer trial key on screen?')) {
+            var target = document.querySelector('[data-trial-mask="' + reveal.dataset.revealTrial + '"]');
+            if (target) target.textContent = trial.license_key;
+            reveal.textContent = 'Key revealed';
+          }
+        }
+        var save = event.target.closest('[data-save-license-status]');
+        if (save) {
+          var id = save.dataset.saveLicenseStatus;
+          var select = document.querySelector('[data-license-status="' + id + '"]');
+          if (!select || !window.confirm('Change this license status to ' + select.value + '?')) return;
+          var patch = { status: select.value };
+          if (select.value === 'active') patch.issued_at = new Date().toISOString();
+          var response = await sb.from('software_licenses').update(patch).eq('id', id);
+          save.textContent = response.error ? 'Save failed' : 'Saved';
+          if (!response.error) setTimeout(loadLicenses, 600);
+        }
+      });
+
+      var btnExportLicenses = document.getElementById('btn-export-licenses');
+      if (btnExportLicenses) btnExportLicenses.addEventListener('click', function () {
+        if (!allLicenseData || !allLicenseData.products) return alert('Load license data first.');
+        var safe = {
+          exported_at: new Date().toISOString(),
+          products: allLicenseData.products,
+          registry: allLicenseData.manual,
+          trials: allLicenseData.trials.map(function (row) { return Object.assign({}, row, { license_key: '[redacted]' }); }),
+          activations: allLicenseData.activations
+        };
+        var blob = new Blob([JSON.stringify(safe, null, 2)], { type: 'application/json' });
+        var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'avery-license-report-' + Date.now() + '.json'; a.click();
       });
 
       // ─── Audit Log ───────────────────────────────────────────────────
