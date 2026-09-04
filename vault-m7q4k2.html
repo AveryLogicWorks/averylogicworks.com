@@ -287,7 +287,11 @@
               <div class="metric"><strong data-admin-stat="speakeasy_section_view">0</strong><span>Speakeasy views</span></div>
               <div class="metric"><strong data-admin-stat="speakeasy_info_click">0</strong><span>More-info clicks</span></div>
               <div class="metric"><strong data-admin-stat="speakeasy_trial_download">0</strong><span>Trial downloads</span></div>
-              <div class="metric"><strong data-admin-stat="speakeasy_purchase_click">0</strong><span>Purchase clicks</span></div>
+              <div class="metric"><strong data-admin-stat="speakeasy_purchase_click">0</strong><span>Speakeasy purchase clicks</span></div>
+              <div class="metric"><strong data-admin-stat="quadrahydra_section_view">0</strong><span>QuadraHydra views</span></div>
+              <div class="metric"><strong data-admin-stat="quadrahydra_info_click">0</strong><span>QuadraHydra more-info clicks</span></div>
+              <div class="metric"><strong data-admin-stat="quadrahydra_trial_download">0</strong><span>QuadraHydra trial downloads</span></div>
+              <div class="metric"><strong data-admin-stat="quadrahydra_purchase_click">0</strong><span>QuadraHydra purchase clicks</span></div>
               <div class="metric"><strong data-admin-stat="downloads_30d">0</strong><span>Downloads (30d)</span></div>
             </div>
             <p class="small-note">Tracks every download click and trial claim across the site. Use this to see if visitors are actually attempting to use your products.</p>
@@ -597,8 +601,8 @@
 
         <div class="vault-section" id="section-licenses">
           <div class="form-shell">
-            <span class="tag">Command Nexus licenses</span>
-            <h3>Active, trial, and expired license keys</h3>
+            <span class="tag">Software licenses</span>
+            <h3>Command Nexus, Speakeasy, and QuadraHydra licenses</h3>
             <div class="quick-action-bar">
               <button class="quick-action" id="btn-refresh-licenses">Refresh licenses</button>
               <button class="quick-action" id="btn-generate-key">Generate trial key</button>
@@ -673,6 +677,10 @@
                 <option value="subscription_completed">Subscriptions</option>
                 <option value="command_nexus_download">CN downloads</option>
                 <option value="trial_key_claimed">Trial keys</option>
+                <option value="quadrahydra_section_view">QuadraHydra views</option>
+                <option value="quadrahydra_info_click">QuadraHydra information clicks</option>
+                <option value="quadrahydra_trial_download">QuadraHydra trial downloads</option>
+                <option value="quadrahydra_purchase_click">QuadraHydra purchase clicks</option>
                 <option value="service_request_submitted">Service requests</option>
                 <option value="public_feedback_submitted">Feedback</option>
                 <option value="sales_inquiry">Sales inquiries</option>
@@ -1296,7 +1304,7 @@
       }
 
       async function loadDownloadMetrics() {
-        var downloadEvents = ['command_nexus_download', 'trial_key_claimed', 'speakeasy_section_view', 'speakeasy_info_click', 'speakeasy_trial_download', 'speakeasy_purchase_click'];
+        var downloadEvents = ['command_nexus_download', 'trial_key_claimed', 'speakeasy_section_view', 'speakeasy_info_click', 'speakeasy_trial_download', 'speakeasy_purchase_click', 'quadrahydra_section_view', 'quadrahydra_info_click', 'quadrahydra_trial_download', 'quadrahydra_purchase_click'];
         await Promise.all(downloadEvents.map(async function (eventType) {
           try {
             var total = await countEvent(eventType);
@@ -1309,8 +1317,8 @@
         // Downloads in last 30 days
         try {
           var thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-          var recentDownloads = await countEvent('command_nexus_download', thirtyDaysAgo);
-          setStatValue('downloads_30d', recentDownloads, '0');
+          var recentDownloads = await Promise.all(['command_nexus_download', 'speakeasy_trial_download', 'quadrahydra_trial_download'].map(function (eventType) { return countEvent(eventType, thirtyDaysAgo); }));
+          setStatValue('downloads_30d', recentDownloads.reduce(function (sum, count) { return sum + Number(count || 0); }, 0), '0');
         } catch (err) {
           setStatValue('downloads_30d', '0', '0');
         }
