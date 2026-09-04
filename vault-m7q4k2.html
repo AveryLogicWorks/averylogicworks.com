@@ -220,6 +220,9 @@
               <div class="metric"><strong data-admin-stat="visits_30d">0</strong><span>Visits (30d)</span></div>
               <div class="metric"><strong data-admin-stat="visits_all_time">0</strong><span>Visits (all time)</span></div>
               <div class="metric"><strong data-admin-stat="accounts_total">0</strong><span>Total accounts</span></div>
+              <div class="metric"><strong data-admin-stat="accounts_unconfirmed">0</strong><span>Unconfirmed accounts</span></div>
+              <div class="metric"><strong data-admin-stat="accounts_attention">0</strong><span>Need attention</span></div>
+              <div class="metric"><strong data-admin-stat="unique_visitors_30d">0</strong><span>Unique visitors (30d)</span></div>
               <div class="metric"><strong data-admin-stat="signups_30d">0</strong><span>Signups (30d)</span></div>
               <div class="metric"><strong data-admin-stat="logins_30d">0</strong><span>Logins (30d)</span></div>
               <div class="metric"><strong data-admin-stat="newsletter_opt_ins">0</strong><span>Mailing list</span></div>
@@ -228,6 +231,19 @@
               <div class="metric"><strong data-admin-stat="subscription_events">0</strong><span>Subscription events</span></div>
               <div class="metric"><strong data-admin-stat="donation_total">$0.00</strong><span>Donation total</span></div>
               <div class="metric"><strong data-admin-stat="subscription_total">$0.00</strong><span>Subscription total</span></div>
+            </div>
+          </div>
+
+          <div class="admin-grid">
+            <div class="policy-shell">
+              <span class="tag">Traffic intelligence</span>
+              <h3>Top pages (30d)</h3>
+              <div class="data-list" id="traffic-pages-list"><div class="empty-state">Loading page activity&hellip;</div></div>
+            </div>
+            <div class="policy-shell">
+              <span class="tag alt">Discovery</span>
+              <h3>Top referrers (30d)</h3>
+              <div class="data-list" id="traffic-referrers-list"><div class="empty-state">Loading referrers&hellip;</div></div>
             </div>
           </div>
 
@@ -336,6 +352,9 @@
                 <option value="newsletter">Newsletter subscribers</option>
                 <option value="supporter">Supporter email opt-ins</option>
                 <option value="recent">Recent signups (30d)</option>
+                <option value="unconfirmed">Email not confirmed</option>
+                <option value="attention">Needs attention</option>
+                <option value="review">Risk review / restricted</option>
               </select>
               <button class="quick-action" id="btn-refresh-users">Refresh</button>
             </div>
@@ -651,6 +670,8 @@
       const serviceRequestList = document.getElementById('service-request-list');
       const feedbackList = document.getElementById('feedback-list');
       const securityEventList = document.getElementById('security-event-list');
+      const trafficPagesList = document.getElementById('traffic-pages-list');
+      const trafficReferrersList = document.getElementById('traffic-referrers-list');
       const enterpriseInquiryList = document.getElementById('enterprise-inquiry-list');
       let lastInquiryCount = 0;
       let notificationPollTimer = null;
@@ -819,6 +840,11 @@
             + '<div class="data-meta">' + escapeHtml(meta.customer_name || 'Unknown name') + ' · ' + escapeHtml(meta.customer_email || row.user_email || 'No email') + '</div>'
             + '<div class="data-meta">' + escapeHtml(meta.tier_label || 'Unknown tier') + ' · ' + escapeHtml(row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div>'
             + '<p>' + escapeHtml(meta.details || '') + '</p>'
+            + '<div class="data-meta">Quote: $' + (Number(meta.quoted_price_cents || 0) / 100).toFixed(2)
+            + ' · Notification: ' + (meta.notification_sent_at ? 'sent' : escapeHtml(meta.notification_error || 'stored in vault')) + '</div>'
+            + '<div style="display:flex;gap:8px;align-items:center;margin-top:8px;"><select data-request-status="' + escapeHtml(meta.request_id || '') + '">'
+            + ['new','reviewing','contacted','accepted','closed'].map(function (status) { return '<option value="' + status + '"' + (row.status === status ? ' selected' : '') + '>' + status + '</option>'; }).join('')
+            + '</select><button class="quick-action" data-save-request="' + escapeHtml(meta.request_id || '') + '">Save status</button></div>'
             + '<div class="data-meta"><code>' + escapeHtml(meta.request_id || 'No request id') + '</code></div>'
             + '</div>';
         }, 'No private service requests have been captured yet.');
@@ -842,7 +868,9 @@
           return '<div class="data-item">'
             + '<strong>' + escapeHtml(row.label || row.event_type || 'Security event logged') + '</strong>'
             + '<div class="data-meta">' + escapeHtml(row.user_email || meta.email || 'Unknown email') + ' · ' + escapeHtml(row.created_at ? new Date(row.created_at).toLocaleString() : 'No timestamp') + '</div>'
-            + '<div class="data-meta">' + escapeHtml(meta.reason || meta.source || row.event_type || 'Security event logged') + '</div>'
+            + '<div class="data-meta">' + escapeHtml(meta.reason || meta.source || row.event_type || 'Security event logged')
+            + (meta.ip_address ? ' · IP ' + escapeHtml(meta.ip_address) : '')
+            + (meta.page_path ? ' · ' + escapeHtml(meta.page_path) : '') + '</div>'
             + '</div>';
         }, 'No blocked or suspicious access events are recorded yet.');
       }
@@ -888,6 +916,44 @@
         renderServiceRequestRows(payload && payload.service_requests ? payload.service_requests : []);
         renderFeedbackRows(payload && payload.feedback ? payload.feedback : []);
         renderSecurityRows(payload && payload.security ? payload.security : []);
+        allUserData = payload && payload.people ? payload.people : [];
+        renderUserDirectory();
+        const people = allUserData;
+        setStatValue('accounts_unconfirmed', people.filter(function (p) { return !p.email_confirmed_at; }).length, '0');
+        setStatValue('accounts_attention', people.filter(function (p) { return p.needs_attention || p.support_status === 'waiting'; }).length, '0');
+        const traffic = payload && payload.traffic ? payload.traffic : {};
+        setStatValue('unique_visitors_30d', traffic.unique_visitors_30d, '0');
+        renderList(trafficPagesList, traffic.top_pages || [], function (row) {
+          return '<div class="data-item"><strong>' + escapeHtml(row.label) + '</strong><div class="data-meta">' + row.count + ' visit' + (row.count === 1 ? '' : 's') + '</div></div>';
+        }, 'No page telemetry has been captured in the last 30 days.');
+        renderList(trafficReferrersList, traffic.top_referrers || [], function (row) {
+          return '<div class="data-item"><strong>' + escapeHtml(row.label) + '</strong><div class="data-meta">' + row.count + ' referral' + (row.count === 1 ? '' : 's') + '</div></div>';
+        }, 'No external referrers have been captured in the last 30 days.');
+        applySecuritySummary(payload || {});
+      }
+
+      function applySecuritySummary(payload) {
+        const rows = payload.security || [];
+        const ips = payload.ip_watchlist || [];
+        const blocked = rows.filter(function (r) { return r.event_type === 'admin_access_denied'; }).length;
+        const hidden = rows.filter(function (r) { return r.event_type === 'admin_hidden_path_hit'; }).length;
+        const failed = rows.filter(function (r) { return r.event_type === 'login_failed' && new Date(r.created_at).getTime() >= Date.now() - 30 * 86400000; }).length;
+        document.getElementById('sec-stat-blocked').textContent = blocked;
+        document.getElementById('sec-stat-hidden').textContent = hidden;
+        document.getElementById('sec-stat-failed-logins').textContent = failed;
+        document.getElementById('sec-stat-unique-ips').textContent = ips.length;
+        const threatBadge = document.getElementById('threat-level-badge');
+        const warningTotal = rows.filter(function (r) { return r.severity === 'warning' || r.severity === 'critical'; }).length;
+        const level = warningTotal >= 10 ? 'high' : warningTotal >= 3 ? 'medium' : 'low';
+        threatBadge.className = 'threat-level ' + level;
+        threatBadge.textContent = 'Threat Level: ' + level.charAt(0).toUpperCase() + level.slice(1);
+        const ipList = document.getElementById('ip-watchlist');
+        renderList(ipList, ips, function (entry) {
+          return '<div class="data-item"><strong><span class="ip-badge">' + escapeHtml(entry.ip_address || 'Unavailable') + '</span></strong>'
+            + (entry.warnings ? ' <span class="vault-self-badge threat">' + entry.warnings + ' warning' + (entry.warnings === 1 ? '' : 's') + '</span>' : '')
+            + '<div class="data-meta">' + entry.count + ' requests · ' + escapeHtml((entry.events || []).join(', ')) + '</div>'
+            + '<div class="data-meta">Accounts/attempts: ' + escapeHtml((entry.emails || []).join(', ') || 'Unknown') + '</div></div>';
+        }, 'No IP telemetry has been captured yet.');
       }
 
       async function countEvent(eventType, sinceIso) {
@@ -1269,7 +1335,7 @@
       }
 
       // ----- Desktop persistent notifications + Message Center -----
-      var notifState = { feedback: 0, inquiries: 0, security: 0, messages: 0 };
+      var notifState = { feedback: 0, inquiries: 0, security: 0, messages: 0, serviceRequests: 0 };
       var notifBadges = {
         feedback: document.getElementById('notif-feedback-badge'),
         inquiries: document.getElementById('notif-inquiry-badge'),
@@ -1353,6 +1419,24 @@
               }
               notifState.feedback = fCount;
               updateNotifBadge('feedback', fCount);
+            }
+          } catch (e) { /* silent */ }
+
+          // Poll private service request queue
+          try {
+            var requestResp = await sb.from('service_requests')
+              .select('*', { count: 'exact', head: true })
+              .eq('status', 'new');
+            if (!requestResp.error) {
+              var requestCount = requestResp.count || 0;
+              if (requestCount > notifState.serviceRequests && notifState.serviceRequests >= 0) {
+                showDesktopNotification(
+                  'Avery Logic Works — New Service Request',
+                  (requestCount - notifState.serviceRequests) + ' new private build request' + ((requestCount - notifState.serviceRequests) === 1 ? '' : 's') + ' received.',
+                  'service-request'
+                );
+              }
+              notifState.serviceRequests = requestCount;
             }
           } catch (e) { /* silent */ }
 
@@ -1493,7 +1577,8 @@
           var session = sessionData?.data?.session;
           var insertData = {
             sender_email: session?.user?.email || 'owner',
-            recipient_email: recipientEmail,
+            recipient_user_id: recipientEmail,
+            recipient_email: null,
             audience: audience,
             subject: subject,
             body: body
@@ -1521,7 +1606,8 @@
             var rows = targets.map(function (u) {
               return {
                 sender_email: session?.user?.email || 'owner',
-                recipient_email: u.user_id,
+                recipient_user_id: u.user_id,
+                recipient_email: null,
                 audience: 'individual',
                 subject: subject,
                 body: body
@@ -1586,9 +1672,9 @@
       async function loadUserDirectory() {
         if (!sb) return;
         try {
-          var profResp = await sb.from('profiles')
-            .select('user_id,display_name,created_at,newsletter_opt_in,supporter_updates_opt_in')
-            .order('created_at', { ascending: false }).limit(500);
+          var profResp = await sb.from('user_operator_profiles')
+            .select('*')
+            .order('account_created_at', { ascending: false }).limit(1000);
           if (profResp.error) throw profResp.error;
           allUserData = profResp.data || [];
           renderUserDirectory();
@@ -1610,8 +1696,11 @@
           if (filter === 'supporter' && !u.supporter_updates_opt_in) return false;
           if (filter === 'recent') {
             var thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
-            if (!u.created_at || new Date(u.created_at).getTime() < thirtyDaysAgo) return false;
+            if (!u.account_created_at || new Date(u.account_created_at).getTime() < thirtyDaysAgo) return false;
           }
+          if (filter === 'unconfirmed' && u.email_confirmed_at) return false;
+          if (filter === 'attention' && !u.needs_attention && u.support_status !== 'waiting') return false;
+          if (filter === 'review' && u.risk_level === 'normal') return false;
           return true;
         });
         var list = document.getElementById('user-directory-list');
@@ -1619,14 +1708,49 @@
         if (!users.length) { list.innerHTML = '<div class="empty-state">No users match this filter.</div>'; return; }
         list.innerHTML = users.map(function (u) {
           var who = classifyVisitor(u.email || '');
-          var dateStr = u.created_at ? new Date(u.created_at).toLocaleString() : 'No timestamp';
+          var dateStr = u.account_created_at ? new Date(u.account_created_at).toLocaleString() : 'No timestamp';
           var nl = u.newsletter_opt_in ? '<span class="tag alt" style="font-size:.7rem;padding:2px 8px;">Newsletter</span>' : '';
           var sup = u.supporter_updates_opt_in ? '<span class="tag warm" style="font-size:.7rem;padding:2px 8px;">Supporter</span>' : '';
-          return '<div class="data-item"><strong>' + escapeHtml(u.display_name || 'Unknown') + ' <span class="vault-self-badge ' + who.cls + '">' + who.label + '</span></strong>'
-            + '<div class="data-meta">' + escapeHtml(u.email || u.user_id || 'No email') + ' &middot; ' + escapeHtml(dateStr) + '</div>'
-            + '<div class="data-meta">' + nl + ' ' + sup + '</div></div>';
+          return '<div class="data-item" data-user-card="' + escapeHtml(u.user_id) + '"><strong>' + escapeHtml(u.display_name || 'Unknown') + ' <span class="vault-self-badge ' + who.cls + '">' + who.label + '</span></strong>'
+            + '<div class="data-meta">' + escapeHtml(u.email || 'No email') + ' &middot; Joined ' + escapeHtml(dateStr)
+            + ' &middot; ' + (u.email_confirmed_at ? 'Email confirmed' : 'EMAIL UNCONFIRMED') + '</div>'
+            + '<div class="data-meta">Last sign-in: ' + escapeHtml(u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleString() : 'Never')
+            + ' · Last IP: <span class="ip-badge">' + escapeHtml(u.last_seen_ip || 'Unavailable') + '</span></div>'
+            + '<div class="data-meta">Browser: ' + escapeHtml(u.last_user_agent || 'Unavailable') + '</div>'
+            + '<div class="data-meta">Logins: ' + Number(u.login_count || 0) + ' · Recorded events: ' + Number(u.event_count || 0) + ' · ' + nl + ' ' + sup + '</div>'
+            + '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:10px;">'
+            + '<label class="small-note">Risk<select data-user-risk><option value="normal"' + (u.risk_level === 'normal' ? ' selected' : '') + '>Normal</option><option value="review"' + (u.risk_level === 'review' ? ' selected' : '') + '>Review</option><option value="restricted"' + (u.risk_level === 'restricted' ? ' selected' : '') + '>Restricted</option></select></label>'
+            + '<label class="small-note">Support<select data-user-support><option value="none"' + (u.support_status === 'none' ? ' selected' : '') + '>None</option><option value="waiting"' + (u.support_status === 'waiting' ? ' selected' : '') + '>Waiting</option><option value="in_progress"' + (u.support_status === 'in_progress' ? ' selected' : '') + '>In progress</option><option value="resolved"' + (u.support_status === 'resolved' ? ' selected' : '') + '>Resolved</option></select></label>'
+            + '<label class="small-note" style="display:flex;align-items:center;gap:6px;"><input type="checkbox" data-user-attention' + (u.needs_attention ? ' checked' : '') + '> Needs attention</label></div>'
+            + '<textarea data-user-note maxlength="4000" placeholder="Private owner note" style="width:100%;min-height:64px;margin-top:8px;">' + escapeHtml(u.owner_note || '') + '</textarea>'
+            + '<button class="quick-action" data-save-user="' + escapeHtml(u.user_id) + '" style="margin-top:8px;">Save operator details</button></div>';
         }).join('');
       }
+
+      document.getElementById('user-directory-list')?.addEventListener('click', async function (event) {
+        const button = event.target.closest('[data-save-user]');
+        if (!button || !sb) return;
+        const card = button.closest('[data-user-card]');
+        button.disabled = true; button.textContent = 'Saving…';
+        const { error } = await sb.from('user_operator_profiles').update({
+          risk_level: card.querySelector('[data-user-risk]').value,
+          support_status: card.querySelector('[data-user-support]').value,
+          needs_attention: card.querySelector('[data-user-attention]').checked,
+          owner_note: card.querySelector('[data-user-note]').value.trim()
+        }).eq('user_id', button.getAttribute('data-save-user'));
+        button.disabled = false; button.textContent = error ? 'Save failed' : 'Saved';
+        if (!error) setTimeout(function () { button.textContent = 'Save operator details'; }, 1200);
+      });
+
+      serviceRequestList?.addEventListener('click', async function (event) {
+        const button = event.target.closest('[data-save-request]');
+        if (!button || !sb) return;
+        const requestId = button.getAttribute('data-save-request');
+        const select = serviceRequestList.querySelector('[data-request-status="' + requestId + '"]');
+        button.disabled = true; button.textContent = 'Saving…';
+        const { error } = await sb.from('service_requests').update({ status: select.value }).eq('request_id', requestId);
+        button.disabled = false; button.textContent = error ? 'Save failed' : 'Saved';
+      });
       var userSearchInput = document.getElementById('user-search-input');
       var userFilterSelect = document.getElementById('user-filter-select');
       if (userSearchInput) userSearchInput.addEventListener('input', renderUserDirectory);
@@ -1828,7 +1952,13 @@
 
       // ─── Security button wiring ──────────────────────────────────────
       var btnRefreshSec = document.getElementById('btn-refresh-security');
-      if (btnRefreshSec) btnRefreshSec.addEventListener('click', loadSecurityEvents);
+      if (btnRefreshSec) btnRefreshSec.addEventListener('click', async function () {
+        const session = (await sb.auth.getSession())?.data?.session;
+        if (!session) return;
+        btnRefreshSec.disabled = true;
+        try { applyVaultSummary(await loadVaultSummary(vaultBuildId?.textContent || 'unknown', session)); }
+        finally { btnRefreshSec.disabled = false; }
+      });
       var btnExportSec = document.getElementById('btn-export-security');
       if (btnExportSec) btnExportSec.addEventListener('click', function () {
         var content = securityEventList ? securityEventList.textContent : 'No security events';
@@ -1851,7 +1981,6 @@
           settleAdminLists();
           loadEnterpriseInquiries();
           loadOwnerInbox();
-          loadSecurityEvents();
           startNotificationPolling();
           setMessage(adminStatus, 'Owner session confirmed. Snapshot: profiles ' + snapshotProfiles.textContent + ', visits ' + snapshotVisits.textContent + ', logins ' + snapshotLogins.textContent + ', signups ' + snapshotSignups.textContent + '. Loaded through the owner vault service.', 'info');
           return;

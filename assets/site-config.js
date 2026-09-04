@@ -18,7 +18,9 @@ window.AVERY_CONFIG = {
   supabase: {
     url: 'https://esoiezxddkqlmvsgscqw.supabase.co',
     publishableKey: 'sb_publishable_TYosyp9VRS1S2DEXpNi8eQ_bhMTSFqO',
-    trialKeyEdgeFunction: 'https://esoiezxddkqlmvsgscqw.supabase.co/functions/v1/generate-trial-key'
+    trialKeyEdgeFunction: 'https://esoiezxddkqlmvsgscqw.supabase.co/functions/v1/generate-trial-key',
+    telemetryEdgeFunction: 'https://esoiezxddkqlmvsgscqw.supabase.co/functions/v1/site-telemetry',
+    serviceRequestEdgeFunction: 'https://esoiezxddkqlmvsgscqw.supabase.co/functions/v1/service-request-notify'
   },
   emailOctopus: {
     enabled: true,

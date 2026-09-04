@@ -80,13 +80,9 @@
       const promoField = document.getElementById('promoCode');
       const promoMessage = document.getElementById('promoMessage');
       const applyPromoButton = document.getElementById('applyPromoButton');
-      let sb = null;
       let promoApplied = false;
 
       document.querySelectorAll('[data-current-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
-      if (window.supabase && supabaseCfg.url && supabaseCfg.publishableKey) {
-        sb = window.supabase.createClient(supabaseCfg.url, supabaseCfg.publishableKey, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
-      }
 
       const normalLinks = {
         starter: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=20&item_name=Starter+Build&currency_code=USD',
@@ -138,22 +134,33 @@
       form.addEventListener('submit', async function (event) {
         event.preventDefault();
         if (!form.reportValidity()) return;
-        if (!sb) { setMessage('Private intake is temporarily unavailable. Please do not complete checkout until this is fixed.', 'error'); return; }
+        if (!supabaseCfg.serviceRequestEdgeFunction) { setMessage('Private intake is temporarily unavailable. Please do not complete checkout until this is fixed.', 'error'); return; }
         submitButton.disabled = true;
         const customerName = document.getElementById('customerName').value.trim();
         const customerEmail = document.getElementById('customerEmail').value.trim();
         const subject = subjectField.value.trim() || selectedService.subject;
         const details = detailsField.value.trim();
-        const requestId = 'svc_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
         const checkoutUrl = promoApplied ? promoLinks[selectedKey] : normalLinks[selectedKey];
-        const promoMeta = promoApplied ? { code: 'BACK25', percent_off: 25, new_customers_only: true, applies_to: 'one purchase of any one product' } : null;
         try {
-          const { error } = await sb.from('site_events').insert({ event_type: 'service_request_submitted', page_path: window.location.pathname || '/service-intake.html', visitor_token: getVisitorToken(), user_email: customerEmail, metadata: { request_id: requestId, tier_key: selectedKey, tier_label: selectedService.label, tier_price: selectedService.price, promo_price: promoApplied ? selectedService.promoPrice : null, checkout_url: checkoutUrl, promo: promoMeta, customer_name: customerName, customer_email: customerEmail, subject: subject, details: details, submitted_at: new Date().toISOString(), source: 'service-intake.html' } });
-          if (error) throw error;
-          await sb.from('site_events').insert({ event_type: 'service_checkout_opened', page_path: window.location.pathname || '/service-intake.html', visitor_token: getVisitorToken(), user_email: customerEmail, metadata: { request_id: requestId, tier_key: selectedKey, tier_label: selectedService.label, checkout_url: checkoutUrl, promo: promoMeta, source: 'service-intake.html' } });
+          const response = await fetch(supabaseCfg.serviceRequestEdgeFunction, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'apikey': supabaseCfg.publishableKey || '' },
+            body: JSON.stringify({ customer_name: customerName, customer_email: customerEmail, subject: subject,
+              details: details, tier_key: selectedKey, promo_code: promoApplied ? 'BACK25' : null,
+              visitor_token: getVisitorToken() })
+          });
+          const result = await response.json().catch(function () { return {}; });
+          if (!response.ok || !result.ok) throw new Error(result.error || 'Private intake failed.');
           form.reset(); subjectField.value = selectedService.subject; detailsField.value = selectedService.prompt; promoApplied = false;
-          setMessage('Your request has been received privately as ' + requestId + '. The payment page should now be opening.', 'info');
+          setMessage('Your request has been received privately as ' + result.request_id + '. The payment page should now be opening.', 'info');
           window.open(checkoutUrl, '_blank', 'noopener,noreferrer');
+          if (supabaseCfg.telemetryEdgeFunction) {
+            fetch(supabaseCfg.telemetryEdgeFunction, { method: 'POST', keepalive: true,
+              headers: { 'Content-Type': 'application/json', 'apikey': supabaseCfg.publishableKey || '' },
+              body: JSON.stringify({ event_type: 'service_checkout_opened', page_path: window.location.pathname || '/service-intake.html',
+                visitor_token: getVisitorToken(), metadata: { request_id: result.request_id, tier_key: selectedKey } })
+            }).catch(function () {});
+          }
         } catch (err) {
           setMessage('Your request could not be saved privately right now, so please do not treat checkout as complete yet. Try again before paying so the founder actually receives the build details.', 'error');
         } finally { submitButton.disabled = false; }
