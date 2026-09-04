@@ -316,6 +316,36 @@
     });
   }
 
+
+  function productPriceLabel(product) {
+    const amount = new Intl.NumberFormat(undefined, { style: 'currency', currency: product.currency || 'USD', maximumFractionDigits: 2 }).format(Number(product.price_cents || 0) / 100);
+    const billing = product.billing_model === 'one_time' ? 'one-time' : product.billing_model === 'monthly' ? 'monthly' : product.billing_model === 'yearly' ? 'yearly' : product.billing_model === 'free' ? 'free' : product.billing_model;
+    return product.billing_model === 'free' ? 'Free' : amount + (billing ? ' · ' + billing : '');
+  }
+
+  function applyManagedProducts(products) {
+    const map = new Map((products || []).map((product) => [product.slug, product]));
+    document.querySelectorAll('[data-managed-product]').forEach((root) => {
+      const product = map.get(root.getAttribute('data-managed-product'));
+      const visible = !!product && product.published && (product.status === 'live' || product.status === 'trial');
+      root.hidden = !visible;
+      if (!visible) return;
+      root.querySelectorAll('[data-product-name]').forEach((node) => { node.textContent = product.product_name; });
+      root.querySelectorAll('[data-product-summary]').forEach((node) => { node.textContent = product.short_description; });
+      root.querySelectorAll('[data-product-price]').forEach((node) => { node.textContent = productPriceLabel(product); });
+      root.querySelectorAll('[data-product-trial]').forEach((node) => {
+        node.textContent = Number(product.trial_days || 0) > 0 ? 'Free ' + Number(product.trial_days) + '-day trial' : (product.status === 'live' ? 'Available now' : product.status);
+      });
+      root.querySelectorAll('[data-product-info-url]').forEach((node) => { if (product.info_url) node.setAttribute('href', product.info_url); });
+      root.querySelectorAll('[data-product-purchase-url]').forEach((node) => { if (product.purchase_url) node.setAttribute('href', product.purchase_url); });
+      root.querySelectorAll('[data-product-download-url]').forEach((node) => {
+        if (!product.download_url) return;
+        if (node instanceof HTMLAnchorElement) node.setAttribute('href', product.download_url);
+        else node.setAttribute('data-managed-download-url', product.download_url);
+      });
+    });
+  }
+
   async function initializeManagedSite() {
     if (!sb) { maybeTrackVisit(); return; }
     try {
@@ -328,6 +358,10 @@
       }
       const contentResponse = await sb.from('managed_page_content').select('selector,property,value,published').eq('page_path', currentManagedPath()).eq('published', true);
       if (!contentResponse.error) (contentResponse.data || []).forEach(applyManagedValue);
+      if (document.querySelector('[data-managed-product]')) {
+        const productsResponse = await sb.from('product_catalog').select('slug,product_name,short_description,status,published,price_cents,currency,billing_model,trial_days,info_url,purchase_url,download_url');
+        if (!productsResponse.error) applyManagedProducts(productsResponse.data || []);
+      }
     } catch (error) {
       console.debug('managed site settings unavailable', error?.message || error);
     }
