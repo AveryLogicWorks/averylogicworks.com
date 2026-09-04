@@ -141,8 +141,10 @@
     return { ok: true, value: name };
   }
 
+  let analyticsEnabled = true;
+
   async function trackEvent(eventType, payload) {
-    if (!eventType || !supabaseCfg.telemetryEdgeFunction) return;
+    if (!analyticsEnabled || !eventType || !supabaseCfg.telemetryEdgeFunction) return;
     try {
       const sessionData = sb ? await sb.auth.getSession() : null;
       const session = sessionData?.data?.session || null;
@@ -177,6 +179,160 @@
       localStorage.setItem(key, token);
     }
     return token;
+  }
+
+
+  function currentManagedPath() {
+    const part = String(window.location.pathname || '/').split('/').filter(Boolean).pop();
+    return part || 'index.html';
+  }
+
+  function applyManagedValue(row) {
+    if (!row || !row.selector) return;
+    let nodes;
+    try { nodes = document.querySelectorAll(row.selector); } catch (_) { return; }
+    nodes.forEach((node) => {
+      if (row.property === 'text') node.textContent = row.value || '';
+      if (row.property === 'href' && node instanceof HTMLAnchorElement) node.setAttribute('href', row.value || '#');
+      if (row.property === 'src' && (node instanceof HTMLImageElement || node instanceof HTMLSourceElement)) node.setAttribute('src', row.value || '');
+      if (row.property === 'hidden') node.hidden = String(row.value).toLowerCase() === 'true';
+    });
+  }
+
+  function showManagedBanner(setting) {
+    if (!setting || !setting.enabled || !setting.message) return;
+    const banner = document.createElement('div');
+    banner.className = 'alw-managed-banner alw-managed-banner-' + String(setting.tone || 'info');
+    banner.setAttribute('role', setting.tone === 'critical' ? 'alert' : 'status');
+    banner.textContent = setting.message;
+    banner.style.cssText = 'padding:12px 18px;text-align:center;font-weight:800;border-bottom:1px solid rgba(255,255,255,.18);background:#14304d;color:#fff;';
+    if (setting.tone === 'warning') banner.style.background = '#6b4c09';
+    if (setting.tone === 'critical') banner.style.background = '#7a2420';
+    if (setting.tone === 'success') banner.style.background = '#175b34';
+    document.body.insertBefore(banner, document.body.firstChild);
+  }
+
+  function showMaintenance(setting) {
+    if (!setting || !setting.enabled || currentManagedPath() === 'vault-m7q4k2.html') return;
+    const main = document.querySelector('main');
+    if (!main) return;
+    main.innerHTML = '<section class="page-hero"><div class="container"><div class="form-shell" style="max-width:760px;margin:0 auto;text-align:center;"><span class="tag warm">Maintenance</span><h1>We will be right back.</h1><p class="muted" id="alw-maintenance-message"></p><p class="small-note">Customer data and account access remain protected while maintenance is active.</p></div></div></section>';
+    const message = document.getElementById('alw-maintenance-message');
+    if (message) message.textContent = setting.message || 'Avery Logic Works is temporarily undergoing maintenance.';
+  }
+
+  function cssEscape(value) {
+    if (window.CSS && typeof window.CSS.escape === 'function') return window.CSS.escape(value);
+    return String(value).replace(/[^a-zA-Z0-9_-]/g, (char) => '\\' + char);
+  }
+
+  function stableSelector(element) {
+    if (element.id) return '#' + cssEscape(element.id);
+    const contentKey = element.getAttribute('data-content-key');
+    if (contentKey) return '[data-content-key="' + cssEscape(contentKey) + '"]';
+    const parts = [];
+    let node = element;
+    while (node && node !== document.body && parts.length < 7) {
+      let part = node.tagName.toLowerCase();
+      if (node.classList && node.classList.length) {
+        const usable = Array.from(node.classList).find((name) => !name.startsWith('alw-vault-'));
+        if (usable) part += '.' + cssEscape(usable);
+      }
+      const parent = node.parentElement;
+      if (parent) {
+        const same = Array.from(parent.children).filter((child) => child.tagName === node.tagName);
+        if (same.length > 1) part += ':nth-of-type(' + (same.indexOf(node) + 1) + ')';
+      }
+      parts.unshift(part);
+      node = parent;
+    }
+    return parts.join(' > ');
+  }
+
+  function editorProperty(element) {
+    if (element instanceof HTMLAnchorElement) return 'href';
+    if (element instanceof HTMLImageElement || element instanceof HTMLSourceElement) return 'src';
+    return 'text';
+  }
+
+  async function enableOwnerVisualEditor() {
+    if (new URLSearchParams(window.location.search).get('vault-editor') !== '1' || !sb) return;
+    try {
+      const session = (await sb.auth.getSession())?.data?.session;
+      if (!session) return;
+      const allowed = await sb.from('site_admins').select('email').limit(1);
+      if (allowed.error || !allowed.data?.length) return;
+    } catch (_) { return; }
+
+    const style = document.createElement('style');
+    style.textContent = '.alw-vault-edit-mode *{cursor:crosshair!important}.alw-vault-edit-mode [data-alw-edit-hover]{outline:3px solid #58a6ff!important;outline-offset:3px!important}.alw-vault-editor-note{position:fixed;z-index:2147483647;left:16px;right:16px;bottom:16px;padding:12px 16px;border-radius:12px;background:#0d2842;color:#fff;border:1px solid #58a6ff;font-weight:800;text-align:center;box-shadow:0 12px 35px rgba(0,0,0,.45)}';
+    document.head.appendChild(style);
+    let editing = false;
+    let hovered = null;
+    const note = document.createElement('div');
+    note.className = 'alw-vault-editor-note';
+    note.hidden = true;
+    note.textContent = 'Click an element to send it to the Vault editor. Press Escape to stop.';
+    document.body.appendChild(note);
+
+    window.addEventListener('message', (event) => {
+      if (event.origin !== window.location.origin || !event.data) return;
+      if (event.data.type === 'alw-vault-editor-start') {
+        editing = true; note.hidden = false; document.documentElement.classList.add('alw-vault-edit-mode');
+      }
+      if (event.data.type === 'alw-vault-editor-preview') applyManagedValue(event.data);
+    });
+
+    document.addEventListener('mouseover', (event) => {
+      if (!editing || event.target === note) return;
+      if (hovered) hovered.removeAttribute('data-alw-edit-hover');
+      hovered = event.target;
+      hovered.setAttribute('data-alw-edit-hover', 'true');
+    }, true);
+
+    document.addEventListener('click', (event) => {
+      if (!editing || event.target === note) return;
+      event.preventDefault(); event.stopPropagation();
+      const element = event.target;
+      const property = editorProperty(element);
+      const value = property === 'text' ? element.textContent.trim() : (element.getAttribute(property) || '');
+      const label = (element.getAttribute('aria-label') || element.textContent || element.getAttribute('alt') || element.tagName).trim().slice(0, 100);
+      window.parent.postMessage({
+        type: 'alw-vault-editor-selection',
+        selector: stableSelector(element),
+        property: property,
+        value: value,
+        label: label || 'Page content'
+      }, window.location.origin);
+      editing = false; note.hidden = true; document.documentElement.classList.remove('alw-vault-edit-mode');
+      if (hovered) hovered.removeAttribute('data-alw-edit-hover');
+    }, true);
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        editing = false; note.hidden = true; document.documentElement.classList.remove('alw-vault-edit-mode');
+        if (hovered) hovered.removeAttribute('data-alw-edit-hover');
+      }
+    });
+  }
+
+  async function initializeManagedSite() {
+    if (!sb) { maybeTrackVisit(); return; }
+    try {
+      const settingsResponse = await sb.from('platform_settings').select('key,value').in('key', ['site_banner', 'maintenance_mode', 'analytics']);
+      if (!settingsResponse.error) {
+        const settings = Object.fromEntries((settingsResponse.data || []).map((row) => [row.key, row.value || {}]));
+        analyticsEnabled = settings.analytics?.enabled !== false;
+        showManagedBanner(settings.site_banner);
+        showMaintenance(settings.maintenance_mode);
+      }
+      const contentResponse = await sb.from('managed_page_content').select('selector,property,value,published').eq('page_path', currentManagedPath()).eq('published', true);
+      if (!contentResponse.error) (contentResponse.data || []).forEach(applyManagedValue);
+    } catch (error) {
+      console.debug('managed site settings unavailable', error?.message || error);
+    }
+    await enableOwnerVisualEditor();
+    initializeManagedSite();
   }
 
   function maybeTrackVisit() {
