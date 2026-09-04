@@ -406,6 +406,25 @@
       });
     });
   });
+
+  document.querySelectorAll('[data-track-view]').forEach((el) => {
+    const eventType = el.getAttribute('data-track-view');
+    const key = 'alw-view:' + window.location.pathname + ':' + eventType;
+    let alreadySeen = false;
+    try { alreadySeen = window.sessionStorage.getItem(key) === '1'; } catch (e) { /* unavailable */ }
+    if (alreadySeen || !eventType) return;
+    const recordView = () => {
+      try { window.sessionStorage.setItem(key, '1'); } catch (e) { /* unavailable */ }
+      trackEvent(eventType, { label: (el.querySelector('h1,h2,h3')?.textContent || '').trim().slice(0, 160) });
+    };
+    if (!('IntersectionObserver' in window)) { recordView(); return; }
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.4)) return;
+      observer.disconnect();
+      recordView();
+    }, { threshold: [0.4] });
+    observer.observe(el);
+  });
   hydrateRememberToggles();
   hydratePasswordToggles();
   applyActiveNavState();

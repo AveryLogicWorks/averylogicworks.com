@@ -68,7 +68,8 @@ Deno.serve(async (req: Request) => {
       const { count, error } = await q; if (error) throw error; return count || 0;
     };
     const clickNames = ["homepage_visit", "homepage_service_cta_click", "homepage_donation_click", "homepage_signup_click",
-      "homepage_signin_click", "homepage_founder_cta_click", "homepage_support_cta_click", "homepage_fit_cta_click"];
+      "homepage_signin_click", "homepage_founder_cta_click", "homepage_support_cta_click", "homepage_fit_cta_click",
+      "speakeasy_section_view", "speakeasy_info_click", "speakeasy_trial_download", "speakeasy_purchase_click"];
     const [visits24h, visits30d, visitsAll, logins30d, loginsAll, signups30d, signupsAll, clickPairs, checkoutOpens] = await Promise.all([
       eventCount("page_visit", since(1)), eventCount("page_visit", since(30)), eventCount("page_visit"),
       eventCount("login_success", since(30)), eventCount("login_success"), eventCount("signup_submitted", since(30)), eventCount("signup_submitted"),
