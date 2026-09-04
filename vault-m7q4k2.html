@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/site.css">
+  <link rel="stylesheet" href="assets/site.css">\n  <link rel="stylesheet" href="assets/vault-command-center.css">
   <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('alw-theme')||'dark')</script>
   <meta name="description" content="This page is unavailable.">
   <title>Operator Vault | Avery Logic Works</title>
@@ -194,11 +194,11 @@
             <div class="snapshot-item"><strong id="snapshot-logins">0</strong><span>Total logins</span></div>
             <div class="snapshot-item"><strong id="snapshot-signups">0</strong><span>Total signups</span></div>
           </div>
-          <p class="small-note">Vault build: <strong id="vault-build-id">2026-07-04-1</strong></p>
+          <p class="small-note">Vault build: <strong id="vault-build-id">2026-09-04-enterprise-command-center</strong></p>
         </div>
 
         <div class="vault-tabs" id="vault-tab-bar">
-          <button class="vault-tab active" data-tab="dashboard">Dashboard</button>
+          <button class="vault-tab active" data-tab="dashboard">Dashboard</button>\n          <button class="vault-tab" data-tab="command">Command Center</button>
           <button class="vault-tab" data-tab="security">Security <span class="tab-badge zero" id="tab-badge-security">0</span></button>
           <button class="vault-tab" data-tab="users">Users</button>
           <button class="vault-tab" data-tab="revenue">Revenue</button>
@@ -309,7 +309,199 @@
           </div>
         </div>
 
-        <div class="vault-section" id="section-security">
+
+        <div class="vault-section" id="section-command">
+          <div class="command-center-shell">
+            <div class="form-shell command-center-hero">
+              <div>
+                <span class="tag warm">No-code owner operating system</span>
+                <h3>Enterprise Command Center</h3>
+                <p class="muted">Change the public website, manage every product, run bulk account operations, control site-wide behavior, investigate records, export data, and recover earlier content without writing code.</p>
+                <div class="command-search-wrap">
+                  <div class="command-center-search">
+                    <input id="command-global-search" type="search" placeholder="Find a page, product, user, or incident…">
+                    <button class="button secondary small" id="command-refresh-all" type="button">Refresh everything</button>
+                  </div>
+                  <div class="search-results" id="command-search-results"></div>
+                </div>
+                <div class="command-status" id="command-center-status">Open this panel to load owner tools.</div>
+              </div>
+              <div class="command-warning"><strong>Protected changes.</strong> Public edits support text, links, images, and visibility—never arbitrary executable code. Every owner change is recorded, and page edits keep revision history.</div>
+            </div>
+
+            <div class="command-kpis">
+              <div class="command-kpi"><strong id="command-kpi-pages">0</strong><span>Managed pages</span></div>
+              <div class="command-kpi"><strong id="command-kpi-products">0</strong><span>Live products</span></div>
+              <div class="command-kpi"><strong id="command-kpi-drafts">0</strong><span>Unpublished drafts</span></div>
+              <div class="command-kpi"><strong id="command-kpi-incidents">0</strong><span>Open incidents</span></div>
+            </div>
+
+            <div class="command-subnav" aria-label="Command center tools">
+              <button class="command-subtab active" data-command-subtab="website" type="button">Website Editor</button>
+              <button class="command-subtab" data-command-subtab="products" type="button">Products</button>
+              <button class="command-subtab" data-command-subtab="people" type="button">Bulk User Tools</button>
+              <button class="command-subtab" data-command-subtab="site" type="button">Site Controls</button>
+              <button class="command-subtab" data-command-subtab="operations" type="button">Operations</button>
+              <button class="command-subtab" data-command-subtab="data" type="button">Data &amp; Exports</button>
+              <button class="command-subtab" data-command-subtab="history" type="button">Change History</button>
+            </div>
+
+            <div class="command-panel active" id="command-panel-website">
+              <div class="form-shell">
+                <span class="tag alt">Visual page editor</span>
+                <h3>Click what you want to change</h3>
+                <p class="small-note">Choose a page, load the preview, start click-to-edit, then click the text, link, image, or section you want. Save it privately as a draft or publish it immediately.</p>
+                <div class="command-actions">
+                  <select id="command-page-select" style="min-width:260px;"></select>
+                  <button class="button secondary small" id="command-load-preview" type="button">Load preview</button>
+                  <button class="button primary small" id="command-start-picker" type="button">Start click-to-edit</button>
+                </div>
+              </div>
+              <div class="editor-workspace">
+                <div class="editor-preview"><iframe id="command-page-frame" title="Website page preview"></iframe></div>
+                <div class="command-card editor-inspector">
+                  <h4>Selected content</h4>
+                  <div class="command-form">
+                    <div class="command-field"><span>Friendly name</span><input id="command-content-label" type="text" placeholder="Example: Homepage headline"></div>
+                    <div class="command-field"><span>Change type</span><select id="command-content-property"><option value="text">Text</option><option value="href">Link destination</option><option value="src">Image source</option><option value="hidden">Show or hide</option></select></div>
+                    <div class="command-field"><span>New value</span><textarea id="command-content-value" rows="7" placeholder="Type the new text or destination here…"></textarea></div>
+                    <input id="command-content-selector" type="hidden">
+                    <div class="command-actions">
+                      <button class="button ghost small" id="command-preview-change" type="button">Preview change</button>
+                      <button class="button secondary small" id="command-save-draft" type="button">Save draft</button>
+                      <button class="button primary small" id="command-publish-change" type="button">Publish now</button>
+                    </div>
+                    <div class="command-status" id="command-editor-status">Load a page to begin.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="command-grid">
+                <div class="command-card"><h4>Changes on this page</h4><div class="command-list" id="command-page-change-list"><div class="editor-empty">Choose a page.</div></div></div>
+                <div class="command-card"><h4>Earlier versions</h4><div class="command-list" id="command-revision-list"><div class="editor-empty">Choose History beside a saved change.</div></div></div>
+              </div>
+            </div>
+
+            <div class="command-panel" id="command-panel-products">
+              <div class="command-grid">
+                <div class="command-card">
+                  <div class="command-row-head"><div><span class="tag">Product catalog</span><h4>Everything you sell or offer</h4></div><button class="button secondary small" id="command-new-product" type="button">Add product</button></div>
+                  <p class="small-note">Command Nexus, Speakeasy, and QuadraHydra are managed here as first-class products.</p>
+                  <div class="command-list" id="command-product-list"><div class="editor-empty">Loading products…</div></div>
+                </div>
+                <div class="command-card">
+                  <h4>Product editor</h4>
+                  <div class="command-form command-form-grid">
+                    <div class="command-field"><span>Product name</span><input id="product-product-name" type="text"></div>
+                    <div class="command-field"><span>Short ID</span><input id="product-slug" type="text" placeholder="product-name"></div>
+                    <div class="command-field full"><span>Short description</span><textarea id="product-short-description" rows="2"></textarea></div>
+                    <div class="command-field full"><span>Full description</span><textarea id="product-full-description" rows="4"></textarea></div>
+                    <div class="command-field"><span>Status</span><select id="product-status"><option value="draft">Draft</option><option value="trial">Trial available</option><option value="live">Live</option><option value="paused">Paused</option><option value="retired">Retired</option></select></div>
+                    <div class="command-field"><span>Price</span><input id="product-price" type="number" min="0" step="0.01"></div>
+                    <div class="command-field"><span>Currency</span><input id="product-currency" value="USD" maxlength="3"></div>
+                    <div class="command-field"><span>Billing</span><select id="product-billing-model"><option value="free">Free</option><option value="one_time">One-time</option><option value="monthly">Monthly</option><option value="yearly">Yearly</option><option value="custom">Custom</option></select></div>
+                    <div class="command-field"><span>Trial days</span><input id="product-trial-days" type="number" min="0"></div>
+                    <div class="command-field"><span>Version</span><input id="product-version" type="text"></div>
+                    <div class="command-field"><span>Release channel</span><select id="product-release-channel"><option value="alpha">Alpha</option><option value="beta">Beta</option><option value="stable">Stable</option><option value="legacy">Legacy</option></select></div>
+                    <div class="command-field full"><span>Information page</span><input id="product-info-url" type="text"></div>
+                    <div class="command-field full"><span>Purchase page or checkout</span><input id="product-purchase-url" type="text"></div>
+                    <div class="command-field full"><span>Download link</span><input id="product-download-url" type="text"></div>
+                    <div class="command-field"><span>Support page</span><input id="product-support-url" type="text" value="support.html"></div>
+                    <div class="command-field"><span>Terms page</span><input id="product-terms-url" type="text" value="terms.html"></div>
+                    <div class="command-field"><span>Privacy page</span><input id="product-privacy-url" type="text" value="privacy.html"></div>
+                    <label class="command-toggle"><input id="product-published" type="checkbox"> Publicly listed</label>
+                    <label class="command-toggle"><input id="product-featured" type="checkbox"> Featured product</label>
+                    <div class="command-actions full"><button class="button primary small" id="command-save-product" type="button">Save product</button><span class="command-status" id="command-product-status">Choose a product or add one.</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="command-panel" id="command-panel-people">
+              <div class="form-shell">
+                <span class="tag warm">Bulk account operations</span>
+                <h3>Update many user records safely</h3>
+                <p class="small-note">Search and select users, then apply only the fields you choose. Blank bulk controls leave that field unchanged.</p>
+                <div class="command-actions"><input id="command-bulk-user-search" type="search" placeholder="Search name or email…" style="flex:1;min-width:220px;"><button class="quick-action" id="command-select-all-users" type="button">Select visible</button><button class="quick-action" id="command-clear-users" type="button">Clear selection</button><span id="command-selected-user-count" class="status-pill">0 selected</span></div>
+                <div class="bulk-controls">
+                  <select id="command-bulk-risk"><option value="">Keep risk level</option><option value="normal">Normal</option><option value="review">Review</option><option value="restricted">Restricted</option></select>
+                  <select id="command-bulk-support"><option value="">Keep support status</option><option value="none">None</option><option value="waiting">Waiting</option><option value="in_progress">In progress</option><option value="resolved">Resolved</option></select>
+                  <select id="command-bulk-attention"><option value="">Keep attention flag</option><option value="true">Needs attention</option><option value="false">Clear attention</option></select>
+                  <button class="button primary small" id="command-apply-bulk-users" type="button">Apply to selected</button>
+                </div>
+                <div class="command-actions"><button class="button secondary small" id="command-export-users" type="button">Export selected users</button><span class="command-status" id="command-bulk-status"></span></div>
+              </div>
+              <div class="command-card"><div class="selection-list" id="command-bulk-user-list"><div class="editor-empty">Loading users…</div></div></div>
+            </div>
+
+            <div class="command-panel" id="command-panel-site">
+              <div class="command-grid">
+                <div class="command-card">
+                  <span class="tag alt">Announcement banner</span><h4>Put one message across the website</h4>
+                  <label class="command-toggle"><input id="setting-banner-enabled" type="checkbox"> Show public banner</label>
+                  <div class="command-field"><span>Message</span><textarea id="setting-banner-message" rows="4"></textarea></div>
+                  <div class="command-field"><span>Tone</span><select id="setting-banner-tone"><option value="info">Information</option><option value="success">Success</option><option value="warning">Warning</option><option value="critical">Critical</option></select></div>
+                </div>
+                <div class="command-card command-danger">
+                  <span class="tag warm">Maintenance mode</span><h4>Temporarily pause the public site</h4>
+                  <label class="command-toggle"><input id="setting-maintenance-enabled" type="checkbox"> Enable maintenance notice</label>
+                  <div class="command-field"><span>Visitor message</span><textarea id="setting-maintenance-message" rows="4"></textarea></div>
+                  <p class="small-note">The owner Vault stays available. Turning this on always requires confirmation.</p>
+                </div>
+                <div class="command-card">
+                  <span class="tag">Privacy control</span><h4>First-party analytics</h4>
+                  <label class="command-toggle"><input id="setting-analytics-enabled" type="checkbox"> Record site visits and approved interaction events</label>
+                  <p class="small-note">Turning this off stops new first-party analytics collection after visitors receive the updated setting.</p>
+                </div>
+                <div class="command-card">
+                  <span class="tag">Apply controls</span><h4>Save site-wide settings</h4>
+                  <button class="button primary" id="command-save-settings" type="button">Save site controls</button>
+                  <div class="command-status" id="command-setting-status"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="command-panel" id="command-panel-operations">
+              <div class="command-grid">
+                <div class="command-card">
+                  <span class="tag warm">Incident desk</span><h4>Record a problem or outage</h4>
+                  <div class="command-field"><span>Title</span><input id="incident-title" type="text"></div>
+                  <div class="command-field"><span>Affected area</span><input id="incident-area" type="text" placeholder="Example: checkout, login, QuadraHydra download"></div>
+                  <div class="command-field"><span>Severity</span><select id="incident-severity"><option value="notice">Notice</option><option value="warning">Warning</option><option value="critical">Critical</option></select></div>
+                  <div class="command-field"><span>What happened</span><textarea id="incident-description" rows="5"></textarea></div>
+                  <button class="button primary small" id="command-create-incident" type="button">Record incident</button><div class="command-status" id="command-incident-status"></div>
+                </div>
+                <div class="command-card"><h4>Operational incidents</h4><div class="command-list" id="command-incident-list"><div class="editor-empty">Loading incidents…</div></div></div>
+              </div>
+            </div>
+
+            <div class="command-panel" id="command-panel-data">
+              <div class="form-shell">
+                <span class="tag alt">Owner data explorer</span><h3>Inspect and export your records</h3>
+                <p class="small-note">Choose a protected dataset. Results are read-only here and limited to 1,000 recent rows per load.</p>
+                <div class="command-actions">
+                  <select id="command-dataset-select">
+                    <option value="users">Users and account operations</option><option value="traffic">Traffic and interaction events</option>
+                    <option value="security">Security events and IPs</option><option value="sales">Payments and purchase audit</option>
+                    <option value="licenses">Trial licenses</option><option value="inquiries">Enterprise inquiries</option>
+                    <option value="requests">Custom service requests</option><option value="products">Product catalog</option>
+                    <option value="content">Website content changes</option><option value="changes">Owner change history</option>
+                    <option value="incidents">Operational incidents</option>
+                  </select>
+                  <button class="button primary small" id="command-load-dataset" type="button">Load data</button>
+                  <button class="button secondary small" id="command-export-dataset" type="button">Export CSV</button>
+                  <span class="command-status" id="command-dataset-status"></span>
+                </div>
+              </div>
+              <div class="dataset-table-wrap"><table class="dataset-table" id="command-dataset-table"><tbody><tr><td>Choose a dataset and load it.</td></tr></tbody></table></div>
+            </div>
+
+            <div class="command-panel" id="command-panel-history">
+              <div class="form-shell"><span class="tag">Owner audit trail</span><h3>Who changed what and when</h3><p class="small-note">Product, page-content, site-control, incident, and bulk-user actions are recorded here.</p></div>
+              <div class="command-card"><div class="command-list" id="command-action-list"><div class="editor-empty">Loading change history…</div></div></div>
+            </div>
+          </div>
+        </div>
+\n        <div class="vault-section" id="section-security">
           <div class="form-shell">
             <span class="tag warm">Security Center</span>
             <h3>Threat assessment and access control</h3>
@@ -538,7 +730,7 @@
             <div class="admin-grid">
               <div class="health-card">
                 <strong>Vault build</strong>
-                <span id="health-build-id">2026-07-04-1</span>
+                <span id="health-build-id">2026-09-04-enterprise-command-center</span>
               </div>
               <div class="health-card">
                 <strong>Site config version</strong>
@@ -2275,7 +2467,7 @@
       if (existing) return;
 
       var vaultNavItems = [
-        { label: 'Dashboard', tab: 'dashboard', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>' },
+        { label: 'Command Center', tab: 'command', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>' },\n        { label: 'Dashboard', tab: 'dashboard', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>' },
         { label: 'Security Center', tab: 'security', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/></svg>' },
         { label: 'User Directory', tab: 'users', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>' },
         { label: 'Revenue', tab: 'revenue', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>' },
