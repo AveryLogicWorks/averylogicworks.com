@@ -71,14 +71,14 @@
     </section>
 
     <section id="speakeasy-purchase" data-managed-product="speakeasy" aria-labelledby="speakeasy-purchase-title">
-      <div class="section-head"><div class="section-label">Try or buy Speakeasy</div><h2 id="speakeasy-purchase-title">Three days free. Then <span id="speakeasy-price-label">$10 one-time</span>.</h2><p class="muted">The free trial needs no card and never charges automatically. Buy the separate unrestricted copy only if Speakeasy works for you.</p></div>
+      <div class="section-head"><div class="section-label">Try or buy Speakeasy</div><h2 id="speakeasy-purchase-title">Three days free. Then <span id="speakeasy-price-label" data-product-price>$10 one-time</span>.</h2><p class="muted">The free trial needs no card and never charges automatically. Buy the separate unrestricted copy only if Speakeasy works for you.</p></div>
       <div style="max-width:560px;margin:0 auto;"><div style="padding:1.5rem;border:1px solid var(--line);border-radius:24px;background:var(--panel);">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;"><div><strong style="font-size:1.3rem;">Speakeasy</strong><p class="soft" style="font-size:.9rem;margin:.25rem 0 0;">Text-to-speech tray reader</p></div><span class="program-price" id="speakeasy-price-pill">$10</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;"><div><strong style="font-size:1.3rem;">Speakeasy</strong><p class="soft" style="font-size:.9rem;margin:.25rem 0 0;">Text-to-speech tray reader</p></div><span class="program-price" id="speakeasy-price-pill" data-product-price>$10</span></div>
         <ul class="program-features" style="margin-bottom:1.25rem;"><li>Free trial with the full Speakeasy features for 72 consecutive hours</li><li>Windows Python launcher with guided first-run package setup</li><li>Uses only SAPI voices already installed in Windows</li></ul>
         <div class="qh-offer" style="margin-bottom:1.25rem;">
           <p><strong>Try it before you buy it.</strong> The clock starts only when you approve <em>Start Trial</em> inside Speakeasy. Closing the program does not pause the 72-hour period.</p>
           <div class="qh-actions">
-            <a class="button" href="downloads/Speakeasy-3-Day-Trial.zip" download data-track-event="speakeasy_trial_download">Download free 3-day trial</a>
+            <a class="button" href="downloads/Speakeasy-3-Day-Trial.zip" download data-track-event="speakeasy_trial_download" data-product-download-url>Download free 3-day trial</a>
           </div>
           <p class="soft" style="font-size:.85rem;margin-bottom:0;">Windows 10 or newer and Python 3 are required. Extract the ZIP and read README-TRIAL.txt before launching. <a href="downloads/Speakeasy-3-Day-Trial-SHA256.txt">Verify the checksum</a>.</p>
         </div>
@@ -117,13 +117,13 @@
     <section id="quadrahydra-purchase" data-managed-product="quadrahydra" aria-labelledby="quadrahydra-title">
       <div class="section-head"><div class="section-label">QuadraHydra Command Center</div><h2 id="quadrahydra-title">Try it on your PC. Keep it for $15.</h2><p class="muted">Three days to try the Windows app. One payment to continue. No subscription.</p></div>
       <div class="qh-offer">
-        <p class="qh-price">$15 <small>USD · one PC · paid once</small></p>
+        <p class="qh-price" data-product-price>$15 <small>USD · one PC · paid once</small></p>
         <p>The free trial lasts 72 hours from when you click <strong>Start Trial inside the app</strong>, including time while it is closed. No card or website account is needed for the trial, and it never charges you automatically.</p>
         <p>Download the complete Windows ZIP, extract all files, then open <strong>QuadraHydra.exe</strong>. No development tools are needed. The same download accepts your purchased activation key.</p>
         <div class="qh-notice"><strong>Save your work before changing processes.</strong> Changing priorities, suspending, or ending a process can interrupt applications or lose unsaved data. Administrator privileges do not make an action safe. Performance depends on your PC and workload.</div>
         <label class="qh-consent" for="qh-agree"><input type="checkbox" id="qh-agree"><span>I agree to the <a href="quadrahydra-terms.html" target="_blank" rel="noopener">QuadraHydra Terms and Software License</a> (QH-TERMS-2026-09-03), including the one-PC license and process-control risks. I acknowledge the <a href="support.html" target="_blank" rel="noopener">refund policy</a>. Read the <a href="quadrahydra-privacy.html" target="_blank" rel="noopener">app privacy notice</a>.</span></label>
         <div class="qh-actions">
-          <button class="button" id="qh-download" type="button" data-track-event="quadrahydra_trial_download" disabled>Download free 3-day trial</button>
+          <button class="button" id="qh-download" type="button" data-track-event="quadrahydra_trial_download" data-product-download-url disabled>Download free 3-day trial</button>
           <form id="qh-checkout" action="https://www.paypal.com/cgi-bin/webscr" method="post">
             <input type="hidden" name="cmd" value="_xclick"><input type="hidden" name="business" value="AveryLogicWorks@gmail.com"><input type="hidden" name="amount" value="15.00"><input type="hidden" name="currency_code" value="USD"><input type="hidden" name="item_name" value="QuadraHydra - One PC - Perpetual Version 1 License"><input type="hidden" name="item_number" value="QH-V1-1PC"><input type="hidden" name="quantity" value="1"><input type="hidden" name="no_shipping" value="1"><input type="hidden" name="no_note" value="1"><input type="hidden" name="charset" value="utf-8"><input type="hidden" name="return" value="https://averylogicworks.com/quadrahydra-purchase.html"><input type="hidden" name="cancel_return" value="https://averylogicworks.com/programs.html#quadrahydra-purchase"><input type="hidden" name="on0" value="License terms"><input type="hidden" name="os0" value="QH-TERMS-2026-09-03; one PC"><input type="hidden" name="custom" id="qh-order-agreement" value="">
             <button class="button primary" id="qh-buy" type="submit" data-track-event="quadrahydra_purchase_click" disabled>Buy for $15 with PayPal</button>
