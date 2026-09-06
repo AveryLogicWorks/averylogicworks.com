@@ -44,7 +44,7 @@ window.AVERY_CONFIG = {
   // Flip this to roll prices forward once the matching PayPal links below are filled in.
   commandNexusStage: 'full',
   commandNexus: {
-    downloadUrl: 'https://github.com/AveryLogicWorks/Command-Nexus/releases/download/v0.2.0/CommandNexus.exe'
+    downloadUrl: 'secure-download.html?product=command-nexus'
   },
   paths: {
     home: 'index.html',

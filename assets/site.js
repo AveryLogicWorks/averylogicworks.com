@@ -339,9 +339,9 @@
       root.querySelectorAll('[data-product-info-url]').forEach((node) => { if (product.info_url) node.setAttribute('href', product.info_url); });
       root.querySelectorAll('[data-product-purchase-url]').forEach((node) => { if (product.purchase_url) node.setAttribute('href', product.purchase_url); });
       root.querySelectorAll('[data-product-download-url]').forEach((node) => {
-        if (!product.download_url) return;
-        if (node instanceof HTMLAnchorElement) node.setAttribute('href', product.download_url);
-        else node.setAttribute('data-managed-download-url', product.download_url);
+        const accountDownload = 'secure-download.html?product=' + encodeURIComponent(product.slug);
+        if (node instanceof HTMLAnchorElement) node.setAttribute('href', accountDownload);
+        else node.setAttribute('data-managed-download-url', accountDownload);
       });
     });
   }
