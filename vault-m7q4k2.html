@@ -2242,6 +2242,24 @@
             labelEdge.textContent = resp.ok ? 'Responsive' : 'Degraded';
           } catch (e) { dotEdge.className = 'health-dot down'; labelEdge.textContent = 'Unreachable'; }
         }
+        var paypalDot = document.getElementById('health-dot-paypal');
+        var paypalLabel = document.getElementById('health-label-paypal');
+        if (paypalDot && paypalLabel) {
+          paypalDot.className = 'health-dot unknown';
+          paypalLabel.textContent = 'Checking live PayPal API…';
+          try {
+            if (!sb) throw new Error('Sign in required');
+            var paypalCheck = await sb.functions.invoke('paypal-health', { body: {} });
+            if (paypalCheck.error || !paypalCheck.data) throw new Error('Check unavailable');
+            var health = paypalCheck.data;
+            paypalDot.className = 'health-dot ' + (['ok','warn','down','unknown'].includes(health.state) ? health.state : 'unknown');
+            paypalLabel.textContent = health.label + ' · ' + new Date(health.checked_at).toLocaleTimeString();
+            paypalLabel.title = health.scope || 'Live API check; not a completed purchase test.';
+          } catch (error) {
+            paypalDot.className = 'health-dot unknown';
+            paypalLabel.textContent = 'Check unavailable — refresh while signed in';
+          }
+        }
         var configVersion = document.getElementById('health-config-version');
         if (configVersion) configVersion.textContent = cfg.commandNexusStage ? 'Stage: ' + cfg.commandNexusStage : 'Unknown';
       }

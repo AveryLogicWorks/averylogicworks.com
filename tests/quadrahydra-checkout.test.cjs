@@ -18,7 +18,7 @@ assert.equal(s.elements['qh-buy'].disabled,false);assert.equal(s.elements['qh-do
 blocked=false;s.elements['qh-checkout'].listeners.submit({preventDefault(){blocked=true;}});
 assert.equal(blocked,false);
 assert.equal(JSON.parse(s.elements['qh-order-agreement'].value).terms,'QH-TERMS-2026-09-03');
-s.elements['qh-download'].listeners.click();assert.equal(s.links[0].href,'downloads/QuadraHydra-1.0.3-Windows.zip');assert.equal(s.links[0].clicked,true);
+s.elements['qh-download'].listeners.click();assert.equal(s.links[0].href,'secure-download.html?product=quadrahydra');assert.equal(s.links[0].clicked,true);
 s.elements['qh-agree'].checked=false;s.elements['qh-agree'].listeners.change();assert.equal(s.elements['qh-buy'].disabled,true);
 s=setup(true);s.elements['qh-agree'].checked=true;blocked=false;s.elements['qh-checkout'].listeners.submit({preventDefault(){blocked=true;}});assert.equal(blocked,false);
 const page=fs.readFileSync('programs.html','utf8');
