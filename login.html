@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="assets/site.css">
     <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('alw-theme')||'dark')</script>
   <style>body{background:#06111d;color:#edf4ff}[data-theme="light"] body{background:#f5f7fa;color:#1a1a2e}</style>
-  <meta name="description" content="Sign in or request a password reset for your Avery Logic Works account shell.">
+  <meta name="description" content="Sign in, use a secure passwordless owner link, or request a password reset for your Avery Logic Works account.">
   <title>Sign in | Avery Logic Works</title>
   <meta property="og:title" content="Sign in | Avery Logic Works">
   <meta property="og:type" content="website">
@@ -21,7 +21,7 @@
       <div class="container section-intro">
         <span class="eyebrow">Account access</span>
         <h1>Sign in to your Avery Logic Works account.</h1>
-        <p class="muted">Use your email and password to sign in, choose whether this device should remember you, or request a reset link if you need to set a new password.</p>
+        <p class="muted">Use your email and password, or use a secure passwordless sign-in link without changing your existing password. Choose whether this device should remember you.</p>
         <p class="small-note" id="login-redirect-hint" style="display:none;">After signing in, you&rsquo;ll be taken back to <strong id="login-redirect-target">Command Nexus</strong>.</p>
         <div id="login-back-btn-wrap" style="display:none;margin-top:1rem;">
           <a class="button" id="login-back-btn" href="#">&larr; Go back to <span id="login-back-name">Command Nexus</span></a>
@@ -57,6 +57,27 @@
           </form>
           <div class="form-message" id="login-message"></div>
           <p class="small-note" style="margin-top:16px;">Don't have an account? <a href="signup.html" class="text-link" id="login-to-signup-link">Sign up</a></p>
+        </div>
+
+        <div class="form-shell">
+          <span class="tag warm">Owner laptop access</span>
+          <h3>Sign in without changing your password</h3>
+          <p class="muted">For the owner account, send a one-time secure sign-in link to the existing admin email. Open the email link on this laptop. Your current password stays unchanged.</p>
+          <form id="owner-magic-link-form">
+            <div class="field">
+              <label for="ownerMagicEmail">Owner email</label>
+              <input id="ownerMagicEmail" type="email" value="adminaverylogicworks@gmail.com" autocomplete="email" required>
+            </div>
+            <div class="checkbox-row compact">
+              <input id="ownerRememberDevice" type="checkbox" checked>
+              <label for="ownerRememberDevice">Remember this laptop</label>
+            </div>
+            <div class="form-actions">
+              <button class="button primary" type="submit">Email secure sign-in link</button>
+            </div>
+          </form>
+          <div class="form-message" id="owner-magic-message"></div>
+          <p class="small-note" style="margin-top:16px;">This does not reset, reveal, or replace your password. The link is single-use. Only an existing authorized owner account is allowed.</p>
         </div>
 
         <div class="form-shell">
@@ -141,5 +162,66 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/site-shell.js"></script>
   <script src="assets/site.js"></script>
+  <script>
+    (function () {
+      var form = document.getElementById('owner-magic-link-form');
+      var message = document.getElementById('owner-magic-message');
+      if (!form || !message) return;
+
+      form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        var cfg = window.AVERY_CONFIG || {};
+        var supabaseCfg = cfg.supabase || {};
+        var ownerEmails = (cfg.ownerEmails || []).map(function (value) { return String(value || '').trim().toLowerCase(); });
+        var emailInput = document.getElementById('ownerMagicEmail');
+        var rememberInput = document.getElementById('ownerRememberDevice');
+        var email = String(emailInput ? emailInput.value : '').trim().toLowerCase();
+        var button = form.querySelector('button[type="submit"]');
+
+        message.textContent = '';
+        message.className = 'form-message';
+
+        if (!ownerEmails.includes(email)) {
+          message.textContent = 'That email is not configured as an authorized owner account.';
+          message.className = 'form-message error';
+          return;
+        }
+        if (!window.supabase || !supabaseCfg.url || !supabaseCfg.publishableKey) {
+          message.textContent = 'Secure sign-in is temporarily unavailable.';
+          message.className = 'form-message error';
+          return;
+        }
+
+        if (button) { button.disabled = true; button.textContent = 'Sending...'; }
+        try {
+          var storage = rememberInput && rememberInput.checked ? window.localStorage : window.sessionStorage;
+          var client = window.supabase.createClient(supabaseCfg.url, supabaseCfg.publishableKey, {
+            auth: {
+              persistSession: true,
+              autoRefreshToken: true,
+              detectSessionInUrl: true,
+              storage: storage
+            }
+          });
+          var redirect = new URL('vault-m7q4k2.html', window.location.href).toString();
+          var result = await client.auth.signInWithOtp({
+            email: email,
+            options: {
+              shouldCreateUser: false,
+              emailRedirectTo: redirect
+            }
+          });
+          if (result.error) throw result.error;
+          message.textContent = 'Secure sign-in link sent. Open that email link on this laptop. Your existing password has not been changed.';
+          message.className = 'form-message success';
+        } catch (error) {
+          message.textContent = error && error.message ? error.message : 'Unable to send the secure sign-in link.';
+          message.className = 'form-message error';
+        } finally {
+          if (button) { button.disabled = false; button.textContent = 'Email secure sign-in link'; }
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
