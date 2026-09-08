@@ -22,6 +22,9 @@ const allowedEvents = new Set([
 const securityEvents = new Set([
   "page_visit", "signup_submitted", "login_success", "login_failed", "password_reset_requested",
 ]);
+const sensitiveMetadataKeys = new Set([
+  "key", "license_key", "raw_key", "access_token", "refresh_token", "id_token", "authorization", "password"
+]);
 
 function cors(req: Request) {
   const origin = req.headers.get("origin") || "";
@@ -35,6 +38,34 @@ function cors(req: Request) {
 }
 function json(req: Request, data: unknown, status = 200) { return new Response(JSON.stringify(data), { status, headers: cors(req) }); }
 function trim(value: unknown, max: number) { return String(value ?? "").trim().slice(0, max); }
+function sanitizeUrl(value: unknown, max = 1000) {
+  const text = trim(value, max);
+  if (!text) return "";
+  try {
+    const parsed = new URL(text);
+    parsed.hash = "";
+    for (const key of ["access_token", "refresh_token", "id_token", "token", "code"]) parsed.searchParams.delete(key);
+    return parsed.toString().slice(0, max);
+  } catch {
+    return text.split("#")[0].slice(0, max);
+  }
+}
+function sanitizeMetadata(value: unknown) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  const result: Record<string, unknown> = {};
+  for (const [rawKey, rawValue] of Object.entries(value).slice(0, 30)) {
+    const key = trim(rawKey, 60);
+    if (!key || sensitiveMetadataKeys.has(key.toLowerCase())) continue;
+    if (["href", "url", "referrer"].includes(key.toLowerCase())) {
+      result[key] = sanitizeUrl(rawValue, 1000);
+    } else if (typeof rawValue === "string") {
+      result[key] = trim(rawValue, 1000);
+    } else if (["number", "boolean"].includes(typeof rawValue) || rawValue === null) {
+      result[key] = rawValue;
+    }
+  }
+  return JSON.stringify(result).length <= 12_000 ? result : {};
+}
 function clientIp(req: Request) {
   const raw = req.headers.get("cf-connecting-ip") || req.headers.get("x-real-ip") || req.headers.get("fly-client-ip") || (req.headers.get("x-forwarded-for") || "").split(",")[0] || "";
   const ip = raw.trim().replace(/^\[|\]$/g, "").slice(0, 64);
@@ -84,15 +115,12 @@ Deno.serve(async (req: Request) => {
       user = data.user ? { id: data.user.id, email: data.user.email } : null;
     }
 
-    const metadataCandidate = body?.metadata && typeof body.metadata === "object" && !Array.isArray(body.metadata)
-      ? Object.fromEntries(Object.entries(body.metadata).slice(0, 30).map(([key, value]) => [trim(key, 60), typeof value === "string" ? trim(value, 1000) : value]))
-      : {};
-    const metadata = JSON.stringify(metadataCandidate).length <= 12_000 ? metadataCandidate : {};
+    const metadata = sanitizeMetadata(body?.metadata);
     const attemptedEmail = eventType === "login_failed" ? trim(body?.attempted_email, 320).toLowerCase() : null;
     const pagePath = trim(body?.page_path, 500) || "/";
     const visitorToken = trim(body?.visitor_token, 160) || null;
     const userAgent = trim(req.headers.get("user-agent"), 1000) || null;
-    const referrer = trim(req.headers.get("referer") || body?.referrer, 1000) || null;
+    const referrer = sanitizeUrl(req.headers.get("referer") || body?.referrer, 1000) || null;
     const severity = eventType === "login_failed" ? "warning" : "info";
 
     const { error: siteError } = await admin.from("site_events").insert({ event_type: eventType, page_path: pagePath, visitor_token: visitorToken, user_id: user?.id || null, user_email: user?.email || attemptedEmail || null, metadata });
