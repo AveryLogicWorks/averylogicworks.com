@@ -91,3 +91,19 @@ window.AVERY_CONFIG = {
     avatar: 'assets/founder-photo.jpg'
   }
 };
+
+// The Vault is intentionally kept off the public site shell. Load its owner-only
+// enterprise data layer only on the hidden Vault route after the page is parsed.
+(function () {
+  if (!/vault-m7q4k2\.html$/i.test(window.location.pathname)) return;
+  function loadVaultLayer() {
+    if (document.querySelector('script[data-alw-vault-enterprise]')) return;
+    var script = document.createElement('script');
+    script.src = 'assets/vault-enterprise.js?v=20260908-2';
+    script.defer = true;
+    script.setAttribute('data-alw-vault-enterprise', '1');
+    document.head.appendChild(script);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadVaultLayer);
+  else loadVaultLayer();
+})();
