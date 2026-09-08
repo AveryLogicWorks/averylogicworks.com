@@ -1,8 +1,8 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const SECRET_KEY = "AVERY_LOGIC_WORKS_COMMAND_NEXUS_2026";
 const TIER_CODE = "TR";
-const TRIAL_DAYS = 3;
+const DEFAULT_TRIAL_DAYS = 3;
+const ALLOWED_PRODUCTS = new Set(["command-nexus", "speakeasy", "quadrahydra"]);
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -18,7 +18,9 @@ function json(data: Record<string, unknown>, status: number): Response {
 }
 
 async function computeHmac(payload: string): Promise<string> {
-  const keyData = new TextEncoder().encode(SECRET_KEY);
+  const secret = Deno.env.get("NEXUS_KEY_SECRET") || "";
+  if (!secret) throw new Error("Trial-key signing secret is not configured");
+  const keyData = new TextEncoder().encode(secret);
   const cryptoKey = await crypto.subtle.importKey("raw", keyData, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
   const sig = await crypto.subtle.sign("HMAC", cryptoKey, new TextEncoder().encode(payload));
   return Array.from(new Uint8Array(sig)).map((b) => b.toString(16).padStart(2, "0")).join("").substring(0, 16).toUpperCase();
@@ -29,75 +31,75 @@ function formatKey(raw: string): string {
 }
 
 Deno.serve(async (req: Request) => {
-  if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
-  }
-  if (req.method !== "POST") {
-    return json({ error: "Method not allowed" }, 405);
-  }
+  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
 
   try {
     const authHeader = req.headers.get("Authorization") || "";
     const apiKey = req.headers.get("apikey") || Deno.env.get("SUPABASE_ANON_KEY") || "";
-    if (!authHeader) {
-      return json({ error: "Not authenticated. Please sign in to claim a free trial." }, 401);
-    }
+    if (!authHeader) return json({ error: "Not authenticated. Please sign in to claim a free trial." }, 401);
+
+    const body = await req.json().catch(() => ({}));
+    const requestedProduct = String(body?.product_slug || "command-nexus").trim().toLowerCase();
+    if (!ALLOWED_PRODUCTS.has(requestedProduct)) return json({ error: "Unknown trial product." }, 400);
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
-    if (!supabaseUrl) {
-      console.error("generate-trial-key: SUPABASE_URL env var not set");
-      return json({ error: "Server not configured. Please contact support." }, 500);
-    }
+    if (!supabaseUrl) return json({ error: "Server not configured. Please contact support." }, 500);
+
     const supabase = createClient(supabaseUrl, apiKey, { global: { headers: { Authorization: authHeader } } });
     const { data: { user }, error: userError } = await supabase.auth.getUser();
-    if (userError || !user) {
-      return json({ error: "Not authenticated. Please sign in to claim a free trial." }, 401);
-    }
+    if (userError || !user) return json({ error: "Not authenticated. Please sign in to claim a free trial." }, 401);
 
-    // Check if user already claimed
-    const { data: existing, error: checkError } = await supabase.from("trial_keys").select("id, license_key, expires_at, claimed_at").eq("user_id", user.id).maybeSingle();
-    if (checkError) {
-      console.error("generate-trial-key: check error:", checkError.message);
-      return json({ error: "Could not verify trial eligibility. Please try again." }, 500);
-    }
+    let trialDays = DEFAULT_TRIAL_DAYS;
+    const { data: product } = await supabase
+      .from("product_catalog")
+      .select("slug, trial_days, published")
+      .eq("slug", requestedProduct)
+      .maybeSingle();
+    if (product && Number(product.trial_days) > 0) trialDays = Number(product.trial_days);
+
+    const { data: existing, error: checkError } = await supabase
+      .from("trial_keys")
+      .select("id, license_key, expires_at, claimed_at, product_slug")
+      .eq("user_id", user.id)
+      .eq("product_slug", requestedProduct)
+      .maybeSingle();
+    if (checkError) return json({ error: "Could not verify trial eligibility. Please try again." }, 500);
+
     if (existing) {
       const expiresAt = new Date(existing.expires_at);
       if (new Date() < expiresAt) {
-        return json({ key: existing.license_key, expires_at: existing.expires_at, already_claimed: true, message: "You already claimed a free trial key." }, 200);
-      } else {
-        return json({ error: "You have already used your free trial. Please purchase a subscription to continue.", expired: true }, 409);
+        return json({ key: existing.license_key, expires_at: existing.expires_at, product_slug: requestedProduct, already_claimed: true }, 200);
       }
+      return json({ error: "You have already used this product's free trial.", product_slug: requestedProduct, expired: true }, 409);
     }
 
-    // Generate key: tier_code(2) + expiry_hex(10) + random(8) + hmac(16) = 36 chars
-    const expiryTs = Math.floor(Date.now() / 1000) + (TRIAL_DAYS * 86400);
+    const expiryTs = Math.floor(Date.now() / 1000) + (trialDays * 86400);
     const expiryHex = expiryTs.toString(16).toUpperCase().padStart(10, "0");
     const randomBytes = crypto.getRandomValues(new Uint8Array(4));
     const randomPart = Array.from(randomBytes).map((b) => b.toString(16).padStart(2, "0")).join("").toUpperCase();
+    const productTag = requestedProduct === "speakeasy" ? "SP" : requestedProduct === "quadrahydra" ? "QH" : "CN";
     const payload = `${TIER_CODE}${expiryHex}${randomPart}`;
-    const hmacHex = await computeHmac(payload);
-    const rawKey = `${TIER_CODE}${expiryHex}${randomPart}${hmacHex}`;
+    const hmacHex = await computeHmac(`${productTag}:${payload}`);
+    const rawKey = `${payload}${hmacHex}`;
     const formattedKey = formatKey(rawKey);
     const expiresAtISO = new Date(expiryTs * 1000).toISOString();
 
-    // Save to database
     const { error: insertError } = await supabase.from("trial_keys").insert({
       user_id: user.id,
       user_email: user.email,
+      product_slug: requestedProduct,
       license_key: formattedKey,
       raw_key: rawKey,
       tier: "trial",
       claimed_at: new Date().toISOString(),
       expires_at: expiresAtISO,
     });
-    if (insertError) {
-      console.error("generate-trial-key: insert error:", insertError.message);
-      return json({ error: "Could not save trial key. Please try again." }, 500);
-    }
+    if (insertError) return json({ error: "Could not save trial key. Please try again." }, 500);
 
-    return json({ key: formattedKey, expires_at: expiresAtISO, days: TRIAL_DAYS, message: `Your ${TRIAL_DAYS}-day free trial key is ready!` }, 200);
+    return json({ key: formattedKey, expires_at: expiresAtISO, days: trialDays, product_slug: requestedProduct }, 200);
   } catch (err) {
-    console.error("generate-trial-key: unexpected error:", err);
+    console.error("generate-trial-key:", err);
     return json({ error: "An unexpected error occurred. Please try again." }, 500);
   }
 });
