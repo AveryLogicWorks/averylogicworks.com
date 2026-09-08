@@ -1,63 +1,83 @@
 (function () {
   'use strict';
 
-  var MENU_ID = 'alw-emergency-dropdown-nav';
-  var STYLE_ID = 'alw-emergency-dropdown-style';
+  var HEADER_ID = 'alw-enterprise-header';
+  var CSS_ID = 'alw-enterprise-css';
+  var ownerOnlyPages = new Set(['vault-m7q4k2.html', 'owner-content-m7q4k2.html']);
 
-  var NAV_ITEMS = [
-    ['Home', 'index.html'],
-    ['One-Time Programs', 'programs.html'],
-    ['Software Subscriptions', 'software-subscriptions.html'],
-    ['Custom Software', 'service-intake.html'],
-    ['Themis', 'themis.html'],
-    ['Founder', 'founder.html'],
-    ['Support & Feedback', 'support.html'],
-    ['Sign in', 'login.html'],
-    ['Sign up', 'signup.html']
-  ];
-
-  function addStyle() {
-    if (document.getElementById(STYLE_ID)) return;
-    var style = document.createElement('style');
-    style.id = STYLE_ID;
-    style.textContent = `
-      .alw-emergency-menu{position:fixed;top:14px;right:14px;z-index:2147483647;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
-      .alw-emergency-menu summary{list-style:none;display:inline-flex;align-items:center;gap:.5rem;height:52px;padding:0 20px 0 14px;border-radius:14px;border:2px solid rgba(125,211,252,.4);background:linear-gradient(135deg,rgba(5,7,13,.98),rgba(10,20,35,.98));color:#f7f9ff;box-shadow:0 8px 30px rgba(0,0,0,.5),0 0 20px rgba(125,211,252,.15);cursor:pointer;font-size:1.5rem;font-weight:900;line-height:1;transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease;}
-      .alw-emergency-menu summary:hover{transform:translateY(-1px);border-color:rgba(125,211,252,.7);box-shadow:0 10px 36px rgba(0,0,0,.55),0 0 28px rgba(125,211,252,.25);}
-      .alw-emergency-menu summary .menu-label{font-size:1rem;font-weight:800;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.03em;text-transform:uppercase;}
-      .alw-emergency-menu summary::-webkit-details-marker{display:none;}
-      .alw-emergency-menu-panel{width:min(300px,calc(100vw - 28px));max-height:calc(100vh - 86px);overflow:auto;margin-top:.6rem;padding:.75rem;border:1px solid rgba(255,255,255,.18);border-radius:18px;background:rgba(5,7,13,.98);box-shadow:0 18px 60px rgba(0,0,0,.45);display:grid;gap:.35rem;position:absolute;right:0;top:100%;}
-      .alw-emergency-menu-panel a{display:block;padding:.72rem .85rem;border-radius:12px;color:#f7f9ff;text-decoration:none;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);font-weight:750;}
-      .alw-emergency-menu-panel a:hover,.alw-emergency-menu-panel a:focus-visible{background:rgba(125,211,252,.14);outline:none;}
-      .mobile-nav-toggle{display:grid!important;position:fixed!important;top:14px!important;right:14px!important;left:auto!important;z-index:2147483646!important;}
-      .sidebar-toggle{display:block!important;visibility:visible!important;opacity:1!important;}
-      .hero #hero-title{margin:18px auto 14px!important;text-align:center!important;}
-    `;
-    document.head.appendChild(style);
+  function currentPage() {
+    return String(window.location.pathname || '/').split('/').filter(Boolean).pop() || 'index.html';
   }
 
-  function injectDropdown() {
-    if (document.getElementById(MENU_ID)) return;
-    addStyle();
-    var details = document.createElement('details');
-    details.id = MENU_ID;
-    details.className = 'alw-emergency-menu';
-    var summary = document.createElement('summary');
-    summary.setAttribute('aria-label', 'Open site menu');
-    summary.title = 'Menu';
-    summary.innerHTML = '&#9776;<span class="menu-label">Menu</span>';
-    var nav = document.createElement('nav');
-    nav.className = 'alw-emergency-menu-panel';
-    nav.setAttribute('aria-label', 'Site navigation');
-    NAV_ITEMS.forEach(function (item) {
-      var a = document.createElement('a');
-      a.href = item[1];
-      a.textContent = item[0];
-      nav.appendChild(a);
+  function loadEnterpriseCss() {
+    if (document.getElementById(CSS_ID)) return;
+    var link = document.createElement('link');
+    link.id = CSS_ID;
+    link.rel = 'stylesheet';
+    link.href = 'assets/enterprise.css';
+    document.head.appendChild(link);
+  }
+
+  function productLink(href, title, description) {
+    return '<a href="' + href + '"><strong>' + title + '</strong><span>' + description + '</span></a>';
+  }
+
+  function injectHeader() {
+    if (ownerOnlyPages.has(currentPage()) || document.getElementById(HEADER_ID)) return;
+
+    var header = document.createElement('header');
+    header.id = HEADER_ID;
+    header.setAttribute('role', 'banner');
+    header.innerHTML = ''
+      + '<div class="alw-enterprise-header-inner">'
+      +   '<a class="alw-enterprise-brand" href="index.html" aria-label="Avery Logic Works home">'
+      +     '<img src="assets/favicon.svg" alt="" aria-hidden="true">'
+      +     '<span class="alw-enterprise-brand-copy"><strong>Avery Logic Works</strong><span>Software · AI · Systems</span></span>'
+      +   '</a>'
+      +   '<nav class="alw-enterprise-nav nav-links" aria-label="Primary navigation">'
+      +     '<details class="alw-products-menu">'
+      +       '<summary>Products</summary>'
+      +       '<div class="alw-products-panel">'
+      +         productLink('programs.html', 'One-Time Software', 'Focused Windows programs with one-purchase licensing.')
+      +         productLink('software-subscriptions.html', 'Software Subscriptions', 'Recurring-access software and actively supported platforms.')
+      +         productLink('command-nexus.html', 'Command Nexus', 'AI orchestration, governance, and local-first control.')
+      +         productLink('themis.html', 'Themis', 'Legal-information and structured reasoning tools.')
+      +       '</div>'
+      +     '</details>'
+      +     '<a href="service-intake.html">Custom Software</a>'
+      +     '<a href="founder.html">Company</a>'
+      +     '<a href="support.html">Support</a>'
+      +     '<a href="login.html" data-auth-state="login">Sign in</a>'
+      +     '<a class="alw-signup" href="signup.html">Create account</a>'
+      +   '</nav>'
+      +   '<div class="alw-mobile-nav-wrap">'
+      +     '<details class="alw-mobile-nav">'
+      +       '<summary aria-label="Open navigation">&#9776;</summary>'
+      +       '<nav class="alw-mobile-panel" aria-label="Mobile navigation">'
+      +         '<div class="group-label">Products</div>'
+      +         '<a href="programs.html">One-Time Software</a>'
+      +         '<a href="software-subscriptions.html">Software Subscriptions</a>'
+      +         '<a href="command-nexus.html">Command Nexus</a>'
+      +         '<a href="themis.html">Themis</a>'
+      +         '<div class="group-label">Business</div>'
+      +         '<a href="service-intake.html">Custom Software</a>'
+      +         '<a href="founder.html">Company</a>'
+      +         '<a href="support.html">Support &amp; Feedback</a>'
+      +         '<div class="group-label">Account</div>'
+      +         '<a href="login.html">Sign in</a>'
+      +         '<a href="signup.html">Create account</a>'
+      +       '</nav>'
+      +     '</details>'
+      +   '</div>'
+      + '</div>';
+
+    document.body.insertBefore(header, document.body.firstChild);
+
+    document.addEventListener('click', function (event) {
+      document.querySelectorAll('.alw-products-menu[open], .alw-mobile-nav[open]').forEach(function (details) {
+        if (!details.contains(event.target)) details.removeAttribute('open');
+      });
     });
-    details.appendChild(summary);
-    details.appendChild(nav);
-    document.body.insertBefore(details, document.body.firstChild);
   }
 
   function loadContactBridge() {
@@ -71,7 +91,8 @@
   }
 
   function safeRun() {
-    try { injectDropdown(); } catch (e) { console.error('Site menu failed', e); }
+    try { loadEnterpriseCss(); } catch (e) { console.error('Enterprise styles failed', e); }
+    try { injectHeader(); } catch (e) { console.error('Enterprise navigation failed', e); }
     try { loadContactBridge(); } catch (e) { console.error('Contact form bridge failed', e); }
   }
 
