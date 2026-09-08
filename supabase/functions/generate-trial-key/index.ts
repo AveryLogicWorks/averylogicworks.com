@@ -78,9 +78,11 @@ Deno.serve(async (req: Request) => {
     const expiryHex = expiryTs.toString(16).toUpperCase().padStart(10, "0");
     const randomBytes = crypto.getRandomValues(new Uint8Array(4));
     const randomPart = Array.from(randomBytes).map((b) => b.toString(16).padStart(2, "0")).join("").toUpperCase();
-    const productTag = requestedProduct === "speakeasy" ? "SP" : requestedProduct === "quadrahydra" ? "QH" : "CN";
+    const productTag = requestedProduct === "speakeasy" ? "SP" : "QH";
     const payload = `${TIER_CODE}${expiryHex}${randomPart}`;
-    const hmacHex = await computeHmac(`${productTag}:${payload}`);
+    const hmacHex = requestedProduct === "command-nexus"
+      ? await computeHmac(payload)
+      : await computeHmac(`${productTag}:${payload}`);
     const rawKey = `${payload}${hmacHex}`;
     const formattedKey = formatKey(rawKey);
     const expiresAtISO = new Date(expiryTs * 1000).toISOString();
