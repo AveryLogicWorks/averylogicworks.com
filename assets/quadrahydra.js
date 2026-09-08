@@ -7,7 +7,7 @@
   var buy = document.getElementById('qh-buy');
   var checkout = document.getElementById('qh-checkout');
   var feedback = document.getElementById('qh-feedback');
-  var version = 'QH-TERMS-2026-09-03';
+  var version = 'QH-TERMS-2026-09-08';
 
   function accepted() {
     if (!agree.checked) {
@@ -24,18 +24,18 @@
   agree.addEventListener('change', function () {
     download.disabled = buy.disabled = !agree.checked;
     feedback.textContent = agree.checked
-      ? 'Free trials require a signed-in Avery Logic Works account. Choose the trial or continue to PayPal.'
-      : 'Read the terms and check the agreement box to download or purchase.';
+      ? 'Terms accepted. Sign in to claim the evaluation or continue to PayPal for a one-computer license.'
+      : 'Review the terms and check the agreement box before trial or purchase.';
   });
 
   download.addEventListener('click', async function () {
     if (!accepted()) return;
     if (!window.AveryProductTrials) {
-      feedback.textContent = 'Secure trial access is temporarily unavailable. Please reload the page.';
+      feedback.textContent = 'Trial access is temporarily unavailable. Please reload the page.';
       return;
     }
     download.disabled = true;
-    feedback.textContent = 'Checking your account and issuing your QuadraHydra trial key...';
+    feedback.textContent = 'Checking your account and issuing your QuadraHydra trial entitlement...';
     try {
       var url = download.getAttribute('data-managed-download-url') || 'downloads/QuadraHydra-1.0.3-Windows.zip';
       var payload = await window.AveryProductTrials.claimAndDownload({
@@ -47,10 +47,10 @@
         feedback: feedback
       });
       if (payload) {
-        feedback.textContent += ' The current desktop build still needs the server-bound trial-key check wired into the app before this becomes full device enforcement.';
+        feedback.textContent = 'QuadraHydra trial issued to your account. Save the displayed key with the trial package. Expires ' + new Date(payload.expires_at).toLocaleString() + '.';
       }
     } catch (error) {
-      feedback.textContent = error && error.message ? error.message : 'Unable to start the trial download.';
+      feedback.textContent = error && error.message ? error.message : 'Unable to issue the trial.';
     } finally {
       download.disabled = !agree.checked;
     }
