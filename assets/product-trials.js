@@ -17,6 +17,20 @@
     return cachedClient;
   }
 
+  function visitorToken() {
+    var key = 'avery-visitor-token';
+    try {
+      var token = localStorage.getItem(key);
+      if (!token) {
+        token = 'v_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+        localStorage.setItem(key, token);
+      }
+      return token;
+    } catch (e) {
+      return null;
+    }
+  }
+
   function loginFor(anchor) {
     var next = 'programs.html' + (anchor || '');
     window.location.href = 'login.html?next=' + encodeURIComponent(next);
@@ -44,7 +58,10 @@
         'Authorization': 'Bearer ' + session.access_token,
         'apikey': cfg.supabase.publishableKey
       },
-      body: JSON.stringify({ product_slug: productSlug })
+      body: JSON.stringify({
+        product_slug: productSlug,
+        visitor_token: visitorToken()
+      })
     });
     var payload = await response.json().catch(function () { return {}; });
     if (!response.ok) throw new Error(payload.error || 'Could not issue your trial key.');
@@ -64,7 +81,8 @@
   function formatResult(productName, payload) {
     if (!payload) return '';
     var expiry = payload.expires_at ? new Date(payload.expires_at).toLocaleString() : '';
-    return productName + ' trial key: ' + payload.key + (expiry ? ' · expires ' + expiry : '') + '. Save this key. It belongs to your signed-in account.';
+    var action = payload.restarted ? ' restarted' : '';
+    return productName + ' trial' + action + '. Key: ' + payload.key + (expiry ? ' · expires ' + expiry : '') + '. Save this key. It belongs to your signed-in account and may be bound to the computer that first activates it.';
   }
 
   async function claimAndDownload(options) {
