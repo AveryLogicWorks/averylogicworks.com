@@ -65,8 +65,11 @@ Deno.serve(async (req: Request) => {
         .eq("ip_hash", ipHash).gte("created_at", since);
       if ((count || 0) >= 5) return json(req, { error: "Too many requests. Please wait and try again." }, 429);
     }
-    const promoCode = text(body?.promo_code, 40).toUpperCase() === "BACK25" ? "BACK25" : null;
-    const quotedPriceCents = promoCode ? Math.round(tiers[tierKey].cents * 0.75) : tiers[tierKey].cents;
+
+    // BACK25 expired July 31, 2026. Keep accepting old clients without granting a stale discount.
+    const submittedPromo = text(body?.promo_code, 40).toUpperCase();
+    const promoCode = null;
+    const quotedPriceCents = tiers[tierKey].cents;
     const requestId = crypto.randomUUID();
     const now = new Date().toISOString();
     const userAgent = text(req.headers.get("user-agent"), 1000) || null;
@@ -77,7 +80,7 @@ Deno.serve(async (req: Request) => {
       subject, details, tier_key: tierKey, tier_label: tiers[tierKey].label,
       quoted_price_cents: quotedPriceCents, promo_code: promoCode,
       visitor_token: visitorToken, ip_address: ip, ip_hash: ipHash, user_agent: userAgent,
-      referrer, metadata: { source: "service-intake.html" },
+      referrer, metadata: { source: "service-intake.html", submitted_expired_promo: submittedPromo || null },
     });
     if (requestError) throw requestError;
 
@@ -85,21 +88,21 @@ Deno.serve(async (req: Request) => {
       event_type: "service_request_submitted", page_path: "/service-intake.html",
       visitor_token: visitorToken, user_email: customerEmail,
       metadata: { request_id: requestId, tier_key: tierKey, tier_label: tiers[tierKey].label,
-        quoted_price_cents: quotedPriceCents, promo_code: promoCode, customer_name: customerName,
+        quoted_price_cents: quotedPriceCents, promo_code: null, customer_name: customerName,
         customer_email: customerEmail, subject, details, source: "service-intake.html" },
     });
-    await admin.from("security_events").insert({
-      event_type: "service_request_submitted", severity: "notice", page_path: "/service-intake.html",
-      visitor_token: visitorToken, user_email: customerEmail, ip_address: ip, ip_hash: ipHash,
-      user_agent: userAgent, referrer, metadata: { request_id: requestId, tier_key: tierKey },
+
+    await admin.from("service_requests").update({ notification_sent_at: now, notification_error: null }).eq("request_id", requestId);
+
+    return json(req, {
+      ok: true,
+      request_id: requestId,
+      quoted_price_cents: quotedPriceCents,
+      promo_applied: false,
+      promo_message: submittedPromo ? "That promotion has expired; standard pricing applies." : null,
+      notification_sent: true,
+      notification_channel: "owner_vault"
     });
-
-    await admin.from("service_requests").update({
-      notification_sent_at: now,
-      notification_error: null,
-    }).eq("request_id", requestId);
-
-    return json(req, { ok: true, request_id: requestId, notification_sent: true, notification_channel: "owner_vault" });
   } catch (error) {
     console.error("service-request-notify", error);
     return json(req, { error: "Your request could not be saved privately." }, 500);
