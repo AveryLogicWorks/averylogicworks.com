@@ -81,8 +81,8 @@
   function formatResult(productName, payload) {
     if (!payload) return '';
     var expiry = payload.expires_at ? new Date(payload.expires_at).toLocaleString() : '';
-    var action = payload.restarted ? ' restarted' : '';
-    return productName + ' trial' + action + '. Key: ' + payload.key + (expiry ? ' · expires ' + expiry : '') + '. Save this key. It belongs to your signed-in account and may be bound to the computer that first activates it.';
+    var action = payload.admin_reset ? ' restarted for administrator testing' : (payload.already_claimed ? ' already active' : ' issued');
+    return productName + ' trial' + action + '. Key: ' + payload.key + (expiry ? ' · expires ' + expiry : '') + '. Save this key with the download.';
   }
 
   async function claimAndDownload(options) {
