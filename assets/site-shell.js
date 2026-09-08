@@ -90,10 +90,21 @@
     document.head.appendChild(script);
   }
 
+  function loadPageSpecificLayer() {
+    if (currentPage() !== 'command-nexus.html') return;
+    if (document.querySelector('script[data-alw-command-nexus-current]')) return;
+    var script = document.createElement('script');
+    script.src = 'assets/command-nexus-current.js?v=20260908-1';
+    script.defer = true;
+    script.setAttribute('data-alw-command-nexus-current', '1');
+    document.head.appendChild(script);
+  }
+
   function safeRun() {
     try { loadEnterpriseCss(); } catch (e) { console.error('Enterprise styles failed', e); }
     try { injectHeader(); } catch (e) { console.error('Enterprise navigation failed', e); }
     try { loadContactBridge(); } catch (e) { console.error('Contact form bridge failed', e); }
+    try { loadPageSpecificLayer(); } catch (e) { console.error('Product presentation layer failed', e); }
   }
 
   if (document.readyState === 'loading') {
