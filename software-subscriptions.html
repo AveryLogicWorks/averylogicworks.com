@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Software Subscriptions | Avery Logic Works</title>
+  <meta name="description" content="Subscription software from Avery Logic Works, including Command Nexus and future recurring-access programs.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/site.css">
+  <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('alw-theme')||'dark')}catch(e){}</script>
+  <style>
+    body{background:#06111d;color:#edf4ff}[data-theme="light"] body{background:#f5f7fa;color:#1a1a2e}
+    .subscription-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.2rem;margin-top:2rem}
+    .subscription-card{padding:1.5rem;border:1px solid var(--line);border-radius:24px;background:var(--panel);display:grid;gap:1rem}
+    .subscription-meta{display:flex;gap:.6rem;flex-wrap:wrap}
+    .subscription-meta span{padding:.35rem .65rem;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:.86rem}
+    .subscription-actions{display:flex;gap:.65rem;flex-wrap:wrap}
+  </style>
+</head>
+<body>
+  <main class="main-content">
+    <section class="page-hero">
+      <div class="container section-intro">
+        <span class="eyebrow">Recurring-access software</span>
+        <h1>Software Subscriptions</h1>
+        <p class="muted">Programs that continue to receive active service, access, and development through a recurring plan. Each program has its own subscription and terms. This page is the catalog, not a subscription itself.</p>
+      </div>
+    </section>
+
+    <section class="section-tight">
+      <div class="container">
+        <div class="subscription-grid">
+          <article class="subscription-card">
+            <div>
+              <span class="tag">Available now</span>
+              <h2 style="margin-top:.75rem">Command Nexus</h2>
+              <p class="muted">Local-first AI orchestration and control with governance visibility, agent creation, workflow capability, licensing, and owner controls.</p>
+            </div>
+            <div class="subscription-meta">
+              <span>Recurring plans</span>
+              <span>Windows</span>
+              <span>Early access / active development</span>
+            </div>
+            <p class="muted">Choose the plan that fits your use. Command Nexus keeps its full product details, trial information, pricing, and activation controls on its own product page.</p>
+            <div class="subscription-actions">
+              <a class="button primary" href="command-nexus.html#pricing">View plans</a>
+              <a class="button" href="command-nexus.html">Explore Command Nexus</a>
+            </div>
+          </article>
+
+          <article class="subscription-card">
+            <div>
+              <span class="tag alt">More subscription software</span>
+              <h2 style="margin-top:.75rem">Additional programs are being prepared</h2>
+              <p class="muted">As additional Avery Logic Works programs become ready for recurring access, they will appear here as separate products with their own plans, trials, and product information.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="policy-shell" style="margin-top:1.5rem">
+          <span class="tag warm">Looking for a one-time purchase?</span>
+          <h2>Speakeasy and QuadraHydra live in One-Time Programs.</h2>
+          <p class="muted">Those products use a one-purchase, one-computer license rather than a recurring subscription.</p>
+          <a class="button" href="programs.html">Open One-Time Programs</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer"><div class="container footer-inner"><div>&copy; <span data-current-year></span> Avery Logic Works&trade;. All rights reserved.</div><div class="footer-links"><a href="support.html">Support</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a></div></div></footer>
+  <script src="assets/site-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/site-shell.js"></script>
+  <script src="assets/site.js"></script>
+  <script>document.querySelectorAll('[data-current-year]').forEach(function(el){el.textContent=new Date().getFullYear();});</script>
+</body>
+</html>
