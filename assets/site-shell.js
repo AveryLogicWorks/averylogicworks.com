@@ -60,8 +60,19 @@
     document.body.insertBefore(details, document.body.firstChild);
   }
 
+  function loadContactBridge() {
+    if (!document.querySelector('#support-form,#bug-report-form,#feedback-form')) return;
+    if (document.querySelector('script[data-alw-contact-bridge]')) return;
+    var script = document.createElement('script');
+    script.src = 'assets/customer-contact.js';
+    script.defer = true;
+    script.setAttribute('data-alw-contact-bridge', '1');
+    document.head.appendChild(script);
+  }
+
   function safeRun() {
     try { injectDropdown(); } catch (e) { console.error('Site menu failed', e); }
+    try { loadContactBridge(); } catch (e) { console.error('Contact form bridge failed', e); }
   }
 
   if (document.readyState === 'loading') {
