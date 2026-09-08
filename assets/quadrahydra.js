@@ -1,4 +1,4 @@
-/* QuadraHydra purchase/trial consent. No payment verification or key issuance in the browser. */
+/* QuadraHydra purchase/trial consent and account-bound trial claim. */
 (function () {
   'use strict';
   var agree = document.getElementById('qh-agree');
@@ -8,29 +8,54 @@
   var checkout = document.getElementById('qh-checkout');
   var feedback = document.getElementById('qh-feedback');
   var version = 'QH-TERMS-2026-09-03';
+
   function accepted() {
     if (!agree.checked) {
       feedback.textContent = 'Please review the terms and check the agreement box first.';
       agree.focus();
       return false;
     }
-    var record = {product: 'QuadraHydra', terms: version, accepted_utc: new Date().toISOString()};
+    var record = { product: 'QuadraHydra', terms: version, accepted_utc: new Date().toISOString() };
     document.getElementById('qh-order-agreement').value = JSON.stringify(record);
     try { localStorage.setItem('alw.quadrahydra.agreement', JSON.stringify(record)); } catch (error) { /* Checkout works without browser storage. */ }
     return true;
   }
+
   agree.addEventListener('change', function () {
     download.disabled = buy.disabled = !agree.checked;
-    feedback.textContent = agree.checked ? 'Choose the free trial or continue to PayPal.' : 'Read the terms and check the agreement box to download or purchase.';
+    feedback.textContent = agree.checked
+      ? 'Free trials require a signed-in Avery Logic Works account. Choose the trial or continue to PayPal.'
+      : 'Read the terms and check the agreement box to download or purchase.';
   });
-  download.addEventListener('click', function () {
+
+  download.addEventListener('click', async function () {
     if (!accepted()) return;
-    var link = document.createElement('a');
-    link.href = download.getAttribute('data-managed-download-url') || 'downloads/QuadraHydra-1.0.3-Windows.zip';
-    link.download = 'QuadraHydra-1.0.3-Windows.zip';
-    document.body.appendChild(link); link.click(); link.remove();
-    feedback.textContent = 'Download started. Extract all files and open QuadraHydra.exe. The 72-hour trial starts when you click Start Trial inside the app.';
+    if (!window.AveryProductTrials) {
+      feedback.textContent = 'Secure trial access is temporarily unavailable. Please reload the page.';
+      return;
+    }
+    download.disabled = true;
+    feedback.textContent = 'Checking your account and issuing your QuadraHydra trial key...';
+    try {
+      var url = download.getAttribute('data-managed-download-url') || 'downloads/QuadraHydra-1.0.3-Windows.zip';
+      var payload = await window.AveryProductTrials.claimAndDownload({
+        productSlug: 'quadrahydra',
+        productName: 'QuadraHydra',
+        anchor: '#quadrahydra-purchase',
+        downloadUrl: url,
+        filename: 'QuadraHydra-1.0.3-Windows.zip',
+        feedback: feedback
+      });
+      if (payload) {
+        feedback.textContent += ' The current desktop build still needs the server-bound trial-key check wired into the app before this becomes full device enforcement.';
+      }
+    } catch (error) {
+      feedback.textContent = error && error.message ? error.message : 'Unable to start the trial download.';
+    } finally {
+      download.disabled = !agree.checked;
+    }
   });
+
   checkout.addEventListener('submit', function (event) {
     if (!accepted()) event.preventDefault();
   });
