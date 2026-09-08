@@ -93,17 +93,21 @@ window.AVERY_CONFIG = {
 };
 
 // The Vault is intentionally kept off the public site shell. Load its owner-only
-// enterprise data layer only on the hidden Vault route after the page is parsed.
+// enterprise data layers only on the hidden Vault route after the page is parsed.
 (function () {
   if (!/vault-m7q4k2\.html$/i.test(window.location.pathname)) return;
-  function loadVaultLayer() {
-    if (document.querySelector('script[data-alw-vault-enterprise]')) return;
+  function loadScript(src, marker) {
+    if (document.querySelector('script[' + marker + ']')) return;
     var script = document.createElement('script');
-    script.src = 'assets/vault-enterprise.js?v=20260908-2';
+    script.src = src;
     script.defer = true;
-    script.setAttribute('data-alw-vault-enterprise', '1');
+    script.setAttribute(marker, '1');
     document.head.appendChild(script);
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadVaultLayer);
-  else loadVaultLayer();
+  function loadVaultLayers() {
+    loadScript('assets/vault-enterprise.js?v=20260908-3', 'data-alw-vault-enterprise');
+    loadScript('assets/vault-account-linker.js?v=20260908-1', 'data-alw-vault-account-linker');
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadVaultLayers);
+  else loadVaultLayers();
 })();
