@@ -1,1200 +1,149 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Avery Logic Works | Privacy Should Be Standard</title>
-  <meta name="description" content="Avery Logic Works is a founder-led studio building software, AI, and digital systems. Privacy should be standard — your data, your choice." />
-  <meta property="og:title" content="Avery Logic Works | Founder-led software, AI, and digital systems studio">
-  <meta property="og:description" content="Founder-led studio building software, AI, and digital systems.">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Avery Logic Works | Software, AI & Systems</title>
+  <meta name="description" content="Avery Logic Works develops privacy-conscious software, AI systems, Windows tools, and purpose-built automation with clear licensing and owner-controlled technology.">
+  <meta property="og:title" content="Avery Logic Works | Software, AI & Systems">
+  <meta property="og:description" content="Software platforms, AI systems, focused Windows tools, and custom software built for control, privacy, and practical use.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.averylogicworks.com/">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Avery Logic Works | Founder-led software, AI, and digital systems studio">
-  <meta name="twitter:description" content="Founder-led studio building software, AI, and digital systems.">
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <meta name="twitter:title" content="Avery Logic Works | Software, AI & Systems">
+  <meta name="twitter:description" content="Software platforms, AI systems, focused Windows tools, and custom software built for control, privacy, and practical use.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/site.css">
-  <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('alw-theme')||'dark')</script>
+  <link id="alw-enterprise-css" rel="stylesheet" href="assets/enterprise.css">
+  <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('alw-theme')||'dark')}catch(e){}</script>
   <style>
-    :root {
-      --bg: #05070d;
-      --panel: rgba(255, 255, 255, 0.055);
-      --panel-strong: rgba(255, 255, 255, 0.095);
-      --text: #f7f9ff;
-      --muted: #b7bfd1;
-      --soft: #8790a6;
-      --line: rgba(255,255,255,.14);
-      --accent: #7dd3fc;
-      --accent-2: #a78bfa;
-      --accent-3: #22d3ee;
-      --neon: #F2FF00;
-      --neon-warm: #FFB800;
-      --neon-glow: rgba(242, 255, 0, 0.35);
-      --max: 1120px;
-    }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at 20% 5%, rgba(125, 211, 252, .18), transparent 32rem),
-        radial-gradient(circle at 80% 15%, rgba(167, 139, 250, .12), transparent 34rem),
-        linear-gradient(180deg, #05070d 0%, #090d18 52%, #05070d 100%);
-      color: var(--text);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.6;
-    }
-
-    a { color: inherit; }
-
-    .skip-link {
-      position: absolute;
-      left: 1rem;
-      top: -4rem;
-      z-index: 100;
-      padding: .75rem 1rem;
-      border-radius: 999px;
-      background: #fff;
-      color: #05070d;
-      transition: top .2s ease;
-    }
-
-    .skip-link:focus { top: 1rem; }
-
-    .top-emblem-bar {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 1rem 0 .4rem;
-    }
-
-    .top-emblem-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 64px;
-      height: 64px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: 0 0 28px rgba(125, 211, 252, .14);
-    }
-
-    .top-emblem,
-    .brand-mark {
-      display: block;
-      object-fit: contain;
-      filter: drop-shadow(0 0 12px rgba(125, 211, 252, .18));
-    }
-
-    .top-emblem {
-      width: 38px;
-      height: 38px;
-    }
-
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      -webkit-backdrop-filter: blur(18px);
-      backdrop-filter: blur(18px);
-      background: rgba(5, 7, 13, .78);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .nav {
-      width: min(var(--max), calc(100% - 2rem));
-      margin: 0 auto;
-      min-height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: .65rem;
-      text-decoration: none;
-      font-weight: 800;
-      letter-spacing: .01em;
-    }
-
-    .brand-mark {
-      width: 34px;
-      height: 34px;
-      border-radius: 12px;
-      flex: 0 0 auto;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: .35rem;
-      flex-wrap: wrap;
-    }
-
-    .nav-links a {
-      padding: .55rem .8rem;
-      border-radius: 999px;
-      color: var(--muted);
-      text-decoration: none;
-      font-size: .94rem;
-    }
-
-    .nav-links a:hover,
-    .nav-links a:focus-visible {
-      color: var(--text);
-      background: var(--panel);
-      outline: none;
-    }
-
-    .nav-links a.active {
-      color: var(--text);
-      background: var(--panel);
-      font-weight: 700;
-    }
-
-    .nav-links .nav-hidden { display: none !important; }
-
-    .nav-links .nav-primary {
-      color: #041016;
-      background: linear-gradient(135deg, var(--accent), var(--accent-3));
-      font-weight: 800;
-    }
-
-    .nav-links .nav-flagship {
-      color: #0c0716;
-      background: linear-gradient(135deg, var(--accent-2), var(--accent));
-      font-weight: 800;
-    }
-
-    main { overflow: hidden; }
-
-    section {
-      width: min(var(--max), calc(100% - 2rem));
-      margin: 0 auto;
-      padding: 4.5rem 0;
-    }
-
-    .hero {
-      min-height: auto;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      padding-top: 4rem;
-      padding-bottom: 2.5rem;
-    }
-
-    .hero-inner { max-width: 1000px; margin: 0 auto; }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: .5rem;
-      padding: .45rem .8rem;
-      margin-bottom: 1.35rem;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      color: var(--muted);
-      background: rgba(255,255,255,.04);
-      font-size: .95rem;
-    }
-
-    .privacy-banner {
-      font-size: clamp(1.15rem, 2.5vw, 1.6rem);
-      font-weight: 800;
-      text-align: center;
-      margin-bottom: .6rem;
-      letter-spacing: .02em;
-      color: #F2FF00;
-      text-shadow: 0 0 4px rgba(242,255,0,0.95), 0 0 10px rgba(255,230,0,0.85), 0 0 20px rgba(255,184,0,0.65);
-    }
-
-    .neon-text {
-      color: #F2FF00;
-      text-shadow: 0 0 4px rgba(242,255,0,0.95), 0 0 10px rgba(255,230,0,0.85), 0 0 20px rgba(255,184,0,0.65);
-    }
-
-    .neon-heading {
-      color: #F2FF00;
-      text-shadow: 0 0 4px rgba(242,255,0,0.95), 0 0 10px rgba(255,230,0,0.85), 0 0 20px rgba(255,184,0,0.65), 0 0 34px rgba(255,140,0,0.35);
-    }
-
-    .neon-accent {
-      color: #F2FF00;
-      font-weight: 800;
-    }
-
-    h1, h2, h3, p { margin-top: 0; }
-
-    h1 {
-      margin-bottom: 1.25rem;
-      font-size: clamp(2.6rem, 6vw, 4.9rem);
-      line-height: 1.02;
-      letter-spacing: -.045em;
-      font-weight: 900;
-      text-wrap: balance;
-      text-align: center;
-    }
-
-    .hero-welcome {
-      font-size: clamp(1.3rem, 3vw, 2rem);
-      font-weight: 700;
-      color: var(--text);
-      margin: .5rem auto 0;
-      max-width: 820px;
-      text-align: center;
-    }
-
-    .hero-subhead {
-      max-width: 820px;
-      margin: 0 auto;
-      color: var(--muted);
-      font-size: clamp(1.08rem, 2vw, 1.32rem);
-      text-wrap: balance;
-    }
-
-    .hero-note {
-      max-width: 760px;
-      margin: 1rem auto 0;
-      color: var(--soft);
-      font-size: .98rem;
-    }
-
-    .cta-row {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: .85rem;
-      flex-wrap: wrap;
-      margin-top: 2rem;
-    }
-
-    .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 48px;
-      padding: .78rem 1.15rem;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      text-decoration: none;
-      color: var(--text);
-      background: rgba(255,255,255,.06);
-      font-weight: 800;
-    }
-
-    .button.primary {
-      color: #041016;
-      border: none;
-      background: linear-gradient(135deg, var(--accent), var(--accent-3));
-      box-shadow: 0 12px 40px rgba(34, 211, 238, .24);
-    }
-
-    .button:hover,
-    .button:focus-visible {
-      transform: translateY(-1px);
-      outline: none;
-    }
-
-    .trust-strip {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: .85rem;
-      margin-top: 2rem;
-      text-align: left;
-    }
-
-    .trust-pill {
-      padding: 1rem 1.1rem;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(255,255,255,.045);
-      color: var(--muted);
-    }
-
-    .trust-pill strong {
-      display: block;
-      margin-bottom: .25rem;
-      color: var(--text);
-      font-size: .98rem;
-    }
-
-    .video-section { padding-top: 1rem; }
-
-    .video-intro {
-      text-align: center;
-      max-width: 760px;
-      margin: 0 auto 1.35rem;
-      color: var(--muted);
-      font-size: clamp(1rem, 2vw, 1.18rem);
-    }
-
-    .video-frame {
-      position: relative;
-      overflow: hidden;
-      width: min(100%, 960px);
-      margin: 0 auto;
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      background: linear-gradient(135deg, rgba(125, 211, 252, .12), rgba(167, 139, 250, .10));
-      box-shadow: 0 24px 90px rgba(0,0,0,.36);
-    }
-
-    .video-frame::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: radial-gradient(circle at 50% 0%, rgba(125,211,252,.22), transparent 40%);
-      z-index: 1;
-    }
-
-    .video-frame video,
-    .video-fallback {
-      display: block;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
-    }
-
-    .video-frame video {
-      opacity: 0;
-      transition: opacity .7s ease;
-    }
-
-    .video-frame.video-playing video { opacity: 1; }
-
-    .video-intro-still {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 2;
-      transition: opacity .7s ease;
-    }
-
-    .video-frame.video-playing .video-intro-still {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .video-audio-toggle {
-      position: absolute;
-      bottom: 12px;
-      right: 12px;
-      z-index: 5;
-      background: rgba(0, 0, 0, 0.7);
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 6px;
-      padding: 6px 14px;
-      font-size: 13px;
-      font-family: inherit;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity .3s ease, background .2s ease;
-    }
-
-    .video-frame.video-playing .video-audio-toggle { opacity: 1; }
-
-    .video-audio-toggle:hover {
-      background: rgba(0, 0, 0, 0.85);
-    }
-
-    .video-audio-toggle[aria-pressed="true"] {
-      background: rgba(94, 53, 177, 0.85);
-      border-color: rgba(255, 255, 255, 0.5);
-    }
-
-    .video-fallback {
-      display: grid;
-      place-items: center;
-      padding: 3rem;
-      color: var(--muted);
-      text-align: center;
-    }
-
-    .section-head {
-      max-width: 780px;
-      margin: 0 auto 2rem;
-      text-align: center;
-    }
-
-    .section-label {
-      color: var(--accent);
-      font-weight: 800;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      font-size: .78rem;
-      margin-bottom: .75rem;
-    }
-
-    h2 {
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      line-height: 1.04;
-      letter-spacing: -.045em;
-      margin-bottom: 1rem;
-      text-wrap: balance;
-    }
-
-    h3 {
-      font-size: clamp(1.25rem, 2.5vw, 1.65rem);
-      line-height: 1.15;
-      margin-bottom: .75rem;
-    }
-
-    .muted { color: var(--muted); }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      max-width: 1000px;
-      margin: 0 auto;
-      justify-content: center;
-    }
-
-    .grid-2-center {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-      max-width: 840px;
-      margin: 0 auto;
-      justify-content: center;
-    }
-
-    .card {
-      padding: 1.35rem;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      background: var(--panel);
-    }
-
-    .card p:last-child { margin-bottom: 0; }
-
-    .split {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      align-items: start;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .split-centered {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      max-width: 1000px;
-      margin: 0 auto;
-      gap: 1rem;
-    }
-
-    .split-centered .section-head {
-      text-align: center;
-      max-width: 780px;
-      margin: 0 auto;
-    }
-
-    .split-centered .card {
-      max-width: 560px;
-      width: 100%;
-    }
-
-    .list {
-      display: grid;
-      gap: .85rem;
-      padding: 0;
-      list-style: none;
-      margin: 0 auto;
-      max-width: 840px;
-    }
-
-    .privacy-section {
-      max-width: 860px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .privacy-section p {
-      max-width: 780px;
-      margin: 1rem auto;
-      line-height: 1.7;
-    }
-
-    .privacy-section .privacy-heading {
-      font-size: clamp(1.6rem, 3vw, 2.2rem);
-      font-weight: 900;
-      margin: 1.5rem auto .75rem;
-      color: #F2FF00;
-      text-shadow: 0 0 4px rgba(242,255,0,0.95), 0 0 10px rgba(255,230,0,0.85), 0 0 20px rgba(255,184,0,0.65);
-    }
-
-    .privacy-section .privacy-statement {
-      max-width: 780px;
-      margin: 1.5rem auto;
-      padding: 2rem;
-      border: 1px solid rgba(242, 255, 0, 0.15);
-      border-radius: 24px;
-      background: rgba(242, 255, 0, 0.03);
-      text-align: left;
-    }
-
-    .privacy-section .privacy-statement p {
-      margin: .85rem auto;
-      text-align: left;
-    }
-
-    .privacy-section .privacy-tagline {
-      font-size: clamp(1.3rem, 2.5vw, 1.8rem);
-      font-weight: 900;
-      color: #F2FF00;
-      text-shadow: 0 0 4px rgba(242,255,0,0.95), 0 0 10px rgba(255,230,0,0.85), 0 0 20px rgba(255,184,0,0.65);
-      margin: 1.5rem auto 1rem;
-    }
-
-    .list li {
-      padding: 1rem;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(255,255,255,.045);
-    }
-
-    .service-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-    }
-
-    .service-card {
-      display: flex;
-      flex-direction: column;
-      gap: .95rem;
-    }
-
-    .service-price {
-      display: inline-flex;
-      align-self: flex-start;
-      padding: .42rem .78rem;
-      border-radius: 999px;
-      border: 1px solid rgba(125, 211, 252, .28);
-      background: rgba(125, 211, 252, .12);
-      color: var(--accent);
-      font-weight: 900;
-      letter-spacing: .01em;
-    }
-
-    .service-kicker {
-      display: inline-flex;
-      align-self: flex-start;
-      padding: .35rem .7rem;
-      border-radius: 999px;
-      border: 1px solid rgba(167, 139, 250, .24);
-      background: rgba(167, 139, 250, .10);
-      color: var(--muted);
-      font-size: .8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-
-    .service-card .button {
-      width: 100%;
-      margin-top: auto;
-    }
-
-    .service-note {
-      max-width: 840px;
-      margin: 1.25rem auto 0;
-      text-align: center;
-      color: var(--muted);
-    }
-
-    .fit-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-      max-width: 840px;
-      margin: 0 auto;
-    }
-
-    .fit-card {
-      padding: 1.2rem;
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      background: rgba(255,255,255,.045);
-    }
-
-    .fit-card strong {
-      display: block;
-      margin-bottom: .35rem;
-    }
-
-    .support-panel {
-      max-width: 840px;
-      margin: 0 auto;
-      padding: clamp(1.5rem, 4vw, 2.5rem);
-      border: 1px solid var(--line);
-      border-radius: 30px;
-      background: linear-gradient(135deg, rgba(125, 211, 252, .105), rgba(167, 139, 250, .095));
-      text-align: center;
-    }
-
-    .donation-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin: 1.5rem auto 0;
-      text-align: center;
-      width: 100%;
-      max-width: 900px;
-      justify-content: center;
-    }
-
-    .donation-grid-wrapper { display: flex; justify-content: center; }
-
-    .donation-group {
-      min-width: 0;
-      padding: 1.2rem;
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      background: rgba(0,0,0,.16);
-      text-align: center;
-    }
-
-    .amounts {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: .6rem;
-      margin-top: .85rem;
-    }
-
-    .amounts a {
-      min-width: 72px;
-      text-align: center;
-      white-space: nowrap;
-      padding: .62rem .78rem;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(255,255,255,.07);
-      text-decoration: none;
-      color: var(--text);
-      font-weight: 800;
-    }
-
-    .site-footer {
-      border-top: 1px solid var(--line);
-      padding: 2rem 0;
-      color: var(--soft);
-    }
-
-    .footer-inner {
-      width: min(var(--max), calc(100% - 2rem));
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .footer-links a {
-      color: var(--muted);
-      text-decoration: none;
-    }
-
-    .flagship-section { padding-top: 2rem; padding-bottom: 2rem; }
-
-    .flagship-panel {
-      max-width: 880px;
-      margin: 0 auto;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      padding: clamp(2rem, 5vw, 3.25rem);
-      border: 1px solid rgba(167, 139, 250, .4);
-      border-radius: 32px;
-      background: linear-gradient(135deg, rgba(167, 139, 250, .16), rgba(125, 211, 252, .1));
-      box-shadow: 0 24px 90px rgba(167, 139, 250, .16);
-    }
-
-    .flagship-badges {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: .6rem;
-      margin-bottom: 1.4rem;
-    }
-
-    .flagship-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: .45rem;
-      padding: .42rem .85rem;
-      border-radius: 999px;
-      border: 1px solid rgba(167, 139, 250, .4);
-      background: rgba(167, 139, 250, .14);
-      color: var(--text);
-      font-size: .82rem;
-      font-weight: 800;
-      letter-spacing: .05em;
-      text-transform: uppercase;
-    }
-
-    .flagship-badge .badge-dot {
-      width: .55rem;
-      height: .55rem;
-      border-radius: 999px;
-      background: var(--accent-3);
-      box-shadow: 0 0 12px rgba(34, 211, 238, .8);
-    }
-
-    .flagship-name {
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      line-height: 1.02;
-      letter-spacing: -.04em;
-      font-weight: 900;
-      margin-bottom: .65rem;
-    }
-
-    .flagship-phrase {
-      max-width: 880px;
-      margin: 0 auto 1.1rem;
-      font-size: clamp(1.35rem, 3vw, 2.1rem);
-      line-height: 1.18;
-      font-weight: 800;
-      letter-spacing: -.02em;
-      text-wrap: balance;
-    }
-
-    .flagship-teaser {
-      max-width: 720px;
-      margin: 0 auto 1.75rem;
-      color: var(--muted);
-      font-size: clamp(1.02rem, 2vw, 1.18rem);
-    }
-
-    .flagship-teaser .no-code { color: var(--accent); font-weight: 900; }
-
-    @media (max-width: 760px) {
-      .nav { align-items: flex-start; flex-direction: column; padding: 1rem 0; }
-      .nav-links { justify-content: flex-start; }
-      .hero { min-height: auto; padding-top: 5rem; }
-      .grid, .split, .service-grid, .donation-grid, .fit-grid, .trust-strip { grid-template-columns: 1fr; }
-      h1 { font-size: clamp(2.35rem, 11vw, 3.85rem); }
-      .footer-inner { flex-direction: column; text-align: center; gap: .75rem; }
-      .footer-links { justify-content: center; }
-      .donation-grid { text-align: center; }
-      .donation-group { text-align: center; }
-      .split-centered { max-width: 100%; }
-      .privacy-section .privacy-statement { padding: 1.25rem; }
-    }
+    body{background:#06111d;color:#edf4ff}[data-theme="light"] body{background:#f5f7fa;color:#1a1a2e}
+    .home-hero{padding:7rem 0 5rem}.home-hero-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,.7fr);gap:3rem;align-items:center}
+    .home-hero h1{font-size:clamp(3rem,6vw,5.6rem);line-height:.98;letter-spacing:-.055em;max-width:920px;margin:.8rem 0 1.25rem}
+    .home-lead{font-size:clamp(1.08rem,2vw,1.3rem);line-height:1.7;color:var(--muted);max-width:800px}.hero-brief{display:grid;gap:.75rem;padding:1.4rem;border:1px solid var(--line);border-radius:18px;background:var(--panel)}
+    .brief-row{display:flex;justify-content:space-between;gap:1rem;padding:.8rem 0;border-top:1px solid var(--line)}.brief-row:first-child{border-top:0}.brief-row span{color:var(--muted)}
+    .portfolio-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.portfolio-card{display:grid;gap:1rem;padding:1.5rem;border:1px solid var(--line);border-radius:18px;background:var(--panel)}
+    .portfolio-card h3{font-size:1.35rem;margin:0}.portfolio-card p{margin:0;color:var(--muted)}.portfolio-card .button{align-self:end}.enterprise-band{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .enterprise-panel{padding:1.6rem;border:1px solid var(--line);border-radius:18px;background:var(--panel)}.signal-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.75rem}
+    .signal{padding:1.1rem;border-top:2px solid var(--line);background:rgba(255,255,255,.025)}.signal strong{display:block;margin-bottom:.35rem}.signal span{color:var(--muted);font-size:.9rem}
+    .product-focus{display:grid;grid-template-columns:1fr .8fr;gap:1.25rem;align-items:stretch}.product-focus-main,.product-focus-side{padding:1.8rem;border:1px solid var(--line);border-radius:18px;background:var(--panel)}
+    .product-focus-main h2{font-size:clamp(2rem,4vw,3.4rem);letter-spacing:-.04em}.product-facts{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0}.product-facts span{padding:.4rem .7rem;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:.84rem}
+    .principles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.principle{padding:1.4rem;border-top:1px solid var(--line)}.principle strong{display:block;font-size:1.08rem;margin-bottom:.45rem}.principle p{margin:0;color:var(--muted)}
+    .support-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.support-box{padding:1.5rem;border:1px solid var(--line);border-radius:18px;background:var(--panel)}.amounts{display:flex;gap:.5rem;flex-wrap:wrap}.amounts a{padding:.65rem .85rem;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:inherit}
+    @media(max-width:900px){.home-hero-grid,.product-focus,.enterprise-band,.support-grid{grid-template-columns:1fr}.portfolio-grid,.principles{grid-template-columns:1fr 1fr}.signal-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:620px){.portfolio-grid,.principles,.signal-grid{grid-template-columns:1fr}.home-hero{padding-top:5rem}}
   </style>
-<style id="command-nexus-early-access-style">
-  #command-nexus-early-access {
-    max-width: 900px;
-    margin: 32px auto;
-    padding: 28px;
-    border-radius: 18px;
-    border: 1px solid rgba(255,255,255,0.18);
-    background: rgba(10,10,18,0.72);
-    box-shadow: 0 12px 34px rgba(0,0,0,0.28);
-  }
-
-  #command-nexus-early-access h2 {
-    margin-top: 0;
-    font-size: 2rem;
-  }
-
-  #command-nexus-early-access p {
-    line-height: 1.55;
-  }
-
-  #command-nexus-early-access .cnx-download-button {
-    display: inline-block;
-    margin: 14px 0;
-    padding: 14px 20px;
-    border-radius: 12px;
-    text-decoration: none;
-    font-weight: 800;
-    border: 1px solid rgba(255,255,255,0.22);
-  }
-
-  #command-nexus-early-access .cnx-key-note {
-    font-size: 0.95rem;
-    opacity: 0.88;
-  }
-
-  video,
-  .command-nexus-video,
-  #command-nexus-video,
-  iframe[src*="youtube"],
-  iframe[src*="vimeo"] {
-    transform: none !important;
-    scale: 1 !important;
-    transition: none !important;
-    animation: none !important;
-    object-fit: contain !important;
-    max-width: 100% !important;
-  }
-
-  video:hover,
-  .command-nexus-video:hover,
-  #command-nexus-video:hover {
-    transform: none !important;
-    scale: 1 !important;
-  }
-</style>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-
   <main id="main" class="main-content">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-inner">
-        <div class="eyebrow">Independent studio in active development</div>
-        <h1 id="hero-title"><span class="neon-heading">PRIVACY</span> SHOULD BE STANDARD.</h1>
-        <p class="hero-welcome">Welcome to Avery Logic Works.</p>
-        <p class="hero-subhead">A founder-led software, AI, and digital systems studio built with a clear point of view: <span class="neon-accent">your data. Your choice.</span> Limited support-backed collaboration may be available, but the larger purpose is building long-term software, AI, and interactive systems that respect the people who use them.</p>
-        <p class="hero-note">If you want to purchase a paid service or look at the current collaboration options, more information is below, and the paid services button is always at the top.</p>
-        <div class="cta-row" aria-label="Homepage actions">
-          <a class="button primary" href="#privacy-promise">Read our privacy promise</a>
-          <a class="button" href="#custom-software" data-track-event="homepage_service_cta_click">View paid services</a>
-          <a class="button" href="founder.html" data-track-event="homepage_founder_cta_click">Meet the founder</a>
-        </div>
-        <div class="trust-strip" aria-label="Trust signals">
-          <div class="trust-pill">
-            <strong><span class="neon-accent">Privacy</span> by design, not by accident</strong>
-            Limited information collection, clear purpose, and user choice are built into the foundation.
-          </div>
-          <div class="trust-pill">
-            <strong>Founder-led from start to finish</strong>
-            You are working directly with the person building the system, not being handed off into a queue.
-          </div>
-          <div class="trust-pill">
-            <strong>Built for usefulness, not fluff</strong>
-            The goal is a working result that solves something real, not a pile of vague promises.
+    <section class="home-hero">
+      <div class="container home-hero-grid">
+        <div>
+          <span class="eyebrow">Software · AI · Systems</span>
+          <h1>Software infrastructure built for control, privacy, and practical use.</h1>
+          <p class="home-lead">Avery Logic Works develops software platforms, AI systems, focused Windows applications, and purpose-built automation. The portfolio is organized around clear ownership, understandable licensing, responsible data handling, and technology that remains useful after the demo ends.</p>
+          <div class="cta-row">
+            <a class="button primary" href="#products">Explore products</a>
+            <a class="button" href="service-intake.html" data-track-event="homepage_service_cta_click">Custom software</a>
+            <a class="button" href="founder.html" data-track-event="homepage_founder_cta_click">Company</a>
           </div>
         </div>
+        <aside class="hero-brief" aria-label="Avery Logic Works portfolio overview">
+          <span class="tag">Portfolio</span>
+          <div class="brief-row"><strong>One-Time Software</strong><span>Per-computer licensing</span></div>
+          <div class="brief-row"><strong>Software Subscriptions</strong><span>Recurring access</span></div>
+          <div class="brief-row"><strong>AI Systems</strong><span>Local-first where practical</span></div>
+          <div class="brief-row"><strong>Custom Software</strong><span>Defined-scope builds</span></div>
+        </aside>
       </div>
     </section>
 
-    <section id="privacy-promise" aria-labelledby="privacy-promise-title">
-      <div class="privacy-section">
-        <div class="section-label"><span class="neon-accent">Privacy</span> Promise</div>
-        <h2 id="privacy-promise-title" class="privacy-heading">Your Privacy Matters</h2>
-        <div class="privacy-statement">
-          <p>Avery Logic Works collects <strong>very little</strong> personal information.</p>
-          <p>The limited information we collect is used only for website continuity, account operation, usability, user-selected options and features, saved preferences, trusted-device recognition, requested communications, purchases, licensing, customer support, and security.</p>
-          <p>For example, an email address may be required to create and identify an account, send a requested newsletter, connect a purchase with the correct customer, issue a license key, provide support, or restore access to an account.</p>
-          <p>We do <strong>not</strong> sell your personal information to third parties, and we do <strong>not</strong> use it to build advertising profiles for outside companies.</p>
-          <p>We do <strong>not</strong> collect information for monetization. We collect limited information for continuity, functionality, user choice, and security.</p>
-          <p>Whenever a choice can reasonably be provided, that choice belongs to the user.</p>
-          <p class="privacy-tagline">Your data. Your choice.</p>
-          <p>Certain limited security information must be processed to protect users, accounts, purchases, transactions, license keys, and Avery Logic Works systems. Essential security processing cannot be disabled while using services that depend on it. However, security-related collection must remain limited to what is reasonably necessary for protection, fraud prevention, system integrity, and reliable operation.</p>
-          <p>Any information collected must be handled carefully, used only for its clearly stated purpose, and retained only for as long as reasonably necessary for that purpose, account operation, licensing, legal obligations, or security.</p>
-          <p>We do not state or imply that Avery Logic Works collects absolutely no information. The wording here is honest about the limited information required for accounts, purchases, licensing, selected features, continuity, and security.</p>
-          <p>We do not store or transmit a customer&rsquo;s raw password merely because the customer selects <strong>Remember This Device</strong>. We use a secure, expiring, revocable authentication token. The customer&rsquo;s browser or password manager may separately save credentials when the customer chooses to allow it.</p>
-        </div>
-        <div class="cta-row" style="margin-top:1.5rem;">
-          <a class="button" href="privacy.html">Full privacy policy</a>
-          <a class="button primary" href="#custom-software" data-track-event="homepage_service_cta_click">View paid services</a>
+    <section id="products" class="section-tight">
+      <div class="container">
+        <div class="section-head"><div class="section-label">Product portfolio</div><h2>Different products. One operating philosophy.</h2><p class="muted">Choose the ownership model and product category that fits the job rather than forcing every customer into the same subscription.</p></div>
+        <div class="portfolio-grid">
+          <article class="portfolio-card"><span class="tag">One-Time Software</span><h3>Speakeasy & QuadraHydra</h3><p>Focused Windows tools available under one-purchase, one-computer licensing, with account-issued evaluation access.</p><a class="button primary" href="programs.html">View one-time software</a></article>
+          <article class="portfolio-card"><span class="tag alt">Software Subscriptions</span><h3>Recurring-access platforms</h3><p>Software that receives ongoing platform access, development, and service through an individual subscription plan.</p><a class="button primary" href="software-subscriptions.html">View subscriptions</a></article>
+          <article class="portfolio-card"><span class="tag warm">Custom Software</span><h3>Defined business problems</h3><p>Purpose-built scripts, tools, automations, repairs, and compact applications with a private intake before checkout.</p><a class="button primary" href="service-intake.html?tier=custom" data-track-event="homepage_service_cta_click">Request a build</a></article>
         </div>
       </div>
     </section>
 
-    <section class="flagship-section" aria-labelledby="flagship-title">
-      <div class="flagship-panel">
-        <div class="flagship-badges">
-          <span class="flagship-badge"><span class="badge-dot"></span> Flagship product</span>
-          <span class="flagship-badge">Full access</span>
-        </div>
-        <div class="flagship-name" id="flagship-title">Command Nexus</div>
-        <p class="flagship-phrase">Frontier-level AI intelligence. On your machine. Under your rules.</p>
-        <p class="flagship-teaser">Powered by the NEXUS Cognitive Architecture &mdash; designed for persistent context, adaptable reasoning, self-checking, and flexible model support while proprietary implementation details remain private. <span class="no-code">No coding required.</span></p>
-        <div class="cta-row" aria-label="Command Nexus actions">
-          <a class="button primary" href="command-nexus.html#features">Explore Command Nexus features</a>
-          <a class="button" href="command-nexus.html#pricing">Start / activate access</a>
-        </div>
-      </div>
-    </section>
-
-    <section aria-labelledby="programs-teaser-title">
-      <div class="section-head" style="text-align:center;margin:0 auto 2rem;">
-        <div class="section-label">Small programs &amp; utilities</div>
-        <h2 id="programs-teaser-title" style="font-size:clamp(1.6rem,3vw,2.2rem);">Not everything needs to be a flagship.</h2>
-        <p class="muted">Sometimes you just need a small, focused tool that does one thing well. No subscriptions, no bloat &mdash; just a program that works. <a href="programs.html" style="color:var(--accent);text-decoration:none;font-weight:700;">Browse small programs &rarr;</a></p>
-      </div>
-    </section>
-
-    <section class="video-section" aria-labelledby="video-title">
-      <p id="video-title" class="video-intro">Built through controlled iteration, using proprietary systems and AI-assisted automation to produce real, working software.</p>
-      <div class="video-frame" data-reveal-video data-reveal-delay="2500">
-        <video id="cn-promo-video" muted loop playsinline preload="metadata" poster="assets/1000008564.png" aria-label="Avery Logic Works visual identity animation">
-          <source src="assets/Command_Nexus_power_video_FINAL_sequence_usecase_zoom_caption.mp4" type="video/mp4" />
-          <track kind="captions" src="assets/command-nexus-captions.vtt" srclang="en" label="English" default />
-          <img class="video-fallback" src="assets/1000008564.png" alt="Avery Logic Works visual identity animation" />
-        </video>
-        <img class="video-intro-still" src="assets/1000008564.png" alt="Founder building Avery Logic Works systems by hand" />
-        <button class="video-audio-toggle" id="video-audio-toggle" type="button" aria-label="Unmute video" aria-pressed="false" title="Click to unmute">Sound: Off</button>
-      </div>
-    </section>
-
-
-    <section id="custom-software" aria-labelledby="services-title">
-      <div class="section-head">
-        <div class="section-label">Paid service</div>
-        <h2 id="services-title">Custom software, built by the founder.</h2>
-        <p class="muted">Have a specific problem that needs a custom solution? Describe what you need, and the founder will build it. One scoped build, one price, one conversation.</p>
-      </div>
-      <div class="service-grid" style="grid-template-columns:1fr;max-width:480px;margin:0 auto;">
-        <article class="card service-card">
-          <div class="service-kicker">Custom software build</div>
-          <div class="service-price">$100</div>
-          <h3>Custom Software</h3>
-          <p>Tell the founder what you need built &mdash; a custom script, a utility program, an automation, a tool, or a focused fix. The request is reviewed and the build is scoped to match.</p>
-          <p class="muted">You&rsquo;ll describe exactly what you want on a private intake page before checkout. The founder follows up within 24 hours after the request and purchase are both received.</p>
-          <a class="button primary" href="service-intake.html?tier=custom" data-track-event="homepage_service_cta_click">Request Custom Software Build</a>
+    <section class="section-tight" aria-labelledby="command-nexus-title">
+      <div class="container product-focus">
+        <article class="product-focus-main">
+          <span class="tag">Subscription software</span>
+          <h2 id="command-nexus-title">Command Nexus</h2>
+          <p class="home-lead">AI orchestration and control designed around persistent context, agent creation, workflow coordination, governance visibility, and flexible local or external model support while proprietary implementation details remain private.</p>
+          <div class="product-facts"><span>Windows</span><span>3-day free evaluation</span><span>Recurring plans</span><span>Owner-controlled workflows</span></div>
+          <div class="cta-row"><a class="button primary" href="command-nexus.html">Explore Command Nexus</a><a class="button" href="command-nexus.html#pricing">Plans & pricing</a></div>
         </article>
-      </div>
-      <p class="service-note">The intake form sends your project details privately to the founder before checkout opens. If the request needs broader scope, the founder will contact you about the next step before work begins.</p>
-    </section>
-
-    <section id="good-fit" aria-labelledby="fit-title">
-      <div class="section-head">
-        <div class="section-label">Good fit right now</div>
-        <h2 id="fit-title">What people can bring to Avery Logic Works today</h2>
-        <p class="muted">The fastest path to yes is a small, clear problem with a useful outcome. These are the kinds of requests the current build slots are meant to handle well.</p>
-      </div>
-      <div class="fit-grid">
-        <div class="fit-card">
-          <strong>Fix a frustrating bug</strong>
-          Clean up a broken behavior, repair a logic issue, or untangle a small software problem that keeps wasting time.
-        </div>
-        <div class="fit-card">
-          <strong>Automate something repetitive</strong>
-          Turn a repeated manual step into a script or compact workflow so the work gets lighter and faster.
-        </div>
-        <div class="fit-card">
-          <strong>Build a small useful tool</strong>
-          Create a compact utility, helper script, or focused internal tool that solves one job clearly.
-        </div>
-        <div class="fit-card">
-          <strong>Start with a low-risk first project</strong>
-          Use a small paid build as the easiest way to see whether the working style and results are a good fit.
-        </div>
+        <aside class="product-focus-side">
+          <span class="section-label">Control model</span>
+          <h3>Capability without surrendering visibility.</h3>
+          <p class="muted">Command Nexus is positioned as one platform within the Avery Logic Works portfolio, not as the identity of the company itself. Customers can evaluate the product, select a plan, and keep product access separate from one-time software licenses.</p>
+          <a class="button" href="software-subscriptions.html">Software Subscriptions</a>
+        </aside>
       </div>
     </section>
 
-    <section id="philosophy" aria-labelledby="philosophy-title">
-      <div class="section-head">
-        <div class="section-label">Studio direction</div>
-        <h2 id="philosophy-title">Avery Logic Works is being built for more than one-off jobs.</h2>
-      </div>
-      <div class="split">
-        <div class="card">
-          <p>Avery Logic Works exists to build technology that matters, designed for lasting usefulness instead of momentary attention.</p>
-          <p>The public build slots help fund that work, create real proof through real systems, and keep the studio anchored in practical results instead of theory alone.</p>
+    <section id="privacy-promise" class="section-tight">
+      <div class="container">
+        <div class="section-head"><div class="section-label">Trust architecture</div><h2>Privacy should be standard.</h2><p class="muted">Avery Logic Works collects the information needed for accounts, licensing, purchases, requested communications, support, fraud prevention, and reliable operation. Personal information is not sold to advertisers.</p></div>
+        <div class="signal-grid">
+          <div class="signal"><strong>Purpose-limited data</strong><span>Collection should have an operational reason.</span></div>
+          <div class="signal"><strong>Account-linked licensing</strong><span>Entitlements can be traced and supported.</span></div>
+          <div class="signal"><strong>Security telemetry</strong><span>Kept separate from ordinary business analytics where practical.</span></div>
+          <div class="signal"><strong>User choice</strong><span>Optional communications remain optional.</span></div>
         </div>
-        <div class="card">
-          <p>The larger direction includes AI systems, applications, interactive projects, and long-term software infrastructure built with care, clarity, and disciplined iteration.</p>
-          <p>What is offered publicly right now is the early, practical entry point, not the ceiling of what the studio is meant to become.</p>
-        </div>
+        <div class="cta-row"><a class="button" href="privacy.html">Read the privacy policy</a><a class="button" href="terms.html">Terms of use</a></div>
       </div>
     </section>
 
-    <section id="work" aria-labelledby="work-title">
-      <div class="section-head">
-        <div class="section-label">What this studio is growing into</div>
-        <h2 id="work-title">A longer arc than services alone</h2>
-        <p class="muted">The studio is being built to produce technology that is useful, understandable, and capable of lasting beyond short-term cycles.</p>
-      </div>
-      <div class="grid">
-        <article class="card">
-          <h3>AI systems</h3>
-          <p>Tools and workflows designed for clarity, control, usefulness, and human-centered direction.</p>
+    <section id="custom-software" class="section-tight">
+      <div class="container enterprise-band">
+        <article class="enterprise-panel">
+          <span class="tag">Custom Software</span>
+          <h2>Purpose-built work with a controlled intake.</h2>
+          <p class="muted">Describe the outcome, requirements, constraints, and supporting material before checkout. The private intake is recorded first, then the matching PayPal checkout opens.</p>
+          <a class="button primary" href="service-intake.html?tier=custom" data-track-event="homepage_service_cta_click">Start a custom software request</a>
         </article>
-        <article class="card">
-          <h3>Applications</h3>
-          <p>Software built to support real workflows, solve real problems, and remain understandable as it grows.</p>
-        </article>
-        <article class="card">
-          <h3>Interactive projects</h3>
-          <p>Games, experiments, and digital systems developed with structure, intention, and long-term potential.</p>
+        <article class="enterprise-panel">
+          <span class="tag alt">Company</span>
+          <h2>Founder-led. Systems-driven.</h2>
+          <p class="muted">Avery Logic Works is developed under direct founder ownership with a growing internal operating stack for product development, licensing, customer support, analytics, and release management.</p>
+          <a class="button" href="founder.html">Company & founder</a>
         </article>
       </div>
     </section>
 
-    <section aria-labelledby="together-title">
-      <div class="section-head">
-        <div class="section-label">Working together</div>
-        <h2 id="together-title">What the working style is meant to feel like</h2>
-      </div>
-      <ul class="list">
-        <li>Clear scope, focused outcome, and direct communication</li>
-        <li>Built quickly with intention, then refined where it matters</li>
-        <li>Designed for real use, not just presentation</li>
-        <li>Adjusted honestly if the request is bigger than the starting tier</li>
-      </ul>
-    </section>
-
-    <section aria-labelledby="founder-title">
-      <div class="split-centered">
-        <div class="section-head">
-          <div class="section-label">Founder-led</div>
-          <h2 id="founder-title">Built independently, carefully, and with a longer horizon in mind.</h2>
-        </div>
-        <div class="card">
-          <p>Avery Logic Works is an independent, founder-led software studio building long-term systems across AI, software, and interactive technology.</p>
-          <p>Work is developed within a growing set of internal tools, automation systems, and studio infrastructure designed to support research, development, and disciplined release.</p>
-          <a class="button" href="founder.html">Read the founder note</a>
+    <section class="section-tight">
+      <div class="container">
+        <div class="section-head"><div class="section-label">Operating principles</div><h2>Built as a durable product company.</h2></div>
+        <div class="principles">
+          <div class="principle"><strong>Clear commercial terms</strong><p>One-time purchases, evaluations, and recurring plans are presented as separate offers.</p></div>
+          <div class="principle"><strong>Reversible operations</strong><p>Product and backend changes are designed to preserve history and support controlled rollback.</p></div>
+          <div class="principle"><strong>Useful over decorative</strong><p>Interfaces and features should make the underlying work easier to understand and operate.</p></div>
         </div>
       </div>
     </section>
 
-    <section aria-labelledby="privacy-title">
-      <div class="grid">
-        <article class="card">
-          <div class="section-label">Selective visibility</div>
-          <h3>Some work can be shared early. Some stays private until it is ready.</h3>
-          <p>The public site communicates mission, visible progress, and working entry points without forcing every internal system into the open too early.</p>
-        </article>
-        <article class="card">
-          <div class="section-label">Trust & <span class="neon-accent">privacy</span></div>
-          <h3 id="privacy-title">Private information should not be treated like a product.</h3>
-          <p><span class="neon-accent">Privacy</span>, account controls, and respectful handling of user information are part of the design philosophy here, not an afterthought added later.</p>
-        </article>
-        <article class="card">
-          <div class="section-label">Updates</div>
-          <h3>Updates should make the work meaningfully better.</h3>
-          <p>The aim is not constant change for its own sake. Updates should improve the system, extend usefulness, or strengthen what already works.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="support" aria-labelledby="support-title">
-      <div class="support-panel">
-        <div class="section-label">Support the studio</div>
-        <h2 id="support-title">Want to help fund the larger build?</h2>
-        <p>If you are here because you believe in the direction of Avery Logic Works, support options are available below even if you do not need a service slot right now.</p>
-        <p>That support helps keep the studio moving while the larger body of work grows.</p>
-        <a class="button primary" href="#donation-options">Go to support options</a>
-      </div>
-    </section>
-
-    <section id="donation-options" aria-labelledby="donation-title">
-      <div class="section-head">
-        <div class="section-label">Support options</div>
-        <h2 id="donation-title">Direct support, kept separate from service work.</h2>
-        <p class="muted">This is for people who want to support the studio itself. Service slots and direct support stay separate so the page remains clear.</p>
-      </div>
-      <div class="donation-grid">
-        <div class="donation-group">
-          <h3>One-time support</h3>
-          <div class="amounts" aria-label="One-time support amounts">
-            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=10&item_name=Avery+Logic+Works+Donation&currency_code=USD" target="_blank" rel="noopener noreferrer">$10</a>
-            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=25&item_name=Avery+Logic+Works+Donation&currency_code=USD" target="_blank" rel="noopener noreferrer">$25</a>
-            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=50&item_name=Avery+Logic+Works+Donation&currency_code=USD" target="_blank" rel="noopener noreferrer">$50</a>
-            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=100&item_name=Avery+Logic+Works+Donation&currency_code=USD" target="_blank" rel="noopener noreferrer">$100</a>
-          </div>
+    <section id="donation-options" class="section-tight">
+      <div class="container">
+        <div class="section-head"><div class="section-label">Support Avery Logic Works</div><h2>Direct support is separate from product purchases.</h2><p class="muted">Support the company’s continued development without buying a product or service. These payments do not create product ownership, equity, or governance rights.</p></div>
+        <div class="support-grid">
+          <div class="support-box"><h3>One-time support</h3><div class="amounts"><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=10&item_name=Avery+Logic+Works+Donation&currency_code=USD" target="_blank" rel="noopener noreferrer" data-track-event="homepage_donation_click">$10</a><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=25&item_name=Avery+Logic+Works+Donation&currency_code=USD" target="_blank" rel="noopener noreferrer" data-track-event="homepage_donation_click">$25</a><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=50&item_name=Avery+Logic+Works+Donation&currency_code=USD" target="_blank" rel="noopener noreferrer" data-track-event="homepage_donation_click">$50</a><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=100&item_name=Avery+Logic+Works+Donation&currency_code=USD" target="_blank" rel="noopener noreferrer" data-track-event="homepage_donation_click">$100</a></div></div>
+          <div class="support-box"><h3>Monthly support</h3><div class="amounts"><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=10&p3=1&t3=M&item_name=Avery+Logic+Works+Monthly+Support&currency_code=USD" target="_blank" rel="noopener noreferrer">$10/mo</a><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=25&p3=1&t3=M&item_name=Avery+Logic+Works+Monthly+Support&currency_code=USD" target="_blank" rel="noopener noreferrer">$25/mo</a><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=50&p3=1&t3=M&item_name=Avery+Logic+Works+Monthly+Support&currency_code=USD" target="_blank" rel="noopener noreferrer">$50/mo</a><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=100&p3=1&t3=M&item_name=Avery+Logic+Works+Monthly+Support&currency_code=USD" target="_blank" rel="noopener noreferrer">$100/mo</a></div></div>
         </div>
-        <div class="donation-group">
-          <h3>Monthly support</h3>
-          <div class="amounts" aria-label="Monthly support amounts">
-            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=10&p3=1&t3=M&item_name=Avery+Logic+Works+Monthly+Support&currency_code=USD" target="_blank" rel="noopener noreferrer">$10/mo</a>
-            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=25&p3=1&t3=M&item_name=Avery+Logic+Works+Monthly+Support&currency_code=USD" target="_blank" rel="noopener noreferrer">$25/mo</a>
-            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=50&p3=1&t3=M&item_name=Avery+Logic+Works+Monthly+Support&currency_code=USD" target="_blank" rel="noopener noreferrer">$50/mo</a>
-            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=100&p3=1&t3=M&item_name=Avery+Logic+Works+Monthly+Support&currency_code=USD" target="_blank" rel="noopener noreferrer">$100/mo</a>
-          </div>
-        </div>
-      </div>
-      <p class="sub-note" style="text-align:center;margin-top:1rem;">Monthly support can be <strong>cancelled any time</strong> through PayPal&rsquo;s subscription management page.</p>
-      <div class="cta-row">
-        <a class="button" href="support.html">Support, refund & dispute policy</a>
-        <a class="button" href="privacy.html">Email preferences & privacy</a>
-        <a class="button primary" href="signup.html">Sign up / join updates</a>
-        <a class="button" href="login.html">Sign in</a>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <p>&copy; <span id="year"></span> Avery Logic Works&trade;. All rights reserved.</p>
-      <div class="footer-links">
-        <a href="support.html">Support</a>
-        <a href="terms.html">Terms</a>
-        <a href="privacy.html">Privacy</a>
-        <a href="https://www.youtube.com/watch?v=IakQBx4rgks" target="_blank" rel="noopener noreferrer">YouTube</a>
-      </div>
-    </div>
-  </footer>
-
+  <footer class="site-footer"><div class="footer-inner"><p>&copy; <span data-current-year></span> Avery Logic Works&trade;. All rights reserved.</p><div class="footer-links"><a href="programs.html">Products</a><a href="support.html">Support</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a></div></div></footer>
   <script src="assets/site-config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/site-shell.js"></script>
   <script src="assets/site.js"></script>
-  <script>
-    (function () {
-      var frame = document.querySelector('[data-reveal-video]');
-      if (!frame) return;
-      var video = frame.querySelector('video');
-      if (!video) return;
-      var delay = parseInt(frame.getAttribute('data-reveal-delay'), 10);
-      if (isNaN(delay)) delay = 2500;
-      window.setTimeout(function () {
-        var attempt = video.play();
-        if (attempt && typeof attempt.then === 'function') {
-          attempt.then(function () {
-            frame.classList.add('video-playing');
-          }).catch(function () {
-            // Autoplay blocked: keep the still image visible.
-          });
-        } else {
-          frame.classList.add('video-playing');
-        }
-      }, delay);
-    })();
-
-    // Audio toggle for promo video
-    (function () {
-      var toggle = document.getElementById("video-audio-toggle");
-      var video = document.getElementById("cn-promo-video");
-      if (!toggle || !video) return;
-      toggle.addEventListener("click", function () {
-        var isMuted = video.muted;
-        video.muted = !isMuted;
-        toggle.setAttribute("aria-pressed", String(isMuted));
-        toggle.textContent = isMuted ? "Sound: On" : "Sound: Off";
-        toggle.title = isMuted ? "Click to mute" : "Click to unmute";
-        // Show captions only when muted
-        if (video.textTracks.length > 0) {
-          video.textTracks[0].mode = video.muted ? "showing" : "hidden";
-        }
-      });
-      // Start with captions visible (video is muted by default)
-      if (video.textTracks.length > 0) {
-        video.textTracks[0].mode = "showing";
-      }
-    })();
-  </script>
 </body>
 </html>
