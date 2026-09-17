@@ -930,7 +930,8 @@
           <p class="muted">No payment required. Sign up, claim your free trial key, download Command Nexus, and activate it. Full access to every feature for 3 days &mdash; no credit card, no catch.</p>
         </div>
 
-        <div class="free-trial-box" id="free-trial-box">
+        <p role="status" id="cn-release-status">Command Nexus downloads, new trials, and checkout are temporarily paused while we verify the repaired Windows release. Please check back here for the verified download.</p>
+        <div class="free-trial-box" id="free-trial-box" hidden>
           <!-- Step 1: Not signed in -->
           <div class="ft-state" id="ft-state-anon">
             <p class="ft-icon">&#128274;</p>
@@ -968,7 +969,7 @@
             <h3>Your trial key is ready!</h3>
             <p class="soft" style="font-size:.85rem;margin-top:.25rem;">Expires: <span id="ft-expires"></span></p>
             <div class="cta-row" style="margin-top:1rem;">
-              <a class="button primary" href="https://github.com/AveryLogicWorks/Command-Nexus/releases/download/v1.1.0-beta.22/CommandNexus.exe" download id="cn-trial-download-btn">Download CommandNexus.exe for Windows</a>
+              <button class="button primary" type="button" disabled aria-disabled="true" id="cn-trial-download-btn">Download temporarily paused</button>
               <a class="button" href="download.html">Go to download page</a>
             </div>
             <div style="background:rgba(255,196,0,.08);border:1px solid rgba(255,196,0,.3);border-radius:8px;padding:.75rem 1rem;margin-top:1rem;text-align:left;">
@@ -1254,7 +1255,7 @@
         </div>
       </div>
 
-      <a class="button primary" href="https://github.com/AveryLogicWorks/Command-Nexus/releases/download/v1.1.0-beta.22/CommandNexus.exe" download id="cn-download-btn">Download CommandNexus.exe for Windows</a>
+      <button class="button primary" type="button" disabled aria-disabled="true" id="cn-download-btn">Download temporarily paused</button>
       <p class="sub-note" style="margin-top:1rem;">Command Nexus&trade; &mdash; Avery Logic Works&trade;</p>
     </section>
 
@@ -1332,6 +1333,11 @@
       };
       document.querySelectorAll('[data-cn-link]').forEach(function (el) {
         var key = el.getAttribute('data-cn-link');
+        // Release hold: resume checkout only with the verified customer download.
+        el.removeAttribute('href');
+        el.setAttribute('aria-disabled', 'true');
+        el.textContent = 'Temporarily unavailable';
+        return;
         var url = map[key];
         if (url && url !== '#') {
           el.href = url;
@@ -1376,6 +1382,8 @@
 
     // ===== 3-Day Free Trial Claim Flow =====
     (function () {
+      // Release hold: do not start a customer's trial while downloads are paused.
+      return;
       var cfg = window.AVERY_CONFIG || {};
       var sbCfg = cfg.supabase || {};
       var trialUrl = sbCfg.trialKeyEdgeFunction;
