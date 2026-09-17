@@ -26,11 +26,16 @@ function base64Url(bytes: Uint8Array): string {
 }
 
 let commandNexusSigningKeyPromise:
-  | Promise<{ privateKey: CryptoKey; publicKey: string }>
+  | Promise<{
+      privateKey: CryptoKey;
+      publicCryptoKey: CryptoKey;
+      publicKey: string;
+    }>
   | null = null;
 
 async function commandNexusSigningKey(): Promise<{
   privateKey: CryptoKey;
+  publicCryptoKey: CryptoKey;
   publicKey: string;
 }> {
   if (commandNexusSigningKeyPromise) return commandNexusSigningKeyPromise;
@@ -73,7 +78,20 @@ async function commandNexusSigningKey(): Promise<{
     );
     const jwk = await crypto.subtle.exportKey("jwk", privateKey);
     if (!jwk.x) throw new Error("Could not derive the Command Nexus signing public key");
-    return { privateKey, publicKey: jwk.x };
+    const publicCryptoKey = await crypto.subtle.importKey(
+      "jwk",
+      {
+        kty: "OKP",
+        crv: "Ed25519",
+        x: jwk.x,
+        ext: true,
+        key_ops: ["verify"],
+      },
+      { name: "Ed25519" },
+      false,
+      ["verify"],
+    );
+    return { privateKey, publicCryptoKey, publicKey: jwk.x };
   })();
 
   return commandNexusSigningKeyPromise;
@@ -155,11 +173,26 @@ Deno.serve(async (req: Request) => {
   if (req.method === "GET") {
     try {
       const signingKey = await commandNexusSigningKey();
+      const healthPayload = new TextEncoder().encode(
+        JSON.stringify({ purpose: "command-nexus-signing-health", v: 1 }),
+      );
+      const healthSignature = new Uint8Array(
+        await crypto.subtle.sign("Ed25519", signingKey.privateKey, healthPayload),
+      );
+      const signingSelfTest = await crypto.subtle.verify(
+        "Ed25519",
+        signingKey.publicCryptoKey,
+        healthSignature,
+        healthPayload,
+      );
       return json(
         {
           format: "CN1",
           algorithm: "Ed25519",
           public_key: signingKey.publicKey,
+          signing_self_test: signingSelfTest,
+          health_payload: base64Url(healthPayload),
+          health_signature: base64Url(healthSignature),
         },
         200,
       );
