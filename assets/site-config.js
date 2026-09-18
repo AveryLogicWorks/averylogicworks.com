@@ -41,7 +41,7 @@ window.AVERY_CONFIG = {
     firstPurchaseOnly: true
   },
   // Public Command Nexus pricing is currently the Full stage.
-  commandNexusStage: 'full',
+  commandNexusStage: 'beta',
   commandNexus: {
     downloadUrl: 'https://github.com/AveryLogicWorks/Command-Nexus/releases/download/v1.1.0-beta.28/CommandNexus.exe'
   },
@@ -68,21 +68,7 @@ window.AVERY_CONFIG = {
     serviceStarter20: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=20&item_name=Starter+Build&currency_code=USD',
     serviceStandard50: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=50&item_name=Standard+Build&currency_code=USD',
     serviceExpanded100: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=100&item_name=Expanded+Build&currency_code=USD',
-    commandNexusTrial: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=10&item_name=Command+Nexus+15-Day+Extended+Evaluation&currency_code=USD',
-    commandNexusProMonthly: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=30&p3=1&t3=M&item_name=Command+Nexus+Pro+Monthly&currency_code=USD',
-    commandNexusProYearly: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=324&p3=1&t3=Y&item_name=Command+Nexus+Pro+Yearly&currency_code=USD',
-    commandNexusBusinessMonthly: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=50&p3=1&t3=M&item_name=Command+Nexus+Business+Monthly&currency_code=USD',
-    commandNexusBusinessYearly: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=552&p3=1&t3=Y&item_name=Command+Nexus+Business+Yearly&currency_code=USD',
-    commandNexusUnlimitedMonthly: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=80&p3=1&t3=M&item_name=Command+Nexus+Unlimited+Monthly&currency_code=USD',
-    commandNexusUnlimitedYearly: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=900&p3=1&t3=Y&item_name=Command+Nexus+Unlimited+Yearly&currency_code=USD',
     // Historical stage links retained for backward compatibility with hidden stage blocks.
-    commandNexusProAlpha: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=10&p3=1&t3=M&item_name=Command+Nexus+Pro+Alpha&currency_code=USD',
-    commandNexusBusinessAlpha: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=30&p3=1&t3=M&item_name=Command+Nexus+Business+Alpha&currency_code=USD',
-    commandNexusUnlimitedAlpha: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=50&p3=1&t3=M&item_name=Command+Nexus+Unlimited+Alpha&currency_code=USD',
-    commandNexusTrialBeta: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=AveryLogicWorks@gmail.com&amount=5&item_name=Command+Nexus+Beta+Trial&currency_code=USD',
-    commandNexusProBeta: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=20&p3=1&t3=M&item_name=Command+Nexus+Pro+Beta&currency_code=USD',
-    commandNexusBusinessBeta: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=40&p3=1&t3=M&item_name=Command+Nexus+Business+Beta&currency_code=USD',
-    commandNexusUnlimitedBeta: 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=AveryLogicWorks@gmail.com&a3=60&p3=1&t3=M&item_name=Command+Nexus+Unlimited+Beta&currency_code=USD',
     shop: '#',
     portal: '#'
   },

@@ -930,7 +930,7 @@
           <p class="muted">No payment required. Sign up, claim your free trial key, download Command Nexus, and activate it. Full access to every feature for 3 days &mdash; no credit card, no catch.</p>
         </div>
 
-        <p role="status" id="cn-release-status">The repaired Windows beta is available. Sign in to download. Publisher signing is still pending, so Windows may show “Unknown publisher.” New purchases remain paused during release verification.</p>
+        <p role="status" id="cn-release-status">Downloads, new trials, and checkout are temporarily paused while we repair single-computer activation. Plans: Basic $30/month, Pro $50/month, Business $80/month, and Enterprise by quote.</p>
         <div class="free-trial-box" id="free-trial-box">
           <!-- Step 1: Not signed in -->
           <div class="ft-state" id="ft-state-anon">
@@ -969,7 +969,7 @@
             <h3>Your trial key is ready!</h3>
             <p class="soft" style="font-size:.85rem;margin-top:.25rem;">Expires: <span id="ft-expires"></span></p>
             <div class="cta-row" style="margin-top:1rem;">
-              <button class="button primary" type="button" id="cn-trial-download-btn">Download Command Nexus for Windows</button>
+              <button class="button primary" type="button" id="cn-trial-download-btn" disabled aria-disabled="true">Download temporarily paused</button>
               <a class="button" href="download.html">Go to download page</a>
             </div>
             <div style="background:rgba(255,196,0,.08);border:1px solid rgba(255,196,0,.3);border-radius:8px;padding:.75rem 1rem;margin-top:1rem;text-align:left;">
@@ -1016,223 +1016,14 @@
 
     <!-- ===== SIMPLE PRICING ===== -->
     <section id="pricing" aria-labelledby="cn-pricing-title" class="price-simple">
-      <div class="section-head">
-        <div class="section-label">Pricing</div>
-        <h2 id="cn-pricing-title">Choose your plan.</h2>
-        <p class="price-note">Every plan requires a free website account. Start with a free trial, then pick a membership. Unlock additional capabilities anytime through in-program purchases.</p>
-      </div>
-
-      <!-- Quick price summary -->
-      <div class="price-simple-grid">
-        <div class="price-simple-card">
-          <div class="ps-name">Trial</div>
-          <div class="ps-price">$10</div>
-          <div class="ps-note">15 days, full access</div>
-        </div>
-        <div class="price-simple-card">
-          <div class="ps-name">Pro</div>
-          <div class="ps-price">$30/mo</div>
-          <div class="ps-note">or $324/year</div>
-        </div>
-        <div class="price-simple-card">
-          <div class="ps-name">Business</div>
-          <div class="ps-price">$50/mo</div>
-          <div class="ps-note">or $552/year</div>
-        </div>
-        <div class="price-simple-card">
-          <div class="ps-name">Unlimited</div>
-          <div class="ps-price">$80/mo</div>
-          <div class="ps-note">or $900/year</div>
-        </div>
-      </div>
-      <p class="sub-note" style="text-align:center; max-width:680px; margin:0 auto 1.5rem;">Additional capabilities &mdash; like Voice Interface, Visual Canvas, Memory Bridge, Email Automation, Financial Gainer, and more &mdash; are available as one-time in-program purchases. Buy only what you need.</p>
-
-      <!-- Detailed pricing stages below -->
-      <p class="sub-note" style="margin-bottom:1.5rem;">Command Nexus grows in stages &mdash; Early Access Alpha, then Beta, then Full Release &mdash; and pricing rises as it matures. See the <a href="terms.html#pricing-evolution">pricing &amp; price-change terms</a>.</p>
-
-      <!-- ALPHA stage (visible by default). Switch stages with commandNexusStage in assets/site-config.js. -->
-      <div data-cn-stage="alpha">
-        <div class="trial-panel">
-          <div class="section-label">Free Alpha Trial</div>
-          <div class="trial-price">$0 <span>/ 7 days</span></div>
-          <p class="muted">For testing Command Nexus while it&rsquo;s still being hardened. A free website account is required. Renewable during Early Access Alpha while free alpha renewal remains open &mdash; this is not permanent free access, and trial rules may change at Beta or Full Release.</p>
-          <div class="cta-row">
-            <a class="button primary" href="login.html?next=command-nexus.html%23free-trial" data-auth-cta="account.html" data-auth-cta-text="Go to your account">Sign in / Create account &amp; start free trial</a>
-          </div>
-        </div>
-
-        <div class="tier-grid">
-          <article class="tier-card">
-            <div class="tier-name">Pro Alpha</div>
-            <div class="tier-price">$10 <span>/mo</span></div>
-            <ul class="tier-list">
-              <li>For individual users testing core Command Nexus features</li>
-              <li>Create up to <strong>2</strong> custom AI agents</li>
-              <li>Free starter agents included</li>
-              <li>Full Visibility Window &amp; AI Creation Engine</li>
-            </ul>
-            <a class="button primary" data-cn-link="proAlpha" data-pending-text="Choose Pro Alpha" href="#">Choose Pro Alpha &mdash; $10/mo</a>
-          </article>
-
-          <article class="tier-card featured">
-            <span class="tier-flag">Most popular</span>
-            <div class="tier-name">Business Alpha</div>
-            <div class="tier-price">$30 <span>/mo</span></div>
-            <ul class="tier-list">
-              <li>For heavier use, business workflow testing, and expanded access</li>
-              <li>Create more custom AI agents for growing workflows</li>
-              <li>Free starter agents included</li>
-              <li>Full Visibility Window &amp; AI Creation Engine</li>
-            </ul>
-            <a class="button primary" data-cn-link="businessAlpha" data-pending-text="Choose Business Alpha" href="#">Choose Business Alpha &mdash; $30/mo</a>
-          </article>
-
-          <article class="tier-card">
-            <div class="tier-name">Unlimited Alpha</div>
-            <div class="tier-price">$50 <span>/mo</span></div>
-            <ul class="tier-list">
-              <li>For maximum alpha access during active testing and hardening</li>
-              <li>Create unlimited custom AI agents</li>
-              <li>Free starter agents included</li>
-              <li>Full Visibility Window &amp; AI Creation Engine</li>
-            </ul>
-            <a class="button primary" data-cn-link="unlimitedAlpha" data-pending-text="Choose Unlimited Alpha" href="#">Choose Unlimited Alpha &mdash; $50/mo</a>
-          </article>
-        </div>
-
-        <p class="sub-note">Command Nexus is currently in Early Access Alpha/Beta. Core features are working and available for testing while licensing, updates, security, and stability are still being hardened. Alpha pricing is discounted and may change when Command Nexus enters Beta or Full Release.</p>
-        <p class="sub-note">Planned Beta pricing: $5 trial (15 days), Pro $20/month, Business $40/month, Unlimited $60/month. Full Release pricing and yearly plans may be introduced later after stable release.</p>
-      </div>
-
-      <!-- BETA stage (built and ready; hidden until commandNexusStage = 'beta'). -->
-      <div data-cn-stage="beta" hidden>
-        <div class="trial-panel">
-          <div class="section-label">Beta Trial</div>
-          <div class="trial-price">$5 <span>/ 15 days</span></div>
-          <p class="muted">A low-cost 15-day trial to explore Command Nexus during Beta. A website account is required. This is not permanent access &mdash; trial rules and pricing may change at Full Release.</p>
-          <div class="cta-row">
-            <a class="button primary" data-cn-link="trialBeta" data-pending-text="Start the $5 Beta trial" href="#">Start the $5 Beta trial</a>
-          </div>
-        </div>
-
-        <div class="tier-grid">
-          <article class="tier-card">
-            <div class="tier-name">Pro Beta</div>
-            <div class="tier-price">$20 <span>/mo</span></div>
-            <ul class="tier-list">
-              <li>For individual users on the maturing Command Nexus</li>
-              <li>Create up to <strong>2</strong> custom AI agents</li>
-              <li>Free starter agents included</li>
-              <li>Full Visibility Window &amp; AI Creation Engine</li>
-            </ul>
-            <a class="button primary" data-cn-link="proBeta" data-pending-text="Choose Pro Beta" href="#">Choose Pro Beta &mdash; $20/mo</a>
-          </article>
-
-          <article class="tier-card featured">
-            <span class="tier-flag">Most popular</span>
-            <div class="tier-name">Business Beta</div>
-            <div class="tier-price">$40 <span>/mo</span></div>
-            <ul class="tier-list">
-              <li>For heavier use and growing business workflows</li>
-              <li>Create more custom AI agents for growing workflows</li>
-              <li>Free starter agents included</li>
-              <li>Full Visibility Window &amp; AI Creation Engine</li>
-            </ul>
-            <a class="button primary" data-cn-link="businessBeta" data-pending-text="Choose Business Beta" href="#">Choose Business Beta &mdash; $40/mo</a>
-          </article>
-
-          <article class="tier-card">
-            <div class="tier-name">Unlimited Beta</div>
-            <div class="tier-price">$60 <span>/mo</span></div>
-            <ul class="tier-list">
-              <li>For maximum access during Beta</li>
-              <li>Create unlimited custom AI agents</li>
-              <li>Free starter agents included</li>
-              <li>Full Visibility Window &amp; AI Creation Engine</li>
-            </ul>
-            <a class="button primary" data-cn-link="unlimitedBeta" data-pending-text="Choose Unlimited Beta" href="#">Choose Unlimited Beta &mdash; $60/mo</a>
-          </article>
-        </div>
-
-        <p class="sub-note">Command Nexus is now in Beta. Pricing has stepped up from Alpha as the program matures. Prices may change again at Full Release, and yearly plans are planned for Full Release.</p>
-        <p class="sub-note">Planned Full Release pricing: $10 trial (15 days), Pro $30/month, Business $50/month, Unlimited $80/month, plus yearly plans.</p>
-      </div>
-
-      <!-- FULL RELEASE stage (built and ready; hidden until commandNexusStage = 'full'). Reuses the existing live links. -->
-      <div data-cn-stage="full" hidden>
-        <div class="trial-panel">
-          <div class="section-label">Trial</div>
-          <div class="trial-price">$10 <span>/ 15 days</span></div>
-          <p class="muted">A 15-day trial to explore Command Nexus. A website account is required.</p>
-          <div class="cta-row">
-            <a class="button primary" data-cn-link="trialFull" data-pending-text="Start the 15-day trial" href="#">Start the 15-day trial &mdash; $10</a>
-          </div>
-        </div>
-
-        <div class="tier-grid">
-          <article class="tier-card">
-            <div class="tier-name">Pro</div>
-            <div class="tier-price">$30 <span>/mo</span></div>
-            <div class="tier-yearly">or $324 / year</div>
-            <ul class="tier-list">
-              <li>Create up to <strong>2</strong> custom AI agents</li>
-              <li>Free starter agents included</li>
-              <li>Full Visibility Window &amp; AI Creation Engine</li>
-            </ul>
-            <a class="button primary" data-cn-link="proMonthly" data-pending-text="Choose Pro" href="#">Choose Pro &mdash; $30/mo</a>
-            <a class="button" data-cn-link="proYearly" data-pending-text="Pay yearly &mdash; $324" href="#">Pay yearly &mdash; $324 (save $36)</a>
-          </article>
-
-          <article class="tier-card featured">
-            <span class="tier-flag">Most popular</span>
-            <div class="tier-name">Business</div>
-            <div class="tier-price">$50 <span>/mo</span></div>
-            <div class="tier-yearly">or $552 / year</div>
-            <ul class="tier-list">
-              <li>Create more custom AI agents for growing workflows</li>
-              <li>Free starter agents included</li>
-              <li>Full Visibility Window &amp; AI Creation Engine</li>
-            </ul>
-            <a class="button primary" data-cn-link="businessMonthly" data-pending-text="Choose Business" href="#">Choose Business &mdash; $50/mo</a>
-            <a class="button" data-cn-link="businessYearly" data-pending-text="Pay yearly &mdash; $552" href="#">Pay yearly &mdash; $552 (save $48)</a>
-          </article>
-
-          <article class="tier-card">
-            <div class="tier-name">Unlimited</div>
-            <div class="tier-price">$80 <span>/mo</span></div>
-            <div class="tier-yearly">or $900 / year</div>
-            <ul class="tier-list">
-              <li>Create unlimited custom AI agents</li>
-              <li>Free starter agents included</li>
-              <li>Full Visibility Window &amp; AI Creation Engine</li>
-            </ul>
-            <a class="button primary" data-cn-link="unlimitedMonthly" data-pending-text="Choose Unlimited" href="#">Choose Unlimited &mdash; $80/mo</a>
-            <a class="button" data-cn-link="unlimitedYearly" data-pending-text="Pay yearly &mdash; $900" href="#">Pay yearly &mdash; $900 (save $60)</a>
-          </article>
-
-          <article class="tier-card enterprise">
-            <span class="tier-flag">Enterprise</span>
-            <div class="tier-name">Enterprise</div>
-            <div class="tier-price">Contact for Pricing</div>
-            <ul class="tier-list">
-              <li>Everything in Unlimited, plus:</li>
-              <li>Security auditing &amp; code review tools</li>
-              <li>Medical research &amp; legal assistant capabilities</li>
-              <li>Custom integrations &amp; deployment support</li>
-              <li>Dedicated support channel</li>
-            </ul>
-            <a class="button primary" href="mailto:Averylogicworks@gmail.com?subject=Enterprise%20Inquiry%20-%20Command%20Nexus">Contact Sales</a>
-          </article>
-        </div>
-
-        <p class="sub-note">Monthly and yearly plans are billed through secure PayPal checkout. You can <strong>cancel any time</strong> &mdash; no questions asked. Enterprise pricing is negotiable &mdash; contact us for a custom quote.</p>
-        <div style="margin-top:.75rem;">
-          <a class="button" href="https://www.paypal.com/myaccount/autopay/" target="_blank" rel="noopener noreferrer">Cancel your subscription</a>
-          <p class="sub-note" style="margin-top:.5rem;">You&rsquo;ll be redirected to PayPal&rsquo;s secure subscription management page where you can cancel any active subscription. Your access continues until the end of your current billing period.</p>
-        </div>
-      </div>
-
-      <p class="sub-note">Prices may change as Command Nexus moves from Alpha to Beta to Full Release. If you&rsquo;re already subscribed, your current price stays in place until your paid period ends; when it ends under new pricing, you&rsquo;ll be asked whether to continue at the new price before anything renews. See the <a href="terms.html#pricing-evolution">pricing &amp; price-change terms</a>.</p>
+      <div class="section-head"><div class="section-label">Pricing</div><h2 id="cn-pricing-title">Choose your plan.</h2>
+      <p>Basic, Pro, Business, and Enterprise. A free website account is required. Paid checkout remains paused while activation is repaired.</p></div>
+      <div class="tier-grid"><article class="tier-card"><div class="tier-name">Basic</div><div class="tier-price">$30 / month</div><p>Entry membership</p><button class="button" type="button" disabled>Purchases temporarily paused</button></article>
+<article class="tier-card"><div class="tier-name">Pro</div><div class="tier-price">$50 / month</div><p>Expanded membership</p><button class="button" type="button" disabled>Purchases temporarily paused</button></article>
+<article class="tier-card"><div class="tier-name">Business</div><div class="tier-price">$80 / month</div><p>Business membership</p><button class="button" type="button" disabled>Purchases temporarily paused</button></article>
+<article class="tier-card"><div class="tier-name">Enterprise</div><div class="tier-price">Custom quote</div><p>Full package, scoped with Avery Logic Works</p><button class="button" type="button" disabled>Purchases temporarily paused</button></article>
+</div>
+      <p class="sub-note">A free 3-day trial will resume with the repaired download. Each license activates one computer. Transfers or additional licenses require approval from Avery Logic Works; charges may apply.</p>
     </section>
 
     <section aria-labelledby="cn-download-title" style="text-align:center; margin: 3rem 0;">
@@ -1255,7 +1046,7 @@
         </div>
       </div>
 
-      <button class="button primary" type="button" id="cn-download-btn">Download Command Nexus for Windows</button>
+      <button class="button primary" type="button" id="cn-download-btn" disabled aria-disabled="true">Download temporarily paused</button>
       <p class="sub-note" style="margin-top:1rem;">Command Nexus&trade; &mdash; Avery Logic Works&trade;</p>
     </section>
 
@@ -1376,6 +1167,8 @@
       }
       async function downloadVerifiedRelease(event) {
         event.preventDefault();
+        return; // Activation repair hold.
+        event.preventDefault();
         var source = event.currentTarget.id;
         var sb = window._averySupabase;
         var status = document.getElementById('cn-release-status');
@@ -1442,6 +1235,8 @@
       }
 
       async function checkAuthAndInit() {
+        Object.keys(states).forEach(function(k) { if(states[k]) states[k].hidden = true; });
+        return; // Activation repair hold.
         if (!sb) {
           showState('error');
           var errMsg = document.getElementById('ft-error-msg');
@@ -1464,6 +1259,7 @@
       }
 
       async function claimTrial() {
+        return; // Activation repair hold.
         if (!sb) { showState('error'); return; }
 
         showState('loading');
