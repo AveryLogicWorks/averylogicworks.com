@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Command Nexus | Avery Logic Works flagship AI product</title>
-  <meta name="description" content="Command Nexus is the flagship product from Avery Logic Works: use and make AI with no coding required. Now in Early Access Alpha/Beta &mdash; start free for 7 days (account required), then low-cost monthly plans." />
+  <meta name="description" content="Command Nexus is the flagship product from Avery Logic Works: use and make AI with no coding required. Now in Early Access Alpha/Beta &mdash; start free for 3 days (account required), then low-cost monthly plans." />
   <meta property="og:title" content="Command Nexus | Avery Logic Works">
   <meta property="og:description" content="Use and make AI with no coding required. Free trial available.">
   <meta property="og:type" content="website">
@@ -930,8 +930,8 @@
           <p class="muted">No payment required. Sign up, claim your free trial key, download Command Nexus, and activate it. Full access to every feature for 3 days &mdash; no credit card, no catch.</p>
         </div>
 
-        <p role="status" id="cn-release-status">Command Nexus downloads, new trials, and checkout are temporarily paused while we verify the repaired Windows release. Please check back here for the verified download.</p>
-        <div class="free-trial-box" id="free-trial-box" hidden>
+        <p role="status" id="cn-release-status">The repaired Windows beta is available. Sign in to download. Publisher signing is still pending, so Windows may show “Unknown publisher.” New purchases remain paused during release verification.</p>
+        <div class="free-trial-box" id="free-trial-box">
           <!-- Step 1: Not signed in -->
           <div class="ft-state" id="ft-state-anon">
             <p class="ft-icon">&#128274;</p>
@@ -969,7 +969,7 @@
             <h3>Your trial key is ready!</h3>
             <p class="soft" style="font-size:.85rem;margin-top:.25rem;">Expires: <span id="ft-expires"></span></p>
             <div class="cta-row" style="margin-top:1rem;">
-              <button class="button primary" type="button" disabled aria-disabled="true" id="cn-trial-download-btn">Download temporarily paused</button>
+              <button class="button primary" type="button" id="cn-trial-download-btn">Download Command Nexus for Windows</button>
               <a class="button" href="download.html">Go to download page</a>
             </div>
             <div style="background:rgba(255,196,0,.08);border:1px solid rgba(255,196,0,.3);border-radius:8px;padding:.75rem 1rem;margin-top:1rem;text-align:left;">
@@ -1255,7 +1255,7 @@
         </div>
       </div>
 
-      <button class="button primary" type="button" disabled aria-disabled="true" id="cn-download-btn">Download temporarily paused</button>
+      <button class="button primary" type="button" id="cn-download-btn">Download Command Nexus for Windows</button>
       <p class="sub-note" style="margin-top:1rem;">Command Nexus&trade; &mdash; Avery Logic Works&trade;</p>
     </section>
 
@@ -1374,16 +1374,36 @@
           }).then(function(){}).catch(function(e){ console.debug('download event skipped', e); });
         } catch (e) { console.debug('download event failed', e); }
       }
+      async function downloadVerifiedRelease(event) {
+        event.preventDefault();
+        var source = event.currentTarget.id;
+        var sb = window._averySupabase;
+        var status = document.getElementById('cn-release-status');
+        if (!sb) {
+          if (status) status.textContent = 'Account access is temporarily unavailable. Please refresh and try again.';
+          return;
+        }
+        try {
+          var result = await sb.auth.getSession();
+          if (result.error) throw result.error;
+          if (!result.data || !result.data.session) {
+            window.location.assign('login.html?next=command-nexus.html%23cn-download-title');
+            return;
+          }
+          logDownload('command_nexus_download', source);
+          window.location.assign('https://github.com/AveryLogicWorks/Command-Nexus/releases/download/v1.1.0-beta.28/CommandNexus.exe');
+        } catch (error) {
+          if (status) status.textContent = 'Could not verify your account. Please sign in again before downloading.';
+        }
+      }
       var dlBtn = document.getElementById('cn-download-btn');
-      if (dlBtn) dlBtn.addEventListener('click', function() { logDownload('command_nexus_download', 'main-download-section'); });
+      if (dlBtn) dlBtn.addEventListener('click', downloadVerifiedRelease);
       var trialDlBtn = document.getElementById('cn-trial-download-btn');
-      if (trialDlBtn) trialDlBtn.addEventListener('click', function() { logDownload('command_nexus_download', 'trial-success'); });
+      if (trialDlBtn) trialDlBtn.addEventListener('click', downloadVerifiedRelease);
     })();
 
     // ===== 3-Day Free Trial Claim Flow =====
     (function () {
-      // Release hold: do not start a customer's trial while downloads are paused.
-      return;
       var cfg = window.AVERY_CONFIG || {};
       var sbCfg = cfg.supabase || {};
       var trialUrl = sbCfg.trialKeyEdgeFunction;
@@ -1436,33 +1456,8 @@
             showState('anon');
             return;
           }
-          // User is signed in — auto-check if they already have a trial key
-          showState('loading');
-          try {
-            var response = await fetch(trialUrl, {
-              method: 'POST',
-              headers: {
-                'Authorization': 'Bearer ' + session.access_token,
-                'apikey': sbCfg.publishableKey,
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({})
-            });
-            var data = await response.json();
-            if (response.ok && data.key) {
-              var keyEl = document.getElementById('ft-license-key');
-              var expiresEl = document.getElementById('ft-expires');
-              if (keyEl) keyEl.textContent = data.key;
-              if (expiresEl) expiresEl.textContent = formatDate(data.expires_at);
-              showState('done');
-            } else if (data.expired) {
-              showState('expired');
-            } else {
-              showState('ready');
-            }
-          } catch (e) {
-            showState('ready');
-          }
+          // Claim only after the customer explicitly requests a trial.
+          showState('ready');
         } catch (e) {
           showState('anon');
         }
@@ -1522,7 +1517,7 @@
                 visitor_token: (function(){var k='avery-visitor-token';var t=localStorage.getItem(k);if(!t){t='v_'+Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem(k,t);}return t;})(),
                 user_id: session.user.id || null,
                 user_email: session.user.email || null,
-                metadata: { key: data.key, expires_at: data.expires_at }
+                metadata: { product_slug: 'command-nexus', expires_at: data.expires_at }
               }).then(function(){}).catch(function(e){ console.debug('trial event log skipped', e); });
             } catch (e) { console.debug('trial event log failed', e); }
           }

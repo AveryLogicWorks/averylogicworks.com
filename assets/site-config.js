@@ -43,7 +43,7 @@ window.AVERY_CONFIG = {
   // Public Command Nexus pricing is currently the Full stage.
   commandNexusStage: 'full',
   commandNexus: {
-    downloadUrl: 'https://github.com/AveryLogicWorks/Command-Nexus/releases/download/v1.1.0-beta.22/CommandNexus.exe'
+    downloadUrl: 'https://github.com/AveryLogicWorks/Command-Nexus/releases/download/v1.1.0-beta.28/CommandNexus.exe'
   },
   paths: {
     home: 'index.html',
