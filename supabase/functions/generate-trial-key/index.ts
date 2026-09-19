@@ -1,4 +1,4 @@
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { createClient } from "npm:@supabase/supabase-js@2.116.0";
 
 const TIER_CODE = "TR";
 const DEFAULT_TRIAL_DAYS = 3;
